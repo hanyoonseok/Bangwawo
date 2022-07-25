@@ -37,6 +37,11 @@ const routes = [
     name: "home",
     component: () => import("@/views/HomeView"),
   },
+  {
+    path: "/secret",
+    name: "secret",
+    component: () => import("@/views/SecretFriendView"),
+  },
 ];
 
 export const router = createRouter({
