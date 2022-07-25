@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <img alt="Vue logo" src="./assets/logo.png" />
+  <div class="layout">
     <HeaderNav />
+    <router-view></router-view>
   </div>
 </template>
 
@@ -16,4 +16,6 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss">
+@import "@/css/global.scss";
+</style>

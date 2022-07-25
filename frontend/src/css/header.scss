@@ -1,0 +1,164 @@
+.container {
+  height: 80px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  background-color: transparent;
+  font-family: $SCore;
+  font-size: 14px;
+  padding: 15px 40px;
+  @include flexBetween;
+  align-items: center;
+
+  .left {
+    display: flex;
+    align-items: center;
+    img {
+      width: 80px;
+      height: 50px;
+      margin-right: 20px;
+    }
+    ul {
+      display: flex;
+      align-items: center;
+      li {
+        margin-right: 20px;
+      }
+    }
+  }
+
+  .right {
+    display: flex;
+    align-items: center;
+
+    .login {
+      @include SubmitBtn();
+      margin-left: 20px;
+    }
+    .consult {
+      @include StatusBtn(true);
+      font-size: 12px;
+      font-family: $appleB;
+      margin-left: 20px;
+    }
+    .img-wrapper {
+      width: 35px;
+      height: 35px;
+      margin-left: 20px;
+      position: relative;
+      cursor: pointer;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+      ul {
+        position: absolute;
+        bottom: -90px;
+        left: 50%;
+        transform: translate(-50%, 0);
+        box-shadow: $shadow;
+        width: 108px;
+        border-radius: 12px;
+        padding: 8px 10px;
+        @include flexColumn;
+        li {
+          @include flexCenter;
+          width: 100%;
+          padding: 6px 0;
+          font-family: $appleM;
+          font-size: 13px;
+          &:first-child {
+            border-bottom: 1px solid $light-grey;
+          }
+          &:last-child {
+            color: $pink;
+          }
+        }
+      }
+    }
+    .bell-wrapper {
+      position: relative;
+      margin-left: 20px;
+      i {
+        font-size: 35px;
+        color: $soft-yellow;
+        position: relative;
+        .count {
+          position: absolute;
+          right: -6px;
+          top: 0;
+          width: 20px;
+          height: 20px;
+          @include flexCenter;
+          font-size: 10px;
+          color: $dark-grey;
+          background-color: $pink;
+          padding: 4px;
+          border-radius: 4px;
+        }
+      }
+      .modal {
+        position: absolute;
+        bottom: -270px;
+        left: -238px;
+        width: 255px;
+        height: 255px;
+        padding: 15px;
+        border-radius: 25px;
+        background-color: $lightx2-yellow;
+        font-family: $appleM;
+        overflow: hidden;
+        @include flexColumn;
+        .title-wrapper {
+          display: flex;
+          align-items: center;
+          width: 100%;
+          font-size: 14px;
+          font-family: $SCore;
+          margin-bottom: 10px;
+          i {
+            margin-right: 10px;
+            font-size: 20px;
+          }
+        }
+        .row-wrapper {
+          height: 100%;
+          overflow-y: auto;
+          -ms-overflow-style: none; /* IE and Edge */
+          scrollbar-width: none; /* Firefox */
+          &::-webkit-scrollbar {
+            display: none;
+          }
+        }
+        .row {
+          width: 100%;
+          padding: 10px 0;
+          @include flexBetween;
+          img {
+            width: 35px;
+            height: 35px;
+            flex-shrink: 0;
+            cursor: pointer;
+          }
+          label {
+            width: 100%;
+            margin: 0 10px;
+          }
+          p {
+            font-size: 12px;
+          }
+          .date {
+            font-size: 8px;
+            color: $grey;
+            font-weight: bold;
+          }
+          .close {
+            font-size: 15px;
+            color: $dark-grey;
+            flex-shrink: 0;
+          }
+        }
+      }
+    }
+  }
+}
