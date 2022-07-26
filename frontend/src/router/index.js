@@ -52,6 +52,11 @@ const routes = [
     name: "login",
     component: () => import("@/views/LoginView"),
   },
+  {
+    path: "/class",
+    name: "class",
+    component: () => import("@/views/ClassView"),
+  },
 ];
 
 export const router = createRouter({
