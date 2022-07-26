@@ -47,6 +47,12 @@ const routes = [
     path: "/login",
     name: "login",
     component: () => import("@/views/LoginView"),
+    children: [
+      {
+        path: "",
+        component: () => import("@/components/StuAndVoluLogin"),
+      },
+    ],
   },
 ];
 

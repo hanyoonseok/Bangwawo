@@ -1,3 +1,5 @@
+/*loginView CSS*/
+
 .user-background {
   background: url("@/assets/userBg.png");
   height: 100vh;
@@ -25,3 +27,28 @@
     }
   }
 }
+
+/* stuAndVoluLogin CSS*/
+
+.stuAndVolu {
+  text-align: center;
+  .login-desc {
+    font-family: $SCoreL;
+    font-weight: bolder;
+    margin: 20px 0;
+  }
+  button {
+    @include SubmitBtn;
+    height: 40px;
+    width: 330px;
+    font-size: 16px;
+
+    img {
+      margin-right: 10px;
+      width: 30px;
+      height: 23px;
+    }
+  }
+}
+
+/*ParentLogin CSS*/
