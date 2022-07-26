@@ -50,7 +50,13 @@ const routes = [
     children: [
       {
         path: "",
+        name: "stuAndvolu",
         component: () => import("@/components/StuAndVoluLogin"),
+      },
+      {
+        path: "/parent",
+        name: "parent",
+        component: () => import("@/components/ParentLogin"),
       },
     ],
   },

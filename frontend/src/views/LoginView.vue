@@ -5,8 +5,12 @@
         <img src="@/assets/threeDuck.png" />
       </div>
       <div class="user-select">
-        <button class="user-btn">학생&봉사자</button>
-        <button class="user-btn">학부모</button>
+        <router-link :to="{ name: 'stuAndvolu' }" class="user-btn"
+          >학생&봉사자</router-link
+        >
+        <router-link :to="{ name: 'parent' }" class="user-btn"
+          >학부모</router-link
+        >
       </div>
       <router-view></router-view>
     </div>
