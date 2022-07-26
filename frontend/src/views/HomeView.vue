@@ -3,7 +3,7 @@
     <section class="banner">
       <img class="banner-img" src="@/assets/banner-illust.png" />
       <div class="banner-info">
-        <h1 class="banner-title">
+        <h1 class="banner-title" data-aos="fade-up">
           방과후에는<br /><span class="underline"> 방과워</span>와 함께+
         </h1>
         <p class="banner-desc">
@@ -107,6 +107,7 @@
 <script>
 export default {
   name: "HomeView",
+  setup() {},
 };
 </script>
 
