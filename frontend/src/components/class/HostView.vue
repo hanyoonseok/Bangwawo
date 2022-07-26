@@ -11,8 +11,35 @@
         <div class="user-card"></div>
         <div class="user-card"></div>
       </article>
-      <article class="top-right">h</article>
+
+      <article class="top-right">
+        <article class="top-article top">
+          <div class="title-wrapper">
+            <label>참가자</label>
+            <i class="fa-solid fa-minus"></i>
+          </div>
+          <div class="list-wrapper">
+            <div class="list-item">
+              <img src="@/assets/profile.png" /> 닉네임임임임
+            </div>
+            <div class="list-item">
+              <img src="@/assets/profile.png" /> 닉네임임임임
+            </div>
+            <div class="list-item">
+              <img src="@/assets/profile.png" /> 닉네임임임임
+            </div>
+            <div class="list-item">
+              <img src="@/assets/profile.png" /> 닉네임임임임
+            </div>
+            <div class="list-item">
+              <img src="@/assets/profile.png" /> 닉네임임임임
+            </div>
+          </div>
+        </article>
+        <article class="top-article bot"></article>
+      </article>
     </section>
+
     <section class="bot-section">
       <article class="bot-left">
         <button class="option-btn red">
@@ -30,6 +57,7 @@
         <button class="option-btn">&nbsp;OX 퀴즈</button>
         <i class="fa-solid fa-xmark xmark"></i>
       </article>
+
       <article class="bot-right">
         <button class="option-btn">
           <i class="fa-solid fa-user"></i>
