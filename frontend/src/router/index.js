@@ -42,7 +42,11 @@ const routes = [
     name: "secret",
     component: () => import("@/views/SecretFriendView"),
   },
-
+  {
+    path: "/secrettalk",
+    name: "secrettalk",
+    component: () => import("@/views/SecretTalkView"),
+  },
   {
     path: "/login",
     name: "login",
