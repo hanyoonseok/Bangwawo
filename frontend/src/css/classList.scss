@@ -29,47 +29,21 @@ section {
       color: $grey;
     }
   }
-  .slide {
-    width: 1043px;
+  .swiper {
     height: 320px;
-    position: relative;
-    margin: auto;
-    overflow: hidden;
+    margin: 0 148px;
 
-    .slides {
-      @include flexBetween;
-      position: absolute;
-      left: 0;
-      top: 0;
-      transition: left 0.5s ease-out;
-
-      li {
-        margin-right: 32px;
+    .swiper-wrapper {
+      .swiper-slide.swiper-slide-next .post-card {
+        width: 399px;
+        height: 245px;
+        margin-top: 0;
       }
-    }
-  }
-  .controller {
-    span {
-      position: absolute;
-      top: 50%;
-      cursor: pointer;
-
-      i {
-        font-size: 60px;
-        color: $grey;
+      .swiper-slide .post-card {
+        width: 330px;
+        height: 200px;
+        margin: 30px auto 0;
       }
-
-      :hover {
-        color: darken($color: $grey, $amount: 10);
-      }
-    }
-
-    .prev {
-      left: 100px;
-    }
-
-    .next {
-      right: 100px;
     }
   }
 }
