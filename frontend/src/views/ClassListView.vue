@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <section></section>
+    <section id="top"></section>
     <section class="opened">
       <div class="title">
         <h2>공개 수업</h2>
@@ -8,12 +8,24 @@
       </div>
       <div class="contents slide">
         <ul class="slides">
-          <li><rect-post-card /></li>
-          <li><rect-post-card class="active" /></li>
-          <li><rect-post-card /></li>
-          <li><rect-post-card /></li>
-          <li><rect-post-card /></li>
-          <li><rect-post-card /></li>
+          <li>
+            <a><rect-post-card /></a>
+          </li>
+          <li>
+            <a><rect-post-card /></a>
+          </li>
+          <li>
+            <a><rect-post-card /></a>
+          </li>
+          <li>
+            <a><rect-post-card /></a>
+          </li>
+          <li>
+            <a><rect-post-card /></a>
+          </li>
+          <li>
+            <a><rect-post-card /></a>
+          </li>
         </ul>
       </div>
       <div class="controller">
@@ -25,7 +37,43 @@
         ></span>
       </div>
     </section>
-    <section class="maked"></section>
+    <section class="maked">
+      <div class="search-bar">
+        <input type="text" placeholder="찾고 싶은 수업을 입력하세요." />
+        <button class="searchBtn">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </div>
+      <div class="title">
+        <h2>개설된 수업</h2>
+        <p>현재 개설된 수업 목록입니다.</p>
+      </div>
+      <div class="contents">
+        <ul>
+          <li>
+            <a><rect-post-card /></a>
+          </li>
+          <li>
+            <a><rect-post-card /></a>
+          </li>
+          <li>
+            <a><rect-post-card /></a>
+          </li>
+          <li>
+            <a><rect-post-card /></a>
+          </li>
+          <li>
+            <a><rect-post-card /></a>
+          </li>
+          <li>
+            <a><rect-post-card /></a>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <a class="up" href="#top">
+      <i class="fa-solid fa-arrow-up"></i>
+    </a>
   </div>
 </template>
 

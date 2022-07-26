@@ -2,8 +2,9 @@
   padding-top: 80px;
 }
 
-.opened {
+section {
   position: relative;
+
   .title {
     width: 100%;
     height: 100px;
@@ -71,4 +72,61 @@
       right: 100px;
     }
   }
+}
+
+.opened {
+  margin-bottom: 160px;
+}
+
+.maked {
+  .search-bar {
+    @include flexCenter;
+    margin-bottom: 120px;
+
+    input {
+      width: 832px;
+      @include Input;
+    }
+    .searchBtn {
+      width: 44px;
+      height: 44px;
+      background-color: $yellow;
+      border-radius: 50%;
+      font-size: 20px;
+      color: $white;
+      margin-left: 28px;
+    }
+  }
+
+  .contents {
+    height: auto;
+    margin: 0 148px;
+    padding-bottom: 50px;
+
+    ul {
+      @include flexBetween;
+      flex-wrap: wrap;
+
+      li {
+        margin-right: 33px;
+        margin-bottom: 70px;
+      }
+    }
+  }
+}
+
+.up {
+  display: block;
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background-color: $yellow;
+  color: $white;
+  font-size: 20px;
+  width: 35px;
+  height: 35px;
+  text-align: center;
+  line-height: 35px;
+  border-radius: 50%;
+  transition: 1s ease;
 }
