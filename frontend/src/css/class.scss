@@ -11,7 +11,7 @@
 
 .main-section {
   width: 100%;
-  height: calc(100% - 80px);
+  height: 100%; //calc(100% - 80px);
   @include flexColumn;
   justify-content: space-between;
 }
@@ -19,7 +19,7 @@
 //top
 .top-section {
   width: 100%;
-  height: 100%;
+  height: calc(100% - 60px);
   @include flexCenter;
   .top-left {
     flex: 7.5;
@@ -34,6 +34,10 @@
       grid-template-rows: repeat(3, 1fr);
       grid-column-gap: 16px;
       grid-row-gap: 16px;
+    }
+    &.expand {
+      flex: none;
+      grid-template-columns: repeat(4, 1fr);
     }
   }
 
@@ -63,6 +67,9 @@
         margin-top: 16px;
         overflow: hidden;
         @include flexColumn;
+        &.expand {
+          margin-top: 0;
+        }
       }
     }
 
@@ -149,7 +156,7 @@
 //bot
 .bot-section {
   width: 100%;
-  margin-top: 40px;
+  height: 60px;
   flex-shrink: 0;
   @include flexCenter;
 

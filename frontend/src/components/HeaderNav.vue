@@ -78,6 +78,14 @@
               >
               <i class="fa-solid fa-xmark close"></i>
             </div>
+            <div class="row">
+              <img src="@/assets/profile.png" />
+              <label
+                ><p>자녀의 상담중 위험 용어가 발생했습니다.</p>
+                <p class="date">2022-07-25</p></label
+              >
+              <i class="fa-solid fa-xmark close"></i>
+            </div>
           </div>
         </article>
       </div>

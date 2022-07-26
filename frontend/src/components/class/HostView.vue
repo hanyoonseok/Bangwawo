@@ -1,7 +1,14 @@
 <template>
   <section class="main-section">
     <section class="top-section">
-      <article class="top-left host">
+      <article
+        :class="{
+          'top-left': true,
+          host: true,
+          expand: !state.isParticipantsOpen && !state.isChatOpen,
+        }"
+      >
+        <div class="user-card"></div>
         <div class="user-card"></div>
         <div class="user-card"></div>
         <div class="user-card"></div>
@@ -12,11 +19,17 @@
         <div class="user-card"></div>
       </article>
 
-      <article class="top-right">
-        <div class="top-article top">
+      <article
+        class="top-right"
+        v-if="state.isParticipantsOpen || state.isChatOpen"
+      >
+        <article class="top-article top" v-show="state.isParticipantsOpen">
           <div class="title-wrapper">
             <label>참가자</label>
-            <i class="fa-solid fa-minus"></i>
+            <i
+              class="fa-solid fa-xmark xmark"
+              @click="toggleParticipants()"
+            ></i>
           </div>
           <div class="list-wrapper">
             <div class="list-item">
@@ -61,22 +74,62 @@
                 <label class="list-item-nickname">닉네임임임임</label>
               </div>
             </div>
+            <div class="list-item">
+              <img src="@/assets/profile.png" />
+              <div class="list-item-center">
+                <label class="list-item-nickname">닉네임임임임</label>
+              </div>
+            </div>
+            <div class="list-item">
+              <img src="@/assets/profile.png" />
+              <div class="list-item-center">
+                <label class="list-item-nickname">닉네임임임임</label>
+              </div>
+            </div>
+            <div class="list-item">
+              <img src="@/assets/profile.png" />
+              <div class="list-item-center">
+                <label class="list-item-nickname">닉네임임임임</label>
+              </div>
+            </div>
+            <div class="list-item">
+              <img src="@/assets/profile.png" />
+              <div class="list-item-center">
+                <label class="list-item-nickname">닉네임임임임</label>
+              </div>
+            </div>
+            <div class="list-item">
+              <img src="@/assets/profile.png" />
+              <div class="list-item-center">
+                <label class="list-item-nickname">닉네임임임임</label>
+              </div>
+            </div>
+            <div class="list-item">
+              <img src="@/assets/profile.png" />
+              <div class="list-item-center">
+                <label class="list-item-nickname">닉네임임임임</label>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="top-article bot">
+        </article>
+        <article
+          v-show="state.isChatOpen"
+          :class="{
+            'top-article': true,
+            bot: true,
+            expand: state.isChatOpen && !state.isParticipantsOpen,
+          }"
+        >
           <div class="title-wrapper">
             <label>채팅</label>
-            <i class="fa-solid fa-minus"></i>
+            <i class="fa-solid fa-xmark xmark" @click="toggleChat()"></i>
           </div>
           <div class="list-wrapper test">
             <div class="list-item chat">
               <img src="@/assets/profile.png" />
               <div class="list-item-center">
                 <label class="list-item-nickname">닉네임임임임</label>
-                <label class="list-item-chat"
-                  >채팅내용ㅇ하나둘셋넷다섯여a1 1 1 1 1 1 1 1 1 1 1 1 dfas dfsad
-                  sfsdafasdasf섯</label
-                >
+                <label class="list-item-chat">채팅내용ㅇ하나둘셋넷다섯여</label>
               </div>
               <label class="list-item-time">4분전</label>
             </div>
@@ -84,10 +137,7 @@
               <img src="@/assets/profile.png" />
               <div class="list-item-center">
                 <label class="list-item-nickname">닉네임임임임</label>
-                <label class="list-item-chat"
-                  >채팅내용ㅇ하나둘셋넷다섯여a1 1 1 1 1 1 1 1 1 1 1 1 dfas dfsad
-                  sfsdafasdasf섯</label
-                >
+                <label class="list-item-chat">채팅내용ㅇ하나둘셋넷다섯여</label>
               </div>
               <label class="list-item-time">4분전</label>
             </div>
@@ -95,10 +145,63 @@
               <img src="@/assets/profile.png" />
               <div class="list-item-center">
                 <label class="list-item-nickname">닉네임임임임</label>
-                <label class="list-item-chat"
-                  >채팅내용ㅇ하나둘셋넷다섯여a1 1 1 1 1 1 1 1 1 1 1 1 dfas dfsad
-                  sfsdafasdasf섯</label
-                >
+                <label class="list-item-chat">채팅내용ㅇ하나둘셋넷다섯여</label>
+              </div>
+              <label class="list-item-time">4분전</label>
+            </div>
+            <div class="list-item chat">
+              <img src="@/assets/profile.png" />
+              <div class="list-item-center">
+                <label class="list-item-nickname">닉네임임임임</label>
+                <label class="list-item-chat">채팅내용ㅇ하나둘셋넷다섯여</label>
+              </div>
+              <label class="list-item-time">4분전</label>
+            </div>
+            <div class="list-item chat">
+              <img src="@/assets/profile.png" />
+              <div class="list-item-center">
+                <label class="list-item-nickname">닉네임임임임</label>
+                <label class="list-item-chat">채팅내용ㅇ하나둘셋넷다섯여</label>
+              </div>
+              <label class="list-item-time">4분전</label>
+            </div>
+            <div class="list-item chat">
+              <img src="@/assets/profile.png" />
+              <div class="list-item-center">
+                <label class="list-item-nickname">닉네임임임임</label>
+                <label class="list-item-chat">채팅내용ㅇ하나둘셋넷다섯여</label>
+              </div>
+              <label class="list-item-time">4분전</label>
+            </div>
+            <div class="list-item chat">
+              <img src="@/assets/profile.png" />
+              <div class="list-item-center">
+                <label class="list-item-nickname">닉네임임임임</label>
+                <label class="list-item-chat">채팅내용ㅇ하나둘셋넷다섯여</label>
+              </div>
+              <label class="list-item-time">4분전</label>
+            </div>
+            <div class="list-item chat">
+              <img src="@/assets/profile.png" />
+              <div class="list-item-center">
+                <label class="list-item-nickname">닉네임임임임</label>
+                <label class="list-item-chat">채팅내용ㅇ하나둘셋넷다섯여</label>
+              </div>
+              <label class="list-item-time">4분전</label>
+            </div>
+            <div class="list-item chat">
+              <img src="@/assets/profile.png" />
+              <div class="list-item-center">
+                <label class="list-item-nickname">닉네임임임임</label>
+                <label class="list-item-chat">채팅내용ㅇ하나둘셋넷다섯여</label>
+              </div>
+              <label class="list-item-time">4분전</label>
+            </div>
+            <div class="list-item chat">
+              <img src="@/assets/profile.png" />
+              <div class="list-item-center">
+                <label class="list-item-nickname">닉네임임임임</label>
+                <label class="list-item-chat">채팅내용ㅇ하나둘셋넷다섯여</label>
               </div>
               <label class="list-item-time">4분전</label>
             </div>
@@ -108,7 +211,7 @@
             class="chat-input"
             placeholder="채팅메시지를 입력하세요."
           />
-        </div>
+        </article>
       </article>
     </section>
 
@@ -131,11 +234,11 @@
       </article>
 
       <article class="bot-right">
-        <button class="option-btn">
+        <button class="option-btn" @click="toggleParticipants()">
           <i class="fa-solid fa-user"></i>
           &nbsp;참가자
         </button>
-        <button class="option-btn">
+        <button class="option-btn" @click="toggleChat()">
           <i class="fa-solid fa-comments"></i>
           &nbsp;채팅
         </button>
@@ -145,9 +248,29 @@
 </template>
 
 <script>
+import { reactive } from "vue";
 export default {
   name: "HostView",
-  setup() {},
+  setup() {
+    const state = reactive({
+      isParticipantsOpen: false,
+      isChatOpen: false,
+    });
+
+    const toggleParticipants = () => {
+      state.isParticipantsOpen = !state.isParticipantsOpen;
+    };
+
+    const toggleChat = () => {
+      state.isChatOpen = !state.isChatOpen;
+    };
+
+    return {
+      state,
+      toggleParticipants,
+      toggleChat,
+    };
+  },
 };
 </script>
 

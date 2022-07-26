@@ -9,6 +9,7 @@
   padding: 15px 40px;
   @include flexBetween;
   align-items: center;
+  z-index: 999;
 
   .left {
     display: flex;
