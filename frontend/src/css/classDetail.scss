@@ -1,0 +1,158 @@
+.background {
+  background-image: $mainBg;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  padding-top: 80px;
+}
+section {
+  position: relative;
+  .back {
+    color: $yellow;
+    font-size: 50px;
+    background-color: transparent;
+    position: absolute;
+    left: 100px;
+    top: 15px;
+  }
+
+  .detail {
+    width: 1200px;
+    height: 575px;
+    margin: auto;
+    background-color: lighten($color: $light-yellow, $amount: 8);
+    box-shadow: $shadow;
+    border-radius: 20px;
+    position: relative;
+
+    .img-box {
+      width: 146px;
+      height: 74px;
+      position: absolute;
+      bottom: 12px;
+      left: 52px;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .title {
+      padding: 68px 86px 46px;
+    }
+
+    .content {
+      article {
+        margin: 0 76px;
+        @include flexBetween;
+
+        .left-box {
+          width: 506px;
+          height: 316px;
+          margin-right: 80px;
+        }
+
+        .right-box {
+          .info-box {
+            width: 450px;
+
+            .info-content button {
+              margin-left: 11px;
+              background-color: transparent;
+            }
+          }
+        }
+      }
+
+      .button-box > div {
+        margin-top: 63px;
+        display: flex;
+        justify-content: flex-end;
+
+        button {
+          margin-left: 22px;
+        }
+
+        .classStatusBtn,
+        .classEntranceBtn,
+        .classSubscribeBtn {
+          @include SubmitBtn;
+          background-color: #e2e2e2;
+        }
+        .classModifyBtn,
+        .classDeleteBtn {
+          background-color: transparent;
+          color: $grey;
+          font-size: 20px;
+          &:hover {
+            color: $yellow;
+          }
+        }
+        .classDeleteBtn,
+        .classEntranceBtn,
+        .classSubscribeBtn {
+          margin-right: 45px;
+        }
+      }
+    }
+  }
+
+  .profile {
+    width: 363px;
+    height: 424px;
+    background-color: #fff;
+    box-shadow: $shadow;
+    padding: 30px 58px;
+
+    .profile-img {
+      width: 157px;
+      height: 157px;
+      margin: auto;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .profile-info .info-box {
+      .info-title {
+        width: 64px;
+        height: 32px;
+      }
+
+      .info-content {
+      }
+    }
+  }
+}
+
+// info-box 공통 부분
+.info-box {
+  margin-bottom: 30px;
+  display: flex;
+  line-height: 30px;
+  align-content: flex-start;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .info-title {
+    width: 74px;
+    height: 30px;
+    text-align: center;
+    background-color: #ffd793;
+    font-size: 12px;
+    font-family: $SCore;
+    font-weight: 500;
+    margin-right: 37px;
+  }
+
+  .info-content button {
+    margin-left: 11px;
+    background-color: transparent;
+  }
+}
