@@ -37,6 +37,24 @@ const routes = [
     name: "home",
     component: () => import("@/views/HomeView"),
   },
+  {
+    path: "/secret",
+    name: "secret",
+    component: () => import("@/views/SecretFriendView"),
+    redirect: "/secret/landing",
+    children: [
+      {
+        path: "landing",
+        name: "secretLanding",
+        component: () => import("@/components/secret/SecretFriendLanding"),
+      },
+      {
+        path: "match",
+        name: "secretMatch",
+        component: () => import("@/components/secret/SecretFriendLanding"),
+      },
+    ],
+  },
 ];
 
 export const router = createRouter({
