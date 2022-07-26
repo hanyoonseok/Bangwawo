@@ -43,6 +43,11 @@ const routes = [
     component: () => import("@/views/SecretFriendView"),
   },
   {
+    path: "/secrettalk",
+    name: "secrettalk",
+    component: () => import("@/views/SecretTalkView"),
+  },
+  {
     path: "/user",
     name: "user",
     component: () => import("@/views/UserView"),
@@ -67,12 +72,12 @@ const routes = [
       {
         path: "signup/student",
         name: "signupStudent",
-        component: () => import("@/views/SignupStudent"),
+        component: () => import("@/views/SignupStudentView"),
       },
       {
         path: "signup/volunteer",
         name: "signupVolunteer",
-        component: () => import("@/views/SignupVolunteer"),
+        component: () => import("@/views/SignupVolunteerView"),
       },
     ],
   },
