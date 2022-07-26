@@ -51,7 +51,7 @@ const routes = [
       {
         path: "match",
         name: "secretMatch",
-        component: () => import("@/components/secret/SecretFriendLanding"),
+        component: () => import("@/components/secret/SecretFriendMatch"),
       },
     ],
   },

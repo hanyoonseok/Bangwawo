@@ -1,7 +1,7 @@
 <template>
   <section class="main-section">
     <section classs="sub-section" v-if="!state.isMatching">
-      <img src="@/assets/secret_landing.png" />
+      <img src="@/assets/secret_landing.png" class="landing-img" />
       <button class="start-btn" @click="startMatch()">비밀친구 대화하기</button>
     </section>
     <section classs="sub-section" v-else>

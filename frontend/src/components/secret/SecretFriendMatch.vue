@@ -1,7 +1,21 @@
 <template>
   <section class="main-section">
-    <img src="@/assets/secret_landing.png" />
-    <button class="start-btn">비밀친구 랟닝</button>
+    <article class="title-wrapper">
+      <h2 class="title">비밀친구 대화중</h2>
+    </article>
+    <article class="user-wrapper">
+      <div class="user-card"></div>
+      <div class="user-card"></div>
+    </article>
+    <article class="btn-wrapper">
+      <button class="option-btn">
+        <i class="fa-solid fa-microphone-slash"></i>
+        &nbsp;음소거 해제
+      </button>
+      <button class="option-btn">
+        <i class="fa-solid fa-xmark"></i> &nbsp;대화 종료
+      </button>
+    </article>
   </section>
 </template>
 
