@@ -1,0 +1,97 @@
+.mypage-background {
+  background: url("@/assets/mainBg.png");
+  height: 100vh;
+  .mypage-container {
+    padding: 70px 80px;
+  }
+  overflow: hidden;
+}
+
+.mypage-content {
+  @include flexCenter;
+  .profile-info {
+    width: 300px;
+    margin-right: 80px;
+    .left-box {
+      width: 100%;
+      height: 295px;
+      border-radius: 40px;
+      box-shadow: $light-shadow;
+    }
+    .profile {
+      position: relative;
+      background-color: white;
+      margin-bottom: 25px;
+      @include flexCenter;
+      flex-direction: column;
+      i {
+        position: absolute;
+        right: 25px;
+        top: 25px;
+        color: $grey;
+      }
+      img {
+        width: 100px;
+        height: 100px;
+        filter: $drop-shadow;
+      }
+      .student-info {
+        @include flexCenter;
+        label {
+          @include inputTitleLabel;
+          width: 60px;
+        }
+        .label-value {
+          margin-left: 25px;
+          width: 130px;
+        }
+        margin-top: 25px;
+      }
+    }
+    .calendar {
+      background-color: $light-yellow;
+    }
+  }
+  .lecture-info {
+    .right-box {
+      width: 900px;
+      height: 295px;
+      background-color: white;
+      border-radius: 40px;
+      box-shadow: $light-shadow;
+      overflow: hidden;
+      &:nth-child(1) {
+        margin-bottom: 25px;
+      }
+    }
+    .lecture-content {
+      padding: 35px;
+      .box-title {
+        display: inline-block;
+        border-bottom: 5px solid $yellow;
+      }
+      .lecture-list {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: row;
+        .lecture {
+          margin-right: 20px;
+          .round-post-card {
+            width: 240px;
+            height: 140px;
+            border-radius: 20px;
+            background-color: $light-grey;
+          }
+          .lecture-title {
+            width: 240px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 14px;
+            margin-top: 10px;
+          }
+        }
+      }
+    }
+  }
+}

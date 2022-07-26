@@ -81,6 +81,29 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/mypage",
+    name: "mypage",
+    component: () => import("@/views/MypageView"),
+    children: [
+      {
+        path: "student",
+        name: "mypageStudent",
+        component: () => import("@/views/MypageStudentView"),
+      },
+
+      {
+        path: "parent",
+        name: "mypageParent",
+        component: () => import("@/views/MypageParentView"),
+      },
+      {
+        path: "volunteer",
+        name: "mypageVolunteer",
+        component: () => import("@/views/MypageVolunteerView"),
+      },
+    ],
+  },
 ];
 
 export const router = createRouter({
