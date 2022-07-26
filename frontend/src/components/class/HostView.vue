@@ -1,8 +1,17 @@
 <template>
   <section class="main-section">
     <section class="top-section">
-      <article class="left"></article>
-      <article class="right">h</article>
+      <article class="top-left host">
+        <div class="user-card"></div>
+        <div class="user-card"></div>
+        <div class="user-card"></div>
+        <div class="user-card"></div>
+        <div class="user-card"></div>
+        <div class="user-card"></div>
+        <div class="user-card"></div>
+        <div class="user-card"></div>
+      </article>
+      <article class="top-right">h</article>
     </section>
     <section class="bot-section">
       <article class="bot-left">
