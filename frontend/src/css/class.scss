@@ -5,12 +5,15 @@
   width: 100%;
   height: 100%;
   padding: 35px;
+  display: flex;
+  max-height: 100vh;
 }
 
 .main-section {
   width: 100%;
-  height: 100%;
+  height: calc(100% - 80px);
   @include flexColumn;
+  justify-content: space-between;
 }
 
 //top
@@ -44,17 +47,22 @@
 
     .top-article {
       width: 100%;
+      height: 100%;
       border-radius: 25px;
       background-color: $light-grey;
       padding: 16px;
       &.top {
+        height: 100%;
         flex: 4;
         overflow: hidden;
         @include flexColumn;
       }
       &.bot {
+        height: 100%;
         flex: 6;
         margin-top: 16px;
+        overflow: hidden;
+        @include flexColumn;
       }
     }
 
@@ -78,7 +86,6 @@
     }
 
     .list-wrapper {
-      height: 100%;
       width: 100%;
       overflow-y: auto;
       margin-top: 10px;
@@ -87,25 +94,54 @@
       &::-webkit-scrollbar {
         display: none;
       }
+      &.test {
+        height: 100%;
+      }
 
       .list-item {
         display: flex;
         align-items: center;
-        font-family: $appleM;
-        font-weight: bold;
         padding: 10px 0;
+        font-size: 12px;
+        &.chat {
+          align-items: flex-start;
+        }
         img {
           box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
           margin-right: 15px;
           width: 30px;
           height: 30px;
           border-radius: 100%;
+          flex: 1;
+        }
+        .list-item-nickname {
+          font-family: $appleM;
+          font-weight: bold;
+          color: #404040;
+        }
+        .list-item-chat {
+          color: #404040;
+        }
+        .list-item-center {
+          @include flexColumn;
+          flex: 8;
+        }
+        .list-item-time {
+          color: #a5a5a5;
+          flex: 2;
         }
       }
 
       .list-item + .list-item {
         border-top: 1px solid #e1e1e1;
       }
+    }
+
+    .chat-input {
+      @include Input;
+      background-color: $white;
+      height: 30px;
+      flex-shrink: 0;
     }
   }
 }
@@ -114,6 +150,7 @@
 .bot-section {
   width: 100%;
   margin-top: 40px;
+  flex-shrink: 0;
   @include flexCenter;
 
   .bot-left {
@@ -146,7 +183,7 @@
   @include SubmitBtn;
 
   i {
-    font-size: 18px;
+    font-size: 16px;
   }
   label {
     @include flexCenter;

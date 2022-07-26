@@ -13,30 +13,102 @@
       </article>
 
       <article class="top-right">
-        <article class="top-article top">
+        <div class="top-article top">
           <div class="title-wrapper">
             <label>참가자</label>
             <i class="fa-solid fa-minus"></i>
           </div>
           <div class="list-wrapper">
             <div class="list-item">
-              <img src="@/assets/profile.png" /> 닉네임임임임
+              <img src="@/assets/profile.png" />
+              <div class="list-item-center">
+                <label class="list-item-nickname">닉네임임임임</label>
+              </div>
             </div>
             <div class="list-item">
-              <img src="@/assets/profile.png" /> 닉네임임임임
+              <img src="@/assets/profile.png" />
+              <div class="list-item-center">
+                <label class="list-item-nickname">닉네임임임임</label>
+              </div>
             </div>
             <div class="list-item">
-              <img src="@/assets/profile.png" /> 닉네임임임임
+              <img src="@/assets/profile.png" />
+              <div class="list-item-center">
+                <label class="list-item-nickname">닉네임임임임</label>
+              </div>
             </div>
             <div class="list-item">
-              <img src="@/assets/profile.png" /> 닉네임임임임
+              <img src="@/assets/profile.png" />
+              <div class="list-item-center">
+                <label class="list-item-nickname">닉네임임임임</label>
+              </div>
             </div>
             <div class="list-item">
-              <img src="@/assets/profile.png" /> 닉네임임임임
+              <img src="@/assets/profile.png" />
+              <div class="list-item-center">
+                <label class="list-item-nickname">닉네임임임임</label>
+              </div>
+            </div>
+            <div class="list-item">
+              <img src="@/assets/profile.png" />
+              <div class="list-item-center">
+                <label class="list-item-nickname">닉네임임임임</label>
+              </div>
+            </div>
+            <div class="list-item">
+              <img src="@/assets/profile.png" />
+              <div class="list-item-center">
+                <label class="list-item-nickname">닉네임임임임</label>
+              </div>
             </div>
           </div>
-        </article>
-        <article class="top-article bot"></article>
+        </div>
+        <div class="top-article bot">
+          <div class="title-wrapper">
+            <label>채팅</label>
+            <i class="fa-solid fa-minus"></i>
+          </div>
+          <div class="list-wrapper test">
+            <div class="list-item chat">
+              <img src="@/assets/profile.png" />
+              <div class="list-item-center">
+                <label class="list-item-nickname">닉네임임임임</label>
+                <label class="list-item-chat"
+                  >채팅내용ㅇ하나둘셋넷다섯여a1 1 1 1 1 1 1 1 1 1 1 1 dfas dfsad
+                  sfsdafasdasf섯</label
+                >
+              </div>
+              <label class="list-item-time">4분전</label>
+            </div>
+            <div class="list-item chat">
+              <img src="@/assets/profile.png" />
+              <div class="list-item-center">
+                <label class="list-item-nickname">닉네임임임임</label>
+                <label class="list-item-chat"
+                  >채팅내용ㅇ하나둘셋넷다섯여a1 1 1 1 1 1 1 1 1 1 1 1 dfas dfsad
+                  sfsdafasdasf섯</label
+                >
+              </div>
+              <label class="list-item-time">4분전</label>
+            </div>
+            <div class="list-item chat">
+              <img src="@/assets/profile.png" />
+              <div class="list-item-center">
+                <label class="list-item-nickname">닉네임임임임</label>
+                <label class="list-item-chat"
+                  >채팅내용ㅇ하나둘셋넷다섯여a1 1 1 1 1 1 1 1 1 1 1 1 dfas dfsad
+                  sfsdafasdasf섯</label
+                >
+              </div>
+              <label class="list-item-time">4분전</label>
+            </div>
+          </div>
+          <input
+            type="text"
+            class="chat-input"
+            placeholder="채팅메시지를 입력하세요."
+          />
+        </div>
       </article>
     </section>
 
