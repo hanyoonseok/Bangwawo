@@ -18,4 +18,4 @@ export default {
   name: "ParentLogin",
 };
 </script>
-<style scoped src="@/css/login.scss" lang="scss"></style>
+<style scoped src="@/css/user.scss" lang="scss"></style>

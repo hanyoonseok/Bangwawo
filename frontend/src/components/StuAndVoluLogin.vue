@@ -13,4 +13,4 @@ export default {
   name: "StuAndVoluLogin",
 };
 </script>
-<style scoped src="@/css/login.scss" lang="scss"></style>
+<style scoped src="@/css/user.scss" lang="scss"></style>

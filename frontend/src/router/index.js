@@ -42,21 +42,37 @@ const routes = [
     name: "secret",
     component: () => import("@/views/SecretFriendView"),
   },
-
   {
-    path: "/login",
-    name: "login",
-    component: () => import("@/views/LoginView"),
+    path: "/user",
+    name: "user",
+    component: () => import("@/views/UserView"),
     children: [
       {
-        path: "",
-        name: "stuAndvolu",
-        component: () => import("@/components/StuAndVoluLogin"),
+        path: "login",
+        name: "login",
+        component: () => import("@/views/LoginView"),
+        children: [
+          {
+            path: "",
+            name: "stuAndvolu",
+            component: () => import("@/components/StuAndVoluLogin"),
+          },
+          {
+            path: "parent",
+            name: "parent",
+            component: () => import("@/components/ParentLogin"),
+          },
+        ],
       },
       {
-        path: "/parent",
-        name: "parent",
-        component: () => import("@/components/ParentLogin"),
+        path: "signup/student",
+        name: "signupStudent",
+        component: () => import("@/views/SignupStudent"),
+      },
+      {
+        path: "signup/volunteer",
+        name: "signupVolunteer",
+        component: () => import("@/views/SignupVolunteer"),
       },
     ],
   },
