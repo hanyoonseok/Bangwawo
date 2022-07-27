@@ -22,9 +22,9 @@
   height: calc(100% - 60px);
   @include flexCenter;
   .top-left {
-    flex: 7.5;
-    width: 100%;
+    //flex: 7.5;
     height: 100%;
+    width: 75%;
     background-color: $light-yellow;
     border-radius: 15px;
     &.host {
@@ -36,14 +36,55 @@
       grid-row-gap: 16px;
     }
     &.expand {
-      flex: none;
+      width: 100%;
       grid-template-columns: repeat(4, 1fr);
+    }
+
+    &.user {
+      @include flexColumn;
+      background-color: transparent;
+    }
+
+    .top-article-left {
+      width: 100%;
+      display: flex;
+      &.top {
+        padding: 15px;
+        flex-wrap: nowrap;
+        width: 100%;
+        margin-bottom: 20px;
+        background-color: $light-yellow;
+        border-radius: 15px;
+        // overflow-x: hidden;
+      }
+      &.bot {
+        height: 100%;
+        width: 100%;
+        background-color: red;
+      }
+
+      .user-card-wrapper {
+        @include flexColumn;
+        align-items: center;
+        label {
+          font-size: 12px;
+          font-family: $appleM;
+          font-weight: bold;
+        }
+        .user-card {
+          width: 200px;
+          height: 120px;
+        }
+      }
+      .user-card-wrapper + .user-card-wrapper {
+        margin-left: 14px;
+      }
     }
   }
 
   .top-right {
-    flex: 2.5;
-    width: 100%;
+    //flex: 2.5;
+    width: 25%;
     height: 100%;
     margin-left: 20px;
     border-radius: 15px;
@@ -119,7 +160,6 @@
           width: 30px;
           height: 30px;
           border-radius: 100%;
-          flex: 1;
         }
         .list-item-nickname {
           font-family: $appleM;
@@ -128,14 +168,15 @@
         }
         .list-item-chat {
           color: #404040;
+          width: 100%;
         }
         .list-item-center {
+          width: 100%;
           @include flexColumn;
-          flex: 8;
         }
         .list-item-time {
           color: #a5a5a5;
-          flex: 2;
+          width: 40px;
         }
       }
 
