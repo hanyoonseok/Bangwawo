@@ -56,7 +56,13 @@ body {
   font-family: $appleM;
   color: $dark-grey;
 }
-
+textarea {
+  resize: none;
+  border: none;
+  &:focus {
+    outline: none;
+  }
+}
 i {
   cursor: pointer;
 }
