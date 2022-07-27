@@ -99,6 +99,7 @@
       background-color: $light-grey;
       padding: 16px;
       &.top {
+        width: 100%;
         height: 100%;
         flex: 4;
         overflow: hidden;
@@ -137,8 +138,8 @@
 
     .list-wrapper {
       width: 100%;
-      overflow-y: auto;
       margin-top: 10px;
+      overflow-y: auto;
       -ms-overflow-style: none; /* IE and Edge */
       scrollbar-width: none; /* Firefox */
       &::-webkit-scrollbar {
@@ -277,5 +278,43 @@
     flex-shrink: 0;
     background-color: transparent;
     content: "";
+  }
+}
+
+.ox-form {
+  width: 100%;
+  height: 100%;
+  margin-top: 10px;
+  @include flexColumn;
+  justify-content: space-between;
+
+  .ox-top-article {
+    @include flexColumn;
+  }
+  .ox-input {
+    @include Input;
+    background-color: $white;
+    height: 30px;
+    margin-top: 10px;
+    width: 100%;
+  }
+  h4 {
+    font-size: 8px;
+    color: $grey;
+    font-family: $appleM;
+  }
+
+  .ox-btn-wrapper {
+    @include flexAround;
+    margin-top: 15px;
+    img {
+      cursor: pointer;
+      width: 80px;
+      height: 96px;
+    }
+  }
+
+  .submit-btn {
+    @include SubmitBtn;
   }
 }

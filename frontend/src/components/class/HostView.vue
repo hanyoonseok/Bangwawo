@@ -5,7 +5,7 @@
         :class="{
           'top-left': true,
           host: true,
-          expand: !state.isParticipantsOpen && !state.isChatOpen,
+          expand: !state.isTopOpen && !state.isChatOpen,
         }"
       >
         <div class="user-card"></div>
@@ -21,199 +21,13 @@
         <div class="next-btn-wrapper"><button class="next-btn"></button></div>
       </article>
 
-      <article
-        class="top-right"
-        v-if="state.isParticipantsOpen || state.isChatOpen"
-      >
-        <article class="top-article top" v-show="state.isParticipantsOpen">
-          <div class="title-wrapper">
-            <label>참가자</label>
-            <i
-              class="fa-solid fa-xmark xmark"
-              @click="toggleParticipants()"
-            ></i>
-          </div>
-          <div class="list-wrapper">
-            <div class="list-item">
-              <img src="@/assets/profile.png" />
-              <div class="list-item-center">
-                <label class="list-item-nickname">닉네임임임임</label>
-              </div>
-            </div>
-            <div class="list-item">
-              <img src="@/assets/profile.png" />
-              <div class="list-item-center">
-                <label class="list-item-nickname">닉네임임임임</label>
-              </div>
-            </div>
-            <div class="list-item">
-              <img src="@/assets/profile.png" />
-              <div class="list-item-center">
-                <label class="list-item-nickname">닉네임임임임</label>
-              </div>
-            </div>
-            <div class="list-item">
-              <img src="@/assets/profile.png" />
-              <div class="list-item-center">
-                <label class="list-item-nickname">닉네임임임임</label>
-              </div>
-            </div>
-            <div class="list-item">
-              <img src="@/assets/profile.png" />
-              <div class="list-item-center">
-                <label class="list-item-nickname">닉네임임임임</label>
-              </div>
-            </div>
-            <div class="list-item">
-              <img src="@/assets/profile.png" />
-              <div class="list-item-center">
-                <label class="list-item-nickname">닉네임임임임</label>
-              </div>
-            </div>
-            <div class="list-item">
-              <img src="@/assets/profile.png" />
-              <div class="list-item-center">
-                <label class="list-item-nickname">닉네임임임임</label>
-              </div>
-            </div>
-            <div class="list-item">
-              <img src="@/assets/profile.png" />
-              <div class="list-item-center">
-                <label class="list-item-nickname">닉네임임임임</label>
-              </div>
-            </div>
-            <div class="list-item">
-              <img src="@/assets/profile.png" />
-              <div class="list-item-center">
-                <label class="list-item-nickname">닉네임임임임</label>
-              </div>
-            </div>
-            <div class="list-item">
-              <img src="@/assets/profile.png" />
-              <div class="list-item-center">
-                <label class="list-item-nickname">닉네임임임임</label>
-              </div>
-            </div>
-            <div class="list-item">
-              <img src="@/assets/profile.png" />
-              <div class="list-item-center">
-                <label class="list-item-nickname">닉네임임임임</label>
-              </div>
-            </div>
-            <div class="list-item">
-              <img src="@/assets/profile.png" />
-              <div class="list-item-center">
-                <label class="list-item-nickname">닉네임임임임</label>
-              </div>
-            </div>
-            <div class="list-item">
-              <img src="@/assets/profile.png" />
-              <div class="list-item-center">
-                <label class="list-item-nickname">닉네임임임임</label>
-              </div>
-            </div>
-          </div>
-        </article>
-        <article
-          v-show="state.isChatOpen"
-          :class="{
-            'top-article': true,
-            bot: true,
-            expand: state.isChatOpen && !state.isParticipantsOpen,
-          }"
-        >
-          <div class="title-wrapper">
-            <label>채팅</label>
-            <i class="fa-solid fa-xmark xmark" @click="toggleChat()"></i>
-          </div>
-          <div class="list-wrapper test">
-            <div class="list-item chat">
-              <img src="@/assets/profile.png" />
-              <div class="list-item-center">
-                <label class="list-item-nickname">닉네임임임임</label>
-                <label class="list-item-chat">채팅내용ㅇ하나둘셋넷다섯여</label>
-              </div>
-              <label class="list-item-time">4분전</label>
-            </div>
-            <div class="list-item chat">
-              <img src="@/assets/profile.png" />
-              <div class="list-item-center">
-                <label class="list-item-nickname">닉네임임임임</label>
-                <label class="list-item-chat">채팅내용ㅇ하나둘셋넷다섯여</label>
-              </div>
-              <label class="list-item-time">4분전</label>
-            </div>
-            <div class="list-item chat">
-              <img src="@/assets/profile.png" />
-              <div class="list-item-center">
-                <label class="list-item-nickname">닉네임임임임</label>
-                <label class="list-item-chat">채팅내용ㅇ하나둘셋넷다섯여</label>
-              </div>
-              <label class="list-item-time">4분전</label>
-            </div>
-            <div class="list-item chat">
-              <img src="@/assets/profile.png" />
-              <div class="list-item-center">
-                <label class="list-item-nickname">닉네임임임임</label>
-                <label class="list-item-chat">채팅내용ㅇ하나둘셋넷다섯여</label>
-              </div>
-              <label class="list-item-time">4분전</label>
-            </div>
-            <div class="list-item chat">
-              <img src="@/assets/profile.png" />
-              <div class="list-item-center">
-                <label class="list-item-nickname">닉네임임임임</label>
-                <label class="list-item-chat">채팅내용ㅇ하나둘셋넷다섯여</label>
-              </div>
-              <label class="list-item-time">4분전</label>
-            </div>
-            <div class="list-item chat">
-              <img src="@/assets/profile.png" />
-              <div class="list-item-center">
-                <label class="list-item-nickname">닉네임임임임</label>
-                <label class="list-item-chat">채팅내용ㅇ하나둘셋넷다섯여</label>
-              </div>
-              <label class="list-item-time">4분전</label>
-            </div>
-            <div class="list-item chat">
-              <img src="@/assets/profile.png" />
-              <div class="list-item-center">
-                <label class="list-item-nickname">닉네임임임임</label>
-                <label class="list-item-chat">채팅내용ㅇ하나둘셋넷다섯여</label>
-              </div>
-              <label class="list-item-time">4분전</label>
-            </div>
-            <div class="list-item chat">
-              <img src="@/assets/profile.png" />
-              <div class="list-item-center">
-                <label class="list-item-nickname">닉네임임임임</label>
-                <label class="list-item-chat">채팅내용ㅇ하나둘셋넷다섯여</label>
-              </div>
-              <label class="list-item-time">4분전</label>
-            </div>
-            <div class="list-item chat">
-              <img src="@/assets/profile.png" />
-              <div class="list-item-center">
-                <label class="list-item-nickname">닉네임임임임</label>
-                <label class="list-item-chat">채팅내용ㅇ하나둘셋넷다섯여</label>
-              </div>
-              <label class="list-item-time">4분전</label>
-            </div>
-            <div class="list-item chat">
-              <img src="@/assets/profile.png" />
-              <div class="list-item-center">
-                <label class="list-item-nickname">닉네임임임임</label>
-                <label class="list-item-chat">채팅내용ㅇ하나둘셋넷다섯여</label>
-              </div>
-              <label class="list-item-time">4분전</label>
-            </div>
-          </div>
-          <input
-            type="text"
-            class="chat-input"
-            placeholder="채팅메시지를 입력하세요."
-          />
-        </article>
+      <article class="top-right" v-if="state.isTopOpen || state.isChatOpen">
+        <ParticipantsList
+          :state="state"
+          :toggleParticipants="toggleParticipants"
+        />
+        <OXForm :state="state" :toggleOX="toggleOX" />
+        <ChatForm :state="state" :toggleChat="toggleChat" />
       </article>
     </section>
 
@@ -231,7 +45,7 @@
           <i class="fa-solid fa-arrow-up-from-square"></i>
           &nbsp;화면 공유
         </button>
-        <button class="option-btn">&nbsp;OX 퀴즈</button>
+        <button class="option-btn" @click="toggleOX()">&nbsp;OX 퀴즈</button>
         <i class="fa-solid fa-xmark xmark"></i>
       </article>
 
@@ -251,16 +65,34 @@
 
 <script>
 import { reactive } from "vue";
+import ParticipantsList from "@/components/class/ParticipantsList.vue";
+import ChatForm from "@/components/class/ChatForm.vue";
+import OXForm from "@/components/class/OXForm.vue";
+
 export default {
   name: "HostView",
   setup() {
     const state = reactive({
       isParticipantsOpen: false,
       isChatOpen: false,
+      isOXOpen: false,
+      isTopOpen: false,
     });
 
     const toggleParticipants = () => {
+      if (state.isOXOpen) state.isOXOpen = false;
       state.isParticipantsOpen = !state.isParticipantsOpen;
+      if (state.isParticipantsOpen || state.isOXOpen) state.isTopOpen = true;
+      else state.isTopOpen = false;
+    };
+
+    const toggleOX = () => {
+      state.isParticipantsOpen = false;
+      state.isChatOpen = false;
+      state.isOXOpen = !state.isOXOpen;
+      if (state.isParticipantsOpen || state.isOXOpen) state.isTopOpen = true;
+      else state.isTopOpen = false;
+      console.log(state);
     };
 
     const toggleChat = () => {
@@ -271,7 +103,13 @@ export default {
       state,
       toggleParticipants,
       toggleChat,
+      toggleOX,
     };
+  },
+  components: {
+    ParticipantsList,
+    ChatForm,
+    OXForm,
   },
 };
 </script>

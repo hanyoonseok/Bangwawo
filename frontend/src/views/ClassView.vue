@@ -17,7 +17,7 @@ export default {
   },
   setup() {
     const state = reactive({
-      isHost: false,
+      isHost: true,
     });
 
     return {
