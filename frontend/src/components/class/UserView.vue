@@ -31,7 +31,9 @@
             <label>김수빈수빈</label>
           </div>
         </article>
-        <article class="top-article-left bot">s</article>
+        <article class="top-article-left bot">
+          <StudentOX />
+        </article>
       </article>
 
       <article class="top-right" v-if="state.isTopOpen || state.isChatOpen">
@@ -74,6 +76,8 @@
 import { reactive } from "vue";
 import ParticipantsList from "@/components/class/ParticipantsList.vue";
 import ChatForm from "@/components/class/ChatForm.vue";
+import StudentOX from "@/components/class/StudentOX.vue";
+
 export default {
   name: "UserView",
   setup() {
@@ -103,6 +107,7 @@ export default {
   components: {
     ParticipantsList,
     ChatForm,
+    StudentOX,
   },
 };
 </script>
