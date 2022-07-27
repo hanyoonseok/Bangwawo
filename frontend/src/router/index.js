@@ -53,6 +53,11 @@ const routes = [
     component: () => import("@/views/ClassDetailView"),
   },
   {
+    path: "/classregister",
+    name: "classregister",
+    component: () => import("@/views/ClassRegisterView"),
+  },
+  {
     path: "/secrettalk",
     name: "secrettalk",
     component: () => import("@/views/SecretTalkView"),
