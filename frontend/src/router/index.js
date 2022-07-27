@@ -56,18 +56,6 @@ const routes = [
         path: "login",
         name: "login",
         component: () => import("@/views/LoginView"),
-        children: [
-          {
-            path: "",
-            name: "stuAndvolu",
-            component: () => import("@/components/StuAndVoluLogin"),
-          },
-          {
-            path: "parent",
-            name: "parent",
-            component: () => import("@/components/ParentLogin"),
-          },
-        ],
       },
       {
         path: "signup/student",
