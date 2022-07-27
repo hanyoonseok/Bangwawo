@@ -321,9 +321,16 @@
 .stu-ox-container {
   width: 100%;
   height: 100%;
-  position: relative;
-  @include flexColumn;
-  align-items: center;
+  .stu-ox-section {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    @include flexColumn;
+    align-items: center;
+    &.result {
+      padding-top: 40px;
+    }
+  }
   .quest-container {
     max-width: 500px;
     display: flex;
