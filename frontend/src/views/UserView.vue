@@ -1,6 +1,6 @@
 <template>
   <div class="user-background">
-    <login-view></login-view>
+    <router-view></router-view>
   </div>
 </template>
 

@@ -59,8 +59,9 @@
         height: 100px;
         filter: $drop-shadow;
       }
-      .student-info {
-        @include flexCenter;
+      .person-info {
+        display: flex;
+        justify-content: center;
         label {
           @include inputTitleLabel;
           width: 60px;
@@ -68,6 +69,23 @@
         .label-value {
           margin-left: 25px;
           width: 130px;
+
+          .children-name {
+            display: block;
+            background-color: transparent;
+            font-family: $appleM;
+            font-size: 16px;
+            line-height: 30px;
+            &:hover > &::after {
+              display: block;
+            }
+            &::after {
+              content: "";
+              border-bottom: 3px solid $grey;
+              width: 100%;
+              display: none;
+            }
+          }
         }
         margin-top: 25px;
       }
@@ -103,10 +121,14 @@
       }
       .lecture-list {
         margin-top: 20px;
+        overflow-y: scroll;
+        height: 180px;
         display: flex;
         flex-direction: row;
+        justify-content: flex-start;
+        flex-wrap: wrap;
         .lecture {
-          margin-right: 20px;
+          margin: 15px;
           .round-post-card {
             width: 240px;
             height: 140px;

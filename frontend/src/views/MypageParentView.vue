@@ -23,8 +23,11 @@
           <div class="label-value">이화연</div>
         </div>
         <div class="person-info">
-          <label>별명</label>
-          <div class="label-value">애기화연</div>
+          <label>자녀</label>
+          <div class="label-value">
+            <button class="children-name">애기화연</button>
+            <button class="children-name">애기화연</button>
+          </div>
         </div>
       </div>
       <div class="left-box calendar">
@@ -84,6 +87,36 @@
         <div class="lecture-content">
           <h4 class="box-title">종료된 수업</h4>
           <div class="lecture-list">
+            <div class="lecture">
+              <div class="round-post-card"></div>
+              <div class="lecture-title">
+                오리선생의 초1 수학수업입니당 진짜 재밌어요~!
+              </div>
+            </div>
+            <div class="lecture">
+              <div class="round-post-card"></div>
+              <div class="lecture-title">
+                오리선생의 초1 수학수업입니당 진짜 재밌어요~!
+              </div>
+            </div>
+            <div class="lecture">
+              <div class="round-post-card"></div>
+              <div class="lecture-title">
+                오리선생의 초1 수학수업입니당 진짜 재밌어요~!
+              </div>
+            </div>
+            <div class="lecture">
+              <div class="round-post-card"></div>
+              <div class="lecture-title">
+                오리선생의 초1 수학수업입니당 진짜 재밌어요~!
+              </div>
+            </div>
+            <div class="lecture">
+              <div class="round-post-card"></div>
+              <div class="lecture-title">
+                오리선생의 초1 수학수업입니당 진짜 재밌어요~!
+              </div>
+            </div>
             <div class="lecture">
               <div class="round-post-card"></div>
               <div class="lecture-title">
