@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="class-list">
     <HeaderNav />
     <div class="contents">
-      <section class="banner">
+      <section class="banner" id="banner">
         <img class="banner-img" src="@/assets/banner-illust.png" />
         <div class="banner-info">
           <h1 class="banner-title" data-aos="fade-up" data-aos-duration="1000">
@@ -27,7 +27,7 @@
         </div>
         <swiper
           :slidesPerView="3"
-          :slidesPerGroup="3"
+          :slidesPerGroup="1"
           :spaceBetween="10"
           :loop="true"
           :loopFillGroupWithBlank="true"
@@ -73,27 +73,33 @@
         <div class="contents">
           <ul>
             <li>
-              <a><rect-post-card /></a>
+              <a><RectPostCard /></a>
             </li>
             <li>
-              <a><rect-post-card /></a>
+              <a><RectPostCard /></a>
             </li>
             <li>
-              <a><rect-post-card /></a>
+              <a><RectPostCard /></a>
             </li>
             <li>
-              <a><rect-post-card /></a>
+              <a><RectPostCard /></a>
             </li>
             <li>
-              <a><rect-post-card /></a>
+              <a><RectPostCard /></a>
             </li>
             <li>
-              <a><rect-post-card /></a>
+              <a><RectPostCard /></a>
+            </li>
+            <li>
+              <a><RectPostCard /></a>
+            </li>
+            <li>
+              <a><RectPostCard /></a>
             </li>
           </ul>
         </div>
       </section>
-      <a class="up" href="#banner">
+      <a class="up" @click="top">
         <i class="fa-solid fa-arrow-up"></i>
       </a>
     </div>
@@ -127,6 +133,11 @@ export default {
     return {
       modules: [Navigation],
     };
+  },
+  methods: {
+    top() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    },
   },
 };
 </script>

@@ -18,7 +18,7 @@
                 <p class="info-title post-card">강사</p>
                 <p class="info-content">
                   <span>김오리</span>
-                  <button>
+                  <button @click="showProfile">
                     <i class="fa-solid fa-circle-info"></i>
                   </button>
                 </p>
@@ -30,7 +30,7 @@
               <div class="info-box">
                 <p class="info-title post-card">수업 소개</p>
                 <p class="info-content">
-                  sdadsdasssssssssssssssssssssssssssssssssssssssssssssssss
+                  sdadsdassssssssssssssssssssssss라라라ㅏ라라랄라sssssssssssssssssssssssss
                 </p>
               </div>
               <div class="info-box">
@@ -77,7 +77,10 @@
           <div class="info-box">
             <p class="info-title post-card">자기소개</p>
             <p class="info-content bg">
-              나는 아주 착한 봉사자 반가워어ㅓ어ㅓㅓ
+              나는 아주 착한 봉사자 선한 봉사자 다정한 봉사자 내가 최고다
+              반가워어ㅓdfsdfsdfsd어ㅓㅓ안여ㅏㅇ나녕안여넝어너어어어 나는 아주
+              착한 봉사자 선한 봉사자 다정한 봉사자 내가 최고다
+              반가워어ㅓdfsdfsdfsd어ㅓㅓ안여ㅏㅇ나녕안여넝어너어어어
             </p>
           </div>
         </div>
@@ -114,6 +117,15 @@ export default {
       state,
       user,
     };
+  },
+  methods: {
+    showProfile() {
+      if (document.querySelector(".profile").style.display === "block") {
+        document.querySelector(".profile").style.display = "none";
+      } else {
+        document.querySelector(".profile").style.display = "block";
+      }
+    },
   },
 };
 </script>

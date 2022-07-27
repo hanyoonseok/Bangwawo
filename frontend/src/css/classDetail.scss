@@ -61,6 +61,7 @@ section {
             .info-content button {
               margin-left: 11px;
               background-color: transparent;
+              color: darken($color: $grey, $amount: 5);
             }
           }
         }
@@ -105,11 +106,16 @@ section {
     background-color: #fff;
     box-shadow: $shadow;
     padding: 30px 58px;
+    border-radius: 44px;
+    position: absolute;
+    right: 70px;
+    top: 30px;
+    display: none;
 
     .profile-img {
       width: 157px;
       height: 157px;
-      margin: auto;
+      margin: 0 auto 30px;
 
       img {
         width: 100%;
@@ -118,12 +124,26 @@ section {
     }
 
     .profile-info .info-box {
+      font-size: 12px;
+      column-gap: 17px;
+
       .info-title {
         width: 64px;
         height: 32px;
       }
 
-      .info-content {
+      .bg {
+        width: 190px;
+        height: 120px;
+        background-color: $light-yellow;
+        border-radius: 13px;
+        padding: 13px;
+        overflow-y: auto;
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+        &::-webkit-scrollbar {
+          display: none;
+        }
       }
     }
   }
@@ -132,9 +152,10 @@ section {
 // info-box 공통 부분
 .info-box {
   margin-bottom: 30px;
-  display: flex;
+  display: grid;
   line-height: 30px;
-  align-content: flex-start;
+  grid-template-columns: 74px 2fr;
+  column-gap: 35px;
 
   &:last-child {
     margin-bottom: 0;
