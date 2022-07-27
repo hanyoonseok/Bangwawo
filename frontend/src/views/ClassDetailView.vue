@@ -6,6 +6,7 @@
         <i class="fa-solid fa-chevron-left"></i>
       </button>
       <div class="detail">
+        <div class="empty" @click="hideProfile"></div>
         <div class="img-box">
           <img src="@/assets/backhead.png" alt="오리 뒷모습" />
         </div>
@@ -121,10 +122,17 @@ export default {
       }
     };
 
+    const hideProfile = () => {
+      if (document.querySelector(".profile").style.display === "block") {
+        document.querySelector(".profile").style.display = "none";
+      }
+    };
+
     return {
       state,
       user,
       showProfile,
+      hideProfile,
     };
   },
 };
