@@ -1,5 +1,5 @@
 <template>
-  <article class="top-article top" v-show="state.isOXOpen">
+  <article class="top-article top" v-show="state.isOXOpen && !state.isOXResult">
     <div class="title-wrapper">
       <label>OX게임 등록</label>
       <i class="fa-solid fa-xmark xmark" @click="toggleOX()"></i>

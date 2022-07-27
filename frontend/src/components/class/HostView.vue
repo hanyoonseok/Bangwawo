@@ -27,6 +27,7 @@
           :toggleParticipants="toggleParticipants"
         />
         <OXForm :state="state" :toggleOX="toggleOX" />
+        <OXResult :state="state" :toggleOX="toggleOX" />
         <ChatForm :state="state" :toggleChat="toggleChat" />
       </article>
     </section>
@@ -68,6 +69,7 @@ import { reactive } from "vue";
 import ParticipantsList from "@/components/class/ParticipantsList.vue";
 import ChatForm from "@/components/class/ChatForm.vue";
 import OXForm from "@/components/class/OXForm.vue";
+import OXResult from "@/components/class/OXResult.vue";
 
 export default {
   name: "HostView",
@@ -77,6 +79,7 @@ export default {
       isChatOpen: false,
       isOXOpen: false,
       isTopOpen: false,
+      isOXResult: true,
     });
 
     const toggleParticipants = () => {
@@ -110,6 +113,7 @@ export default {
     ParticipantsList,
     ChatForm,
     OXForm,
+    OXResult,
   },
 };
 </script>
