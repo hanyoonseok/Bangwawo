@@ -72,8 +72,10 @@ section {
         display: flex;
         justify-content: flex-end;
 
-        button {
+        button,
+        a {
           margin-left: 22px;
+          line-height: 30px;
         }
 
         .classStatusBtn,

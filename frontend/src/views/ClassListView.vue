@@ -39,24 +39,11 @@
           :modules="modules"
           class="slide"
         >
-          <swiper-slide
-            ><a href=""><RectPostCard /></a
-          ></swiper-slide>
-          <swiper-slide
-            ><a href=""><RectPostCard /></a
-          ></swiper-slide>
-          <swiper-slide
-            ><a href=""><RectPostCard /></a
-          ></swiper-slide>
-          <swiper-slide
-            ><a href=""><RectPostCard /></a
-          ></swiper-slide>
-          <swiper-slide
-            ><a href=""><RectPostCard /></a
-          ></swiper-slide>
-          <swiper-slide
-            ><a href=""><RectPostCard /></a
-          ></swiper-slide>
+          <swiper-slide v-for="(item, index) in state" :key="index"
+            ><router-link to="/classdetail">
+              <RectPostCard :state="item" />
+            </router-link>
+          </swiper-slide>
         </swiper>
       </section>
       <section class="maked">
@@ -72,30 +59,11 @@
         </div>
         <div class="contents">
           <ul>
-            <li>
-              <a><RectPostCard /></a>
-            </li>
-            <li>
-              <a><RectPostCard /></a>
-            </li>
-            <li>
-              <a><RectPostCard /></a>
-            </li>
-            <li>
-              <a><RectPostCard /></a>
-            </li>
-            <li>
-              <a><RectPostCard /></a>
-            </li>
-            <li>
-              <a><RectPostCard /></a>
-            </li>
-            <li>
-              <a><RectPostCard /></a>
-            </li>
-            <li>
-              <a><RectPostCard /></a>
-            </li>
+            <div v-for="(item, index) in state" :key="index">
+              <router-link to="/classdetail"
+                ><RectPostCard :state="item"
+              /></router-link>
+            </div>
           </ul>
         </div>
       </section>
@@ -121,6 +89,8 @@ import { Navigation } from "swiper";
 
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+
+import { ref } from "vue";
 export default {
   name: "ClassListView",
   components: {
@@ -130,14 +100,77 @@ export default {
     SwiperSlide,
   },
   setup() {
+    // 임시 테스트용 데이터
+    const state = ref([
+      {
+        className: "dd",
+        classDate: "dd",
+        classStartTime: "dd",
+        classEndTIme: "dd",
+        classThumbnail: "dd",
+        classOpen: "dd",
+        classPeople: "dd",
+        classContent: "dd",
+      },
+      {
+        className: "ss",
+        classDate: "ss",
+        classStartTime: "ss",
+        classEndTIme: "ss",
+        classThumbnail: "ss",
+        classOpen: "ss",
+        classPeople: "ss",
+        classContent: "ss",
+      },
+      {
+        className: "ss",
+        classDate: "ss",
+        classStartTime: "ss",
+        classEndTIme: "ss",
+        classThumbnail: "ss",
+        classOpen: "ss",
+        classPeople: "ss",
+        classContent: "ss",
+      },
+      {
+        className: "ss",
+        classDate: "ss",
+        classStartTime: "ss",
+        classEndTIme: "ss",
+        classThumbnail: "ss",
+        classOpen: "ss",
+        classPeople: "ss",
+        classContent: "ss",
+      },
+      {
+        className: "ss",
+        classDate: "ss",
+        classStartTime: "ss",
+        classEndTIme: "ss",
+        classThumbnail: "ss",
+        classOpen: "ss",
+        classPeople: "ss",
+        classContent: "ss",
+      },
+      {
+        className: "ss",
+        classDate: "ss",
+        classStartTime: "ss",
+        classEndTIme: "ss",
+        classThumbnail: "ss",
+        classOpen: "ss",
+        classPeople: "ss",
+        classContent: "ss",
+      },
+    ]);
+    const top = () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
     return {
+      top,
+      state,
       modules: [Navigation],
     };
-  },
-  methods: {
-    top() {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    },
   },
 };
 </script>
