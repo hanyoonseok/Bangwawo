@@ -9,6 +9,7 @@
         }"
       >
         <article class="top-article-left top">
+          <div class="next-btn-wrapper"><button class="next-btn"></button></div>
           <div class="user-card-wrapper">
             <div class="user-card">s</div>
             <label>김수빈수빈</label>
@@ -239,11 +240,6 @@
           <i class="fa-solid fa-video"></i>
           &nbsp;비디오 시작
         </button>
-        <button class="option-btn">
-          <i class="fa-solid fa-arrow-up-from-square"></i>
-          &nbsp;화면 공유
-        </button>
-        <button class="option-btn">&nbsp;OX 퀴즈</button>
         <i class="fa-solid fa-xmark xmark"></i>
       </article>
 

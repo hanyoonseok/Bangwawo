@@ -17,6 +17,8 @@
         <div class="user-card"></div>
         <div class="user-card"></div>
         <div class="user-card"></div>
+
+        <div class="next-btn-wrapper"><button class="next-btn"></button></div>
       </article>
 
       <article

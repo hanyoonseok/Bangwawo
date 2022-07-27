@@ -34,6 +34,7 @@
       grid-template-rows: repeat(3, 1fr);
       grid-column-gap: 16px;
       grid-row-gap: 16px;
+      position: relative;
     }
     &.expand {
       width: 100%;
@@ -48,6 +49,7 @@
     .top-article-left {
       width: 100%;
       display: flex;
+      position: relative;
       &.top {
         padding: 15px;
         flex-wrap: nowrap;
@@ -255,4 +257,25 @@
   height: 100%;
   background-color: #ffdcdc;
   border-radius: 18px;
+}
+
+.next-btn-wrapper {
+  background-color: #ffd18b;
+  width: 35px;
+  height: 35px;
+  border-radius: 100%;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  @include flexCenter;
+  .next-btn {
+    width: 40%;
+    height: 40%;
+    border-top: 2.5px solid $dark-grey;
+    border-left: 2.5px solid $dark-grey;
+    transform: rotate(135deg);
+    flex-shrink: 0;
+    background-color: transparent;
+    content: "";
+  }
 }
