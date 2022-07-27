@@ -1,0 +1,150 @@
+.mypage-background {
+  background: url("@/assets/mainBg.png");
+  height: 100vh;
+  .mypage-container {
+    padding: 60px 80px;
+  }
+}
+
+.mypage-content {
+  @include flexCenter;
+  .profile-info {
+    width: 300px;
+    margin-right: 80px;
+    .left-box {
+      width: 100%;
+      height: 295px;
+      border-radius: 40px;
+      box-shadow: $light-shadow;
+    }
+    .profile {
+      position: relative;
+      background-color: white;
+      margin-bottom: 25px;
+      @include flexCenter;
+      flex-direction: column;
+      .profile-ellipse {
+        position: absolute;
+        right: 25px;
+        top: 25px;
+        color: $grey;
+        &:hover > ul {
+          display: block;
+        }
+      }
+      ul {
+        position: absolute;
+        box-shadow: $shadow;
+        width: 108px;
+        border-radius: 12px;
+        padding: 8px 10px;
+        background-color: $white;
+        @include flexColumn;
+        display: none;
+        li {
+          padding: 6px 0;
+          font-family: $appleM;
+          font-size: 13px;
+          @include flexCenter;
+          &:first-child {
+            border-bottom: 1px solid $light-grey;
+          }
+          &:last-child {
+            color: $pink;
+          }
+        }
+      }
+      img {
+        width: 100px;
+        height: 100px;
+        filter: $drop-shadow;
+      }
+      .person-info {
+        display: flex;
+        justify-content: center;
+        label {
+          @include inputTitleLabel;
+          width: 60px;
+        }
+        .label-value {
+          margin-left: 25px;
+          width: 130px;
+
+          .children-name {
+            display: block;
+            background-color: transparent;
+            font-family: $appleM;
+            font-size: 16px;
+            line-height: 30px;
+            &:hover > &::after {
+              display: block;
+            }
+            &::after {
+              content: "";
+              border-bottom: 3px solid $grey;
+              width: 100%;
+              display: none;
+            }
+          }
+        }
+        margin-top: 25px;
+      }
+    }
+    .calendar {
+      background-color: $light-yellow;
+      padding: 40px 20px;
+      @include flexColumn;
+      text-align: center;
+      .calendar-area {
+        margin-top: 50px;
+        height: 145px;
+      }
+    }
+  }
+  .lecture-info {
+    .right-box {
+      width: 900px;
+      height: 295px;
+      background-color: white;
+      border-radius: 40px;
+      box-shadow: $light-shadow;
+      overflow: hidden;
+      &:nth-child(1) {
+        margin-bottom: 25px;
+      }
+    }
+    .lecture-content {
+      padding: 35px;
+      .box-title {
+        display: inline-block;
+        border-bottom: 5px solid $yellow;
+      }
+      .lecture-list {
+        margin-top: 20px;
+        overflow-y: scroll;
+        height: 180px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        .lecture {
+          margin: 15px;
+          .round-post-card {
+            width: 240px;
+            height: 140px;
+            border-radius: 20px;
+            background-color: $light-grey;
+          }
+          .lecture-title {
+            width: 240px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 14px;
+            margin-top: 10px;
+          }
+        }
+      }
+    }
+  }
+}

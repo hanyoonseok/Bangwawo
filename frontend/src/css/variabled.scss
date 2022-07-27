@@ -23,6 +23,8 @@ $appleB: "AppleSDGothicNeoB";
 $userBg: url("@/assets/userBg.png");
 $mainBg: url("@/assets/mainBg.png");
 $shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+$light-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+$drop-shadow: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.1));
 
 //mixin
 @mixin flexCenter() {
@@ -70,7 +72,7 @@ $shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   }
 }
 
-@mixin TextArea {
+@mixin TextArea() {
   padding: 12px 20px;
   border-radius: 25px;
   background-color: $light-grey;
