@@ -21,7 +21,7 @@
         color: $dark-grey;
       }
     }
-    .router-link-exact-active {
+    .active {
       border-bottom: 3px solid $dark-grey;
       color: $dark-grey;
     }
@@ -82,6 +82,7 @@
     .parent-input {
       font-size: 16px;
       @include Input;
+      height: 40px;
       border-radius: 0 40px 40px 0;
       background-color: $lightx2-yellow;
       width: 270px;

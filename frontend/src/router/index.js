@@ -43,6 +43,16 @@ const routes = [
     component: () => import("@/views/SecretFriendView"),
   },
   {
+    path: "/classlist",
+    name: "classlist",
+    component: () => import("@/views/ClassListView"),
+  },
+  {
+    path: "/classdetail",
+    name: "classdetail",
+    component: () => import("@/views/ClassDetailView"),
+  },
+  {
     path: "/secrettalk",
     name: "secrettalk",
     component: () => import("@/views/SecretTalkView"),
@@ -56,18 +66,6 @@ const routes = [
         path: "login",
         name: "login",
         component: () => import("@/views/LoginView"),
-        children: [
-          {
-            path: "",
-            name: "stuAndvolu",
-            component: () => import("@/components/StuAndVoluLogin"),
-          },
-          {
-            path: "parent",
-            name: "parent",
-            component: () => import("@/components/ParentLogin"),
-          },
-        ],
       },
       {
         path: "signup/student",

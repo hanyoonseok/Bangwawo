@@ -1,6 +1,6 @@
 <template>
   <div class="post-card">
-    <div class="card-info">
+    <div class="card-info card-view">
       <h4>강의 제목 들어갈부분</h4>
       <div class="division">
         <label class="detail"
@@ -11,12 +11,18 @@
         >
       </div>
     </div>
+    <div class="post-card-hover">
+      <p class="people">정원 : 몇명ㅇ</p>
+      <p class="teacher">강사 : 김오리</p>
+      <p class="time">시간 : 2022/7/27 ~</p>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: "RectPostCard",
+  methods: {},
 };
 </script>
 

@@ -2,9 +2,8 @@
   background: url("@/assets/mainBg.png");
   height: 100vh;
   .mypage-container {
-    padding: 70px 80px;
+    padding: 60px 80px;
   }
-  overflow: hidden;
 }
 
 .mypage-content {
@@ -24,11 +23,36 @@
       margin-bottom: 25px;
       @include flexCenter;
       flex-direction: column;
-      i {
+      .profile-ellipse {
         position: absolute;
         right: 25px;
         top: 25px;
         color: $grey;
+        &:hover > ul {
+          display: block;
+        }
+      }
+      ul {
+        position: absolute;
+        box-shadow: $shadow;
+        width: 108px;
+        border-radius: 12px;
+        padding: 8px 10px;
+        background-color: $white;
+        @include flexColumn;
+        display: none;
+        li {
+          padding: 6px 0;
+          font-family: $appleM;
+          font-size: 13px;
+          @include flexCenter;
+          &:first-child {
+            border-bottom: 1px solid $light-grey;
+          }
+          &:last-child {
+            color: $pink;
+          }
+        }
       }
       img {
         width: 100px;
@@ -50,6 +74,13 @@
     }
     .calendar {
       background-color: $light-yellow;
+      padding: 40px 20px;
+      @include flexColumn;
+      text-align: center;
+      .calendar-area {
+        margin-top: 50px;
+        height: 145px;
+      }
     }
   }
   .lecture-info {
