@@ -1,0 +1,190 @@
+/*loginView CSS*/
+
+.user-background {
+  background: url("@/assets/userBg.png");
+  height: 100vh;
+  @include flexCenter;
+  .three-duck {
+    img {
+      width: 330px;
+      height: 125px;
+    }
+  }
+  .user-select {
+    width: 330px;
+    @include flexBetween;
+    text-align: center;
+    a {
+      color: $grey;
+      transition: all 200ms ease;
+      &:hover {
+        color: $dark-grey;
+      }
+    }
+    .active {
+      border-bottom: 3px solid $dark-grey;
+      color: $dark-grey;
+    }
+    .user-btn {
+      padding: 5px 0;
+      width: 50%;
+      background-color: transparent;
+      font-size: 16px;
+      font-family: $appleM;
+      &:hover {
+        border-bottom: 3px solid $dark-grey;
+      }
+    }
+  }
+}
+
+/* stuAndVoluLogin CSS*/
+
+.stuAndVolu {
+  height: 200px;
+  text-align: center;
+  .login-desc {
+    font-family: $SCoreL;
+    font-weight: bolder;
+    padding: 30px 0;
+  }
+  button {
+    @include SubmitBtn;
+    height: 40px;
+    width: 330px;
+    font-size: 16px;
+
+    img {
+      margin-right: 10px;
+      width: 30px;
+      height: 23px;
+    }
+  }
+}
+
+/*ParentLogin CSS*/
+
+.parent {
+  height: 200px;
+  padding: 20px 0;
+  .parent-login {
+    margin-top: 10px;
+    @include flexCenter;
+    label {
+      background-color: $soft-yellow;
+      width: 55px;
+      height: 40px;
+      @include flexCenter;
+      border-radius: 40px 0 0 40px;
+      color: $white;
+      box-shadow: $light-shadow;
+    }
+    .parent-input {
+      font-size: 16px;
+      @include Input;
+      height: 40px;
+      border-radius: 0 40px 40px 0;
+      background-color: $lightx2-yellow;
+      width: 270px;
+
+      box-shadow: $light-shadow;
+    }
+  }
+  .login-submit {
+    margin-top: 20px;
+    @include SubmitBtn;
+    height: 40px;
+    font-size: 16px;
+    width: 325px;
+  }
+}
+
+/*SignUp Student CSS*/
+.signup-container {
+  @include flexCenter;
+  .sign-input {
+    @include Input;
+    font-size: 16px;
+    display: block;
+    background-color: #fff4dd;
+    margin-top: 10px;
+    width: 350px;
+    box-shadow: $light-shadow;
+  }
+  .duck-img {
+    position: relative;
+    img {
+      width: 180px;
+      height: 212px;
+      margin-left: 20px;
+    }
+  }
+}
+
+.signup-submit {
+  margin-top: 20px;
+  @include SubmitBtn;
+  height: 40px;
+  font-size: 16px;
+  width: 350px;
+}
+/* SignUpVolunteer CSS*/
+
+.signup-volunteer {
+  position: relative;
+  .guide-volunteer {
+    img {
+      width: 115px;
+      height: 95px;
+      filter: $drop-shadow;
+    }
+
+    .guide {
+      width: 280px;
+      border-radius: 30px;
+      top: -30px;
+      left: 120px;
+    }
+    .guide:after {
+      top: 60px;
+      left: 30px;
+    }
+  }
+  .introduction {
+    @include TextArea;
+    width: 550px;
+    height: 180px;
+    background-color: $white;
+    box-shadow: $light-shadow;
+  }
+  .signup-submit {
+    width: 550px;
+  }
+}
+
+/* 말풍선 CSS*/
+.guide {
+  @include flexCenter;
+  position: absolute;
+  width: 250px;
+  top: -60px;
+  right: 100px;
+  background: $white;
+  font-family: $hyemin;
+  border-radius: 20px;
+  padding: 12px 12.8px;
+  filter: $drop-shadow;
+}
+
+.guide:after {
+  border-top: 20px solid $white;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 0px solid transparent;
+  content: "";
+  filter: $drop-shadow;
+
+  position: absolute;
+  top: 40px;
+  left: 160px;
+}
