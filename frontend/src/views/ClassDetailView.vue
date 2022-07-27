@@ -113,19 +113,19 @@ export default {
       subscribe: 0,
     };
 
-    return {
-      state,
-      user,
-    };
-  },
-  methods: {
-    showProfile() {
+    const showProfile = () => {
       if (document.querySelector(".profile").style.display === "block") {
         document.querySelector(".profile").style.display = "none";
       } else {
         document.querySelector(".profile").style.display = "block";
       }
-    },
+    };
+
+    return {
+      state,
+      user,
+      showProfile,
+    };
   },
 };
 </script>
