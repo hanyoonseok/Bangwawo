@@ -43,6 +43,16 @@ const routes = [
     component: () => import("@/views/SecretFriendView"),
   },
   {
+    path: "/classlist",
+    name: "classlist",
+    component: () => import("@/views/ClassListView"),
+  },
+  {
+    path: "/classdetail",
+    name: "classdetail",
+    component: () => import("@/views/ClassDetailView"),
+  },
+  {
     path: "/secrettalk",
     name: "secrettalk",
     component: () => import("@/views/SecretTalkView"),
