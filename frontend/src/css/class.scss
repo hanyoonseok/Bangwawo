@@ -27,6 +27,8 @@
     width: 75%;
     background-color: $light-yellow;
     border-radius: 15px;
+    box-shadow: $light-shadow;
+
     &.host {
       padding: 15px;
       display: grid;

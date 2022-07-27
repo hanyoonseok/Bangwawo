@@ -1,7 +1,7 @@
 <template>
   <section class="main-section">
     <article class="title-wrapper">
-      <h2 class="title">비밀친구 대화중</h2>
+      <h2>비밀친구 대화중</h2>
     </article>
     <article class="user-wrapper">
       <div class="user-card"></div>

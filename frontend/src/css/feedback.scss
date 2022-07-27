@@ -1,0 +1,85 @@
+.background {
+  background-image: $mainBg;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  padding-top: 80px;
+}
+
+.main-section {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  @include flexColumn;
+  align-items: center;
+  padding: 0 60px 30px 60px;
+}
+
+.title-wrapper {
+  position: relative;
+  padding: 10px 0;
+  flex-shrink: 0;
+  &:after {
+    position: absolute;
+    content: "";
+    bottom: 0;
+    left: 50%;
+    width: 110px;
+    height: 5px;
+    background-color: $yellow;
+    transform: translate(-50%, 0);
+  }
+}
+
+.list-wrapper {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 0;
+  row-gap: 50px;
+  margin: 40px 0;
+  place-items: center;
+  padding: 10px 0;
+}
+
+.btn-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  .submit-btn {
+    @include SubmitBtn;
+    flex-shrink: 0;
+  }
+}
+
+.profile {
+  width: 250px;
+  height: 215px;
+  border-radius: 40px;
+  box-shadow: $light-shadow;
+  background-color: white;
+  @include flexBetween;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+
+  img {
+    width: 100px;
+    height: 100px;
+    filter: $drop-shadow;
+  }
+  .person-info {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    color: #7b7777;
+    label {
+      @include inputTitleLabel;
+      margin: 0 15px;
+    }
+  }
+}

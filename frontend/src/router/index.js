@@ -84,6 +84,11 @@ const routes = [
     name: "class",
     component: () => import("@/views/ClassView"),
   },
+  {
+    path: "/feedback",
+    name: "feedback",
+    component: () => import("@/views/FeedBack"),
+  },
 ];
 
 export const router = createRouter({
