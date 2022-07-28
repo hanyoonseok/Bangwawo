@@ -10,6 +10,34 @@
         <i class="fa-solid fa-magnifying-glass"></i>
       </button>
     </div>
+    <div class="filter">
+      <input type="checkbox" name="unresolved" id="unresolved" />
+      <label for="">미해결 요청만 보기</label>
+    </div>
+    <!-- 봉사자 아닐 경우에만 요청 글 작성 가능 -->
+    <div v-if="user.status !== 2">
+      <button class="request-register">작성하기</button>
+    </div>
+    <div class="list">
+      <table>
+        <thead>
+          <tr>
+            <th>글 번호</th>
+            <th>작성자</th>
+            <th>제목</th>
+            <th>해결</th>
+            <th>작성시간</th>
+            <th>조회수</th>
+            <th>원해요</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -17,8 +45,17 @@
 import HeaderNav from "@/components/HeaderNav.vue";
 export default {
   name: "ClassRequestView",
-  component: {
+  components: {
     HeaderNav,
+  },
+  setup() {
+    const user = {
+      status: 1,
+      subscribe: 0,
+    };
+    return {
+      user,
+    };
   },
 };
 </script>

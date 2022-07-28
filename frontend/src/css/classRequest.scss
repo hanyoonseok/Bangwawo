@@ -33,19 +33,64 @@
 // 검색
 .search-bar {
   @include flexCenter;
-  margin-bottom: 120px;
 
   input {
     width: 622px;
     @include Input;
   }
   .searchBtn {
-    width: 44px;
+    width: 37px;
     height: 37px;
     background-color: $yellow;
     border-radius: 50%;
     font-size: 20px;
     color: $white;
     margin-left: 28px;
+    padding: 0;
+    justify-content: center;
+
+    i {
+      text-align: center;
+    }
   }
+}
+
+.filter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  z-index: 999;
+  margin-right: 60px;
+  margin-bottom: 10px;
+
+  input {
+    margin-right: 10px;
+  }
+
+  input[type="checkbox"] {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 100%;
+    background-color: $light-grey;
+    border: 1px solid darken($color: $light-grey, $amount: 5);
+  }
+  input[type="checkbox"]:checked {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 100%;
+    margin-right: 0.1rem;
+    background-color: $yellow;
+  }
+}
+
+button {
+  @include SubmitBtn;
+  display: flex;
+  justify-content: flex-end;
+  text-align: right;
+  float: right;
+  margin-right: 60px;
+  margin-bottom: 16px;
 }

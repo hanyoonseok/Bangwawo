@@ -99,6 +99,8 @@
         }
       }
       .modal {
+        opacity: 0;
+        z-index: -10000;
         position: absolute;
         bottom: -270px;
         left: -238px;

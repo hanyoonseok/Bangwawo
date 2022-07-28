@@ -63,7 +63,7 @@ const routes = [
     component: () => import("@/views/ClassModifyView"),
   },
   {
-    path: "/classrequest",
+    path: "/class/request",
     name: "classrequest",
     component: () => import("@/views/ClassRequestView"),
   },
