@@ -56,7 +56,9 @@
             <input
               type="number"
               name="classPeople"
+              min="0"
               id="classPeople"
+              oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
               v-model="state.classPeople"
             />
           </div>

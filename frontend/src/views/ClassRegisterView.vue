@@ -56,8 +56,10 @@
             <label for="classPeople" class="info-title">최대 인원</label>
             <input
               type="number"
+              min="0"
               name="classPeople"
               id="classPeople"
+              oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
               v-model="state.classPeople"
             />
           </div>

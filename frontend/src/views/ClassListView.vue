@@ -58,13 +58,11 @@
           <p>현재 개설된 수업 목록입니다.</p>
         </div>
         <div class="contents">
-          <ul>
-            <div v-for="(item, index) in state" :key="index">
-              <router-link to="/class/detail"
-                ><RectPostCard :state="item"
-              /></router-link>
-            </div>
-          </ul>
+          <div v-for="(item, index) in state" :key="index">
+            <router-link to="/class/detail"
+              ><RectPostCard :state="item"
+            /></router-link>
+          </div>
         </div>
       </section>
       <a class="up" @click="top">
