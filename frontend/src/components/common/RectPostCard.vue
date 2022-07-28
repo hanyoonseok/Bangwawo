@@ -1,5 +1,11 @@
 <template>
   <div class="post-card">
+    <div class="img-box" v-if="state.classImgFile.length === 0">
+      이미지를 추가해주세요.
+    </div>
+    <div class="img-box" v-else>
+      <img :src="state.classImgFile" alt="썸네일이미지" />
+    </div>
     <div class="card-info card-view">
       <h4>{{ state.className }}</h4>
       <div class="division">
