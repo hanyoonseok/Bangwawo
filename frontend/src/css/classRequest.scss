@@ -160,3 +160,19 @@ button {
     }
   }
 }
+
+.up {
+  display: block;
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background-color: $yellow;
+  color: $white;
+  font-size: 20px;
+  width: 35px;
+  height: 35px;
+  text-align: center;
+  line-height: 35px;
+  border-radius: 50%;
+  transition: 0.7s ease;
+}

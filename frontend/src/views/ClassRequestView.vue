@@ -45,6 +45,9 @@
         </tbody>
       </table>
     </div>
+    <a class="up" @click="top">
+      <i class="fa-solid fa-arrow-up"></i>
+    </a>
   </div>
 </template>
 
@@ -171,9 +174,15 @@ export default {
         want: 1,
       },
     ];
+
+    const top = () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
     return {
       user,
       requests,
+      top,
     };
   },
 };
