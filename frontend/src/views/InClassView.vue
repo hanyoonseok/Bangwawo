@@ -10,7 +10,7 @@ import { reactive } from "vue";
 import HostView from "@/components/class/HostView.vue";
 import UserView from "@/components/class/UserView.vue";
 export default {
-  name: "ClassView",
+  name: "InClassView",
   components: {
     HostView,
     UserView,

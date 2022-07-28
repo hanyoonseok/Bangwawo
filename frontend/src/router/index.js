@@ -80,9 +80,9 @@ const routes = [
     ],
   },
   {
-    path: "/class",
-    name: "class",
-    component: () => import("@/views/ClassView"),
+    path: "/inclass",
+    name: "inclass",
+    component: () => import("@/views/InClassView"),
   },
   {
     path: "/feedback",
