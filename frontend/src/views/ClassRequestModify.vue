@@ -5,7 +5,7 @@
       <section class="title-section">
         <img src="@/assets/consult-1.png" />
         <article class="title-wrapper">
-          <h2>요청 글 등록</h2>
+          <h2>요청 글 수정</h2>
         </article>
         <img src="@/assets/consult-3.png" />
       </section>

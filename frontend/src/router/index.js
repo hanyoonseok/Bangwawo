@@ -41,31 +41,51 @@ const routes = [
     path: "/secret",
     name: "secret",
     component: () => import("@/views/SecretFriendView"),
+    children: [
+      {
+        path: "secrettalk",
+        name: "secrettalk",
+        component: () => import("@/views/SecretTalkView"),
+      },
+    ],
   },
   {
-    path: "/class/list",
-    name: "classlist",
-    component: () => import("@/views/ClassListView"),
-  },
-  {
-    path: "/class/detail",
-    name: "classdetail",
-    component: () => import("@/views/ClassDetailView"),
-  },
-  {
-    path: "/class/register",
-    name: "classregister",
-    component: () => import("@/views/ClassRegisterView"),
-  },
-  {
-    path: "/class/modify",
-    name: "classmodify",
-    component: () => import("@/views/ClassModifyView"),
-  },
-  {
-    path: "/secrettalk",
-    name: "secrettalk",
-    component: () => import("@/views/SecretTalkView"),
+    path: "/class",
+    name: "class",
+    component: () => import("@/views/ClassView"),
+    redirect: "/class/list",
+    children: [
+      {
+        path: "list",
+        name: "classlist",
+        component: () => import("@/views/ClassListView"),
+      },
+      {
+        path: "detail",
+        name: "classdetail",
+        component: () => import("@/views/ClassDetailView"),
+      },
+      {
+        path: "register",
+        name: "classregister",
+        component: () => import("@/views/ClassRegisterView"),
+      },
+      {
+        path: "modify",
+        name: "classmodify",
+        component: () => import("@/views/ClassModifyView"),
+      },
+      {
+        path: "requestregist",
+        name: "classrequestregist",
+        component: () => import("@/views/ClassRequestRegist"),
+      },
+      {
+        path: "requestmodify",
+        name: "classrequestmodify",
+        component: () => import("@/views/ClassRequestModify"),
+      },
+    ],
   },
   {
     path: "/user",
@@ -88,16 +108,6 @@ const routes = [
         component: () => import("@/views/SignupVolunteerView"),
       },
     ],
-  },
-  {
-    path: "/classrequestregist",
-    name: "classrequestregist",
-    component: () => import("@/views/ClassRequestRegist"),
-  },
-  {
-    path: "/classrequestmodify",
-    name: "classrequestmodify",
-    component: () => import("@/views/ClassRequestModify"),
   },
 ];
 
