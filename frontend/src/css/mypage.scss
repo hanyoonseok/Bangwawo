@@ -8,6 +8,7 @@
 
 .mypage-content {
   @include flexCenter;
+
   .profile-info {
     width: 300px;
     margin-right: 80px;
@@ -34,13 +35,13 @@
       }
       ul {
         position: absolute;
-        box-shadow: $shadow;
         width: 108px;
         border-radius: 12px;
         padding: 8px 10px;
         background-color: $white;
         @include flexColumn;
         display: none;
+        box-shadow: $light-shadow;
         li {
           padding: 6px 0;
           font-family: $appleM;
@@ -59,8 +60,9 @@
         height: 100px;
         filter: $drop-shadow;
       }
-      .student-info {
-        @include flexCenter;
+      .person-info {
+        display: flex;
+        justify-content: center;
         label {
           @include inputTitleLabel;
           width: 60px;
@@ -68,6 +70,34 @@
         .label-value {
           margin-left: 25px;
           width: 130px;
+
+          .children-name {
+            display: block;
+            background-color: transparent;
+            font-family: $appleM;
+            font-size: 16px;
+            line-height: 30px;
+            height: 30px;
+            &::after {
+              content: "";
+              border-bottom: 3px solid $grey;
+              width: 100%;
+              display: none;
+            }
+            &:hover {
+              border-bottom: 2px solid $grey;
+            }
+          }
+        }
+        .volunteer-value {
+          width: 170px;
+        }
+        .introduce {
+          padding: 10px;
+          width: 170px;
+          border-radius: 20px;
+          background-color: $lightx2-yellow;
+          height: 80px;
         }
         margin-top: 25px;
       }
@@ -78,7 +108,7 @@
       @include flexColumn;
       text-align: center;
       .calendar-area {
-        margin-top: 50px;
+        margin-top: 20px;
         height: 145px;
       }
     }
@@ -103,15 +133,51 @@
       }
       .lecture-list {
         margin-top: 20px;
+        overflow-y: scroll;
+        height: 180px;
         display: flex;
         flex-direction: row;
+        justify-content: flex-start;
+        flex-wrap: wrap;
         .lecture {
-          margin-right: 20px;
+          margin: 15px;
           .round-post-card {
+            position: relative;
             width: 240px;
             height: 140px;
             border-radius: 20px;
             background-color: $light-grey;
+            cursor: pointer;
+            @include flexCenter;
+            .feedback-btn {
+              @include SubmitBtn;
+              position: absolute;
+              font-family: $SCore;
+              width: 130px;
+              transform: translate(0, 20px);
+              opacity: 0;
+              z-index: 999;
+            }
+          }
+          .end-lecture {
+            transition: all 300ms ease;
+            div {
+              width: 100%;
+              position: absolute;
+              height: 100%;
+              top: 0;
+              left: 0;
+              content: "";
+              background-color: $light-grey;
+              border-radius: 20px;
+            }
+            &:hover > div {
+              filter: brightness(70%);
+            }
+            &:hover > .feedback-btn {
+              transform: translate(0, 0);
+              opacity: 100%;
+            }
           }
           .lecture-title {
             width: 240px;

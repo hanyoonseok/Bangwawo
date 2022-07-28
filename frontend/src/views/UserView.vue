@@ -1,18 +1,14 @@
 <template>
   <div class="user-background">
-    <login-view></login-view>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 // import { reactive } from "vue";
-import LoginView from "@/views/LoginView.vue";
 export default {
   name: "SignupView",
   setup() {},
-  components: {
-    LoginView,
-  },
 };
 </script>
 

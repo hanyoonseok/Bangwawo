@@ -1,0 +1,11 @@
+.calendar-area {
+  height: 150px;
+  .vc-container {
+    font-family: $Gmarket;
+    --font-medium: 600;
+    color: $dark-grey;
+  }
+  .vc-day {
+    height: 20px !important;
+  }
+}
