@@ -102,6 +102,11 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/feedback",
+    name: "feedback",
+    component: () => import("@/views/FeedbackView"),
+  },
 ];
 
 export const router = createRouter({

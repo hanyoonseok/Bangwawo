@@ -1,0 +1,70 @@
+.feedback-background {
+  background: url("@/assets/feedbackBg.png");
+  height: 1440px;
+  padding: 50px;
+  .feedback-area {
+    z-index: 10;
+    background-color: $lightx2-yellow;
+    box-shadow: $shadow;
+    height: 1230px;
+    border-radius: 40px;
+    padding: 60px 90px;
+    section {
+      padding-bottom: 20px;
+    }
+    .title {
+      display: inline-block;
+      line-height: 65px;
+      border-bottom: 5px solid $yellow;
+    }
+    .lecture-info {
+      @include flexCenter;
+      margin: 50px 0;
+      .round-post-card {
+        margin-right: 70px;
+        background-color: $light-grey;
+      }
+      .lecture-desc {
+        width: 70%;
+        @include flexColumn;
+        height: 185px;
+        flex-wrap: wrap;
+        .lecture-value {
+          margin: 5px;
+          label {
+            @include inputTitleLabel;
+          }
+          .label-value {
+            margin-left: 15px;
+            width: 255px;
+          }
+          @include flexCenter;
+          justify-content: flex-start;
+        }
+      }
+    }
+
+    .feedback-desc {
+      background-color: $light-yellow;
+      height: 215px;
+      border-radius: 20px;
+      margin: 30px 0;
+      padding: 40px;
+      font-size: 20px;
+    }
+
+    .lecture-video-area {
+      text-align: center;
+      @include flexCenter;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      .lecture-video {
+        width: 375px;
+        height: 230px;
+        border-radius: 20px;
+        background-color: $light-grey;
+        margin: 30px 20px;
+      }
+    }
+  }
+}
