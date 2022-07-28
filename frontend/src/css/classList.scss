@@ -61,6 +61,7 @@ section {
         width: 399px;
         height: 245px;
         margin-top: 0;
+        border-radius: 0 85px 85px 85px;
       }
       .swiper-slide .post-card {
         width: 330px;
@@ -100,18 +101,16 @@ section {
     margin: 0 148px;
     padding-bottom: 50px;
 
-    ul {
-      @include flexBetween;
-      flex-wrap: wrap;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-column-gap: 33px;
-      grid-row-gap: 70px;
+    @include flexBetween;
+    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-gap: 33px;
+    grid-row-gap: 70px;
 
-      li {
-        margin-right: 33px;
-        margin-bottom: 70px;
-      }
+    a {
+      margin-right: 33px;
+      margin-bottom: 70px;
     }
   }
 }

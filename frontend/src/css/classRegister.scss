@@ -1,0 +1,218 @@
+.background {
+  background-image: $mainBg;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  padding-top: 80px;
+}
+
+.title {
+  width: 100%;
+  height: auto;
+  text-align: center;
+  position: relative;
+  margin-bottom: 28px;
+
+  h2 {
+    &::after {
+      content: "";
+      display: block;
+      width: 121px;
+      height: 8px;
+      background: $yellow;
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, 0);
+    }
+  }
+}
+
+.contents {
+  width: 990px;
+  height: 520px;
+  background-color: #fff;
+  border-radius: 44px;
+  box-shadow: $shadow;
+  margin: auto;
+  padding: 50px 40px;
+  column-gap: 20px;
+
+  article {
+    @include flexBetween;
+    .left-box {
+      width: 50%;
+      .info-box {
+        margin-bottom: 20px;
+        display: grid;
+        line-height: 30px;
+        grid-template-columns: 74px 1fr;
+        column-gap: 35px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .info-title {
+          @include inputTitleLabel;
+        }
+
+        input {
+          @include Input;
+          height: 30px;
+          font-family: $appleM;
+          color: $grey;
+        }
+
+        input[type="number"] {
+          width: 100px;
+        }
+
+        textarea {
+          @include TextArea;
+          font-size: 12px;
+          color: $grey;
+        }
+
+        .classTime {
+          display: flex;
+          column-gap: 10px;
+          width: 90%;
+
+          input {
+            font-family: $appleM;
+            color: $grey;
+            padding: 5px;
+
+            &::before {
+              display: none;
+            }
+            &::after {
+              display: none;
+            }
+          }
+        }
+        .filebox {
+          width: 30px;
+          height: 30px;
+          label {
+            cursor: pointer;
+          }
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+
+        .filebox input[type="file"] {
+          position: absolute;
+          width: 0;
+          height: 0;
+          padding: 0;
+          overflow: hidden;
+          border: 0;
+        }
+      }
+
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+
+        input {
+          opacity: 0;
+          width: 0;
+          height: 0;
+          &:checked + .slider {
+            background-color: $yellow;
+          }
+
+          &:focus + .slider {
+            box-shadow: 0 0 1px $yellow;
+          }
+
+          &:checked + .slider::before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+          }
+        }
+
+        .slider {
+          position: absolute;
+          cursor: pointer;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: #ccc;
+          -webkit-transition: 0.4s;
+          transition: 0.4s;
+          border-radius: 34px;
+
+          &::before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: 0.4s;
+            transition: 0.4s;
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+
+    .right-box {
+      width: 410px;
+      height: 400px;
+      background: $lightx2-yellow;
+      border-radius: 40px;
+      padding: 43px;
+
+      h4 {
+        margin-bottom: 17px;
+      }
+      .post-card {
+        width: 320px;
+        height: 210px;
+      }
+    }
+  }
+
+  .registerBtn {
+    width: 170px;
+    margin-top: 20px;
+    @include SubmitBtn;
+    float: right;
+  }
+}
+input[type="date"] {
+  width: 30px;
+}
+input[type="date"]::-webkit-datetime-edit-text {
+  -webkit-appearance: none;
+  display: none;
+}
+input[type="date"]::-webkit-datetime-edit-month-field {
+  -webkit-appearance: none;
+  display: none;
+}
+input[type="date"]::-webkit-datetime-edit-day-field {
+  -webkit-appearance: none;
+  display: none;
+}
+input[type="date"]::-webkit-datetime-edit-year-field {
+  -webkit-appearance: none;
+  display: none;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

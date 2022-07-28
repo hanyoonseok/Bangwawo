@@ -68,7 +68,8 @@ section {
         .right-box {
           .info-box {
             width: 450px;
-            .info-content {
+
+            &:first-child .info-content {
               z-index: 20;
             }
 
@@ -83,13 +84,20 @@ section {
         }
       }
 
+      .button-box {
+        z-index: 100;
+      }
       .button-box > div {
         margin-top: 63px;
         display: flex;
         justify-content: flex-end;
 
-        button {
+        button,
+        a {
           margin-left: 22px;
+          line-height: 30px;
+          cursor: pointer;
+          z-index: 30;
         }
 
         .classStatusBtn,
