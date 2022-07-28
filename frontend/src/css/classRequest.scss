@@ -1,0 +1,72 @@
+.background {
+  background-image: $mainBg;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  padding-top: 80px;
+}
+.main-section {
+  width: 100%;
+  height: 100%;
+  @include flexColumn;
+  align-items: center;
+  padding: 30px 45px;
+}
+
+.title-section {
+  display: flex;
+  align-items: center;
+
+  .title-wrapper {
+    position: relative;
+    padding: 10px 0;
+    flex-shrink: 0;
+    margin: 0 16px;
+
+    &:after {
+      position: absolute;
+      content: "";
+      bottom: 0;
+      left: 50%;
+      width: 100%;
+      height: 5px;
+      background-color: $yellow;
+      transform: translate(-50%, 0);
+    }
+  }
+
+  img {
+    width: 88px;
+    height: 104px;
+  }
+}
+
+.content-wrapper {
+  width: 70%;
+  margin-top: 40px;
+  display: flex;
+  label {
+    @include inputTitleLabel;
+    margin-right: 20px;
+  }
+  input {
+    @include Input;
+    width: 100%;
+  }
+  textarea {
+    @include TextArea;
+    height: 100%;
+    width: 100%;
+  }
+}
+
+.btn-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 60px;
+  button {
+    @include SubmitBtn;
+  }
+}

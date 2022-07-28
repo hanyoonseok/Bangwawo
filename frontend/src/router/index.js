@@ -79,6 +79,11 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/classrequest",
+    name: "classrequest",
+    component: () => import("@/views/ClassRequestRegist"),
+  },
 ];
 
 export const router = createRouter({
