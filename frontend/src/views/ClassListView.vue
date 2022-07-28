@@ -130,14 +130,13 @@ export default {
     SwiperSlide,
   },
   setup() {
+    const top = () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
     return {
       modules: [Navigation],
+      top,
     };
-  },
-  methods: {
-    top() {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    },
   },
 };
 </script>

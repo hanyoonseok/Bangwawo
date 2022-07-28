@@ -6,12 +6,12 @@
 
 <script>
 // import { reactive } from "vue";
-import LoginView from "@/views/LoginView.vue";
+// import LoginView from "@/views/LoginView.vue";
 export default {
   name: "SignupView",
   setup() {},
   components: {
-    LoginView,
+    // LoginView,
   },
 };
 </script>
