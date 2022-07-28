@@ -12,6 +12,9 @@
   @include flexColumn;
   align-items: center;
   padding: 30px 45px;
+  &.detail {
+    padding: 40px 70px 80px 70px;
+  }
 }
 
 .title-section {
@@ -69,4 +72,28 @@
   button {
     @include SubmitBtn;
   }
+}
+
+.backbtn-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  button {
+    width: 20px;
+    height: 20px;
+    border-top: 4px solid #000;
+    border-left: 4px solid #000;
+    transform: rotate(-45deg);
+    content: "";
+    background-color: transparent;
+    border-color: $yellow;
+    border-radius: 2px;
+  }
+}
+
+.content-section {
+  width: 100%;
+  height: 100%;
+  background-color: $white;
+  padding: 15px 50px 15px 100px;
 }
