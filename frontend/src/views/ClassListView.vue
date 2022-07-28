@@ -111,6 +111,8 @@ export default {
         classOpen: "dd",
         classPeople: "dd",
         classContent: "dd",
+        classImgFile:
+          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
       },
       {
         className: "ss",
@@ -121,6 +123,8 @@ export default {
         classOpen: "ss",
         classPeople: "ss",
         classContent: "ss",
+        classImgFile:
+          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
       },
       {
         className: "ss",
@@ -131,6 +135,8 @@ export default {
         classOpen: "ss",
         classPeople: "ss",
         classContent: "ss",
+        classImgFile:
+          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
       },
       {
         className: "ss",
@@ -141,6 +147,8 @@ export default {
         classOpen: "ss",
         classPeople: "ss",
         classContent: "ss",
+        classImgFile:
+          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
       },
       {
         className: "ss",
@@ -151,6 +159,8 @@ export default {
         classOpen: "ss",
         classPeople: "ss",
         classContent: "ss",
+        classImgFile:
+          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
       },
       {
         className: "ss",
@@ -161,6 +171,8 @@ export default {
         classOpen: "ss",
         classPeople: "ss",
         classContent: "ss",
+        classImgFile:
+          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
       },
     ]);
     const top = () => {
