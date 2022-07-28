@@ -19,6 +19,7 @@
       <button class="request-register">작성하기</button>
     </div>
     <div class="list">
+      <div class="table-header"></div>
       <table>
         <thead>
           <tr>
@@ -32,8 +33,14 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td></td>
+          <tr v-for="item in requests" :key="item.num">
+            <td>{{ item.num }}</td>
+            <td>{{ item.writer }}</td>
+            <td>{{ item.title }}</td>
+            <td>{{ item.solved }}</td>
+            <td>{{ item.time }}</td>
+            <td>{{ item.views }}</td>
+            <td>{{ item.want }}</td>
           </tr>
         </tbody>
       </table>
@@ -53,8 +60,120 @@ export default {
       status: 1,
       subscribe: 0,
     };
+
+    const requests = [
+      {
+        num: 1,
+        writer: "애기오리",
+        title: "애기오리는 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기오리",
+        title: "애기오리는 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기오리",
+        title: "애기오리는 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기오리",
+        title: "애기오리는 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기오리",
+        title: "애기오리는 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기오리",
+        title: "애기오리는 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기오리",
+        title: "애기오리는 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기오리",
+        title: "애기오리는 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기오리",
+        title: "애기오리는 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기오리",
+        title: "애기오리는 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기오리",
+        title: "애기오리는 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기오리",
+        title: "애기오리는 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+    ];
     return {
       user,
+      requests,
     };
   },
 };
