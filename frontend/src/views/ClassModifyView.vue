@@ -13,7 +13,6 @@
               type="text"
               name="className"
               id="className"
-              placeholder="state.className"
               v-model="state.className"
             />
           </div>
@@ -101,9 +100,23 @@ export default {
       classOpen: "",
       classPeople: "",
       classContent: "",
+      classImgFile: "",
     });
+
+    const fileChange = (e) => {
+      var input = e.target;
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = (e) => {
+          state.classImgFile = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    };
+
     return {
       state,
+      fileChange,
     };
   },
 };
