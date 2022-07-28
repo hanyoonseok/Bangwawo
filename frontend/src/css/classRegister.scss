@@ -57,44 +57,17 @@
           @include inputTitleLabel;
         }
 
-        input,
-        select {
+        input {
           @include Input;
           height: 30px;
           font-family: $appleM;
           color: $grey;
         }
 
-        select {
+        input[type="number"] {
           width: 100px;
-          padding: 5px 20px;
-          -o-appearance: none;
-          -webkit-appearance: none;
-          -moz-appearance: none;
-          appearance: none;
-          background: url("@/assets/selectBg.png") center no-repeat;
-          background-size: 100%;
-          border-radius: 40px;
-          cursor: pointer;
-          font-family: $appleM;
-          color: $grey;
-          outline: none;
-
-          /* IE */
-          &::-ms-expand {
-            display: none;
-          }
-
-          option {
-            background: $light-grey;
-            color: $grey;
-            margin-bottom: 3px;
-          }
-
-          &:focus {
-            border: none;
-          }
         }
+
         textarea {
           @include TextArea;
           font-size: 12px;
