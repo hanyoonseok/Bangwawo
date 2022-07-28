@@ -43,14 +43,24 @@ const routes = [
     component: () => import("@/views/SecretFriendView"),
   },
   {
-    path: "/classlist",
+    path: "/class/list",
     name: "classlist",
     component: () => import("@/views/ClassListView"),
   },
   {
-    path: "/classdetail",
+    path: "/class/detail",
     name: "classdetail",
     component: () => import("@/views/ClassDetailView"),
+  },
+  {
+    path: "/class/register",
+    name: "classregister",
+    component: () => import("@/views/ClassRegisterView"),
+  },
+  {
+    path: "/class/modify",
+    name: "classmodify",
+    component: () => import("@/views/ClassModifyView"),
   },
   {
     path: "/secrettalk",
