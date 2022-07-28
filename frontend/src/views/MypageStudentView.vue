@@ -86,28 +86,19 @@
           <h4 class="box-title">종료된 수업</h4>
           <div class="lecture-list">
             <div class="lecture">
-              <div class="round-post-card end-lecture">
-                <div></div>
-                <button class="feedback-btn">피드백 보기</button>
-              </div>
+              <div class="round-post-card end-lecture"></div>
               <div class="lecture-title">
                 오리선생의 초1 수학수업입니당 진짜 재밌어요~!
               </div>
             </div>
             <div class="lecture">
-              <div class="round-post-card end-lecture">
-                <div></div>
-                <button class="feedback-btn">피드백 보기</button>
-              </div>
+              <div class="round-post-card"></div>
               <div class="lecture-title">
                 오리선생의 초1 수학수업입니당 진짜 재밌어요~!
               </div>
             </div>
             <div class="lecture">
-              <div class="round-post-card end-lecture">
-                <div></div>
-                <button class="feedback-btn">피드백 보기</button>
-              </div>
+              <div class="round-post-card end-lecture"></div>
               <div class="lecture-title">
                 오리선생의 초1 수학수업입니당 진짜 재밌어요~!
               </div>

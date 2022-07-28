@@ -103,14 +103,10 @@
       }
     }
     .calendar {
-      background-color: $light-yellow;
+      background-color: $lightx2-yellow;
       padding: 40px 20px;
       @include flexColumn;
       text-align: center;
-      .calendar-area {
-        margin-top: 20px;
-        height: 145px;
-      }
     }
   }
   .lecture-info {
@@ -130,6 +126,11 @@
       .box-title {
         display: inline-block;
         border-bottom: 5px solid $yellow;
+      }
+      .title-desc {
+        font-size: 12px;
+        color: $grey;
+        margin-left: 20px;
       }
       .lecture-list {
         margin-top: 20px;

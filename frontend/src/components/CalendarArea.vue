@@ -1,7 +1,5 @@
 <template>
-  <div class="calendar-area">
-    <Calendar />
-  </div>
+  <div class="calendar-area"><Calendar locale="en" /></div>
 </template>
 
 <script>
