@@ -80,9 +80,14 @@ const routes = [
     ],
   },
   {
-    path: "/classrequest",
-    name: "classrequest",
+    path: "/classrequestregist",
+    name: "classrequestregist",
     component: () => import("@/views/ClassRequestRegist"),
+  },
+  {
+    path: "/classrequestmodify",
+    name: "classrequestmodify",
+    component: () => import("@/views/ClassRequestModify"),
   },
 ];
 

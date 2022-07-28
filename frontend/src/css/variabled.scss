@@ -80,7 +80,7 @@ $drop-shadow: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.1));
   resize: none;
   font-family: inherit;
 
-  ::placeholder {
+  &::placeholder {
     color: $grey;
     font-size: 12px;
   }
