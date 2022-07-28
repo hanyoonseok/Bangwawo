@@ -3,7 +3,10 @@
     <div class="empty" @click="close"></div>
     <div class="container">
       <div class="stretch">
-        <i class="fa-solid fa-xmark close" @click="close"></i>
+        <article class="btn-wrapper">
+          <i class="fa-solid fa-xmark close" @click="close"></i>
+        </article>
+
         <article class="title-wrapper">
           <h2>피드백</h2>
         </article>

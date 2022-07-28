@@ -23,10 +23,21 @@
         </div>
       </article>
       <article class="btn-wrapper">
-        <button class="submit-btn">피드백 제출</button>
+        <button class="submit-btn" @click="isConfirm = true">
+          피드백 제출
+        </button>
       </article>
     </section>
     <FeedbackModal v-if="selected" :info="selected" :close="close" />
+    <div class="confirm" v-if="isConfirm">
+      <div class="container">
+        <h2>정말로 제출하시겠습니까?</h2>
+        <div class="btn-wrapper">
+          <button class="btn">네</button>
+          <button class="btn" @click="isConfirm = false">아니요</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -89,16 +100,18 @@ export default {
 
     let selected = ref(null);
 
+    let isConfirm = ref(false);
+
     const close = (e) => {
       e.stopPropagation();
-
-      console.log(selected);
-      selected = null;
+      selected.value = null;
     };
+
     return {
       students,
       selected,
       close,
+      isConfirm,
     };
   },
 };
