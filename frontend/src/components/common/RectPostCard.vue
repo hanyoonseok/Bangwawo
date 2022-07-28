@@ -1,20 +1,27 @@
 <template>
   <div class="post-card">
+    <div class="img-box" v-if="state.classImgFile.length === 0">
+      이미지를 추가해주세요.
+    </div>
+    <div class="img-box" v-else>
+      <img :src="state.classImgFile" alt="썸네일이미지" />
+    </div>
     <div class="card-info card-view">
-      <h4>강의 제목 들어갈부분</h4>
+      <h4>{{ state.className }}</h4>
       <div class="division">
-        <label class="detail"
-          >강의 설명 asdfasdfasdfs들어sadfasdfasdf갈 부분</label
-        >
+        <label class="detail">{{ state.classContent }}</label>
         <label class="participants"
-          ><i class="fa-solid fa-user"></i>&nbsp;99</label
+          ><i class="fa-solid fa-user"></i>&nbsp;{{ state.classPeople }}</label
         >
       </div>
     </div>
     <div class="post-card-hover">
-      <p class="people">정원 : 몇명ㅇ</p>
-      <p class="teacher">강사 : 김오리</p>
-      <p class="time">시간 : 2022/7/27 ~</p>
+      <p class="people">정원 : {{ state.classPeople }}</p>
+      <p class="teacher">강사 : {{ state.classTeacher }}</p>
+      <p class="time">
+        시간 : {{ state.classDate }} &nbsp; {{ state.classStartTime }} ~
+        {{ state.classEndTIme }}
+      </p>
     </div>
   </div>
 </template>
@@ -22,7 +29,7 @@
 <script>
 export default {
   name: "RectPostCard",
-  methods: {},
+  props: ["state"],
 };
 </script>
 
