@@ -27,9 +27,9 @@
     width: 75%;
     background-color: $light-yellow;
     border-radius: 15px;
-    box-shadow: $light-shadow;
 
     &.host {
+      box-shadow: $light-shadow;
       padding: 15px;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -53,6 +53,7 @@
       display: flex;
       position: relative;
       &.top {
+        box-shadow: $light-shadow;
         padding: 15px;
         flex-wrap: nowrap;
         width: 100%;
