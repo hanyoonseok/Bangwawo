@@ -40,7 +40,7 @@
           class="slide"
         >
           <swiper-slide v-for="(item, index) in state" :key="index"
-            ><router-link to="/classdetail">
+            ><router-link to="/class/detail">
               <RectPostCard :state="item" />
             </router-link>
           </swiper-slide>
@@ -60,7 +60,7 @@
         <div class="contents">
           <ul>
             <div v-for="(item, index) in state" :key="index">
-              <router-link to="/classdetail"
+              <router-link to="/class/detail"
                 ><RectPostCard :state="item"
               /></router-link>
             </div>
