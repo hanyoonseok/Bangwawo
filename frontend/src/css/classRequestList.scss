@@ -1,0 +1,235 @@
+// 배경
+.background {
+  // background-image: $mainBg;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  padding-top: 80px;
+}
+
+// 제목
+.title {
+  width: 100%;
+  height: auto;
+  text-align: center;
+  position: relative;
+  margin-bottom: 35px;
+
+  h2 {
+    &::after {
+      content: "";
+      display: block;
+      width: 121px;
+      height: 8px;
+      background: $yellow;
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, 0);
+    }
+  }
+}
+
+// 검색
+.search-bar {
+  @include flexCenter;
+
+  input {
+    width: 622px;
+    @include Input;
+  }
+  .searchBtn {
+    width: 37px;
+    height: 37px;
+    background-color: $yellow;
+    border-radius: 50%;
+    font-size: 20px;
+    color: $white;
+    margin-left: 28px;
+    padding: 0;
+    justify-content: center;
+
+    i {
+      text-align: center;
+    }
+  }
+}
+
+.filter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  z-index: 999;
+  margin-right: 60px;
+  margin-bottom: 10px;
+
+  input {
+    margin-right: 10px;
+  }
+
+  input[type="checkbox"] {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 100%;
+    background-color: $light-grey;
+    border: 1px solid darken($color: $light-grey, $amount: 5);
+  }
+  input[type="checkbox"]:checked {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 100%;
+    background-color: $yellow;
+  }
+}
+
+.request-register {
+  @include SubmitBtn;
+  display: flex;
+  justify-content: flex-end;
+  text-align: right;
+  float: right;
+  margin-right: 60px;
+  margin-bottom: 16px;
+}
+
+// 요청 글 리스트
+.list {
+  width: 1260px;
+  position: relative;
+  margin: 65px auto 0;
+  .table-header {
+    width: 1260px;
+    content: "";
+    margin: auto;
+    border-radius: 40px;
+    width: 100%;
+    height: 35px;
+    background-color: #ffe7be;
+  }
+  table {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1260px;
+    border-collapse: collapse;
+    table-layout: fixed;
+
+    thead {
+      tr {
+        height: 35px;
+        th {
+          font-family: $SCore;
+          font-size: 13px;
+
+          &:nth-of-type(1),
+          &:nth-of-type(6),
+          &:nth-of-type(7) {
+            width: 100px;
+          }
+
+          &:nth-of-type(2),
+          &:nth-of-type(4),
+          &:nth-of-type(5) {
+            width: 120px;
+          }
+
+          &:nth-of-type(3) {
+            width: 600px;
+          }
+        }
+      }
+    }
+    tbody {
+      tr {
+        height: 40px;
+
+        td {
+          font-size: 13px;
+          height: 35px;
+          text-align: center;
+
+          &:nth-of-type(1),
+          &:nth-of-type(6),
+          &:nth-of-type(7) {
+            width: 100px;
+          }
+
+          &:nth-of-type(2),
+          &:nth-of-type(4),
+          &:nth-of-type(5) {
+            width: 120px;
+          }
+
+          &:nth-of-type(3) {
+            width: 600px;
+            padding: 0 50px;
+            text-align-last: left;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+
+            a {
+              color: $dark-grey;
+            }
+          }
+        }
+
+        &:hover {
+          background-color: #fff5e5;
+          border-radius: 40px;
+        }
+
+        //상태
+        .status {
+          width: 66px;
+          height: 26px;
+          border-radius: 7px;
+          padding: 0;
+          font-family: $SCore;
+          margin: auto;
+          font-size: 12px;
+          line-height: 26px;
+          text-align-last: left;
+
+          i {
+            margin: 0 5px 0;
+          }
+        }
+
+        .solved {
+          background-color: #ffd4d4;
+
+          i {
+            color: #ffa9a9;
+          }
+        }
+
+        .unsolved {
+          background-color: #d4ffc5;
+
+          i {
+            color: #99f58a;
+          }
+        }
+      }
+    }
+  }
+}
+
+.up {
+  display: block;
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background-color: $yellow;
+  color: $white;
+  font-size: 20px;
+  width: 35px;
+  height: 35px;
+  text-align: center;
+  line-height: 35px;
+  border-radius: 50%;
+  transition: 0.7s ease;
+}

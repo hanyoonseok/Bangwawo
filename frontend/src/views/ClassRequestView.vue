@@ -271,4 +271,4 @@ export default {
 };
 </script>
 
-<style src="@/css/classRequest.scss" lang="scss" scoped></style>
+<style src="@/css/classRequestList.scss" lang="scss" scoped></style>

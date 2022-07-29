@@ -9,7 +9,8 @@
         </button>
       </section>
       <section classs="sub-section" v-else>
-        <img src="@/assets/secret_matching.png" />
+        <!-- <img src="@/assets/secret_matching.png" /> -->
+        <img src="@/assets/loading.gif" />
       </section>
     </section>
   </div>
