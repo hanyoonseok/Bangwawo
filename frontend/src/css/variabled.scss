@@ -102,7 +102,9 @@ $drop-shadow: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.1));
   border-radius: 7px;
   font-size: 12px;
   font-family: $SCore;
-  @include flexCenter();
+  display: flex;
+  align-items: center;
+  //@include flexCenter();
   @if $status {
     background-color: #d4ffc5;
   } @else {
