@@ -12,7 +12,7 @@
           <div class="content-writer">
             애기오리 <label>&nbsp;2022.07.20</label>
           </div>
-          <div class="status-wrapper" v-show="user.status === 0">
+          <div class="status-wrapper">
             <button class="status-btn no" v-if="post.status === 0">
               <i class="fa-solid fa-circle"></i>&nbsp;미해결
             </button>
@@ -51,12 +51,24 @@
             </div>
           </div>
 
-          <div class="end-btn-wrapper" v-else>
-            <span></span>
-            <button class="end-btn">
-              <i class="fa-solid fa-check"></i> &nbsp; 수업 생성하기
-            </button>
-            <span> </span>
+          <div class="end-btn-wrapper" v-if="user.status === 1">
+            <div class="no" v-if="post.status === 0">
+              <span></span>
+              <button class="end-btn">
+                <i class="fa-solid fa-check"></i> &nbsp; 수업 생성하기
+              </button>
+              <span> </span>
+            </div>
+
+            <div class="yes" v-else>
+              <img :src="post.link.thumbnail" />
+              <div class="column">
+                <label class="link-title">{{ post.link.title }}</label>
+                <label class="link-description">{{
+                  post.link.description
+                }}</label>
+              </div>
+            </div>
           </div>
           <div class="status-wrapper"><label>조회수 33</label></div>
         </div>
