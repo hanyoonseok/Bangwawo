@@ -80,12 +80,11 @@
     width: 16px;
     height: 16px;
     border-radius: 100%;
-    margin-right: 0.1rem;
     background-color: $yellow;
   }
 }
 
-button {
+.request-register {
   @include SubmitBtn;
   display: flex;
   justify-content: flex-end;
@@ -97,10 +96,11 @@ button {
 
 // 요청 글 리스트
 .list {
-  width: 1300px;
+  width: 1260px;
   position: relative;
   margin: 65px auto 0;
   .table-header {
+    width: 1260px;
     content: "";
     margin: auto;
     border-radius: 40px;
@@ -112,49 +112,102 @@ button {
     position: absolute;
     left: 0;
     top: 0;
-    width: 1300px;
-    margin: auto;
+    width: 1260px;
     border-collapse: collapse;
+    table-layout: fixed;
+
     thead {
       tr {
+        height: 35px;
         th {
-          height: 35px;
+          font-family: $SCore;
+          font-size: 13px;
 
           &:nth-of-type(1),
           &:nth-of-type(6),
           &:nth-of-type(7) {
-            padding: 0 25px;
-          }
-          &:nth-of-type(1) {
-            padding-left: 35px;
-          }
-          &:nth-of-type(7) {
-            padding-right: 35px;
+            width: 100px;
           }
 
           &:nth-of-type(2),
           &:nth-of-type(4),
           &:nth-of-type(5) {
-            padding: 0 35px;
+            width: 120px;
           }
 
           &:nth-of-type(3) {
-            padding: 0 300px;
+            width: 600px;
           }
         }
       }
     }
     tbody {
       tr {
+        height: 40px;
+
         td {
-          padding: 10px 0;
+          font-size: 13px;
           height: 35px;
           text-align: center;
+
+          &:nth-of-type(1),
+          &:nth-of-type(6),
+          &:nth-of-type(7) {
+            width: 100px;
+          }
+
+          &:nth-of-type(2),
+          &:nth-of-type(4),
+          &:nth-of-type(5) {
+            width: 120px;
+          }
+
+          &:nth-of-type(3) {
+            width: 600px;
+            padding: 0 50px;
+            text-align-last: left;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
         }
 
         &:hover {
           background-color: #fff5e5;
           border-radius: 40px;
+        }
+
+        //상태
+        .status {
+          width: 66px;
+          height: 26px;
+          border-radius: 7px;
+          padding: 0;
+          font-family: $SCore;
+          margin: auto;
+          font-size: 12px;
+          line-height: 26px;
+          text-align-last: left;
+
+          i {
+            margin: 0 5px 0;
+          }
+        }
+
+        .solved {
+          background-color: #ffd4d4;
+
+          i {
+            color: #ffa9a9;
+          }
+        }
+
+        .unsolved {
+          background-color: #d4ffc5;
+
+          i {
+            color: #99f58a;
+          }
         }
       }
     }
