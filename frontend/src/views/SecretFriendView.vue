@@ -41,4 +41,4 @@ export default {
 };
 </script>
 
-<style scoped src="@/css/secretFriend.scss" lang="scss"></style>
+<style scoped src="@/css/secret-friend.scss" lang="scss"></style>

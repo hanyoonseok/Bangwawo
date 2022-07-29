@@ -44,6 +44,12 @@ $drop-shadow: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.1));
   flex-direction: column;
 }
 
+@mixin flexAround() {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
 @mixin inputTitleLabel() {
   width: 76px;
   height: 30px;
