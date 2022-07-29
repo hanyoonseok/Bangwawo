@@ -1,0 +1,413 @@
+.background {
+  background-image: $mainBg;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  padding: 35px;
+  display: flex;
+  max-height: 100vh;
+}
+
+.main-section {
+  width: 100%;
+  height: 100%; //calc(100% - 80px);
+  @include flexColumn;
+  justify-content: space-between;
+}
+
+//top
+.top-section {
+  width: 100%;
+  height: calc(100% - 60px);
+  @include flexCenter;
+  .top-left {
+    //flex: 7.5;
+    height: 100%;
+    width: 75%;
+    background-color: $light-yellow;
+    border-radius: 15px;
+
+    &.host {
+      box-shadow: $light-shadow;
+      padding: 15px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      grid-column-gap: 16px;
+      grid-row-gap: 16px;
+      position: relative;
+    }
+    &.expand {
+      width: 100%;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    &.user {
+      @include flexColumn;
+      background-color: transparent;
+    }
+
+    .top-article-left {
+      width: 100%;
+      display: flex;
+      position: relative;
+      &.top {
+        box-shadow: $light-shadow;
+        padding: 15px;
+        flex-wrap: nowrap;
+        width: 100%;
+        margin-bottom: 20px;
+        background-color: $light-yellow;
+        border-radius: 15px;
+        // overflow-x: hidden;
+      }
+      &.bot {
+        height: 100%;
+        width: 100%;
+      }
+
+      .user-card-wrapper {
+        @include flexColumn;
+        align-items: center;
+        label {
+          font-size: 12px;
+          font-family: $appleM;
+          font-weight: bold;
+        }
+        .user-card {
+          width: 200px;
+          height: 120px;
+        }
+      }
+      .user-card-wrapper + .user-card-wrapper {
+        margin-left: 14px;
+      }
+    }
+  }
+
+  .top-right {
+    //flex: 2.5;
+    width: 25%;
+    height: 100%;
+    margin-left: 20px;
+    border-radius: 15px;
+    @include flexColumn;
+
+    .top-article {
+      width: 100%;
+      height: 100%;
+      border-radius: 25px;
+      background-color: $light-grey;
+      padding: 16px;
+      &.top {
+        width: 100%;
+        height: 100%;
+        flex: 4;
+        overflow: hidden;
+        @include flexColumn;
+      }
+      &.bot {
+        height: 100%;
+        flex: 6;
+        margin-top: 16px;
+        overflow: hidden;
+        @include flexColumn;
+        &.expand {
+          margin-top: 0;
+        }
+      }
+    }
+
+    .title-wrapper {
+      width: 100%;
+      @include flexBetween;
+      label {
+        font-size: 16px;
+        font-family: $SCore;
+        font-weight: bold;
+      }
+      i {
+        width: 26px;
+        height: 26px;
+        background-color: #ffdd9b;
+        color: 686868;
+        border-radius: 100%;
+        font-size: 17px;
+        @include flexCenter;
+      }
+    }
+
+    .list-wrapper {
+      width: 100%;
+      margin-top: 10px;
+      overflow-y: auto;
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      &.test {
+        height: 100%;
+      }
+
+      .list-item {
+        display: flex;
+        align-items: center;
+        padding: 10px 0;
+        font-size: 12px;
+        &.chat {
+          align-items: flex-start;
+        }
+        img {
+          box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+          margin-right: 15px;
+          width: 30px;
+          height: 30px;
+          border-radius: 100%;
+        }
+        .list-item-nickname {
+          font-family: $appleM;
+          font-weight: bold;
+          color: #404040;
+        }
+        .list-item-chat {
+          color: #404040;
+          width: 100%;
+        }
+        .list-item-center {
+          width: 100%;
+          @include flexColumn;
+        }
+        .list-item-time {
+          color: #a5a5a5;
+          width: 40px;
+        }
+      }
+
+      .list-item + .list-item {
+        border-top: 1px solid #e1e1e1;
+      }
+    }
+
+    .chat-input {
+      @include Input;
+      background-color: $white;
+      height: 30px;
+      flex-shrink: 0;
+    }
+  }
+}
+
+//bot
+.bot-section {
+  width: 100%;
+  height: 60px;
+  flex-shrink: 0;
+  @include flexCenter;
+
+  .bot-left {
+    flex: 7.5;
+    width: 100%;
+    @include flexCenter;
+    .xmark {
+      background-color: $pink;
+      color: $white;
+      font-size: 18px;
+      width: 43px;
+      height: 43px;
+      @include flexCenter;
+      border-radius: 100%;
+      margin-left: 40px;
+      transition: 0.3s ease;
+      &:hover {
+        background-color: darken($pink, 10%);
+      }
+    }
+  }
+  .bot-right {
+    flex: 2.5;
+    width: 100%;
+    @include flexCenter;
+  }
+}
+
+.option-btn {
+  @include SubmitBtn;
+
+  i {
+    font-size: 16px;
+  }
+  label {
+    @include flexCenter;
+  }
+  &.red {
+    background-color: #ffdcdc;
+    i {
+      color: $pink;
+    }
+    &:hover {
+      background-color: darken(#ffdcdc, 10%);
+    }
+  }
+}
+.option-btn + .option-btn {
+  margin-left: 20px;
+}
+
+.user-card {
+  width: 100%;
+  height: 100%;
+  background-color: #ffdcdc;
+  border-radius: 18px;
+}
+
+.next-btn-wrapper {
+  background-color: #ffd18b;
+  width: 35px;
+  height: 35px;
+  border-radius: 100%;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  @include flexCenter;
+  .next-btn {
+    width: 40%;
+    height: 40%;
+    border-top: 2.5px solid $dark-grey;
+    border-left: 2.5px solid $dark-grey;
+    transform: rotate(135deg);
+    flex-shrink: 0;
+    background-color: transparent;
+    content: "";
+  }
+}
+
+.ox-form {
+  width: 100%;
+  height: 100%;
+  margin-top: 10px;
+  @include flexColumn;
+  justify-content: space-between;
+
+  &.row {
+    flex-direction: row;
+    justify-content: space-around;
+    overflow-y: auto;
+  }
+  .ox-top-article {
+    @include flexColumn;
+
+    .o-name {
+      @include flexCenter;
+      padding: 4px;
+      font-family: $appleM;
+      font-size: 12px;
+      min-width: 80px;
+      border-radius: 7px;
+      font-weight: bold;
+      margin-top: 10px;
+
+      &.blue {
+        background-color: #cfd7eb;
+      }
+      &.red {
+        background-color: #f6cece;
+      }
+    }
+  }
+  .ox-input {
+    @include Input;
+    background-color: $white;
+    height: 30px;
+    margin-top: 10px;
+    width: 100%;
+  }
+  h4 {
+    font-size: 8px;
+    color: $grey;
+    font-family: $appleM;
+  }
+
+  .ox-btn-wrapper {
+    @include flexAround;
+    margin-top: 15px;
+    img {
+      cursor: pointer;
+      width: 80px;
+      height: 96px;
+    }
+  }
+
+  .submit-btn {
+    @include SubmitBtn;
+  }
+}
+
+.stu-ox-container {
+  width: 100%;
+  height: 100%;
+  .stu-ox-section {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    @include flexColumn;
+    align-items: center;
+    &.result {
+      padding-top: 40px;
+    }
+  }
+  .quest-container {
+    max-width: 500px;
+    display: flex;
+    padding: 12px 30px;
+    background-color: $light-grey;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    i {
+      color: $grey;
+      font-size: 35px;
+    }
+    label {
+      margin-left: 20px;
+      font-size: 16px;
+      font-family: $hyemin;
+      color: 000000;
+      font-weight: bold;
+    }
+  }
+  .stu-ox-resttime {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    margin-top: 10px;
+    width: 80px;
+    height: 80px;
+    background-color: $light-yellow;
+    color: #303030;
+    font-family: $SCore;
+    font-size: 35px;
+    @include flexCenter;
+    border-radius: 40px;
+  }
+  .stu-ox-imgcontainer {
+    width: 100%;
+    height: 100%;
+    @include flexCenter;
+  }
+  img {
+    width: 190px;
+    height: 210px;
+  }
+  img + img {
+    margin-left: 30px;
+  }
+}
+
+.noanswer {
+  font-family: $appleM;
+  font-weight: bold;
+  font-size: 20px;
+  margin-top: 10px;
+}
