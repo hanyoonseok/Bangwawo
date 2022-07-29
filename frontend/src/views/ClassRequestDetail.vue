@@ -12,7 +12,7 @@
           <div class="content-writer">
             애기오리 <label>&nbsp;2022.07.20</label>
           </div>
-          <div class="status-wrapper">
+          <div class="status-wrapper" v-show="user.status === 0">
             <button class="status-btn">
               <i class="fa-solid fa-circle"></i>&nbsp;미해결
             </button>
@@ -21,7 +21,7 @@
             애기오리는 오리선생의 역사이야기가 너무 듣고싶습니다. <br />오리선생
             너무 귀여워용 ~~
           </div>
-          <div class="end-btn-wrapper">
+          <div class="end-btn-wrapper" v-if="user.status === 0">
             <img src="@/assets/notice-text.png" />
             <span></span>
             <button class="end-btn">
@@ -34,6 +34,13 @@
                 <i class="fa-solid fa-pen"></i>&nbsp;수정
               </button>
             </div>
+          </div>
+          <div class="end-btn-wrapper" v-else>
+            <span></span>
+            <button class="end-btn">
+              <i class="fa-solid fa-check"></i> &nbsp; 수업 생성하기
+            </button>
+            <span> </span>
           </div>
           <div class="status-wrapper"><label>조회수 33</label></div>
         </div>
@@ -51,13 +58,12 @@ export default {
     HeaderNav,
   },
   setup() {
-    const data = ref({
-      title: "이전에 사용했던 제목",
-      content: "이전에 사용했던 내용",
+    const user = ref({
+      status: 1, //0학생 1봉사자 2부모
     });
 
     return {
-      data,
+      user,
     };
   },
 };
