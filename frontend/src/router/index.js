@@ -49,6 +49,7 @@ const routes = [
       },
     ],
   },
+
   {
     path: "/class",
     name: "class",
@@ -74,6 +75,11 @@ const routes = [
         path: "modify",
         name: "classmodify",
         component: () => import("@/views/ClassModifyView"),
+      },
+      {
+        path: "request",
+        name: "classrequest",
+        component: () => import("@/views/ClassRequestView"),
       },
       {
         path: "requestregist",
