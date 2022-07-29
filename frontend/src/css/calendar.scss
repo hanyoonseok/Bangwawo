@@ -1,0 +1,31 @@
+.calendar-area {
+  height: 150px;
+  .vc-is-expanded {
+    min-height: 150px;
+  }
+  .vc-container {
+    font-family: $Gmarket;
+    --text-xs: 10px;
+    --text-sm: 12px;
+    --text-base: 12px;
+    --text-lg: 14px;
+    --text-lg: 14px;
+    --pink-600: #ff9696;
+    --yellow-200: #ffe8b5;
+    --yellow-600: #ffd89b;
+    color: #3e3e3e;
+    background-color: #fff5e5;
+    border: none;
+    height: 150px;
+
+    .vc-day {
+      height: 20px;
+    }
+    .vc-header {
+      font-size: 16px;
+    }
+    .vc-weeks {
+      padding: 3px;
+    }
+  }
+}
