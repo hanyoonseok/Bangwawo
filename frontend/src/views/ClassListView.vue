@@ -40,7 +40,7 @@
           class="slide"
         >
           <swiper-slide v-for="(item, index) in state" :key="index"
-            ><router-link to="/classdetail">
+            ><router-link to="/class/detail">
               <RectPostCard :state="item" />
             </router-link>
           </swiper-slide>
@@ -58,13 +58,11 @@
           <p>현재 개설된 수업 목록입니다.</p>
         </div>
         <div class="contents">
-          <ul>
-            <div v-for="(item, index) in state" :key="index">
-              <router-link to="/classdetail"
-                ><RectPostCard :state="item"
-              /></router-link>
-            </div>
-          </ul>
+          <div v-for="(item, index) in state" :key="index">
+            <router-link to="/class/detail"
+              ><RectPostCard :state="item"
+            /></router-link>
+          </div>
         </div>
       </section>
       <a class="up" @click="top">
@@ -111,6 +109,8 @@ export default {
         classOpen: "dd",
         classPeople: "dd",
         classContent: "dd",
+        classImgFile:
+          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
       },
       {
         className: "ss",
@@ -121,6 +121,8 @@ export default {
         classOpen: "ss",
         classPeople: "ss",
         classContent: "ss",
+        classImgFile:
+          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
       },
       {
         className: "ss",
@@ -131,6 +133,8 @@ export default {
         classOpen: "ss",
         classPeople: "ss",
         classContent: "ss",
+        classImgFile:
+          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
       },
       {
         className: "ss",
@@ -141,6 +145,8 @@ export default {
         classOpen: "ss",
         classPeople: "ss",
         classContent: "ss",
+        classImgFile:
+          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
       },
       {
         className: "ss",
@@ -151,6 +157,8 @@ export default {
         classOpen: "ss",
         classPeople: "ss",
         classContent: "ss",
+        classImgFile:
+          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
       },
       {
         className: "ss",
@@ -161,6 +169,8 @@ export default {
         classOpen: "ss",
         classPeople: "ss",
         classContent: "ss",
+        classImgFile:
+          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
       },
     ]);
     const top = () => {

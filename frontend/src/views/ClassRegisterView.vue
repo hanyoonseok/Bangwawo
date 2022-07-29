@@ -53,12 +53,15 @@
             </label>
           </div>
           <div class="info-box">
-            <label for="" class="info-title">최대 인원</label>
-            <select v-model="state.classPeople">
-              <option value="0">0</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-            </select>
+            <label for="classPeople" class="info-title">최대 인원</label>
+            <input
+              type="number"
+              min="0"
+              name="classPeople"
+              id="classPeople"
+              oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+              v-model="state.classPeople"
+            />
           </div>
           <div class="info-box">
             <label for="" class="info-title">내용</label>

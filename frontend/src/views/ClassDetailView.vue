@@ -48,7 +48,7 @@
             <!-- 봉사자(2), 학생(1) -->
             <div v-if="user.status === 2">
               <button class="classStatusBtn">수업 활성화</button>
-              <router-link to="/classmodify" class="classModifyBtn">
+              <router-link to="/class/modify" class="classModifyBtn">
                 <i class="fa-solid fa-pencil"></i>
               </router-link>
               <button class="classDeleteBtn">
