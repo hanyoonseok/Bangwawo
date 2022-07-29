@@ -9,7 +9,8 @@
         </button>
       </section>
       <section classs="sub-section" v-else>
-        <img src="@/assets/secret_matching.png" />
+        <!-- <img src="@/assets/secret_matching.png" /> -->
+        <img src="@/assets/loading.gif" />
       </section>
     </section>
   </div>
@@ -40,4 +41,4 @@ export default {
 };
 </script>
 
-<style scoped src="@/css/secretFriend.scss" lang="scss"></style>
+<style scoped src="@/css/secret-friend.scss" lang="scss"></style>

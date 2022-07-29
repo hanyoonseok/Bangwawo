@@ -39,24 +39,11 @@
           :modules="modules"
           class="slide"
         >
-          <swiper-slide
-            ><a href=""><RectPostCard /></a
-          ></swiper-slide>
-          <swiper-slide
-            ><a href=""><RectPostCard /></a
-          ></swiper-slide>
-          <swiper-slide
-            ><a href=""><RectPostCard /></a
-          ></swiper-slide>
-          <swiper-slide
-            ><a href=""><RectPostCard /></a
-          ></swiper-slide>
-          <swiper-slide
-            ><a href=""><RectPostCard /></a
-          ></swiper-slide>
-          <swiper-slide
-            ><a href=""><RectPostCard /></a
-          ></swiper-slide>
+          <swiper-slide v-for="(item, index) in state" :key="index"
+            ><router-link to="/class/detail">
+              <RectPostCard :state="item" />
+            </router-link>
+          </swiper-slide>
         </swiper>
       </section>
       <section class="maked">
@@ -71,32 +58,11 @@
           <p>현재 개설된 수업 목록입니다.</p>
         </div>
         <div class="contents">
-          <ul>
-            <li>
-              <a><RectPostCard /></a>
-            </li>
-            <li>
-              <a><RectPostCard /></a>
-            </li>
-            <li>
-              <a><RectPostCard /></a>
-            </li>
-            <li>
-              <a><RectPostCard /></a>
-            </li>
-            <li>
-              <a><RectPostCard /></a>
-            </li>
-            <li>
-              <a><RectPostCard /></a>
-            </li>
-            <li>
-              <a><RectPostCard /></a>
-            </li>
-            <li>
-              <a><RectPostCard /></a>
-            </li>
-          </ul>
+          <div v-for="(item, index) in state" :key="index">
+            <router-link to="/class/detail"
+              ><RectPostCard :state="item"
+            /></router-link>
+          </div>
         </div>
       </section>
       <a class="up" @click="top">
@@ -121,6 +87,8 @@ import { Navigation } from "swiper";
 
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+
+import { ref } from "vue";
 export default {
   name: "ClassListView",
   components: {
@@ -130,14 +98,89 @@ export default {
     SwiperSlide,
   },
   setup() {
+    // 임시 테스트용 데이터
+    const state = ref([
+      {
+        className: "dd",
+        classDate: "dd",
+        classStartTime: "dd",
+        classEndTIme: "dd",
+        classThumbnail: "dd",
+        classOpen: "dd",
+        classPeople: "dd",
+        classContent: "dd",
+        classImgFile:
+          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
+      },
+      {
+        className: "ss",
+        classDate: "ss",
+        classStartTime: "ss",
+        classEndTIme: "ss",
+        classThumbnail: "ss",
+        classOpen: "ss",
+        classPeople: "ss",
+        classContent: "ss",
+        classImgFile:
+          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
+      },
+      {
+        className: "ss",
+        classDate: "ss",
+        classStartTime: "ss",
+        classEndTIme: "ss",
+        classThumbnail: "ss",
+        classOpen: "ss",
+        classPeople: "ss",
+        classContent: "ss",
+        classImgFile:
+          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
+      },
+      {
+        className: "ss",
+        classDate: "ss",
+        classStartTime: "ss",
+        classEndTIme: "ss",
+        classThumbnail: "ss",
+        classOpen: "ss",
+        classPeople: "ss",
+        classContent: "ss",
+        classImgFile:
+          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
+      },
+      {
+        className: "ss",
+        classDate: "ss",
+        classStartTime: "ss",
+        classEndTIme: "ss",
+        classThumbnail: "ss",
+        classOpen: "ss",
+        classPeople: "ss",
+        classContent: "ss",
+        classImgFile:
+          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
+      },
+      {
+        className: "ss",
+        classDate: "ss",
+        classStartTime: "ss",
+        classEndTIme: "ss",
+        classThumbnail: "ss",
+        classOpen: "ss",
+        classPeople: "ss",
+        classContent: "ss",
+        classImgFile:
+          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
+      },
+    ]);
+    const top = () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
     return {
+      top,
+      state,
       modules: [Navigation],
     };
-  },
-  methods: {
-    top() {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    },
   },
 };
 </script>

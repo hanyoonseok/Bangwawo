@@ -6,6 +6,7 @@
         <i class="fa-solid fa-chevron-left"></i>
       </button>
       <div class="detail">
+        <div class="empty" @click="hideProfile"></div>
         <div class="img-box">
           <img src="@/assets/backhead.png" alt="오리 뒷모습" />
         </div>
@@ -47,9 +48,9 @@
             <!-- 봉사자(2), 학생(1) -->
             <div v-if="user.status === 2">
               <button class="classStatusBtn">수업 활성화</button>
-              <button class="classModifyBtn">
+              <router-link to="/class/modify" class="classModifyBtn">
                 <i class="fa-solid fa-pencil"></i>
-              </button>
+              </router-link>
               <button class="classDeleteBtn">
                 <i class="fa-solid fa-trash-can"></i>
               </button>
@@ -113,19 +114,26 @@ export default {
       subscribe: 0,
     };
 
-    return {
-      state,
-      user,
-    };
-  },
-  methods: {
-    showProfile() {
+    const showProfile = () => {
       if (document.querySelector(".profile").style.display === "block") {
         document.querySelector(".profile").style.display = "none";
       } else {
         document.querySelector(".profile").style.display = "block";
       }
-    },
+    };
+
+    const hideProfile = () => {
+      if (document.querySelector(".profile").style.display === "block") {
+        document.querySelector(".profile").style.display = "none";
+      }
+    };
+
+    return {
+      state,
+      user,
+      showProfile,
+      hideProfile,
+    };
   },
 };
 </script>

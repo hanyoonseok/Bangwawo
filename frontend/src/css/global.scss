@@ -56,7 +56,13 @@ body {
   font-family: $appleM;
   color: $dark-grey;
 }
-
+textarea {
+  resize: none;
+  border: none;
+  &:focus {
+    outline: none;
+  }
+}
 i {
   cursor: pointer;
 }
@@ -98,11 +104,27 @@ h4 {
 .post-card {
   width: 360px;
   height: 220px;
-  border-radius: 0 40px 40px 40px;
+  border-radius: 0 75px 75px 75px;
   position: relative;
   background-color: $grey;
   margin: 0;
   box-shadow: $shadow;
+
+  .img-box {
+    width: 100%;
+    height: 100%;
+    border-radius: 0 75px 75px 75px;
+    text-align: center;
+    font-family: $SCore;
+    @include flexCenter;
+
+    img {
+      width: 101%;
+      height: 101%;
+      border-radius: 0 75px 75px 75px;
+    }
+  }
+
   .card-info {
     width: 265px;
     height: 80px;
@@ -158,7 +180,7 @@ h4 {
   font-family: $SCore;
   text-align: center;
   color: $white;
-  border-radius: 0 40px 40px 40px;
+  border-radius: 0 73px 73px 73px;
   display: grid;
   align-content: center;
   position: absolute;

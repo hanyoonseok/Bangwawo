@@ -41,21 +41,56 @@ const routes = [
     path: "/secret",
     name: "secret",
     component: () => import("@/views/SecretFriendView"),
+    children: [
+      {
+        path: "secrettalk",
+        name: "secrettalk",
+        component: () => import("@/views/SecretTalkView"),
+      },
+    ],
   },
   {
-    path: "/classlist",
-    name: "classlist",
-    component: () => import("@/views/ClassListView"),
-  },
-  {
-    path: "/classdetail",
-    name: "classdetail",
-    component: () => import("@/views/ClassDetailView"),
-  },
-  {
-    path: "/secrettalk",
-    name: "secrettalk",
-    component: () => import("@/views/SecretTalkView"),
+    path: "/class",
+    name: "class",
+    component: () => import("@/views/ClassView"),
+    redirect: "/class/list",
+    children: [
+      {
+        path: "list",
+        name: "classlist",
+        component: () => import("@/views/ClassListView"),
+      },
+      {
+        path: "detail",
+        name: "classdetail",
+        component: () => import("@/views/ClassDetailView"),
+      },
+      {
+        path: "register",
+        name: "classregister",
+        component: () => import("@/views/ClassRegisterView"),
+      },
+      {
+        path: "modify",
+        name: "classmodify",
+        component: () => import("@/views/ClassModifyView"),
+      },
+      {
+        path: "requestregist",
+        name: "classrequestregist",
+        component: () => import("@/views/ClassRequestRegist"),
+      },
+      {
+        path: "requestmodify",
+        name: "classrequestmodify",
+        component: () => import("@/views/ClassRequestModify"),
+      },
+      {
+        path: "requestdetail",
+        name: "classrequestdetail",
+        component: () => import("@/views/ClassRequestDetail"),
+      },
+    ],
   },
   {
     path: "/user",
@@ -103,9 +138,20 @@ const routes = [
     ],
   },
   {
+    path: "/inclass",
+    name: "inclass",
+    component: () => import("@/views/InClassView"),
+  },
+  {
     path: "/feedback",
     name: "feedback",
     component: () => import("@/views/FeedbackView"),
+  },
+
+  {
+    path: "/feedbackSubmit",
+    name: "feedbackSubmit",
+    component: () => import("@/views/FeedBack"),
   },
 ];
 

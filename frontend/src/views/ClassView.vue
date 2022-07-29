@@ -1,14 +1,14 @@
 <template>
-  <div class="user-background">
+  <div class="stretch">
     <router-view></router-view>
   </div>
 </template>
 
 <script>
 export default {
-  name: "SignupView",
+  name: "ClassView",
   setup() {},
 };
 </script>
 
-<style scoped src="@/css/user.scss" lang="scss"></style>
+<style scoped src="@/css/classList.scss" lang="scss"></style>
