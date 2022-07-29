@@ -94,6 +94,16 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/inclass",
+    name: "inclass",
+    component: () => import("@/views/InClassView"),
+  },
+  {
+    path: "/feedback",
+    name: "feedback",
+    component: () => import("@/views/FeedBack"),
+  },
 ];
 
 export const router = createRouter({
