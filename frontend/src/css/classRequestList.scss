@@ -1,6 +1,6 @@
 // 배경
 .background {
-  // background-image: $mainBg;
+  background-image: $mainBg;
   background-repeat: no-repeat;
   background-size: cover;
   width: 100%;
@@ -14,7 +14,7 @@
   height: auto;
   text-align: center;
   position: relative;
-  margin-bottom: 35px;
+  margin-bottom: 40px;
 
   h2 {
     &::after {
@@ -97,8 +97,10 @@
 // 요청 글 리스트
 .list {
   width: 1260px;
+  height: 320px;
   position: relative;
-  margin: 65px auto 0;
+  margin: 65px auto 25px;
+
   .table-header {
     width: 1260px;
     content: "";
@@ -113,6 +115,7 @@
     left: 0;
     top: 0;
     width: 1260px;
+    overflow: hidden;
     border-collapse: collapse;
     table-layout: fixed;
 
@@ -120,6 +123,7 @@
       tr {
         height: 35px;
         th {
+          margin-bottom: 10px;
           font-family: $SCore;
           font-size: 13px;
 
@@ -218,18 +222,25 @@
   }
 }
 
-.up {
-  display: block;
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  background-color: $yellow;
-  color: $white;
-  font-size: 20px;
-  width: 35px;
-  height: 35px;
-  text-align: center;
-  line-height: 35px;
-  border-radius: 50%;
-  transition: 0.7s ease;
+.pagination-wrapper {
+  height: 32px;
+  margin: auto;
+  @include flexCenter;
+
+  div {
+    width: 32px;
+    height: 32px;
+    background-color: $light-grey;
+    border-radius: 40px;
+    text-align: center;
+    line-height: 32px;
+    font-family: $SCore;
+    font-size: 12px;
+    margin: 0 4px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #ffe7be;
+    }
+  }
 }
