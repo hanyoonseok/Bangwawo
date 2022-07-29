@@ -13,8 +13,11 @@
             애기오리 <label>&nbsp;2022.07.20</label>
           </div>
           <div class="status-wrapper" v-show="user.status === 0">
-            <button class="status-btn">
+            <button class="status-btn no" v-if="post.status === 0">
               <i class="fa-solid fa-circle"></i>&nbsp;미해결
+            </button>
+            <button class="status-btn yes" v-if="post.status === 1">
+              <i class="fa-solid fa-circle"></i>&nbsp;해결
             </button>
           </div>
           <div class="content-text">
@@ -22,19 +25,32 @@
             너무 귀여워용 ~~
           </div>
           <div class="end-btn-wrapper" v-if="user.status === 0">
-            <img src="@/assets/notice-text.png" />
-            <span></span>
-            <button class="end-btn">
-              <i class="fa-solid fa-thumbs-up"></i> &nbsp;99
-            </button>
-            <div>
+            <div class="no" v-if="post.status === 0">
+              <img src="@/assets/notice-text.png" class="notice-img" />
+              <span></span>
               <button class="end-btn">
-                <i class="fa-solid fa-trash-can"></i>&nbsp;삭제</button
-              ><button class="end-btn">
-                <i class="fa-solid fa-pen"></i>&nbsp;수정
+                <i class="fa-solid fa-thumbs-up"></i> &nbsp;99
               </button>
+              <div>
+                <button class="end-btn">
+                  <i class="fa-solid fa-trash-can"></i>&nbsp;삭제</button
+                ><button class="end-btn">
+                  <i class="fa-solid fa-pen"></i>&nbsp;수정
+                </button>
+              </div>
+            </div>
+
+            <div class="yes" v-else>
+              <img :src="post.link.thumbnail" />
+              <div class="column">
+                <label class="link-title">{{ post.link.title }}</label>
+                <label class="link-description">{{
+                  post.link.description
+                }}</label>
+              </div>
             </div>
           </div>
+
           <div class="end-btn-wrapper" v-else>
             <span></span>
             <button class="end-btn">
@@ -58,12 +74,22 @@ export default {
     HeaderNav,
   },
   setup() {
+    const post = ref({
+      status: 1, // 0미해결 1해결
+      link: {
+        thumbnail: require("@/assets/banner-illust.png"),
+        title: "오리선생님의 역사 이야기",
+        description:
+          "오리 선생님이 역사 이야기를 해줄거에요sadfasdfsdㅁㄴㅇㄻㄴㅇㄹㄴㅇㄻㄴㅇㄹㄴㅇㅁ랴ㅐㅗㄴㅇㅁ래ㅕㅗㅁㄴㅇ륨아너로먄여로ㅑㅕㅗㄹㄷㅈㅁ러ㅏㅁㄴ오러ㅏㅁㅇ노러ㅏㄴ",
+      },
+    });
     const user = ref({
-      status: 1, //0학생 1봉사자 2부모
+      status: 0, //0학생 1봉사자 2부모
     });
 
     return {
       user,
+      post,
     };
   },
 };
