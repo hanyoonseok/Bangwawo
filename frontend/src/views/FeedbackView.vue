@@ -3,6 +3,7 @@
     <div class="feedback-background">
       <div class="feedback-page">
         <div class="feedback-area">
+          <img src="@/assets/threeDuck.png" class="deco-img" />
           <section>
             <h2 class="title">강의정보</h2>
             <div class="lecture-info">

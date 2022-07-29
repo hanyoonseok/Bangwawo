@@ -1,7 +1,7 @@
 .feedback-background {
   background: url("@/assets/feedbackBg.png");
   height: 1440px;
-  padding: 50px;
+  padding: 70px;
   .feedback-area {
     z-index: 10;
     background-color: $lightx2-yellow;
@@ -9,6 +9,14 @@
     height: 1230px;
     border-radius: 40px;
     padding: 60px 90px;
+    position: relative;
+    .deco-img {
+      position: absolute;
+      right: 100px;
+      top: 100px;
+      height: 80px;
+      width: 220px;
+    }
     section {
       padding-bottom: 20px;
     }
@@ -45,7 +53,7 @@
     }
 
     .feedback-desc {
-      background-color: $light-yellow;
+      background-color: #fff0d3;
       height: 215px;
       border-radius: 20px;
       margin: 30px 0;
@@ -59,7 +67,7 @@
       justify-content: flex-start;
       flex-wrap: wrap;
       .lecture-video {
-        width: 375px;
+        width: 360px;
         height: 230px;
         border-radius: 20px;
         background-color: $light-grey;

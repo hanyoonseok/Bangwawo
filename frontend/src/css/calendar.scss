@@ -1,13 +1,20 @@
 .calendar-area {
   height: 150px;
+  .vc-is-expanded {
+    min-height: 150px;
+  }
   .vc-container {
     font-family: $Gmarket;
-    --font-medium: 500;
+    --text-xs: 10px;
     --text-sm: 12px;
     --text-base: 12px;
     --text-lg: 14px;
-    color: $dark-grey;
-    background-color: $lightx2-yellow;
+    --text-lg: 14px;
+    --pink-600: #ff9696;
+    --yellow-200: #ffe8b5;
+    --yellow-600: #ffd89b;
+    color: #3e3e3e;
+    background-color: #fff5e5;
     border: none;
     height: 150px;
 
