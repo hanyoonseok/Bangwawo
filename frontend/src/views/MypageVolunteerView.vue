@@ -2,18 +2,20 @@
   <div class="mypage-content">
     <div class="profile-info volunteer-info">
       <div class="left-box profile">
-        <i class="fa-solid fa-ellipsis-vertical profile-ellipse">
-          <ul>
-            <li>
-              <i class="fa-solid fa-pen-to-square"></i>
-              &nbsp;<span>정보수정</span>
-            </li>
+        <a href="#sub-nav"
+          ><i class="fa-solid fa-ellipsis-vertical profile-ellipse">
+            <ul id="sub-nav">
+              <li>
+                <i class="fa-solid fa-pen-to-square"></i>
+                &nbsp;<span>정보수정</span>
+              </li>
 
-            <li>
-              <i class="fa-solid fa-arrow-right-from-bracket"></i>
-              &nbsp;<span>회원탈퇴</span>
-            </li>
-          </ul></i
+              <li>
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                &nbsp;<span>회원탈퇴</span>
+              </li>
+            </ul></i
+          ></a
         >
 
         <div>

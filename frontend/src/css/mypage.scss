@@ -32,10 +32,13 @@
         &:hover > ul {
           display: block;
         }
+        &:target ul {
+          display: block;
+        }
       }
       ul {
         position: absolute;
-        width: 108px;
+        width: 120px;
         border-radius: 12px;
         padding: 8px 10px;
         background-color: $white;
@@ -53,6 +56,9 @@
           &:last-child {
             color: $pink;
           }
+        }
+        &:target {
+          display: block;
         }
       }
       img {
@@ -157,7 +163,14 @@
               width: 130px;
               transform: translate(0, 20px);
               opacity: 0;
-              z-index: 999;
+            }
+            .go-detail {
+              position: absolute;
+              color: $light-grey;
+              font-size: 14px;
+              transition: all 200ms ease;
+              transform: translate(0, 30px);
+              opacity: 0;
             }
           }
           .end-lecture {
@@ -173,9 +186,13 @@
               border-radius: 20px;
             }
             &:hover > div {
-              filter: brightness(70%);
+              filter: brightness(90%);
             }
             &:hover > .feedback-btn {
+              transform: translate(0, 0);
+              opacity: 100%;
+            }
+            &:hover > .go-detail {
               transform: translate(0, 0);
               opacity: 100%;
             }
