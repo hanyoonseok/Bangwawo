@@ -3,12 +3,8 @@
   height: 100vh;
   .mypage-container {
     padding: 60px 80px;
+    @include flexCenter;
   }
-}
-
-.mypage-content {
-  @include flexCenter;
-
   .profile-info {
     width: 300px;
     margin-right: 80px;
@@ -166,7 +162,7 @@
             }
             .go-detail {
               position: absolute;
-              color: $light-grey;
+              color: $white;
               font-size: 14px;
               transition: all 200ms ease;
               transform: translate(0, 30px);

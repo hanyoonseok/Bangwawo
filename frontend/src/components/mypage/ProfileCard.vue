@@ -34,8 +34,11 @@
       <div class="label-value introduce">자기소개 글</div>
     </div>
     <div class="person-info" v-else>
-      <label>자기소개</label>
-      <div class="label-value introduce">자기소개 글</div>
+      <label>자녀</label>
+      <div class="label-value">
+        <button class="children-name">애기화연</button>
+        <button class="children-name">애기화연</button>
+      </div>
     </div>
   </div>
 </template>
@@ -44,7 +47,7 @@
 export default {
   setup() {
     const user = {
-      status: 2,
+      status: 3,
       subscribe: 0,
     };
     return {
