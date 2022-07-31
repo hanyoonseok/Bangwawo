@@ -1,6 +1,6 @@
 .calendar-area {
   height: 150px;
-  /deep/ .custom-calendar.vc-container {
+  &::v-deep .custom-calendar.vc-container {
     --day-border: 1px solid #ffd89b;
     --day-border-highlight: 1px solid #ffd89b;
     --day-width: 20px;
