@@ -85,29 +85,6 @@ import { onMounted } from "vue";
 
 export default {
   setup() {
-    const user = {
-      name: "이화연바보",
-      nickname: "애기하연",
-      description: "자기소개입니다",
-      status: 3,
-      subscribe: 0,
-      children: [
-        {
-          name: "이화연바보",
-          nickname: "애기하연",
-          description: "자기소개입니다",
-          status: 1,
-          subscribe: 0,
-        },
-        {
-          name: "이화연바보",
-          nickname: "애기하연",
-          description: "자기소개입니다",
-          status: 1,
-          subscribe: 0,
-        },
-      ],
-    };
     let bookmark;
     onMounted(() => {
       bookmark = document.querySelectorAll(".children-bookmark");
@@ -126,9 +103,9 @@ export default {
     return {
       doActive,
       bookmark,
-      user,
     };
   },
+  props: ["user"],
 };
 </script>
 
