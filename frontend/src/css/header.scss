@@ -20,11 +20,12 @@
       height: 50px;
       margin-right: 20px;
     }
-    ul {
+    .listdiv {
       display: flex;
       align-items: center;
-      li {
+      a {
         position: relative;
+        color: #000000;
         margin-right: 20px;
         &:after {
           transition: 0.3s ease;

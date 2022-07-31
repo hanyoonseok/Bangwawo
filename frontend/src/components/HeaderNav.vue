@@ -1,26 +1,26 @@
 <template>
   <div class="container">
     <section class="left">
-      <ul class="listUl" v-if="user.status === 0">
+      <div class="listdiv" v-if="user.status === 0">
         <div><img src="@/assets/header.png" /></div>
-      </ul>
-      <ul class="listUl" v-if="user.status === 1">
+      </div>
+      <div class="listdiv" v-if="user.status === 1">
         <div><img src="@/assets/header.png" /></div>
-        <li class="list">수업목록</li>
-        <li class="list">수업요청</li>
-        <li class="list">비밀친구</li>
-      </ul>
-      <ul class="listUl" v-if="user.status === 2">
+        <router-link to="/class/list" class="list">수업목록</router-link>
+        <router-link to="/class/request" class="list">수업요청</router-link>
+        <router-link to="/secret" class="list">비밀친구</router-link>
+      </div>
+      <div class="listdiv" v-if="user.status === 2">
         <div><img src="@/assets/header.png" /></div>
-        <li class="list">수업목록</li>
-        <li class="list">수업등록</li>
-        <li class="list">수업요청</li>
-      </ul>
-      <ul class="listUl" v-if="user.status === 3">
+        <router-link to="/class/list" class="list">수업목록</router-link>
+        <router-link to="/class/register" class="list">수업등록</router-link>
+        <router-link to="/class/request" class="list">수업요청</router-link>
+      </div>
+      <div class="listdiv" v-if="user.status === 3">
         <div><img src="@/assets/header.png" /></div>
-        <li class="list">수업목록</li>
-        <li class="list">수업요청</li>
-      </ul>
+        <router-link to="/class/list" class="list">수업목록</router-link>
+        <router-link to="/class/request" class="list">수업요청</router-link>
+      </div>
     </section>
 
     <section class="right">
