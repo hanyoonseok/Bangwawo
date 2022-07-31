@@ -158,6 +158,8 @@
     }
     .lecture-content {
       padding: 35px;
+      position: relative;
+
       .box-title {
         display: inline-block;
         border-bottom: 5px solid $yellow;

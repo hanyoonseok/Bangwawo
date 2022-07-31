@@ -1,5 +1,4 @@
 <template>
-  <!--만약 유저가 학부모일 경우-->
   <div v-if="user.status === 3" class="parent-profile">
     <div class="left-box profile">
       <i class="fa-solid fa-ellipsis-vertical profile-ellipse">
@@ -65,14 +64,14 @@
     <div class="person-info">
       <label>이름</label>
       <div class="label-value volunteer-value" v-if="user.status === 2">
-        이화연 바보
+        {{ user.nickname }}
       </div>
-      <div class="label-value" v-else>이화연 바보</div>
+      <div class="label-value" v-else>{{ user.nickname }}</div>
     </div>
 
     <div class="person-info" v-if="user.status === 2">
       <label>자기소개</label>
-      <div class="label-value introduce">자기소개 글</div>
+      <div class="label-value introduce">{{ user.description }}</div>
     </div>
     <div class="person-info" v-else>
       <label>별명</label>
@@ -82,13 +81,33 @@
 </template>
 
 <script>
-import { reactive, onMounted } from "vue";
+import { onMounted } from "vue";
 
 export default {
   setup() {
-    const children = reactive({
-      childrenNo: 0,
-    });
+    const user = {
+      name: "이화연바보",
+      nickname: "애기하연",
+      description: "자기소개입니다",
+      status: 3,
+      subscribe: 0,
+      children: [
+        {
+          name: "이화연바보",
+          nickname: "애기하연",
+          description: "자기소개입니다",
+          status: 1,
+          subscribe: 0,
+        },
+        {
+          name: "이화연바보",
+          nickname: "애기하연",
+          description: "자기소개입니다",
+          status: 1,
+          subscribe: 0,
+        },
+      ],
+    };
     let bookmark;
     onMounted(() => {
       bookmark = document.querySelectorAll(".children-bookmark");
@@ -104,15 +123,10 @@ export default {
         e.target.classList.remove("active");
       }
     };
-    const user = {
-      status: 2,
-      subscribe: 0,
-    };
     return {
-      user,
-      children,
       doActive,
       bookmark,
+      user,
     };
   },
 };
