@@ -26,12 +26,12 @@
     </div>
     <div class="person-info" v-if="user.status === 1">
       <label>별명</label>
-      <div class="label-value">애기화연</div>
+      <div class="label-value">{{ user.nickname }}</div>
     </div>
 
     <div class="person-info" v-if="user.status === 2">
       <label>자기소개</label>
-      <div class="label-value introduce">자기소개 글</div>
+      <div class="label-value introduce">{{ user.description }}</div>
     </div>
     <div class="person-info" v-else>
       <label>자녀</label>
@@ -45,15 +45,8 @@
 
 <script>
 export default {
-  setup() {
-    const user = {
-      status: 3,
-      subscribe: 0,
-    };
-    return {
-      user,
-    };
-  },
+  setup() {},
+  props: ["user"],
 };
 </script>
 

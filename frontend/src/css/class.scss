@@ -61,7 +61,7 @@
         margin-bottom: 20px;
         background-color: $light-yellow;
         border-radius: 15px;
-        overflow-x: auto;
+        overflow-x: clip;
         flex-shrink: 0;
       }
       &.bot {
