@@ -2,7 +2,7 @@
   background: url("@/assets/mainBg.png");
   height: 100vh;
   .mypage-container {
-    padding: 60px 80px;
+    padding: 80px 80px 50px 80px;
     @include flexCenter;
   }
   .profile-info {
