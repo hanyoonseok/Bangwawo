@@ -1,5 +1,6 @@
 <template>
   <div class="onboard">
+    <HeaderNav />
     <section class="banner">
       <img class="banner-img" src="@/assets/banner-illust.png" />
       <div class="banner-info">
@@ -160,9 +161,13 @@
 </template>
 
 <script>
+import HeaderNav from "@/components/HeaderNav.vue";
 export default {
   name: "HomeView",
   setup() {},
+  components: {
+    HeaderNav,
+  },
 };
 </script>
 

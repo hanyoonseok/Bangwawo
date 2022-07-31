@@ -77,9 +77,9 @@ const routes = [
         component: () => import("@/views/class/ClassModifyView"),
       },
       {
-        path: "request",
+        path: "requestlist",
         name: "classrequest",
-        component: () => import("@/views/class/ClassRequestView"),
+        component: () => import("@/views/class/ClassRequestListView"),
       },
       {
         path: "requestregist",
@@ -140,12 +140,6 @@ const routes = [
     path: "/feedbackSubmit",
     name: "feedbackSubmit",
     component: () => import("@/views/feedback/FeedBack"),
-  },
-  // 피드백부분 수정해본 곳
-  {
-    path: "/feedbackModify",
-    name: "feedbackModify",
-    component: () => import("@/views/feedback/FeedbackModify"),
   },
 ];
 
