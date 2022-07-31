@@ -18,6 +18,7 @@ $appleM: "AppleSDGothicNeoM";
 $SCore: "S-CoreDream-5Medium";
 $SCoreL: "S-CoreDream-1Thin";
 $appleB: "AppleSDGothicNeoB";
+$Gmarket: "GmarketSansMedium";
 
 //backgroundTemplate
 $userBg: url("@/assets/userBg.png");
@@ -129,6 +130,6 @@ $drop-shadow: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.1));
   padding: 0 20px;
   transition: 0.3s ease;
   &:hover {
-    background-color: darken($soft-yellow, 15%);
+    background-color: darken($soft-yellow, 5%);
   }
 }
