@@ -3,11 +3,14 @@
   height: 100vh;
   .mypage-container {
     padding: 60px 80px;
+    height: 100%;
     @include flexCenter;
   }
   .profile-info {
     width: 300px;
     margin-right: 80px;
+    height: 100%;
+    @include flexColumn;
     .left-box {
       width: 100%;
       height: 295px;
@@ -112,6 +115,8 @@
     }
   }
   .lecture-info {
+    height: 100%;
+    @include flexColumn;
     .right-box {
       width: 900px;
       height: 295px;

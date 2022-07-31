@@ -126,7 +126,7 @@ export default {
   },
   setup() {
     const user = {
-      status: 3,
+      status: 1,
       subscribe: 0,
     };
     return {
