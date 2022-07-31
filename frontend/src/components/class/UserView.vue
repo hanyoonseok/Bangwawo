@@ -10,29 +10,18 @@
       >
         <article class="top-article-left top">
           <div class="next-btn-wrapper"><button class="next-btn"></button></div>
-          <div class="user-card-wrapper">
+          <div
+            class="user-card-wrapper"
+            v-for="student in students"
+            :key="student.id"
+          >
             <div class="user-card">s</div>
-            <label>김수빈수빈</label>
-          </div>
-          <div class="user-card-wrapper">
-            <div class="user-card"></div>
-            <label>김수빈수빈</label>
-          </div>
-          <div class="user-card-wrapper">
-            <div class="user-card"></div>
-            <label>김수빈수빈</label>
-          </div>
-          <div class="user-card-wrapper">
-            <div class="user-card"></div>
-            <label>김수빈수빈</label>
-          </div>
-          <div class="user-card-wrapper">
-            <div class="user-card"></div>
-            <label>김수빈수빈</label>
+            <label>{{ student.name }}</label>
           </div>
         </article>
         <article class="top-article-left bot">
-          <StudentOX />
+          <StudentOX v-if="state.isOXOpen" />
+          <StudentInclass v-else />
         </article>
       </article>
 
@@ -73,14 +62,42 @@
 </template>
 
 <script>
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import ParticipantsList from "@/components/class/ParticipantsList.vue";
 import ChatForm from "@/components/class/ChatForm.vue";
 import StudentOX from "@/components/class/StudentOX.vue";
+import StudentInclass from "@/components/class/StudentInclass.vue";
 
 export default {
   name: "UserView",
   setup() {
+    const students = ref([
+      {
+        id: 1,
+        name: "김수빈수빈1",
+      },
+      {
+        id: 2,
+        name: "김수빈수빈2",
+      },
+      {
+        id: 3,
+        name: "김수빈수빈3",
+      },
+      {
+        id: 4,
+        name: "김수빈수빈4",
+      },
+      {
+        id: 5,
+        name: "김수빈수빈5",
+      },
+      {
+        id: 6,
+        name: "김수빈수빈6",
+      },
+    ]);
+
     const state = reactive({
       isParticipantsOpen: false,
       isChatOpen: false,
@@ -102,12 +119,14 @@ export default {
       state,
       toggleParticipants,
       toggleChat,
+      students,
     };
   },
   components: {
     ParticipantsList,
     ChatForm,
     StudentOX,
+    StudentInclass,
   },
 };
 </script>

@@ -79,7 +79,7 @@ export default {
       isChatOpen: false,
       isOXOpen: false,
       isTopOpen: false,
-      isOXResult: true,
+      isOXResult: false,
     });
 
     const toggleParticipants = () => {

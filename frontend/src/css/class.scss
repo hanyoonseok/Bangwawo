@@ -46,6 +46,7 @@
     &.user {
       @include flexColumn;
       background-color: transparent;
+      overflow: hidden;
     }
 
     .top-article-left {
@@ -60,7 +61,8 @@
         margin-bottom: 20px;
         background-color: $light-yellow;
         border-radius: 15px;
-        // overflow-x: hidden;
+        overflow-x: auto;
+        flex-shrink: 0;
       }
       &.bot {
         height: 100%;
@@ -410,4 +412,10 @@
   font-weight: bold;
   font-size: 20px;
   margin-top: 10px;
+}
+
+.stu-inclass-container {
+  width: 100%;
+  height: 100%;
+  background-color: $light-grey;
 }
