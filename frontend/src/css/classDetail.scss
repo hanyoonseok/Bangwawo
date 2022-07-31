@@ -8,13 +8,21 @@
 }
 section {
   position: relative;
-  .back {
-    color: $yellow;
-    font-size: 50px;
-    background-color: transparent;
+  .back-btn-wrapper {
     position: absolute;
     left: 100px;
     top: 15px;
+    .back-btn {
+      width: 20px;
+      height: 20px;
+      border-top: 4px solid #000;
+      border-left: 4px solid #000;
+      transform: rotate(-45deg);
+      content: "";
+      background-color: transparent;
+      border-color: $yellow;
+      border-radius: 2px;
+    }
   }
 
   .detail {
@@ -100,14 +108,14 @@ section {
           z-index: 30;
         }
 
-        .classStatusBtn,
-        .classEntranceBtn,
-        .classSubscribeBtn {
+        .class-status-btn,
+        .class-entrance-btn,
+        .class-subscribe-btn {
           @include SubmitBtn;
           background-color: #e2e2e2;
         }
-        .classModifyBtn,
-        .classDeleteBtn {
+        .class-modify-btn,
+        .class-delete-btn {
           background-color: transparent;
           color: $grey;
           font-size: 20px;
@@ -115,9 +123,9 @@ section {
             color: $yellow;
           }
         }
-        .classDeleteBtn,
-        .classEntranceBtn,
-        .classSubscribeBtn {
+        .class-delete-btn,
+        .class-entrance-btn,
+        .class-subscribe-btn {
           margin-right: 45px;
         }
       }
