@@ -2,9 +2,9 @@
   <div class="background">
     <HeaderNav />
     <section>
-      <button class="back">
-        <i class="fa-solid fa-chevron-left"></i>
-      </button>
+      <div class="back-btn-wrapper">
+        <button class="back-btn"></button>
+      </div>
       <div class="detail">
         <div class="empty" @click="hideProfile"></div>
         <div class="img-box">
