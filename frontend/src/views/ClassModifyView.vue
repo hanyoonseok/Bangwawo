@@ -37,7 +37,7 @@
           </div>
           <div class="info-box">
             <label for="classThumbnail" class="info-title">썸네일</label>
-            <div class="filebox">
+            <div class="file-box">
               <label for="file"
                 ><img src="@/assets/fileBtn.png" alt="파일 추가 버튼"
               /></label>
@@ -79,7 +79,7 @@
           <RectPostCard :state="state" />
         </div>
       </article>
-      <button class="registerBtn">수정</button>
+      <button class="modify-btn">수정</button>
     </div>
   </div>
 </template>
