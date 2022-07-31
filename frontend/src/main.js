@@ -9,5 +9,4 @@ app
   .component("Calendar", Calendar)
   .component("DatePicker", DatePicker)
   .use(router)
-
   .mount("#app");

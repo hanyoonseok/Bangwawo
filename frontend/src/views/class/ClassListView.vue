@@ -20,51 +20,8 @@
           </p>
         </div>
       </section>
-      <section class="opened">
-        <div class="title">
-          <h2>공개 수업</h2>
-          <p>현재 진행중인 공개수업 목록입니다.</p>
-        </div>
-        <swiper
-          :slidesPerView="3"
-          :slidesPerGroup="1"
-          :spaceBetween="10"
-          :loop="true"
-          :loopFillGroupWithBlank="true"
-          :navigation="true"
-          :style="{
-            '--swiper-navigation-color': '#C0C0C0',
-            '--swiper-pagination-color': '#C0C0C0',
-          }"
-          :modules="modules"
-          class="slide"
-        >
-          <swiper-slide v-for="(item, index) in state" :key="index"
-            ><router-link to="/class/detail">
-              <RectPostCard :state="item" />
-            </router-link>
-          </swiper-slide>
-        </swiper>
-      </section>
-      <section class="maked">
-        <div class="search-bar">
-          <input type="text" placeholder="찾고 싶은 수업을 입력하세요." />
-          <button class="search-btn">
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </button>
-        </div>
-        <div class="title">
-          <h2>개설된 수업</h2>
-          <p>현재 개설된 수업 목록입니다.</p>
-        </div>
-        <div class="contents">
-          <div v-for="(item, index) in state" :key="index">
-            <router-link to="/class/detail"
-              ><RectPostCard :state="item"
-            /></router-link>
-          </div>
-        </div>
-      </section>
+      <OpendClassList :opened="state" />
+      <MakedClassList :maked="state" />
       <a class="up" @click="top">
         <i class="fa-solid fa-arrow-up"></i>
       </a>
@@ -74,32 +31,20 @@
 
 <script>
 import HeaderNav from "@/components/HeaderNav.vue";
-import RectPostCard from "@/components/common/RectPostCard.vue";
+import OpendClassList from "@/components/class/OpendClassList.vue";
+import MakedClassList from "@/components/class/MakedClassList.vue";
 
-//vue-awesome-swiper 라이브러리
-// Import Swiper Vue.js components
-import { Swiper, SwiperSlide } from "swiper/vue";
-// Import Swiper styles
-import "swiper/css";
-import "swiper/css/navigation";
-// import required modules
-import { Navigation } from "swiper";
-
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-
-import { ref } from "vue";
+import { reactive } from "vue";
 export default {
   name: "ClassListView",
   components: {
     HeaderNav,
-    RectPostCard,
-    Swiper,
-    SwiperSlide,
+    OpendClassList,
+    MakedClassList,
   },
   setup() {
     // 임시 테스트용 데이터
-    const state = ref([
+    const state = reactive([
       {
         className: "dd",
         classDate: "dd",
@@ -179,7 +124,6 @@ export default {
     return {
       top,
       state,
-      modules: [Navigation],
     };
   },
 };
