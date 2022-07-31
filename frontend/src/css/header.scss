@@ -62,7 +62,7 @@
         border-radius: 12px;
         padding: 8px 10px;
         @include flexColumn;
-        li {
+        a {
           @include flexCenter;
           width: 100%;
           padding: 6px 0;
@@ -70,6 +70,7 @@
           font-size: 13px;
           &:first-child {
             border-bottom: 1px solid $light-grey;
+            color: #3e3e3e;
           }
           &:last-child {
             color: $pink;

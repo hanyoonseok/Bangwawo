@@ -26,10 +26,14 @@
     <section class="right">
       <button class="login" v-if="user.status === 0">로그인</button>
       <div class="img-wrapper">
-        <img src="@/assets/profile.png" v-if="user.status >= 1" />
-        <ul>
-          <li>마이페이지</li>
-          <li>로그아웃</li>
+        <img
+          src="@/assets/profile.png"
+          v-if="user.status >= 1"
+          @click="isProfileOpen = !isProfileOpen"
+        />
+        <ul v-if="isProfileOpen">
+          <router-link to="/mypage">마이페이지</router-link>
+          <router-link to="/logout">로그아웃</router-link>
         </ul>
       </div>
       <div class="bell-wrapper" @click="isModalOpen = !isModalOpen">
@@ -108,9 +112,12 @@ export default {
     };
 
     const isModalOpen = ref(false);
+
+    const isProfileOpen = ref(false);
     return {
       user,
       isModalOpen,
+      isProfileOpen,
     };
   },
 };
