@@ -49,7 +49,7 @@
       <section class="maked">
         <div class="search-bar">
           <input type="text" placeholder="찾고 싶은 수업을 입력하세요." />
-          <button class="searchBtn">
+          <button class="search-btn">
             <i class="fa-solid fa-magnifying-glass"></i>
           </button>
         </div>
