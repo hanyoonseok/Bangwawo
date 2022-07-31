@@ -8,7 +8,7 @@
       <button class="user-btn" @click="doActive">학부모</button>
     </div>
 
-    <div class="stuAndVolu" v-if="state.isStudent">
+    <div class="stu-volu-wrapper" v-if="state.isStudent">
       <div class="login-desc">
         만 19세 미만의 유저는 학생으로, <br />이상의 유저는 봉사자로 참여할 수
         있어요

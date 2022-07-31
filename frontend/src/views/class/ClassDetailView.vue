@@ -2,9 +2,9 @@
   <div class="background">
     <HeaderNav />
     <section>
-      <button class="back">
-        <i class="fa-solid fa-chevron-left"></i>
-      </button>
+      <div class="back-btn-wrapper">
+        <button class="back-btn"></button>
+      </div>
       <div class="detail">
         <div class="empty" @click="hideProfile"></div>
         <div class="img-box">
@@ -47,20 +47,20 @@
           <div class="button-box">
             <!-- 봉사자(2), 학생(1) -->
             <div v-if="user.status === 2">
-              <button class="classStatusBtn">수업 활성화</button>
-              <router-link to="/class/modify" class="classModifyBtn">
+              <button class="class-status-btn">수업 활성화</button>
+              <router-link to="/class/modify" class="class-modify-btn">
                 <i class="fa-solid fa-pencil"></i>
               </router-link>
-              <button class="classDeleteBtn">
+              <button class="class-delete-btn">
                 <i class="fa-solid fa-trash-can"></i>
               </button>
             </div>
             <div v-else>
               <!-- 수업 신청한 경우(1), 수업 신청 안한 경우(0) -->
-              <button v-if="user.subscribe === 1" class="classEntranceBtn">
+              <button v-if="user.subscribe === 1" class="class-entrance-btn">
                 수업 입장
               </button>
-              <button v-else class="classSubscribeBtn">수업 신청</button>
+              <button v-else class="class-subscribe-btn">수업 신청</button>
             </div>
           </div>
         </div>

@@ -2,8 +2,8 @@
   <div class="background">
     <HeaderNav />
     <section class="main-section detail">
-      <div class="backbtn-wrapper">
-        <button class="backbtn"></button>
+      <div class="back-btn-wrapper">
+        <button class="back-btn"></button>
       </div>
       <article class="content-section">
         <div class="content-box">
