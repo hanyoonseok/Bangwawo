@@ -31,6 +31,7 @@
     <FeedbackModal v-if="selected" :info="selected" :close="close" />
     <div class="confirm" v-if="isConfirm">
       <div class="container">
+        <img src="@/assets/profile.png" alt="오리" />
         <h2>정말로 제출하시겠습니까?</h2>
         <div class="btn-wrapper">
           <button class="btn">네</button>

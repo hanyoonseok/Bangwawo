@@ -29,38 +29,21 @@ html {
   }
 }
 
-section {
+.opened {
   position: relative;
+  margin-bottom: 160px;
+  padding: 0 10px;
 
-  .title {
-    width: 100%;
-    height: 100px;
-    text-align: center;
-    margin-bottom: 70px;
-    position: relative;
-
-    h2 {
-      margin-bottom: 33px;
-      &::after {
-        content: "";
-        display: block;
-        width: 121px;
-        height: 8px;
-        background: $yellow;
-        position: absolute;
-        left: 50%;
-        transform: translate(-50%, 0);
-      }
-    }
-    p {
-      color: $grey;
-    }
-  }
   .swiper {
     height: 320px;
     margin: 0 148px;
 
     .swiper-wrapper {
+      .swiper-slide a {
+        width: 330px;
+        height: 200px;
+        margin: 0 30px;
+      }
       .swiper-slide.swiper-slide-next .post-card {
         width: 399px;
         height: 245px;
@@ -73,11 +56,23 @@ section {
         margin: 30px auto 0;
       }
     }
-  }
-}
 
-.opened {
-  margin-bottom: 160px;
+    &::v-deep .swiper-button-prev {
+      left: -5px;
+
+      &::after {
+        font-size: 33px;
+      }
+    }
+
+    &::v-deep .swiper-button-next {
+      right: -5px;
+
+      &::after {
+        font-size: 33px;
+      }
+    }
+  }
 }
 
 .maked {
@@ -133,4 +128,29 @@ section {
   line-height: 35px;
   border-radius: 50%;
   transition: 0.7s ease;
+}
+
+.title {
+  width: 100%;
+  height: 100px;
+  text-align: center;
+  margin-bottom: 70px;
+  position: relative;
+
+  h2 {
+    margin-bottom: 33px;
+    &::after {
+      content: "";
+      display: block;
+      width: 121px;
+      height: 8px;
+      background: $yellow;
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, 0);
+    }
+  }
+  p {
+    color: $grey;
+  }
 }
