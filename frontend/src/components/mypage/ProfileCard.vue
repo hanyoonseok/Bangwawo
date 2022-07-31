@@ -105,7 +105,7 @@ export default {
       }
     };
     const user = {
-      status: 3,
+      status: 2,
       subscribe: 0,
     };
     return {
