@@ -26,32 +26,6 @@
       line-height: 65px;
       border-bottom: 5px solid $yellow;
     }
-    .lecture-info {
-      @include flexCenter;
-      margin: 50px 0;
-      .round-post-card {
-        margin-right: 70px;
-        background-color: $light-grey;
-      }
-      .lecture-desc {
-        width: 70%;
-        @include flexColumn;
-        height: 185px;
-        flex-wrap: wrap;
-        .lecture-value {
-          margin: 5px;
-          label {
-            @include inputTitleLabel;
-          }
-          .label-value {
-            margin-left: 15px;
-            width: 255px;
-          }
-          @include flexCenter;
-          justify-content: flex-start;
-        }
-      }
-    }
 
     .feedback-desc {
       background-color: #fff0d3;
@@ -75,6 +49,22 @@
         margin: 30px 20px;
       }
     }
+  }
+}
+.lecture-desc {
+  @include flexColumn;
+  flex-wrap: wrap;
+  .lecture-value {
+    margin: 5px;
+    label {
+      @include inputTitleLabel;
+    }
+    .label-value {
+      margin-left: 15px;
+      width: 60%;
+    }
+    @include flexCenter;
+    justify-content: flex-start;
   }
 }
 .background {
@@ -307,31 +297,50 @@
 // 여기서부터는 수정된 피드백 뷰
 
 .background-view {
+  transition: all 300ms ease;
   background-image: $mainBg;
   background-repeat: no-repeat;
   background-size: cover;
   width: 100%;
   height: 100%;
-  padding: 100px 130px 0 130px;
+  padding: 0 130px;
+  @include flexCenter;
+  flex-direction: column;
+  .feedback-title {
+    line-height: 60px;
+    border-bottom: 7px solid $soft-yellow;
+  }
   .feedback-container {
-    height: 550px;
+    margin-top: 30px;
+    height: 600px;
     width: 100%;
     background-color: white;
     border-radius: 40px;
     box-shadow: $light-shadow;
     @include flexCenter;
+    position: relative;
+    .duck-img {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 210px;
+      height: 80px;
+    }
     .left {
       .lecture-area {
         position: relative;
-        img {
+        video {
           height: 477px;
           width: 900px;
+          transition: all 300ms ease;
+        }
+        .slide-open {
+          width: 700px;
         }
         i {
           position: absolute;
           right: 17px;
           top: 17px;
-          color: $white;
           font-size: 20px;
           transition: all 200ms ease;
           &:hover {
@@ -345,27 +354,42 @@
       }
     }
     .slider.closed {
-      width: 0;
+      max-width: 0;
+      transition: all 200ms ease;
     }
     .right {
-      box-shadow: none;
+      margin-left: 50px;
       .slider {
+        transition: all 300ms ease;
         overflow-x: hidden;
-        max-height: 911px;
-        width: 300px;
-        transition-property: all;
-        transition-duration: 0.4s;
-        transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
-        .feedback-container {
+        width: 400px;
+        .feedback-area {
           @include flexColumn;
+          box-shadow: none;
           .feedback-menu {
             display: flex;
             flex-direction: row;
+            .menu-btn {
+              padding: 5px 15px;
+            }
+            .active {
+              border-bottom: 3px solid $dark-grey;
+              color: $dark-grey;
+            }
           }
-          .feedback-box {
-            width: 270px;
+          .feedback-info {
+            max-width: 400px;
+            width: 400px;
+            margin-top: 25px;
             height: 400px;
-            background-color: $light-grey;
+            background-color: #fbfbfb;
+            border-radius: 20px;
+            .feedback-box {
+              padding: 35px;
+            }
+            .detail-box {
+              padding: 35px;
+            }
           }
         }
       }
