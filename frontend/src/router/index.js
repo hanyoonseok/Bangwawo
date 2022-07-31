@@ -40,12 +40,12 @@ const routes = [
   {
     path: "/secret",
     name: "secret",
-    component: () => import("@/views/SecretFriendView"),
+    component: () => import("@/views/secret/SecretFriendView"),
     children: [
       {
         path: "secrettalk",
         name: "secrettalk",
-        component: () => import("@/views/SecretTalkView"),
+        component: () => import("@/views/secret/SecretTalkView"),
       },
     ],
   },
@@ -53,111 +53,99 @@ const routes = [
   {
     path: "/class",
     name: "class",
-    component: () => import("@/views/ClassView"),
+    component: () => import("@/views/class/ClassView"),
     redirect: "/class/list",
     children: [
       {
         path: "list",
         name: "classlist",
-        component: () => import("@/views/ClassListView"),
+        component: () => import("@/views/class/ClassListView"),
       },
       {
         path: "detail",
         name: "classdetail",
-        component: () => import("@/views/ClassDetailView"),
+        component: () => import("@/views/class/ClassDetailView"),
       },
       {
         path: "register",
         name: "classregister",
-        component: () => import("@/views/ClassRegisterView"),
+        component: () => import("@/views/class/ClassRegisterView"),
       },
       {
         path: "modify",
         name: "classmodify",
-        component: () => import("@/views/ClassModifyView"),
+        component: () => import("@/views/class/ClassModifyView"),
       },
       {
         path: "request",
         name: "classrequest",
-        component: () => import("@/views/ClassRequestView"),
+        component: () => import("@/views/class/ClassRequestView"),
       },
       {
         path: "requestregist",
         name: "classrequestregist",
-        component: () => import("@/views/ClassRequestRegist"),
+        component: () => import("@/views/class/ClassRequestRegist"),
       },
       {
         path: "requestmodify",
         name: "classrequestmodify",
-        component: () => import("@/views/ClassRequestModify"),
+        component: () => import("@/views/class/ClassRequestModify"),
       },
       {
         path: "requestdetail",
         name: "classrequestdetail",
-        component: () => import("@/views/ClassRequestDetail"),
+        component: () => import("@/views/class/ClassRequestDetail"),
       },
     ],
   },
   {
     path: "/user",
     name: "user",
-    component: () => import("@/views/UserView"),
+    component: () => import("@/views/user/UserView"),
     children: [
       {
         path: "login",
         name: "login",
-        component: () => import("@/views/LoginView"),
+        component: () => import("@/views/user/LoginView"),
       },
       {
         path: "signup/student",
         name: "signupStudent",
-        component: () => import("@/views/SignupStudentView"),
+        component: () => import("@/views/user/SignupStudentView"),
       },
       {
         path: "signup/volunteer",
         name: "signupVolunteer",
-        component: () => import("@/views/SignupVolunteerView"),
+        component: () => import("@/views/user/SignupVolunteerView"),
       },
     ],
   },
   {
     path: "/mypage",
     name: "mypage",
-    component: () => import("@/views/MypageView"),
-    children: [
-      {
-        path: "student",
-        name: "mypageStudent",
-        component: () => import("@/views/MypageStudentView"),
-      },
-
-      {
-        path: "parent",
-        name: "mypageParent",
-        component: () => import("@/views/MypageParentView"),
-      },
-      {
-        path: "volunteer",
-        name: "mypageVolunteer",
-        component: () => import("@/views/MypageVolunteerView"),
-      },
-    ],
+    component: () => import("@/views/user/MypageView"),
   },
   {
     path: "/inclass",
     name: "inclass",
-    component: () => import("@/views/InClassView"),
+    component: () => import("@/views/class/InClassView"),
   },
   {
     path: "/feedback",
     name: "feedback",
-    component: () => import("@/views/FeedbackView"),
+    component: () => import("@/views/feedback/FeedbackView"),
   },
 
   {
     path: "/feedbackSubmit",
     name: "feedbackSubmit",
-    component: () => import("@/views/FeedBack"),
+    component: () => import("@/views/feedback/FeedBack"),
+  },
+  // 피드백부분 수정해본 곳
+  {
+    path: "/feedbackModify",
+    name: "feedbackModify",
+    component: () => import("@/views/feedback/FeedbackModify"),
   },
 ];
 
