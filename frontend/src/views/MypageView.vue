@@ -117,7 +117,7 @@
 </template>
 
 <script>
-import CalendarArea from "@/components/CalendarArea.vue";
+import CalendarArea from "@/components/mypage/CalendarArea.vue";
 import ProfileCard from "@/components/mypage/ProfileCard.vue";
 export default {
   components: {

@@ -141,6 +141,12 @@ const routes = [
     name: "feedbackSubmit",
     component: () => import("@/views/FeedBack"),
   },
+  // 피드백부분 수정해본 곳
+  {
+    path: "/feedbackModify",
+    name: "feedbackModify",
+    component: () => import("@/views/FeedbackModify"),
+  },
 ];
 
 export const router = createRouter({

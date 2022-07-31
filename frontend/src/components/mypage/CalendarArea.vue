@@ -1,6 +1,6 @@
 <template>
   <div class="calendar-area" style="height: 150px">
-    <Calendar is-expanded :attributes="attributes" height="150" />
+    <Calendar is-expanded :attributes="attributes" class="custom-calendar" />
   </div>
 </template>
 
@@ -29,7 +29,7 @@ export default {
             fillMode: "solid",
           }, // Boolean, String, Object
           bar: false, // Boolean, String, Object
-          content: "red", // Boolean, String, Object
+          content: "yellow", // Boolean, String, Object
           // Your custom data object for later access, if needed
           // We also need some dates to know where to display the attribute
           // We use a single date here, but it could also be an array of dates,
