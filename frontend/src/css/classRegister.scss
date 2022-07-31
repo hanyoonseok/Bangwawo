@@ -63,6 +63,10 @@
           font-family: $appleM;
           color: $grey;
         }
+        input[type="date"],
+        input[type="time"] {
+          cursor: pointer;
+        }
 
         input[type="number"] {
           width: 100px;
