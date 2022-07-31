@@ -29,17 +29,18 @@
         <img
           src="@/assets/profile.png"
           v-if="user.status >= 1"
-          @click="isProfileOpen = !isProfileOpen"
+          @click="toggleProfile"
         />
         <ul v-if="isProfileOpen">
           <router-link to="/mypage">마이페이지</router-link>
           <router-link to="/logout">로그아웃</router-link>
         </ul>
       </div>
-      <div class="bell-wrapper" @click="isModalOpen = !isModalOpen">
+      <div class="bell-wrapper">
         <i
           class="fa-solid fa-bell"
           v-if="user.status === 1 || user.status === 3"
+          @click="toggleModal"
           ><div class="count" v-if="user.messages.length > 0">
             {{ user.messages.length }}
           </div></i
@@ -107,17 +108,29 @@ export default {
   name: "HeaderNav",
   setup() {
     const user = {
-      status: 1,
+      status: 1, //0비로그인 1로그인
       messages: ["asd"],
     };
 
-    const isModalOpen = ref(false);
+    let isModalOpen = ref(false);
 
-    const isProfileOpen = ref(false);
+    let isProfileOpen = ref(false);
+
+    const toggleProfile = () => {
+      isModalOpen.value = false;
+      isProfileOpen.value = !isProfileOpen.value;
+    };
+
+    const toggleModal = () => {
+      isProfileOpen.value = false;
+      isModalOpen.value = !isModalOpen.value;
+    };
     return {
       user,
       isModalOpen,
       isProfileOpen,
+      toggleProfile,
+      toggleModal,
     };
   },
 };
