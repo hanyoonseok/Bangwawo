@@ -114,6 +114,7 @@
         </div>
       </div>
     </div>
+    <CharacterModal :character="character" />
   </div>
 </template>
 
@@ -121,19 +122,25 @@
 import CalendarArea from "@/components/mypage/CalendarArea.vue";
 import ProfileCard from "@/components/mypage/ProfileCard.vue";
 import HeaderNav from "@/components/HeaderNav.vue";
+import CharacterModal from "@/components/mypage/CharacterModal.vue";
+import { ref } from "@vue/reactivity";
 export default {
   components: {
     CalendarArea,
     HeaderNav,
     ProfileCard,
+    CharacterModal,
   },
   setup() {
     const user = {
       status: 3,
       subscribe: 0,
     };
+
+    const character = ref(true);
     return {
       user,
+      character,
     };
   },
 };

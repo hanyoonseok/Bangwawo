@@ -1,0 +1,109 @@
+.character-modal {
+  width: 100%;
+  height: 100%;
+  background-color: #3333335d;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 10;
+}
+.content-wrapper {
+  width: 870px;
+  height: 600px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  //   background-color: $light-grey;
+  background-color: $lightx2-yellow;
+  box-shadow: $shadow;
+  border-radius: 50px;
+
+  .back-btn,
+  .save-btn {
+    position: absolute;
+    right: 35px;
+
+    background-color: transparent;
+    color: $dark-grey;
+  }
+  .back-btn {
+    top: 35px;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+  }
+
+  .save-btn {
+    bottom: 35px;
+    width: 124px;
+    height: 33px;
+    @include SubmitBtn;
+  }
+  .box {
+    @include flexCenter;
+    margin: 75px 0;
+
+    > div {
+      width: 360px;
+      height: 450px;
+    }
+
+    .left-box {
+      background-color: $white;
+      border-radius: 27px;
+      box-shadow: $shadow;
+      padding: 40px;
+      .color-box {
+        .color-title {
+          font-family: $appleM;
+          color: #6d6d6d;
+          font-size: 15px;
+          margin-bottom: 10px;
+        }
+
+        .color-palette {
+          width: 230px;
+          height: 30px;
+          @include flexBetween;
+
+          span {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+          }
+
+          .red {
+            background-color: #ff9d9d;
+          }
+
+          .orange {
+            background-color: #ffba87;
+          }
+          .yellow {
+            background-color: #ffef99;
+          }
+          .green {
+            background-color: #a8e199;
+          }
+          .blue {
+            background-color: #b2c7ff;
+          }
+          .purple {
+            background-color: #f7c7ff;
+          }
+          .pink {
+            background-color: #ffcfdd;
+          }
+        }
+        margin-bottom: 20px;
+      }
+    }
+
+    .right-box {
+      margin-left: 20px;
+      border: 1px solid #000;
+    }
+  }
+}
