@@ -8,11 +8,23 @@
           expand: !state.isTopOpen && !state.isChatOpen,
         }"
       >
-        <article class="top-article-left top">
-          <div class="next-btn-wrapper"><button class="next-btn"></button></div>
+        <article
+          :class="{
+            'top-article-left': true,
+            top: true,
+            'top-side': state.isTopOpen || state.isChatOpen,
+            'right-side': !state.isTopOpen && !state.isChatOpen,
+          }"
+        >
+          <div class="idx-btn-wrapper next" @click="nextClick">
+            <button class="idx-btn next"></button>
+          </div>
+          <div class="idx-btn-wrapper prev" @click="prevClick">
+            <button class="idx-btn prev"></button>
+          </div>
           <div
             class="user-card-wrapper"
-            v-for="student in students"
+            v-for="student in currentStudents"
             :key="student.id"
           >
             <div class="user-card">s</div>
@@ -71,6 +83,8 @@ import StudentInclass from "@/components/class/StudentInclass.vue";
 export default {
   name: "UserView",
   setup() {
+    const dataLen = ref(4);
+    const dataIdx = ref(0);
     const students = ref([
       {
         id: 1,
@@ -98,6 +112,49 @@ export default {
       },
     ]);
 
+    const currentStudents = ref([]);
+
+    const initCurrentStudents = () => {
+      const tempArr = [];
+      for (
+        let i = dataIdx.value;
+        i < Math.min(dataIdx.value + dataLen.value, students.value.length);
+        i++
+      ) {
+        tempArr.push(students.value[i]);
+      }
+      currentStudents.value = tempArr;
+      console.log(dataLen);
+    };
+
+    const nextClick = () => {
+      if (dataIdx.value + dataLen.value >= students.value.length) return;
+      dataIdx.value += dataLen.value;
+      const currentTempArr = [];
+      for (
+        let i = dataIdx.value;
+        i < Math.min(dataIdx.value + dataLen.value, students.value.length);
+        i++
+      ) {
+        currentTempArr.push(students.value[i]);
+      }
+      currentStudents.value = currentTempArr;
+    };
+
+    const prevClick = () => {
+      if (dataIdx.value - dataLen.value < 0) return;
+      dataIdx.value -= dataLen.value;
+      const currentTempArr = [];
+      for (
+        let i = Math.max(0, dataIdx.value);
+        i < dataIdx.value + dataLen.value;
+        i++
+      ) {
+        currentTempArr.push(students.value[i]);
+      }
+      currentStudents.value = currentTempArr;
+    };
+
     const state = reactive({
       isParticipantsOpen: false,
       isChatOpen: false,
@@ -108,18 +165,32 @@ export default {
     const toggleParticipants = () => {
       state.isParticipantsOpen = !state.isParticipantsOpen;
       state.isTopOpen = state.isParticipantsOpen;
-      console.log(state);
+      const len = !state.isTopOpen && !state.isChatOpen ? 4 : 5;
+      console.log(len);
+      if (len != dataLen.value) {
+        dataLen.value = len;
+        initCurrentStudents();
+      }
     };
 
     const toggleChat = () => {
       state.isChatOpen = !state.isChatOpen;
+      const len = !state.isTopOpen && !state.isChatOpen ? 4 : 5;
+      if (len != dataLen.value) {
+        dataLen.value = len;
+        initCurrentStudents();
+      }
     };
 
+    initCurrentStudents();
     return {
       state,
       toggleParticipants,
       toggleChat,
       students,
+      prevClick,
+      nextClick,
+      currentStudents,
     };
   },
   components: {

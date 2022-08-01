@@ -4,7 +4,7 @@
   background-size: cover;
   width: 100%;
   height: 100%;
-  padding: 35px;
+  padding: 10px;
   display: flex;
   max-height: 100vh;
 }
@@ -47,22 +47,53 @@
       @include flexColumn;
       background-color: transparent;
       overflow: hidden;
+      &.expand {
+        flex-direction: row-reverse;
+      }
     }
 
     .top-article-left {
       width: 100%;
       display: flex;
+      align-items: center;
+      justify-content: center;
       position: relative;
       &.top {
         box-shadow: $light-shadow;
         padding: 15px;
         flex-wrap: nowrap;
         width: 100%;
-        margin-bottom: 20px;
         background-color: $light-yellow;
         border-radius: 15px;
-        overflow-x: clip;
         flex-shrink: 0;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-column-gap: 20px;
+        &.top-side {
+          margin-bottom: 20px;
+          .user-card-wrapper {
+            width: 100%;
+            height: 160px;
+            .user-card {
+              width: 100%;
+              height: 100%;
+            }
+          }
+        }
+        &.right-side {
+          grid-template-rows: repeat(4, 1fr);
+          grid-template-columns: repeat(1, 1fr);
+          grid-row-gap: 10px;
+          width: 240px;
+          .user-card-wrapper {
+            width: 100%;
+            height: 100%;
+            .user-card {
+              width: 100%;
+              height: 100%;
+            }
+          }
+        }
       }
       &.bot {
         height: 100%;
@@ -78,12 +109,9 @@
           font-weight: bold;
         }
         .user-card {
-          width: 200px;
+          width: 100%;
           height: 120px;
         }
-      }
-      .user-card-wrapper + .user-card-wrapper {
-        margin-left: 14px;
       }
     }
   }
@@ -264,24 +292,35 @@
   border-radius: 18px;
 }
 
-.next-btn-wrapper {
+.idx-btn-wrapper {
   background-color: #ffd18b;
   width: 35px;
   height: 35px;
   border-radius: 100%;
   position: absolute;
   top: 50%;
-  right: 0;
+
   @include flexCenter;
-  .next-btn {
+  &.next {
+    right: 0;
+  }
+  &.prev {
+    left: 0;
+  }
+  .idx-btn {
     width: 40%;
     height: 40%;
     border-top: 2.5px solid $dark-grey;
     border-left: 2.5px solid $dark-grey;
-    transform: rotate(135deg);
     flex-shrink: 0;
     background-color: transparent;
     content: "";
+    &.next {
+      transform: rotate(135deg);
+    }
+    &.prev {
+      transform: rotate(-45deg);
+    }
   }
 }
 
