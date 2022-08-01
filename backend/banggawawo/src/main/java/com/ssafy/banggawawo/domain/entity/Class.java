@@ -1,20 +1,27 @@
 package com.ssafy.banggawawo.domain.entity;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 
 @Entity
 @Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Class {
     @Id
     @GeneratedValue
-    private long c_id;          //수업 아이디
-    private long v_id;          //봉사자 아이디
+    private Long c_id;          //수업 아이디
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="v_id")
+    private Volunteer volunteer;//봉사자 아이디
+
     private String c_vname;     //봉사자 이름
     private String c_title;     //제목
     private String c_introduce; //소개글
