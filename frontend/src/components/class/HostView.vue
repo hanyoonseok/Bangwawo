@@ -8,17 +8,20 @@
           expand: !state.isTopOpen && !state.isChatOpen,
         }"
       >
-        <div class="user-card"></div>
-        <div class="user-card"></div>
-        <div class="user-card"></div>
-        <div class="user-card"></div>
-        <div class="user-card"></div>
-        <div class="user-card"></div>
-        <div class="user-card"></div>
-        <div class="user-card"></div>
-        <div class="user-card"></div>
-
-        <div class="next-btn-wrapper"><button class="next-btn"></button></div>
+        <div class="idx-btn-wrapper next" @click="nextClick">
+          <button class="idx-btn next"></button>
+        </div>
+        <div class="idx-btn-wrapper prev" @click="prevClick">
+          <button class="idx-btn prev"></button>
+        </div>
+        <div
+          class="user-card-wrapper"
+          v-for="student in currentStudents"
+          :key="student.id"
+        >
+          <div class="hover-wrapper">{{ student.name }}</div>
+          <div class="user-card"></div>
+        </div>
       </article>
 
       <article class="top-right" v-if="state.isTopOpen || state.isChatOpen">
@@ -73,7 +76,14 @@ import OXResult from "@/components/class/OXResult.vue";
 
 export default {
   name: "HostView",
-  setup() {
+  props: [
+    "dataLen",
+    "currentStudents",
+    "initCurrentStudents",
+    "prevClick",
+    "nextClick",
+  ],
+  setup(props) {
     const state = reactive({
       isParticipantsOpen: false,
       isChatOpen: false,
@@ -102,6 +112,7 @@ export default {
       state.isChatOpen = !state.isChatOpen;
     };
 
+    props.initCurrentStudents();
     return {
       state,
       toggleParticipants,
