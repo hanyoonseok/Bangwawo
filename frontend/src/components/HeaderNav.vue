@@ -1,41 +1,46 @@
 <template>
   <div class="container">
     <section class="left">
-      <ul v-if="user.status === 0">
+      <div class="listdiv" v-if="user.status === 0">
         <div><img src="@/assets/header.png" /></div>
-      </ul>
-      <ul v-if="user.status === 1">
+      </div>
+      <div class="listdiv" v-if="user.status === 1">
         <div><img src="@/assets/header.png" /></div>
-        <li class="list">수업목록</li>
-        <li class="list">수업요청</li>
-        <li class="list">비밀친구</li>
-      </ul>
-      <ul v-if="user.status === 2">
+        <router-link to="/class/list" class="list">수업목록</router-link>
+        <router-link to="/class/request" class="list">수업요청</router-link>
+        <router-link to="/secret" class="list">비밀친구</router-link>
+      </div>
+      <div class="listdiv" v-if="user.status === 2">
         <div><img src="@/assets/header.png" /></div>
-        <li class="list">수업목록</li>
-        <li class="list">수업등록</li>
-        <li class="list">수업요청</li>
-      </ul>
-      <ul v-if="user.status === 3">
+        <router-link to="/class/list" class="list">수업목록</router-link>
+        <router-link to="/class/register" class="list">수업등록</router-link>
+        <router-link to="/class/request" class="list">수업요청</router-link>
+      </div>
+      <div class="listdiv" v-if="user.status === 3">
         <div><img src="@/assets/header.png" /></div>
-        <li class="list">수업목록</li>
-        <li class="list">수업요청</li>
-      </ul>
+        <router-link to="/class/list" class="list">수업목록</router-link>
+        <router-link to="/class/request" class="list">수업요청</router-link>
+      </div>
     </section>
 
     <section class="right">
       <button class="login" v-if="user.status === 0">로그인</button>
       <div class="img-wrapper">
-        <img src="@/assets/profile.png" v-if="user.status >= 1" />
-        <ul>
-          <li>마이페이지</li>
-          <li>로그아웃</li>
+        <img
+          src="@/assets/profile.png"
+          v-if="user.status >= 1"
+          @click="toggleProfile"
+        />
+        <ul v-if="isProfileOpen">
+          <router-link to="/mypage">마이페이지</router-link>
+          <router-link to="/logout">로그아웃</router-link>
         </ul>
       </div>
-      <div class="bell-wrapper" @click="isModalOpen = !isModalOpen">
+      <div class="bell-wrapper">
         <i
           class="fa-solid fa-bell"
           v-if="user.status === 1 || user.status === 3"
+          @click="toggleModal"
           ><div class="count" v-if="user.messages.length > 0">
             {{ user.messages.length }}
           </div></i
@@ -103,14 +108,29 @@ export default {
   name: "HeaderNav",
   setup() {
     const user = {
-      status: 1,
+      status: 1, //0비로그인 1로그인
       messages: ["asd"],
     };
 
-    const isModalOpen = ref(false);
+    let isModalOpen = ref(false);
+
+    let isProfileOpen = ref(false);
+
+    const toggleProfile = () => {
+      isModalOpen.value = false;
+      isProfileOpen.value = !isProfileOpen.value;
+    };
+
+    const toggleModal = () => {
+      isProfileOpen.value = false;
+      isModalOpen.value = !isModalOpen.value;
+    };
     return {
       user,
       isModalOpen,
+      isProfileOpen,
+      toggleProfile,
+      toggleModal,
     };
   },
 };
