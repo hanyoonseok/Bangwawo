@@ -4,7 +4,7 @@
   background-size: cover;
   width: 100%;
   height: 100%;
-  padding: 35px;
+  padding: 10px;
   display: flex;
   max-height: 100vh;
 }
@@ -32,11 +32,55 @@
       box-shadow: $light-shadow;
       padding: 15px;
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       grid-template-rows: repeat(3, 1fr);
       grid-column-gap: 16px;
       grid-row-gap: 16px;
       position: relative;
+      .user-card-wrapper {
+        width: 100%;
+        height: 100%;
+        .user-card {
+          width: 100%;
+          height: 100%;
+        }
+        position: relative;
+
+        .hover-wrapper {
+          opacity: 0;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          content: "";
+          background-color: rgba(53, 53, 53, 0.25);
+          color: $white;
+          font-size: 16px;
+          font-family: $appleM;
+          font-weight: bold;
+          @include flexCenter;
+          border-radius: 18px;
+          &:hover {
+            transition: 0.3s ease;
+            opacity: 0.5;
+          }
+        }
+      }
+      .idx-btn-wrapper {
+        &.prev {
+          left: 0;
+          &.prev {
+            transform: rotate(-45deg);
+          }
+        }
+        &.next {
+          right: 0;
+          &.next {
+            transform: rotate(135deg);
+          }
+        }
+      }
     }
     &.expand {
       width: 100%;
@@ -46,21 +90,95 @@
     &.user {
       @include flexColumn;
       background-color: transparent;
+      overflow: hidden;
+      &.expand {
+        flex-direction: row-reverse;
+      }
     }
 
     .top-article-left {
       width: 100%;
       display: flex;
+      align-items: center;
+      justify-content: center;
       position: relative;
       &.top {
         box-shadow: $light-shadow;
         padding: 15px;
         flex-wrap: nowrap;
         width: 100%;
-        margin-bottom: 20px;
         background-color: $light-yellow;
         border-radius: 15px;
-        // overflow-x: hidden;
+        flex-shrink: 0;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-column-gap: 20px;
+        &.top-side {
+          margin-bottom: 20px;
+          .user-card-wrapper {
+            width: 100%;
+            height: 140px;
+            .user-card {
+              width: 100%;
+              height: 100%;
+            }
+          }
+          .idx-btn-wrapper {
+            &.next {
+              right: 0;
+              transform: translate(0, -50%);
+            }
+            &.prev {
+              left: 0;
+              transform: translate(0, -50%);
+            }
+            .idx-btn {
+              &.next {
+                transform: rotate(135deg);
+              }
+              &.prev {
+                transform: rotate(-45deg);
+              }
+            }
+          }
+        }
+        &.right-side {
+          grid-template-rows: repeat(4, 1fr);
+          grid-template-columns: repeat(1, 1fr);
+          grid-row-gap: 10px;
+          width: 240px;
+          margin-left: 20px;
+          .user-card-wrapper {
+            width: 100%;
+            height: 100%;
+            .user-card {
+              width: 100%;
+              height: 100%;
+            }
+          }
+
+          .idx-btn-wrapper {
+            top: inherit;
+            &.next {
+              bottom: 0;
+              right: 50%;
+              transform: translate(50%, 0);
+            }
+            &.prev {
+              top: 0;
+              left: 50%;
+              transform: translate(-50%, 0);
+            }
+            .idx-btn {
+              &.next {
+                transform: rotate(-135deg);
+              }
+              &.prev {
+                transform: rotate(45deg);
+              }
+            }
+          }
+        }
       }
       &.bot {
         height: 100%;
@@ -70,18 +188,33 @@
       .user-card-wrapper {
         @include flexColumn;
         align-items: center;
-        label {
-          font-size: 12px;
+        position: relative;
+
+        .hover-wrapper {
+          opacity: 0;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          content: "";
+          background-color: rgba(53, 53, 53, 0.25);
+          color: $white;
+          font-size: 16px;
           font-family: $appleM;
           font-weight: bold;
+          @include flexCenter;
+          border-radius: 18px;
+          &:hover {
+            transition: 0.3s ease;
+            opacity: 0.5;
+          }
         }
+
         .user-card {
-          width: 200px;
+          width: 100%;
           height: 120px;
         }
-      }
-      .user-card-wrapper + .user-card-wrapper {
-        margin-left: 14px;
       }
     }
   }
@@ -262,21 +395,21 @@
   border-radius: 18px;
 }
 
-.next-btn-wrapper {
+.idx-btn-wrapper {
   background-color: #ffd18b;
   width: 35px;
   height: 35px;
   border-radius: 100%;
   position: absolute;
   top: 50%;
-  right: 0;
+  z-index: 2;
+
   @include flexCenter;
-  .next-btn {
+  .idx-btn {
     width: 40%;
     height: 40%;
     border-top: 2.5px solid $dark-grey;
     border-left: 2.5px solid $dark-grey;
-    transform: rotate(135deg);
     flex-shrink: 0;
     background-color: transparent;
     content: "";
@@ -410,4 +543,10 @@
   font-weight: bold;
   font-size: 20px;
   margin-top: 10px;
+}
+
+.stu-inclass-container {
+  width: 100%;
+  height: 100%;
+  background-color: $light-grey;
 }

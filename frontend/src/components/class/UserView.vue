@@ -8,31 +8,32 @@
           expand: !state.isTopOpen && !state.isChatOpen,
         }"
       >
-        <article class="top-article-left top">
-          <div class="next-btn-wrapper"><button class="next-btn"></button></div>
-          <div class="user-card-wrapper">
-            <div class="user-card">s</div>
-            <label>김수빈수빈</label>
+        <article
+          :class="{
+            'top-article-left': true,
+            top: true,
+            'top-side': state.isTopOpen || state.isChatOpen,
+            'right-side': !state.isTopOpen && !state.isChatOpen,
+          }"
+        >
+          <div class="idx-btn-wrapper next" @click="nextClick">
+            <button class="idx-btn next"></button>
           </div>
-          <div class="user-card-wrapper">
-            <div class="user-card"></div>
-            <label>김수빈수빈</label>
+          <div class="idx-btn-wrapper prev" @click="prevClick">
+            <button class="idx-btn prev"></button>
           </div>
-          <div class="user-card-wrapper">
+          <div
+            class="user-card-wrapper"
+            v-for="student in currentStudents"
+            :key="student.id"
+          >
+            <div class="hover-wrapper">{{ student.name }}</div>
             <div class="user-card"></div>
-            <label>김수빈수빈</label>
-          </div>
-          <div class="user-card-wrapper">
-            <div class="user-card"></div>
-            <label>김수빈수빈</label>
-          </div>
-          <div class="user-card-wrapper">
-            <div class="user-card"></div>
-            <label>김수빈수빈</label>
           </div>
         </article>
         <article class="top-article-left bot">
-          <StudentOX />
+          <StudentOX v-if="state.isOXOpen" />
+          <StudentInclass v-else />
         </article>
       </article>
 
@@ -77,10 +78,18 @@ import { reactive } from "vue";
 import ParticipantsList from "@/components/class/ParticipantsList.vue";
 import ChatForm from "@/components/class/ChatForm.vue";
 import StudentOX from "@/components/class/StudentOX.vue";
+import StudentInclass from "@/components/class/StudentInclass.vue";
 
 export default {
   name: "UserView",
-  setup() {
+  props: [
+    "dataLen",
+    "currentStudents",
+    "initCurrentStudents",
+    "prevClick",
+    "nextClick",
+  ],
+  setup(props, { emit }) {
     const state = reactive({
       isParticipantsOpen: false,
       isChatOpen: false,
@@ -91,13 +100,23 @@ export default {
     const toggleParticipants = () => {
       state.isParticipantsOpen = !state.isParticipantsOpen;
       state.isTopOpen = state.isParticipantsOpen;
-      console.log(state);
+      const len = !state.isTopOpen && !state.isChatOpen ? 4 : 5;
+      if (len != props.dataLen.value) {
+        emit("changeDataLen", len);
+        props.initCurrentStudents();
+      }
     };
 
     const toggleChat = () => {
       state.isChatOpen = !state.isChatOpen;
+      const len = !state.isTopOpen && !state.isChatOpen ? 4 : 5;
+      if (len != props.dataLen.value) {
+        emit("changeDataLen", len);
+        props.initCurrentStudents();
+      }
     };
 
+    props.initCurrentStudents();
     return {
       state,
       toggleParticipants,
@@ -108,6 +127,7 @@ export default {
     ParticipantsList,
     ChatForm,
     StudentOX,
+    StudentInclass,
   },
 };
 </script>
