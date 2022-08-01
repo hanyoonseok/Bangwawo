@@ -13,7 +13,9 @@
         <div class="title"><h3>오리 선생님의 수학수업</h3></div>
         <div class="content">
           <article>
-            <div class="left-box round-post-card"></div>
+            <div class="left-box round-post-card">
+              <img src="@/assets/banner-illust.png" class="left-box-img" />
+            </div>
             <div class="right-box">
               <div class="info-box">
                 <p class="info-title post-card">강사</p>

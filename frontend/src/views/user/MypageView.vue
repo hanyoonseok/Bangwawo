@@ -3,7 +3,7 @@
     <HeaderNav />
     <div class="mypage-container">
       <div class="profile-info">
-        <profile-card></profile-card>
+        <profile-card :user="user"></profile-card>
         <div class="left-box calendar">
           <h4>수업 일정</h4>
           <calendar-area />
@@ -129,8 +129,27 @@ export default {
   },
   setup() {
     const user = {
-      status: 3,
+      name: "이화연바보",
+      nickname: "애기하연",
+      description: "자기소개입니다",
+      status: 1,
       subscribe: 0,
+      children: [
+        {
+          name: "이화연바보",
+          nickname: "애기하연",
+          description: "자기소개입니다",
+          status: 1,
+          subscribe: 0,
+        },
+        {
+          name: "이화연바보",
+          nickname: "애기하연",
+          description: "자기소개입니다",
+          status: 1,
+          subscribe: 0,
+        },
+      ],
     };
     return {
       user,

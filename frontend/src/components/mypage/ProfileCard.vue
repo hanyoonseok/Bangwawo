@@ -72,7 +72,7 @@
 
     <div class="person-info" v-if="user.status === 2">
       <label>자기소개</label>
-      <div class="label-value introduce">자기소개 글</div>
+      <div class="label-value introduce">{{ user.description }}</div>
     </div>
     <div class="person-info" v-else>
       <label>별명</label>

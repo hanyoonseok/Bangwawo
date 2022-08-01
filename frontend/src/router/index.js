@@ -133,13 +133,13 @@ const routes = [
   {
     path: "/feedback",
     name: "feedback",
-    component: () => import("@/views/feedback/FeedbackView"),
+    component: () => import("@/views/feedback/FeedBack"),
   },
 
   {
     path: "/feedbackSubmit",
     name: "feedbackSubmit",
-    component: () => import("@/views/feedback/FeedBack"),
+    component: () => import("@/views/feedback/FeedbackSubmit"),
   },
 ];
 
