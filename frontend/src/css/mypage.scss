@@ -286,7 +286,37 @@
           background-color: $light-grey;
           border-radius: 20px 20px 0 0;
           box-shadow: $light-shadow;
+          position: relative;
+          .state-btn {
+            position: absolute;
+            top: 10px;
+            right: 13px;
+            @include StatusBtn(true);
+            width: 60px;
+            font-size: 10px;
+            padding: 3px;
+            height: 25px;
+            font-family: $appleB;
+            i {
+              font-size: 6px;
+            }
+          }
+          .end-btn {
+            position: absolute;
+            top: 10px;
+            right: 13px;
+            font-size: 10px;
+            font-family: $appleB;
+            padding: 4px;
+            border-radius: 5px;
+            color: $white;
+            background-color: $grey;
+            i {
+              font-size: 6px;
+            }
+          }
         }
+
         .lecture-info {
           background-color: #fefefe;
           width: 100%;

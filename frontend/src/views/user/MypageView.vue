@@ -47,7 +47,7 @@ export default {
       name: "이화연바보",
       nickname: "애기하연",
       description: "자기소개입니다",
-      status: 1,
+      status: 3,
       subscribe: 0,
       children: [
         {
@@ -75,6 +75,7 @@ export default {
         classContent:
           "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
         classOpen: true,
+        classStatus: "입장가능",
         classPeople: "12/45",
       },
       {
@@ -85,6 +86,7 @@ export default {
         classContent:
           "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
         classOpen: true,
+        classStatus: "입장대기",
         classPeople: "12/45",
       },
       {
@@ -95,6 +97,7 @@ export default {
         classContent:
           "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
         classOpen: true,
+        classStatus: "입장대기",
         classPeople: "12/45",
       },
       {
@@ -105,6 +108,7 @@ export default {
         classContent:
           "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
         classOpen: true,
+        classStatus: "입장대기",
         classPeople: "12/45",
       },
       {
@@ -115,6 +119,7 @@ export default {
         classContent:
           "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
         classOpen: true,
+        classStatus: "입장대기",
         classPeople: "12/45",
       },
       {
@@ -125,6 +130,7 @@ export default {
         classContent:
           "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
         classOpen: true,
+        classStatus: "종료",
         classPeople: "12/45",
       },
       {
@@ -135,6 +141,7 @@ export default {
         classContent:
           "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
         classOpen: true,
+        classStatus: "종료",
         classPeople: "12/45",
       },
       {
@@ -145,6 +152,7 @@ export default {
         classContent:
           "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
         classOpen: true,
+        classStatus: "종료",
         classPeople: "12/45",
       },
       {
@@ -155,6 +163,7 @@ export default {
         classContent:
           "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
         classOpen: true,
+        classStatus: "종료",
         classPeople: "12/45",
       },
     ];
