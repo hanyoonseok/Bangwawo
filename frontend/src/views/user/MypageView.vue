@@ -1,5 +1,6 @@
 <template>
   <div class="mypage-background">
+    <HeaderNav />
     <div class="mypage-container">
       <div class="profile-info">
         <profile-card></profile-card>
@@ -119,9 +120,11 @@
 <script>
 import CalendarArea from "@/components/mypage/CalendarArea.vue";
 import ProfileCard from "@/components/mypage/ProfileCard.vue";
+import HeaderNav from "@/components/HeaderNav.vue";
 export default {
   components: {
     CalendarArea,
+    HeaderNav,
     ProfileCard,
   },
   setup() {

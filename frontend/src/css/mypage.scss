@@ -2,7 +2,7 @@
   background: url("@/assets/mainBg.png");
   height: 100vh;
   .mypage-container {
-    padding: 60px 80px;
+    padding: 80px 80px 50px 80px;
     @include flexCenter;
   }
   .profile-info {
@@ -13,6 +13,39 @@
       height: 295px;
       border-radius: 40px;
       box-shadow: $light-shadow;
+    }
+    .parent-profile {
+      @include flexCenter;
+      align-items: flex-start;
+      .bookmark-area {
+        padding: 10px 0;
+        .children-bookmark {
+          cursor: pointer;
+          width: 25px;
+          @include flexCenter;
+          flex-wrap: wrap;
+          border-radius: 0 10px 10px 0;
+          padding: 15px 7px;
+          margin: 25px 0;
+          font-size: 10px;
+          line-height: 10px;
+          font-weight: bold;
+          font-family: $appleM;
+          position: relative;
+          background-color: $light-grey;
+
+          img {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            top: -20px;
+          }
+        }
+      }
+
+      .children-bookmark.active {
+        background-color: #ffefd3;
+      }
     }
     .profile {
       position: relative;
