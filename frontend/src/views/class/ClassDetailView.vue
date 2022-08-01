@@ -51,7 +51,7 @@
               <router-link to="/class/modify" class="class-modify-btn">
                 <i class="fa-solid fa-pencil"></i>
               </router-link>
-              <button class="class-delete-btn">
+              <button class="class-delete-btn" @click="isConfirm.status = true">
                 <i class="fa-solid fa-trash-can"></i>
               </button>
             </div>
@@ -87,11 +87,22 @@
         </div>
       </div>
     </section>
+    <div class="confirm" v-if="isConfirm.status">
+      <div class="container">
+        <img src="@/assets/profile.png" alt="오리" />
+        <h2>정말로 삭제하시겠습니까?</h2>
+        <div class="btn-wrapper">
+          <button class="btn">네</button>
+          <button class="btn" @click="isConfirm.status = false">아니요</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import HeaderNav from "@/components/HeaderNav.vue";
+import { reactive } from "vue";
 
 export default {
   name: "ClassDetailView",
@@ -128,11 +139,16 @@ export default {
       }
     };
 
+    const isConfirm = reactive({
+      status: false,
+    });
+
     return {
       state,
       user,
       showProfile,
       hideProfile,
+      isConfirm,
     };
   },
 };

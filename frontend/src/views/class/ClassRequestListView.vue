@@ -81,7 +81,7 @@ import HeaderNav from "@/components/HeaderNav.vue";
 import { computed, reactive } from "vue";
 
 export default {
-  name: "ClassRequestView",
+  name: "ClassRequestListView",
   components: {
     HeaderNav,
   },
