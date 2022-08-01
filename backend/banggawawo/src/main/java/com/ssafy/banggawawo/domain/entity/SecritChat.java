@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 
@@ -18,8 +16,12 @@ import java.util.Date;
 public class SecritChat {
     @Id
     @GeneratedValue
-    private long sc_id;           //비밀친구 아이디
-    private long s_id;            //학생 아이디
+    private Long sc_id;           //비밀친구 아이디
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="s_id")
+    private Student student;
+
     private String sc_content;    //위험 내용
     private Date sc_date;         //날짜
 }

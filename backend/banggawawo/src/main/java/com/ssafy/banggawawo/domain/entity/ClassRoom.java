@@ -7,13 +7,14 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Class {
+public class ClassRoom {
     @Id
     @GeneratedValue
     private Long c_id;          //수업 아이디
@@ -21,6 +22,13 @@ public class Class {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="v_id")
     private Volunteer volunteer;//봉사자 아이디
+
+    @OneToMany
+    private List<Enrol> enrols; //수강신청목록
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "r_id")
+    private Request request;
 
     private String c_vname;     //봉사자 이름
     private String c_title;     //제목

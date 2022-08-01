@@ -18,7 +18,7 @@ public class Volunteer {
     private Long v_id;          // 봉사자 아이디
 
     @OneToMany(mappedBy = "v_id")
-    private List<Class> Class;
+    private List<ClassRoom> Class;
 
     private String v_token;     // 카카오 토큰
     private String v_name;      // 이름

@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 
 @Entity
@@ -17,7 +15,13 @@ import javax.persistence.Id;
 public class Like {
     @Id
     @GeneratedValue
-    private long l_id;    //좋아요 아이디
-    private long r_id;    //요청 아이디
-    private long s_id;    //학생 아이디
+    private Long l_id;    //좋아요 아이디
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="r_id")
+    private Request request;    //요청 아이디
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="s_id")
+    private Student student;    //학생 아이디
 }

@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 
 @Entity
@@ -17,9 +15,16 @@ import javax.persistence.Id;
 public class Enrol {
     @Id
     @GeneratedValue
-    private long e_id;            //신청 아이디
-    private long s_id;            //학생 아이디
-    private long c_id;            //수업 아이디
+    private Long e_id;            //신청 아이디
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="s_id")
+    private Student student;      //학생
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="c_id")
+    private ClassRoom class_room;            //수업
+
     private String e_feedback;    //봉사자 피드백
     private String e_emotion;     //감정 피드백(아직 자료형 미정)
     private String e_recording;   //녹화영상

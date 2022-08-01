@@ -17,8 +17,17 @@ public class Student {
     @GeneratedValue
     private Long s_id;          //학생 아이디
 
-    @OneToMany
+    @OneToMany(mappedBy = "e_id")
+    private List<Enrol> enrols; //수강신청 목록 & 피드백 목록
 
+    @OneToMany(mappedBy = "r_id")
+    private List<Request> requests; //수업요청 리스트
+
+    @OneToMany(mappedBy = "sc_id")
+    private List<SecritChat> secritChats;   //비밀친구 대화 리스트
+
+    @OneToMany(mappedBy = "l_id")
+    private List<Like> likes;   //좋아요 리스트
 
     private String s_tonken;    //카카오 토큰
     private String s_name;      // 이름
