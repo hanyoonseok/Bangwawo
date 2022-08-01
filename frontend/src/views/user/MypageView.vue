@@ -138,6 +138,7 @@ export default {
     };
 
     const character = ref(true);
+
     return {
       user,
       character,

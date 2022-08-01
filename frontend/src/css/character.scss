@@ -9,7 +9,7 @@
 }
 .content-wrapper {
   width: 870px;
-  height: 600px;
+  height: 570px;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -46,64 +46,43 @@
 
     > div {
       width: 360px;
-      height: 450px;
+      height: 420px;
     }
 
     .left-box {
-      background-color: $white;
-      border-radius: 27px;
-      box-shadow: $shadow;
-      padding: 40px;
-      .color-box {
-        .color-title {
-          font-family: $appleM;
-          color: #6d6d6d;
-          font-size: 15px;
-          margin-bottom: 10px;
-        }
-
-        .color-palette {
-          width: 230px;
+      .select {
+        margin-left: 15px;
+        button {
+          width: 42px;
           height: 30px;
-          @include flexBetween;
-
-          span {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            cursor: pointer;
-          }
-
-          .red {
-            background-color: #ff9d9d;
-          }
-
-          .orange {
-            background-color: #ffba87;
-          }
-          .yellow {
-            background-color: #ffef99;
-          }
-          .green {
-            background-color: #a8e199;
-          }
-          .blue {
-            background-color: #b2c7ff;
-          }
-          .purple {
-            background-color: #f7c7ff;
-          }
-          .pink {
-            background-color: #ffcfdd;
-          }
+          border-radius: 10px 10px 0 0;
+          font-size: 15px;
+          font-weight: bold;
+          margin-left: 5px;
+          background-color: #e4e3e3;
         }
-        margin-bottom: 20px;
+        .active {
+          background-color: $light-yellow;
+        }
+      }
+
+      &::v-deep .vacp-color-picker {
+        height: 390px;
+        // margin: auto;
+        border-radius: 27px;
+        padding: 40px;
+        box-shadow: $shadow;
+        --vacp-color-space-width: 360px;
+
+        .vacp-copy-button,
+        .vacp-format-switch-button {
+          display: none;
+        }
       }
     }
 
     .right-box {
       margin-left: 20px;
-      border: 1px solid #000;
     }
   }
 }
