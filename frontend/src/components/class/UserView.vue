@@ -27,8 +27,8 @@
             v-for="student in currentStudents"
             :key="student.id"
           >
-            <div class="user-card">s</div>
-            <label>{{ student.name }}</label>
+            <div class="hover-wrapper">{{ student.name }}</div>
+            <div class="user-card"></div>
           </div>
         </article>
         <article class="top-article-left bot">
@@ -124,7 +124,6 @@ export default {
         tempArr.push(students.value[i]);
       }
       currentStudents.value = tempArr;
-      console.log(dataLen);
     };
 
     const nextClick = () => {
@@ -166,7 +165,6 @@ export default {
       state.isParticipantsOpen = !state.isParticipantsOpen;
       state.isTopOpen = state.isParticipantsOpen;
       const len = !state.isTopOpen && !state.isChatOpen ? 4 : 5;
-      console.log(len);
       if (len != dataLen.value) {
         dataLen.value = len;
         initCurrentStudents();

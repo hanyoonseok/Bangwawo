@@ -73,10 +73,28 @@
           margin-bottom: 20px;
           .user-card-wrapper {
             width: 100%;
-            height: 160px;
+            height: 140px;
             .user-card {
               width: 100%;
               height: 100%;
+            }
+          }
+          .idx-btn-wrapper {
+            &.next {
+              right: 0;
+              transform: translate(0, -50%);
+            }
+            &.prev {
+              left: 0;
+              transform: translate(0, -50%);
+            }
+            .idx-btn {
+              &.next {
+                transform: rotate(135deg);
+              }
+              &.prev {
+                transform: rotate(-45deg);
+              }
             }
           }
         }
@@ -93,6 +111,28 @@
               height: 100%;
             }
           }
+
+          .idx-btn-wrapper {
+            top: inherit;
+            &.next {
+              bottom: 0;
+              right: 50%;
+              transform: translate(50%, 0);
+            }
+            &.prev {
+              top: 0;
+              left: 50%;
+              transform: translate(-50%, 0);
+            }
+            .idx-btn {
+              &.next {
+                transform: rotate(-135deg);
+              }
+              &.prev {
+                transform: rotate(45deg);
+              }
+            }
+          }
         }
       }
       &.bot {
@@ -103,11 +143,29 @@
       .user-card-wrapper {
         @include flexColumn;
         align-items: center;
-        label {
-          font-size: 12px;
+        position: relative;
+
+        .hover-wrapper {
+          opacity: 0;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          content: "";
+          background-color: rgba(53, 53, 53, 0.25);
+          color: $white;
+          font-size: 16px;
           font-family: $appleM;
           font-weight: bold;
+          @include flexCenter;
+          border-radius: 18px;
+          &:hover {
+            transition: 0.3s ease;
+            opacity: 0.5;
+          }
         }
+
         .user-card {
           width: 100%;
           height: 120px;
@@ -299,14 +357,9 @@
   border-radius: 100%;
   position: absolute;
   top: 50%;
+  z-index: 2;
 
   @include flexCenter;
-  &.next {
-    right: 0;
-  }
-  &.prev {
-    left: 0;
-  }
   .idx-btn {
     width: 40%;
     height: 40%;
@@ -315,12 +368,6 @@
     flex-shrink: 0;
     background-color: transparent;
     content: "";
-    &.next {
-      transform: rotate(135deg);
-    }
-    &.prev {
-      transform: rotate(-45deg);
-    }
   }
 }
 
