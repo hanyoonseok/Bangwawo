@@ -144,104 +144,193 @@
       text-align: center;
     }
   }
-  .lecture-info {
-    .right-box {
-      width: 900px;
-      height: 295px;
-      background-color: white;
-      border-radius: 40px;
-      box-shadow: $light-shadow;
-      overflow: hidden;
-      &:nth-child(1) {
-        margin-bottom: 25px;
+  // .lecture-info {
+  //   .right-box {
+  //     width: 900px;
+  //     height: 295px;
+  //     background-color: white;
+  //     border-radius: 40px;
+  //     box-shadow: $light-shadow;
+  //     overflow: hidden;
+  //     &:nth-child(1) {
+  //       margin-bottom: 25px;
+  //     }
+  //   }
+  //   .lecture-content {
+  //     padding: 35px;
+  //     position: relative;
+  //     .slide {
+  //       position: absolute;
+  //       top: 30px;
+  //       right: 30px;
+  //       color: $grey;
+  //       font-size: 20px;
+  //     }
+  //     .box-title {
+  //       display: inline-block;
+  //       border-bottom: 5px solid $yellow;
+  //     }
+  //     .title-desc {
+  //       font-size: 12px;
+  //       color: $grey;
+  //       margin-left: 20px;
+  //     }
+  //     .lecture-list {
+  //       margin-top: 20px;
+  //       overflow-y: scroll;
+  //       height: 180px;
+  //       display: flex;
+  //       flex-direction: row;
+  //       justify-content: flex-start;
+  //       flex-wrap: wrap;
+  //       .lecture {
+  //         margin: 15px;
+  //         .round-post-card {
+  //           position: relative;
+  //           width: 240px;
+  //           height: 140px;
+  //           border-radius: 20px;
+  //           background-color: $light-grey;
+  //           cursor: pointer;
+  //           @include flexCenter;
+  //           .feedback-btn {
+  //             @include SubmitBtn;
+  //             position: absolute;
+  //             font-family: $SCore;
+  //             width: 130px;
+  //             transform: translate(0, 20px);
+  //             opacity: 0;
+  //           }
+  //           .go-detail {
+  //             position: absolute;
+  //             color: $white;
+  //             font-size: 14px;
+  //             transition: all 200ms ease;
+  //             transform: translate(0, 30px);
+  //             opacity: 0;
+  //           }
+  //         }
+  //         .end-lecture {
+  //           transition: all 300ms ease;
+  //           div {
+  //             width: 100%;
+  //             position: absolute;
+  //             height: 100%;
+  //             top: 0;
+  //             left: 0;
+  //             content: "";
+  //             background-color: $light-grey;
+  //             border-radius: 20px;
+  //           }
+  //           &:hover > div {
+  //             filter: brightness(90%);
+  //           }
+  //           &:hover > .feedback-btn {
+  //             transform: translate(0, 0);
+  //             opacity: 100%;
+  //           }
+  //           &:hover > .go-detail {
+  //             transform: translate(0, 0);
+  //             opacity: 100%;
+  //           }
+  //         }
+  //         .lecture-title {
+  //           width: 240px;
+  //           white-space: nowrap;
+  //           overflow: hidden;
+  //           text-overflow: ellipsis;
+  //           font-size: 14px;
+  //           margin-top: 10px;
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+
+  .lecture-container {
+    background-color: white;
+    width: 100%;
+    height: 620px;
+    box-shadow: $light-shadow;
+    border-radius: 40px;
+    padding: 30px;
+    .lecture-nav {
+      width: 100%;
+      height: 35px;
+      font-size: 14px;
+      border-bottom: 1px solid $light-grey;
+      display: flex;
+      flex-direction: row;
+      .nav-item {
+        margin-left: 10px;
+      }
+      .active {
+        font-weight: bold;
+        border-bottom: 1.5px solid $grey;
       }
     }
-    .lecture-content {
-      padding: 35px;
-      position: relative;
-      .slide {
-        position: absolute;
-        top: 30px;
-        right: 30px;
-        color: $grey;
-        font-size: 20px;
-      }
-      .box-title {
-        display: inline-block;
-        border-bottom: 5px solid $yellow;
-      }
-      .title-desc {
-        font-size: 12px;
-        color: $grey;
-        margin-left: 20px;
-      }
-      .lecture-list {
-        margin-top: 20px;
-        overflow-y: scroll;
-        height: 180px;
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-        .lecture {
-          margin: 15px;
-          .round-post-card {
-            position: relative;
-            width: 240px;
-            height: 140px;
-            border-radius: 20px;
-            background-color: $light-grey;
-            cursor: pointer;
-            @include flexCenter;
-            .feedback-btn {
-              @include SubmitBtn;
-              position: absolute;
-              font-family: $SCore;
-              width: 130px;
-              transform: translate(0, 20px);
-              opacity: 0;
+    .lecture-area {
+      width: 100%;
+      height: 100%;
+      padding: 20px 75px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      .lecture-box {
+        width: 230px;
+        margin: 10px 15px;
+        height: 210px;
+        .lecture-thumb {
+          width: 100%;
+          height: 130px;
+          background-color: $light-grey;
+          border-radius: 20px 20px 0 0;
+          box-shadow: $light-shadow;
+        }
+        .lecture-info {
+          background-color: #fefefe;
+          width: 100%;
+          box-shadow: $light-shadow;
+          height: 80px;
+          border-radius: 0 0 20px 20px;
+          padding: 10px 15px;
+          position: relative;
+          .teacher-photo {
+            img {
+              width: 42px;
+              height: 42px;
             }
-            .go-detail {
-              position: absolute;
-              color: $white;
-              font-size: 14px;
-              transition: all 200ms ease;
-              transform: translate(0, 30px);
-              opacity: 0;
-            }
+            position: absolute;
+            top: -20px;
+            right: 15px;
           }
-          .end-lecture {
-            transition: all 300ms ease;
-            div {
-              width: 100%;
-              position: absolute;
-              height: 100%;
-              top: 0;
-              left: 0;
-              content: "";
-              background-color: $light-grey;
-              border-radius: 20px;
-            }
-            &:hover > div {
-              filter: brightness(90%);
-            }
-            &:hover > .feedback-btn {
-              transform: translate(0, 0);
-              opacity: 100%;
-            }
-            &:hover > .go-detail {
-              transform: translate(0, 0);
-              opacity: 100%;
-            }
+          .lecture-teacher {
+            font-size: 12px;
           }
-          .lecture-title {
-            width: 240px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            font-size: 14px;
-            margin-top: 10px;
+          .lecture-date {
+            position: absolute;
+            bottom: 7px;
+            font-size: 10px;
+            font-weight: bold;
+            color: #a6a6a6;
+            left: 15px;
           }
+          .lecture-cancel {
+            position: absolute;
+            right: 15px;
+            bottom: 7px;
+            font-family: $appleM;
+            background-color: $soft-pink;
+            width: 32px;
+            height: 17px;
+            font-size: 12px;
+            border-radius: 5px;
+          }
+        }
+        .lecture-title {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
       }
     }
