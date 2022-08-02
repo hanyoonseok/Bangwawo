@@ -54,8 +54,12 @@ export default {
     });
 
     const updateColor = (eventData) => {
+      console.log(change.color);
+      // if (eventData.color === undefined) {
+      //   change.color = "000000";
+      // } else {
       change.color = eventData.colors.hex.replaceAll("#", "").slice(0, 6);
-
+      // }
       document.querySelectorAll(".select-btn").forEach((item) => {
         if (item.classList.contains("active")) {
           if (item.classList.contains("body")) {
@@ -105,6 +109,8 @@ export default {
         console.log("안경");
       }
       part.add("active");
+
+      updateColor(e);
     };
 
     return {

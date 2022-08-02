@@ -178,6 +178,7 @@ export default {
     };
 
     const setMaterial = (parent, type, mtl) => {
+      console.log(parent);
       parent.traverse((o) => {
         if (o.isMesh && o.nameID != null) {
           if (o.nameID == type) {
