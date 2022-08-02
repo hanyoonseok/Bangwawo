@@ -6,8 +6,10 @@
       </button>
       <div class="box">
         <div class="left-box">
-          <div class="select">
-            <button class="select-btn body active" @click="doActive">몸</button>
+          <div class="select options">
+            <button class="select-btn body active option" @click="doActive">
+              몸
+            </button>
             <button class="select-btn clothes" @click="doActive">옷</button>
             <button class="select-btn foot" @click="doActive">발</button>
             <button class="select-btn hair" @click="doActive">머리</button>
@@ -16,14 +18,14 @@
           </div>
           <ColorPicker
             class="color-content"
-            color="hsl(270 100% 50% / 0.8)"
+            :color="color"
             alpha-channel="hide"
             @color-change="updateColor"
             copy-button="hide"
           />
         </div>
         <div class="right-box">
-          <TheCanvas />
+          <TheCanvas :change="change" />
         </div>
       </div>
       <button class="save-btn">저장하기</button>
@@ -32,7 +34,7 @@
 </template>
 
 <script>
-import { onMounted } from "@vue/runtime-core";
+import { onMounted, reactive, ref } from "@vue/runtime-core";
 import { ColorPicker } from "vue-accessible-color-picker";
 import TheCanvas from "@/components/mypage/TheCanvas.vue";
 
@@ -44,18 +46,37 @@ export default {
     TheCanvas,
   },
   setup() {
-    const colors = {
-      hex: "#194d33",
-      hex8: "#194D33A8",
-      hsl: { h: 150, s: 0.5, l: 0.2, a: 1 },
-      hsv: { h: 150, s: 0.66, v: 0.3, a: 1 },
-      rgba: { r: 25, g: 77, b: 51, a: 1 },
-      a: 1,
-    };
+    let color = ref("#194d33"); // color picker 색
+    let change = reactive({
+      //canvas로 전달할 색, 타입
+      color: "194d33",
+      type: "body",
+    });
 
     const updateColor = (eventData) => {
-      console.log(eventData.cssColor);
-      // color.value = eventData.cssColor;
+      change.color = eventData.colors.hex.replaceAll("#", "").slice(0, 6);
+
+      document.querySelectorAll(".select-btn").forEach((item) => {
+        if (item.classList.contains("active")) {
+          if (item.classList.contains("body")) {
+            change.type = "body";
+          } else if (item.classList.contains("foot")) {
+            change.type = "mouse";
+            // change.type = "foot";
+          } else if (item.classList.contains("clothes")) {
+            // change.type = "clothes";
+            change.type = "lhand";
+          } else if (item.classList.contains("hair")) {
+            // change.type = "hair";
+            change.type = "rhand";
+          } else if (item.classList.contains("bag")) {
+            change.type = "bag";
+          } else if (item.classList.contains("glasses")) {
+            change.type = "glasses";
+          }
+        }
+      });
+      console.log(change.type);
     };
 
     let selectBtn;
@@ -87,9 +108,10 @@ export default {
     };
 
     return {
-      colors,
-      updateColor,
+      color,
       selectBtn,
+      change,
+      updateColor,
       doActive,
     };
   },
