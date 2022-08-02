@@ -68,6 +68,7 @@ import { computed, reactive } from "vue";
 export default {
   setup() {
     const page = reactive({
+      outerWidth: window.outerWidth,
       startPage: 2, //화면에 보이는 페이지 시작 번호
       currentPage: 3, // 현재 페이지 번호
       totalCount: 6, // 총 콘텐츠

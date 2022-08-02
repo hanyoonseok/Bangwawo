@@ -4,16 +4,17 @@
   .mypage-container {
     padding: 80px 80px 50px 80px;
     @include flexCenter;
+    height: 100%;
   }
   .profile-info {
     width: 300px;
     margin-right: 80px;
     position: relative;
-    //     height: 100%;
-    //     @include flexColumn;
+    height: 100%;
+    @include flexColumn;
     .left-box {
       width: 100%;
-      height: 295px;
+      height: 100%;
       border-radius: 40px;
       box-shadow: $light-shadow;
       position: relative;
@@ -68,6 +69,7 @@
       position: relative;
       background-color: white;
       margin-bottom: 25px;
+      padding: 30px 0;
       z-index: 99;
       @include flexCenter;
       flex-direction: column;
@@ -159,6 +161,7 @@
     .calendar {
       background-color: #fff5e5;
       padding: 30px 20px;
+      margin-top: 35px;
       @include flexColumn;
       text-align: center;
     }
@@ -183,32 +186,19 @@
       .active {
         font-weight: bold;
         border-bottom: 1.5px solid $grey;
-        // .lecture-info {
-        //   height: 100%;
-        //   @include flexColumn;
-        //   .right-box {
-        //     width: 900px;
-        //     height: 295px;
-        //     background-color: white;
-        //     border-radius: 40px;
-        //     box-shadow: $light-shadow;
-        //     overflow: hidden;
-        //     &:nth-child(1) {
-        //       margin-bottom: 25px;
       }
     }
     .right-box {
       .lecture-area {
         width: 100%;
-        height: 100%;
-        padding: 20px 5vw;
-        display: flex;
-        flex-direction: row;
+        padding: 20px 2vw;
+        height: 70vh;
+        @include flexCenter;
         flex-wrap: wrap;
         .lecture-box {
-          width: 230px;
+          max-width: 250px;
+          min-width: 100px;
           margin: 10px 15px;
-          height: 210px;
           .lecture-thumb {
             width: 100%;
             height: 130px;
