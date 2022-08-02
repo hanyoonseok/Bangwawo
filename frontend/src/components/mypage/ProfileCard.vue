@@ -88,14 +88,17 @@
 import { reactive, onMounted } from "vue";
 
 export default {
-  setup() {
+  props: ["user"],
+  setup(props) {
     let bookmark;
     const state = reactive({
       childrenNo: 0,
     });
     onMounted(() => {
-      bookmark = document.querySelectorAll(".children-name");
-      bookmark[0].parentNode.classList.add("active");
+      if (props.user.status === 3) {
+        bookmark = document.querySelectorAll(".children-name");
+        bookmark[0].parentNode.classList.add("active");
+      }
     });
     const doActive = (e) => {
       const parentBox = e.target.parentNode;
@@ -124,7 +127,6 @@ export default {
       state,
     };
   },
-  props: ["user"],
 };
 </script>
 
