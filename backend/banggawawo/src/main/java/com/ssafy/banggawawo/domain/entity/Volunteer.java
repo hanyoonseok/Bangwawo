@@ -14,11 +14,10 @@ import java.util.List;
 public class Volunteer {
     @Id
     @GeneratedValue
-    @Column(name="v_id")
     private Long v_id;          // 봉사자 아이디
 
-    @OneToMany(mappedBy = "v_id")
-    private List<ClassRoom> Class;
+    @OneToMany(mappedBy = "c_id")
+    private List<ClassRoom> class_rooms;
 
     private String v_token;     // 카카오 토큰
     private String v_name;      // 이름

@@ -38,7 +38,7 @@ public class Student {
     private String s_ppw;       //부모 비밀번호
 
     @Embedded
-    private Character character;//개인 3d캐릭터에대한 정보
+    private Character character;//개인 3d캐릭터에 대한 정보
 
 
 
