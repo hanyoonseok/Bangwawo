@@ -1,4 +1,4 @@
 package com.ssafy.banggawawo.controller;
 
-public class controller {
+public class ClassController {
 }
