@@ -7,11 +7,11 @@
       <div class="box">
         <div class="left-box">
           <div class="select options">
-            <button class="select-btn body active option" @click="doActive">
+            <button class="select-btn body active option" @click="doActive(0)">
               몸
             </button>
-            <button class="select-btn clothes" @click="doActive">옷</button>
-            <button class="select-btn foot" @click="doActive">발</button>
+            <button class="select-btn clothes" @click="doActive(1)">옷</button>
+            <button class="select-btn foot" @click="doActive(2)">발</button>
             <button class="select-btn hair" @click="doActive">머리</button>
             <button class="select-btn bag" @click="doActive">가방</button>
             <button class="select-btn glasses" @click="doActive">안경</button>
@@ -53,11 +53,14 @@ export default {
       type: "body",
     });
 
+    // let parts = reactive(["", "", "", "", "", ""]);
+
     const updateColor = (eventData) => {
       console.log(change.color);
       // if (eventData.color === undefined) {
       //   change.color = "000000";
       // } else {
+      console.log(eventData.color);
       change.color = eventData.colors.hex.replaceAll("#", "").slice(0, 6);
       // }
       document.querySelectorAll(".select-btn").forEach((item) => {
@@ -110,6 +113,7 @@ export default {
       }
       part.add("active");
 
+      console.log(e);
       updateColor(e);
     };
 
