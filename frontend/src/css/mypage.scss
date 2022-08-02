@@ -9,6 +9,8 @@
     width: 300px;
     margin-right: 80px;
     position: relative;
+    //     height: 100%;
+    //     @include flexColumn;
     .left-box {
       width: 100%;
       height: 295px;
@@ -181,6 +183,18 @@
       .active {
         font-weight: bold;
         border-bottom: 1.5px solid $grey;
+        // .lecture-info {
+        //   height: 100%;
+        //   @include flexColumn;
+        //   .right-box {
+        //     width: 900px;
+        //     height: 295px;
+        //     background-color: white;
+        //     border-radius: 40px;
+        //     box-shadow: $light-shadow;
+        //     overflow: hidden;
+        //     &:nth-child(1) {
+        //       margin-bottom: 25px;
       }
     }
     .right-box {

@@ -12,7 +12,7 @@
           </div>
         </div>
         <div class="lecture-info">
-          <div class="teacher-photo" v-if="!user.status === 2">
+          <div class="teacher-photo" v-if="!(user.status === 2)">
             <img src="@/assets/profile.png" />
           </div>
           <div class="lecture-teacher">{{ lecture.classTeacher }} 강사</div>
@@ -33,7 +33,7 @@
           <div class="end-btn">{{ lecture.classStatus }}</div>
         </div>
         <div class="lecture-info">
-          <div class="teacher-photo">
+          <div class="teacher-photo" v-if="!(user.status === 2)">
             <img src="@/assets/profile.png" />
           </div>
           <div class="lecture-teacher">{{ lecture.classTeacher }} 강사</div>
