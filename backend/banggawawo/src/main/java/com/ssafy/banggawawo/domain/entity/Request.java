@@ -23,7 +23,7 @@ public class Request {
     @JoinColumn(name="s_id")
     private Student student;          // 글 쓴 학생
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "request")
     private ClassRoom classRoom;          // 수업 아이디
 
     private String r_title;     // 제목
@@ -31,7 +31,7 @@ public class Request {
     private boolean r_solved;   // 해결여부
 
     @OneToMany
-    private List<Student> like = new ArrayList<Student>(); // 좋아요
+    private List<Student> likes = new ArrayList<>(); // 좋아요
     private int r_count;        // 조회수
 
 }

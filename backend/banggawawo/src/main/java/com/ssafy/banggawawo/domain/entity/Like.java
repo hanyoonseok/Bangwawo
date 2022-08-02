@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name="likes")
 public class Like {
     @Id
     @GeneratedValue

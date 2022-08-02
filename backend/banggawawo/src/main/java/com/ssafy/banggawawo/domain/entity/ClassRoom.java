@@ -15,6 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name="class_room")
 public class ClassRoom {
     @Id
     @GeneratedValue
