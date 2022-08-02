@@ -5,7 +5,6 @@ import com.ssafy.banggawawo.domain.entity.Student;
 
 
 public class RequestDto {
-    private Long r_id;                // 요청 아이디
     private Student student;          // 글 쓴 학생
     private ClassRoom classRoom;      // 수업 아이디
     private String r_title;           // 제목
@@ -16,22 +15,13 @@ public class RequestDto {
     public RequestDto() {
     }
 
-    public RequestDto(Long r_id, Student student, ClassRoom classRoom, String r_title, String r_content, boolean r_solved, int r_count) {
-        this.r_id = r_id;
+    public RequestDto( Student student, ClassRoom classRoom, String r_title, String r_content, boolean r_solved, int r_count) {
         this.student = student;
         this.classRoom = classRoom;
         this.r_title = r_title;
         this.r_content = r_content;
         this.r_solved = r_solved;
         this.r_count = r_count;
-    }
-
-    public Long getR_id() {
-        return r_id;
-    }
-
-    public void setR_id(Long r_id) {
-        this.r_id = r_id;
     }
 
     public Student getStudent() {
@@ -84,6 +74,6 @@ public class RequestDto {
 
     @Override
     public String toString() {
-        return "RequestDto{" + "r_id=" + r_id + ", student=" + student + ", classRoom=" + classRoom + ", r_title='" + r_title + '\'' + ", r_content='" + r_content + '\'' + ", r_solved=" + r_solved + ", r_count=" + r_count + '}';
+        return "RequestDto{" + ", student=" + student + ", classRoom=" + classRoom + ", r_title='" + r_title + '\'' + ", r_content='" + r_content + '\'' + ", r_solved=" + r_solved + ", r_count=" + r_count + '}';
     }
 }
