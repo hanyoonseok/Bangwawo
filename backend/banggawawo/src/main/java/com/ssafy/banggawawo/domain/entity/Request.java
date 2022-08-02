@@ -33,5 +33,4 @@ public class Request {
     @OneToMany
     private List<Student> likes = new ArrayList<>(); // 좋아요
     private int r_count;        // 조회수
-
 }
