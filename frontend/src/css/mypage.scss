@@ -181,98 +181,112 @@
         border-bottom: 1.5px solid $grey;
       }
     }
-    .lecture-area {
-      width: 100%;
-      height: 100%;
-      padding: 20px 50px;
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      .lecture-box {
-        width: 230px;
-        margin: 10px 15px;
-        height: 210px;
-        .lecture-thumb {
-          width: 100%;
-          height: 130px;
-          background-color: $light-grey;
-          border-radius: 20px 20px 0 0;
-          box-shadow: $light-shadow;
-          position: relative;
-          .state-btn {
-            position: absolute;
-            top: 10px;
-            right: 13px;
-            @include StatusBtn(true);
-            width: 60px;
-            font-size: 10px;
-            padding: 3px;
-            height: 25px;
-            font-family: $appleB;
-            i {
-              font-size: 6px;
+    .right-box {
+      .lecture-area {
+        width: 100%;
+        height: 100%;
+        padding: 20px 5vw;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        .lecture-box {
+          width: 230px;
+          margin: 10px 15px;
+          height: 210px;
+          .lecture-thumb {
+            width: 100%;
+            height: 130px;
+            background-color: $light-grey;
+            border-radius: 20px 20px 0 0;
+            box-shadow: $light-shadow;
+            position: relative;
+            .state-btn {
+              position: absolute;
+              top: 10px;
+              right: 13px;
+              @include StatusBtn(true);
+              width: 60px;
+              font-size: 10px;
+              padding: 3px;
+              height: 25px;
+              font-family: $appleB;
+              i {
+                font-size: 6px;
+              }
+            }
+            .end-btn {
+              position: absolute;
+              top: 10px;
+              right: 13px;
+              font-size: 8px;
+              font-family: $appleB;
+              padding: 4px;
+              border-radius: 5px;
+              color: $white;
+              background-color: $grey;
             }
           }
-          .end-btn {
-            position: absolute;
-            top: 10px;
-            right: 13px;
-            font-size: 10px;
-            font-family: $appleB;
-            padding: 4px;
-            border-radius: 5px;
-            color: $white;
-            background-color: $grey;
-            i {
-              font-size: 6px;
-            }
-          }
-        }
 
-        .lecture-info {
-          background-color: #fefefe;
-          width: 100%;
-          box-shadow: $light-shadow;
-          height: 80px;
-          border-radius: 0 0 20px 20px;
-          padding: 10px 15px;
-          position: relative;
-          .teacher-photo {
-            img {
-              width: 42px;
-              height: 42px;
+          .lecture-info {
+            background-color: #fefefe;
+            width: 100%;
+            box-shadow: $light-shadow;
+            height: 80px;
+            border-radius: 0 0 20px 20px;
+            padding: 10px 15px;
+            position: relative;
+            .teacher-photo {
+              img {
+                width: 42px;
+                height: 42px;
+              }
+              position: absolute;
+              top: -20px;
+              right: 15px;
             }
-            position: absolute;
-            top: -20px;
-            right: 15px;
+            .lecture-teacher {
+              font-size: 12px;
+            }
+            .lecture-date {
+              position: absolute;
+              bottom: 7px;
+              font-size: 10px;
+              font-weight: bold;
+              color: #a6a6a6;
+              left: 15px;
+            }
+            .lecture-cancel {
+              position: absolute;
+              right: 15px;
+              bottom: 7px;
+              font-family: $appleM;
+              background-color: #ffc4c4;
+              width: 32px;
+              height: 17px;
+              font-size: 12px;
+              border-radius: 5px;
+            }
           }
-          .lecture-teacher {
-            font-size: 12px;
-          }
-          .lecture-date {
-            position: absolute;
-            bottom: 7px;
-            font-size: 10px;
-            font-weight: bold;
-            color: #a6a6a6;
-            left: 15px;
-          }
-          .lecture-cancel {
-            position: absolute;
-            right: 15px;
-            bottom: 7px;
-            font-family: $appleM;
-            background-color: #ffc4c4;
-            width: 32px;
-            height: 17px;
-            font-size: 12px;
-            border-radius: 5px;
+          .lecture-title {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
         }
-        .lecture-title {
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
+      }
+      .pagination-wrapper {
+        @include flexCenter;
+        i {
+          font-size: 5px;
+          margin: 0 6px;
+        }
+        .page {
+          margin: 0 6px;
+          background-color: $soft-yellow;
+          width: 10px;
+          height: 10px;
+          border-radius: 10px;
+          cursor: pointer;
         }
       }
     }

@@ -15,6 +15,7 @@
           <li class="nav-item" @click="doActive">종료된 수업</li>
         </ul>
         <lecture-area
+          :user="user"
           :isEnd="state.isEnd"
           :endClass="endClass"
           :scheduledClass="scheduledClass"
@@ -47,7 +48,7 @@ export default {
       name: "이화연바보",
       nickname: "애기하연",
       description: "자기소개입니다",
-      status: 3,
+      status: 2,
       subscribe: 0,
       children: [
         {
