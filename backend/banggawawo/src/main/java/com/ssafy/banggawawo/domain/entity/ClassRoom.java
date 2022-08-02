@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class ClassRoom {
     private Volunteer volunteer;//봉사자 아이디
 
     @OneToMany
-    private List<Enrol> enrols; //수강신청목록
+    private List<Enrol> enrols = new ArrayList<Enrol>(); //수강신청목록
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "r_id")

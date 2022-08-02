@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,17 +18,17 @@ public class Student {
     @GeneratedValue
     private Long s_id;          //학생 아이디
 
-    @OneToMany(mappedBy = "e_id")
-    private List<Enrol> enrols; //수강신청 목록 & 피드백 목록
+    @OneToMany(mappedBy = "student")
+    private List<Enrol> enrols = new ArrayList<Enrol>(); //수강신청 목록 & 피드백 목록
 
-    @OneToMany(mappedBy = "r_id")
-    private List<Request> requests; //수업요청 리스트
+    @OneToMany(mappedBy = "student")
+    private List<Request> requests = new ArrayList<Request>(); //수업요청 리스트
 
-    @OneToMany(mappedBy = "sc_id")
-    private List<SecritChat> secritChats;   //비밀친구 대화 리스트
+    @OneToMany(mappedBy = "student")
+    private List<SecritChat> secritChats = new ArrayList<SecritChat>();   //비밀친구 대화 리스트
 
-    @OneToMany(mappedBy = "l_id")
-    private List<Like> likes;   //좋아요 리스트
+    @OneToMany(mappedBy = "student")
+    private List<Like> likes = new ArrayList<Like>();   //좋아요 리스트
 
     private String s_tonken;    //카카오 토큰
     private String s_name;      // 이름

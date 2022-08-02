@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,8 +17,8 @@ public class Volunteer {
     @GeneratedValue
     private Long v_id;          // 봉사자 아이디
 
-    @OneToMany(mappedBy = "c_id")
-    private List<ClassRoom> class_rooms;
+    @OneToMany(mappedBy = "volunteer")
+    private List<ClassRoom> class_rooms = new ArrayList<ClassRoom>();
 
     private String v_token;     // 카카오 토큰
     private String v_name;      // 이름

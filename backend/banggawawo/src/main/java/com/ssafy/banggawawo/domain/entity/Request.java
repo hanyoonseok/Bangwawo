@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,7 +31,7 @@ public class Request {
     private boolean r_solved;   // 해결여부
 
     @OneToMany
-    private List<Student> like; // 좋아요
+    private List<Student> like = new ArrayList<Student>(); // 좋아요
     private int r_count;        // 조회수
 
 }
