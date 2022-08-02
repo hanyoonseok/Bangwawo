@@ -22,7 +22,9 @@
             copy-button="hide"
           />
         </div>
-        <div class="right-box" id="canvas">오리 캐릭터 들어가야할곳</div>
+        <div class="right-box">
+          <TheCanvas />
+        </div>
       </div>
       <button class="save-btn">저장하기</button>
     </div>
@@ -32,12 +34,14 @@
 <script>
 import { onMounted } from "@vue/runtime-core";
 import { ColorPicker } from "vue-accessible-color-picker";
+import TheCanvas from "@/components/mypage/TheCanvas.vue";
 
 export default {
   name: "CharacterModal",
   props: ["character"],
   components: {
     ColorPicker,
+    TheCanvas,
   },
   setup() {
     const colors = {
