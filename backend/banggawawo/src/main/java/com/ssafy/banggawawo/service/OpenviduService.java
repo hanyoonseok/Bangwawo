@@ -1,4 +1,4 @@
 package com.ssafy.banggawawo.service;
 
-public class service {
+public class OpenviduService {
 }
