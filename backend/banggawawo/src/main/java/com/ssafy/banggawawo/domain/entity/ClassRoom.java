@@ -1,9 +1,6 @@
 package com.ssafy.banggawawo.domain.entity;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -39,7 +36,32 @@ public class ClassRoom {
     private Date c_stime;       //시작시간
     private Date c_etime;       //종료시간
     private boolean c_opened;   //공개여부
-    private byte c_thumbnail;   //썸네일
+    private String c_thumbnail;   //썸네일
     private boolean c_state;    //상태
 
+    @Builder
+    public ClassRoom(Long c_id,
+                     Volunteer volunteer,
+                     List<Enrol> enrols,
+                     Request request,
+                     String c_vname,
+                     String c_title,
+                     String c_introduce,
+                     int c_maxcnt,
+                     Date c_stime, Date c_etime,
+                     boolean c_opened, String c_thumbnail, boolean c_state) {
+        this.c_id = c_id;
+        this.volunteer = volunteer;
+        this.enrols = enrols;
+        this.request = request;
+        this.c_vname = c_vname;
+        this.c_title = c_title;
+        this.c_introduce = c_introduce;
+        this.c_maxcnt = c_maxcnt;
+        this.c_stime = c_stime;
+        this.c_etime = c_etime;
+        this.c_opened = c_opened;
+        this.c_thumbnail = c_thumbnail;
+        this.c_state = c_state;
+    }
 }
