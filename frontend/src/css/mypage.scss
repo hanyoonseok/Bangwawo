@@ -23,7 +23,7 @@
     .bookmark-area {
       padding: 10px 0;
       position: absolute;
-      right: -15px;
+      right: -13px;
       top: 0;
 
       .children-bookmark {
@@ -34,7 +34,7 @@
         margin-top: 20px;
         transition: all 200ms ease;
         &:hover {
-          transform: translateX(45px);
+          transform: translateX(40px);
         }
         &:hover > .children-name {
           background-color: $light-yellow;
@@ -43,18 +43,20 @@
           width: 35px;
           height: 35px;
           position: absolute;
-          right: -25px;
+          right: -28px;
         }
         .children-name {
           background-color: #ebebeb;
           padding: 5px 13px;
-
-          font-size: 12px;
+          font-size: 11px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
           font-family: $appleB;
         }
       }
       .children-bookmark.active {
-        transform: translateX(45px);
+        transform: translateX(40px);
         .children-name {
           background-color: $light-yellow;
         }
@@ -287,6 +289,10 @@
           height: 10px;
           border-radius: 10px;
           cursor: pointer;
+          transition: all 200ms ease;
+          &:hover {
+            transform: scale(1.1);
+          }
         }
       }
     }
