@@ -1,5 +1,6 @@
 package com.ssafy.banggawawo.service;
 
+import com.ssafy.banggawawo.domain.entity.Student;
 import com.ssafy.banggawawo.domain.entity.Volunteer;
 import com.ssafy.banggawawo.repository.VolunteerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,5 +21,10 @@ public class VolunteerService {
     @Transactional(readOnly = true) // 조회 시 데이터 변경 방지
     public Optional<Volunteer> findById(Long id){
         return volunteerRepository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Volunteer> findByToken(String token) {
+        return volunteerRepository.findByToken(token);
     }
 }

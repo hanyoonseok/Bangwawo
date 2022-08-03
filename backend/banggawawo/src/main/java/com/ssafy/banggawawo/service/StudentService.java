@@ -26,15 +26,18 @@ public class StudentService {
     @Transactional
     public Student save(StudentDto studentDto){
         Student student = Student.builder()
-                                    .s_id(studentDto.getS_id())
-                                    .s_tonken(studentDto.getS_tonken())
+                                    .token(studentDto.getToken())
                                     .s_name(studentDto.getS_name())
                                     .s_birth(studentDto.getS_birth())
-                                    .s_img(studentDto.getS_img())
                                     .s_nickname(studentDto.getS_nickname())
                                     .s_pemail(studentDto.getS_pemail())
                                     .s_ppw(studentDto.getS_ppw())
                                     .s_character(studentDto.getCharacter()).build();
         return studentRepository.save(student);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Student> findByToken(String token) {
+        return studentRepository.findByToken(token);
     }
 }
