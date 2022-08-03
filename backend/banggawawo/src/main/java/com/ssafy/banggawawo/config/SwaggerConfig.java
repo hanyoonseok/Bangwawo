@@ -1,4 +1,4 @@
-package com.ssafy.banggawawo.controller;
+package com.ssafy.banggawawo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
