@@ -240,7 +240,9 @@ export default {
     };
 
     const closeCharacterModal = () => {
+      console.log(character.value);
       character.value = false;
+      console.log(character.value);
     };
     return {
       user,
