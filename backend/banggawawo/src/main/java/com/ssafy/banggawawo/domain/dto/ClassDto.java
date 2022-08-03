@@ -1,8 +1,16 @@
 package com.ssafy.banggawawo.domain.dto;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.Date;
 
+@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ClassDto {
     private Long c_id;              // 수업id
     private Long v_id;              // 봉사자 id
