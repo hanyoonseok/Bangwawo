@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.OptionalInt;
 
 @Service
 public class StudentService {
@@ -27,17 +28,22 @@ public class StudentService {
     public Student save(StudentDto studentDto){
         Student student = Student.builder()
                                     .token(studentDto.getToken())
-                                    .s_name(studentDto.getS_name())
-                                    .s_birth(studentDto.getS_birth())
-                                    .s_nickname(studentDto.getS_nickname())
-                                    .s_pemail(studentDto.getS_pemail())
-                                    .s_ppw(studentDto.getS_ppw())
-                                    .s_character(studentDto.getCharacter()).build();
+                                    .name(studentDto.getName())
+                                    .birth(studentDto.getBirth())
+                                    .nickname(studentDto.getNickname())
+                                    .pemail(studentDto.getPemail())
+                                    .ppw(studentDto.getPpw())
+                                    .character(studentDto.getCharacter()).build();
         return studentRepository.save(student);
     }
 
     @Transactional(readOnly = true)
     public Optional<Student> findByToken(String token) {
         return studentRepository.findByToken(token);
+    }
+
+    @Transactional
+    public void delete(Student value) {
+        studentRepository.delete(value);
     }
 }

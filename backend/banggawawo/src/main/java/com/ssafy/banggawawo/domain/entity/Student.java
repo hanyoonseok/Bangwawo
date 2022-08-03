@@ -13,7 +13,7 @@ import java.util.List;
 public class Student {
     @Id
     @GeneratedValue
-    private Long s_id;          //학생 아이디
+    private Long sId;          //학생 아이디
 
     @OneToMany(mappedBy = "student")
     private List<Enrol> enrols = new ArrayList<Enrol>(); //수강신청 목록 & 피드백 목록
@@ -28,25 +28,25 @@ public class Student {
     private List<Like> likes = new ArrayList<Like>();   //좋아요 리스트
 
     private String token;       //카카오 토큰
-    private String s_name;      //이름
-    private int s_birth;        //출생년도
-    private String s_pemail;    //부모이메일
-    private String s_nickname;  //별명
-    private String s_ppw;       //부모 비밀번호
+    private String name;      //이름
+    private int birth;        //출생년도
+    private String nickname;    //별명
+    private String pemail;   //부모이메일
+    private String ppw;       //부모 비밀번호
 
     @Embedded
-    private Character s_character;//개인 3d캐릭터에 대한 정보
+    private Character character;//개인 3d캐릭터에 대한 정보
 
     @Builder
-    public Student(String token, String s_name, int s_birth,
-                   String s_nickname, String s_pemail, String s_ppw, Character s_character){
+        public Student(String token, String name, int birth,
+                       String nickname, String pemail, String ppw, Character character){
         this.token = token;
-        this.s_name = s_name;
-        this.s_birth = s_birth;
-        this.s_nickname = s_nickname;
-        this.s_pemail = s_pemail;
-        this.s_ppw = s_ppw;
-        this.s_character = s_character;
+        this.name = name;
+        this.birth = birth;
+        this.nickname = nickname;
+        this.pemail = pemail;
+        this.ppw = ppw;
+        this.character = character;
     }
 
 
