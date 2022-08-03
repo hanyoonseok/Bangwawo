@@ -3,7 +3,10 @@
     <HeaderNav />
     <div class="mypage-container">
       <div class="profile-info">
-        <profile-card :user="user"></profile-card>
+        <profile-card
+          :user="user"
+          @open-character-modal="openCharacterModal"
+        ></profile-card>
         <div class="left-box calendar">
           <h4>수업 일정</h4>
           <calendar-area />
@@ -22,6 +25,10 @@
         ></lecture-area>
       </div>
     </div>
+    <CharacterModal
+      v-if="character"
+      @close-character-modal="closeCharacterModal"
+    />
   </div>
 </template>
 
@@ -31,12 +38,15 @@ import CalendarArea from "@/components/mypage/CalendarArea.vue";
 import ProfileCard from "@/components/mypage/ProfileCard.vue";
 import LectureArea from "@/components/mypage/LectureArea.vue";
 import HeaderNav from "@/components/HeaderNav.vue";
+import CharacterModal from "@/components/mypage/CharacterModal.vue";
+import { ref } from "@vue/reactivity";
 import { reactive, onMounted } from "vue";
 export default {
   components: {
     CalendarArea,
     HeaderNav,
     ProfileCard,
+    CharacterModal,
     LectureArea,
   },
   setup() {
@@ -44,11 +54,12 @@ export default {
     onMounted(() => {
       navItem = document.querySelectorAll(".nav-item");
     });
+
     const user = {
       name: "이화연바보",
       nickname: "애기하연",
       description: "자기소개입니다",
-      status: 3,
+      status: 1,
       subscribe: 0,
       children: [
         {
@@ -81,6 +92,7 @@ export default {
         },
       ],
     };
+    const character = ref(false);
     const classes = [
       {
         classTeacher: "김오리",
@@ -223,8 +235,18 @@ export default {
       }
     };
 
+    const openCharacterModal = () => {
+      character.value = true;
+    };
+
+    const closeCharacterModal = () => {
+      console.log(character.value);
+      character.value = false;
+      console.log(character.value);
+    };
     return {
       user,
+      character,
       state,
       navItem,
       classes,
@@ -232,6 +254,8 @@ export default {
       endClass,
       scheduledClass,
       doActive,
+      openCharacterModal,
+      closeCharacterModal,
     };
   },
 };

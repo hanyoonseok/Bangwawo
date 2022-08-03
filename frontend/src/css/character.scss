@@ -1,0 +1,89 @@
+.character-modal {
+  width: 100%;
+  height: 100%;
+  background-color: #3333335d;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 10;
+}
+.content-wrapper {
+  width: 870px;
+  height: 570px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  //   background-color: $light-grey;
+  background-color: $lightx2-yellow;
+  box-shadow: $shadow;
+  border-radius: 50px;
+
+  .back-btn,
+  .save-btn {
+    position: absolute;
+    right: 35px;
+
+    background-color: transparent;
+    color: $dark-grey;
+  }
+  .back-btn {
+    top: 35px;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+  }
+
+  .save-btn {
+    bottom: 35px;
+    width: 124px;
+    height: 33px;
+    @include SubmitBtn;
+  }
+  .box {
+    @include flexCenter;
+    margin: 75px 0;
+
+    > div {
+      width: 360px;
+      height: 420px;
+    }
+
+    .left-box {
+      .select {
+        margin-left: 15px;
+        button {
+          width: 42px;
+          height: 30px;
+          border-radius: 10px 10px 0 0;
+          font-size: 15px;
+          font-weight: bold;
+          margin-left: 5px;
+          background-color: #e4e3e3;
+        }
+        .active {
+          background-color: $light-yellow;
+        }
+      }
+
+      &::v-deep .vacp-color-picker {
+        height: 390px;
+        // margin: auto;
+        border-radius: 27px;
+        padding: 40px;
+        box-shadow: $shadow;
+        --vacp-color-space-width: 360px;
+
+        .vacp-copy-button,
+        .vacp-format-switch-button,
+        .vacp-color-inputs {
+          display: none;
+        }
+      }
+    }
+
+    .right-box {
+      margin-left: 20px;
+    }
+  }
+}

@@ -71,7 +71,7 @@
       background-color: white;
       margin-bottom: 25px;
       padding: 30px 0;
-      z-index: 99;
+      z-index: 1;
       @include flexCenter;
       flex-direction: column;
 
@@ -116,6 +116,29 @@
         width: 100px;
         height: 100px;
         filter: $drop-shadow;
+      }
+      .img-box {
+        position: relative;
+        cursor: pointer;
+        transition: 0.3s ease;
+        .img-hover-box {
+          width: 100px;
+          height: 100px;
+          background-color: rgba(69, 69, 69, 0.558);
+          border-radius: 50%;
+          color: $white;
+          @include flexCenter;
+          position: absolute;
+          left: 0;
+          top: 0;
+          opacity: 0;
+        }
+
+        &:hover {
+          .img-hover-box {
+            opacity: 1;
+          }
+        }
       }
       .person-info {
         display: flex;
