@@ -1,7 +1,7 @@
 <template>
   <div class="character-modal" v-if="character === true">
     <div class="content-wrapper">
-      <button class="back-btn">
+      <button class="back-btn" @click="closeCharacterModal">
         <i class="fa-solid fa-xmark"></i>
       </button>
       <div class="box">
@@ -41,11 +41,12 @@ import TheCanvas from "@/components/mypage/TheCanvas.vue";
 export default {
   name: "CharacterModal",
   props: ["character"],
+  emits: ["close-character-modal"],
   components: {
     ColorPicker,
     TheCanvas,
   },
-  setup() {
+  setup(props, { emit }) {
     let color = ref("#194d33"); // color picker 색
     let change = reactive({
       //canvas로 전달할 색, 타입
@@ -117,12 +118,17 @@ export default {
       updateColor(e);
     };
 
+    const closeCharacterModal = () => {
+      emit("close-character-modal");
+    };
+
     return {
       color,
       selectBtn,
       change,
       updateColor,
       doActive,
+      closeCharacterModal,
     };
   },
 };

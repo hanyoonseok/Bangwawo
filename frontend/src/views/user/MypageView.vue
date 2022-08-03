@@ -3,7 +3,10 @@
     <HeaderNav />
     <div class="mypage-container">
       <div class="profile-info">
-        <profile-card :user="user"></profile-card>
+        <profile-card
+          :user="user"
+          @open-character-modal="openCharacterModal"
+        ></profile-card>
         <div class="left-box calendar">
           <h4>수업 일정</h4>
           <calendar-area />
@@ -22,7 +25,10 @@
         ></lecture-area>
       </div>
     </div>
-    <CharacterModal :character="character" />
+    <CharacterModal
+      :character="character"
+      @close-character-modal="closeCharacterModal"
+    />
   </div>
 </template>
 
@@ -52,7 +58,7 @@ export default {
       name: "이화연바보",
       nickname: "애기하연",
       description: "자기소개입니다",
-      status: 3,
+      status: 1,
       subscribe: 0,
       children: [
         {
@@ -85,7 +91,7 @@ export default {
         },
       ],
     };
-    const character = ref(true);
+    const character = ref(false);
     const classes = [
       {
         classTeacher: "김오리",
@@ -227,6 +233,14 @@ export default {
         navItem[0].classList.remove("active");
       }
     };
+
+    const openCharacterModal = () => {
+      character.value = true;
+    };
+
+    const closeCharacterModal = () => {
+      character.value = false;
+    };
     return {
       user,
       character,
@@ -237,6 +251,8 @@ export default {
       endClass,
       scheduledClass,
       doActive,
+      openCharacterModal,
+      closeCharacterModal,
     };
   },
 };
