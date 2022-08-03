@@ -1,5 +1,5 @@
 <template>
-  <div class="character-modal" v-if="character === true">
+  <div class="character-modal">
     <div class="content-wrapper">
       <button class="back-btn" @click="closeCharacterModal">
         <i class="fa-solid fa-xmark"></i>
@@ -40,7 +40,6 @@ import TheCanvas from "@/components/mypage/TheCanvas.vue";
 
 export default {
   name: "CharacterModal",
-  props: ["character"],
   emits: ["close-character-modal"],
   components: {
     ColorPicker,
@@ -100,11 +99,6 @@ export default {
         }
       }
     };
-
-    // let selectBtn;
-    // onMounted(() => {
-    //   selectBtn = document.querySelectorAll(".select-btn");
-    // });
 
     const doActive = (e) => {
       document.querySelectorAll(".select-btn").forEach((item) => {
