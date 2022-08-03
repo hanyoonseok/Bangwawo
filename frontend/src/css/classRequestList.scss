@@ -190,7 +190,6 @@
           width: 66px;
           height: 26px;
           border-radius: 7px;
-          padding: 0;
           font-family: $SCore;
           margin: auto;
           font-size: 12px;
@@ -201,21 +200,14 @@
             margin: 0 5px 0;
           }
         }
-
         .solved {
-          background-color: #ffd4d4;
-
-          i {
-            color: #ffa9a9;
-          }
+          @include StatusBtn(true);
+          padding: 0;
         }
 
         .unsolved {
-          background-color: #d4ffc5;
-
-          i {
-            color: #99f58a;
-          }
+          @include StatusBtn(false);
+          padding: 0;
         }
       }
     }

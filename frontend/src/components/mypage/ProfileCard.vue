@@ -62,8 +62,9 @@
         </li>
       </ul></i
     >
-    <div>
+    <div class="img-box" @click="openCharacterModal">
       <img src="@/assets/profile.png" />
+      <div class="img-hover-box">캐릭터 편집</div>
     </div>
     <div class="person-info">
       <label>이름</label>
@@ -89,7 +90,8 @@ import { reactive, onMounted } from "vue";
 
 export default {
   props: ["user"],
-  setup(props) {
+  emits: ["open-character-modal"],
+  setup(props, { emit }) {
     let bookmark;
     const state = reactive({
       childrenNo: 0,
@@ -121,10 +123,15 @@ export default {
         }
       });
     };
+
+    const openCharacterModal = () => {
+      emit("open-character-modal");
+    };
     return {
       doActive,
       bookmark,
       state,
+      openCharacterModal,
     };
   },
 };

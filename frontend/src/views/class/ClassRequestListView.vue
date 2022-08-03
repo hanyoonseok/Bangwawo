@@ -42,12 +42,12 @@
               </router-link>
             </td>
             <td>
-              <p v-if="item.solved === true" class="solved status">
+              <button v-if="item.solved === true" class="solved status">
                 <i class="fa-solid fa-circle"></i>해결
-              </p>
-              <p class="unsolved status" v-else>
+              </button>
+              <button class="unsolved status" v-else>
                 <i class="fa-solid fa-circle"></i>미해결
-              </p>
+              </button>
             </td>
             <td>{{ item.time }}</td>
             <td>{{ item.views }}</td>
