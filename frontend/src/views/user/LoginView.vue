@@ -13,7 +13,9 @@
         만 19세 미만의 유저는 학생으로, <br />이상의 유저는 봉사자로 참여할 수
         있어요
       </div>
-      <button><img src="@/assets/kakao.png" />카카오톡으로 로그인</button>
+      <button @click="kakaoClick">
+        <img src="@/assets/kakao.png" />카카오톡으로 로그인
+      </button>
     </div>
     <div class="parent" v-if="!state.isStudent">
       <div class="parent-login">
@@ -32,18 +34,24 @@
 
 <script>
 import { reactive, onMounted } from "vue";
-// import StuAndVoluLogin from "@/components/StuAndVoluLogin.vue";
-// import ParentLogin from "@/components/ParentLogin.vue";
+
 export default {
   name: "LoginView",
   setup() {
     let userBtn;
+    const getKakao = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.VUE_APP_KAKAO_RESTAPI_KEY}&redirect_uri=${process.env.VUE_APP_REDIRECT_URL}&response_type=code`;
+
     onMounted(() => {
       userBtn = document.querySelectorAll(".user-btn");
     });
     const state = reactive({
       isStudent: true,
     });
+
+    const kakaoClick = () => {
+      console.log("click kakao");
+      window.location.href = getKakao;
+    };
 
     const doActive = (e) => {
       console.log(state.isStudent);
@@ -68,6 +76,7 @@ export default {
       state,
       doActive,
       userBtn,
+      kakaoClick,
     };
   },
   components: {
