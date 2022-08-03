@@ -1,9 +1,6 @@
 package com.ssafy.banggawawo.domain.entity;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -17,20 +14,31 @@ import java.util.List;
 public class Request {
     @Id
     @GeneratedValue
-    private Long r_id;          // 요청 아이디
+    private Long rId;          // 요청 아이디
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="s_id")
+    @JoinColumn(name="sId")
     private Student student;          // 글 쓴 학생
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "request")
     private ClassRoom classRoom;          // 수업 아이디
 
-    private String r_title;     // 제목
-    private String r_content;   // 내용
-    private boolean r_solved;   // 해결여부
+    private String rTitle;     // 제목
+    private String rContent;   // 내용
+    private Boolean rSolved;   // 해결여부
 
     @OneToMany
     private List<Student> likes = new ArrayList<>(); // 좋아요
-    private int r_count;        // 조회수
+    private int rCount;        // 조회수
+
+    @Builder
+    public Request(Student student, ClassRoom classRoom, String rTitle, String rContent, Boolean rSolved, int rCount) {
+        this.student = student;
+        this.classRoom = classRoom;
+        this.rTitle = rTitle;
+        this.rContent = rContent;
+        this.rSolved = rSolved;
+        this.rCount = rCount;
+    }
+
 }
