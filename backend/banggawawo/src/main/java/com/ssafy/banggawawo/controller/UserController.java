@@ -154,4 +154,38 @@ public class UserController {
         }
         return response;
     }
+
+    // 봉사자 정보 수정
+    @PutMapping("/volunteer")
+    public Map<String, Object> updateVolunteer(@RequestBody VolunteerDto value){
+        Map<String, Object> response = new HashMap<>();
+
+        Optional<Volunteer> oVolunteer = volunteerService.findById(value.getVId());
+        if(oVolunteer.isPresent()){
+            Volunteer volunteer = volunteerService.save(value);
+            response.put("result", "SUCCESS");
+            response.put("user", volunteer);
+        }else{
+            response.put("result", "FAIL");
+            response.put("reason", "해당 봉사자가 존재하지 않습니다.");
+        }
+        return response;
+    }
+
+    // 봉사자 정보 삭제
+    @DeleteMapping("/volunteer")
+    public Map<String, Object> deleteVolunteer(@ RequestBody VolunteerDto value){
+        Map<String, Object> response = new HashMap<>();
+        ;
+        Optional<Volunteer> Volunteer = volunteerService.findById(value.getVId());
+        if(Volunteer.isPresent()){
+            volunteerService.delete(Volunteer.get());
+            response.put("result", "SUCCESS");
+        }else{
+            response.put("result", "FAIL");
+            response.put("reason", "해당 봉사자가 존재하지 않습니다.");
+        }
+
+        return response;
+    }
 }

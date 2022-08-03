@@ -24,6 +24,11 @@ public class StudentService {
         return studentRepository.findById(id);
     }
 
+    @Transactional(readOnly = true)
+    public Optional<Student> findByToken(String token) {
+        return studentRepository.findByToken(token);
+    }
+
     @Transactional
     public Student save(StudentDto studentDto){
         Student student = Student.builder()
@@ -35,11 +40,6 @@ public class StudentService {
                                     .ppw(studentDto.getPpw())
                                     .character(studentDto.getCharacter()).build();
         return studentRepository.save(student);
-    }
-
-    @Transactional(readOnly = true)
-    public Optional<Student> findByToken(String token) {
-        return studentRepository.findByToken(token);
     }
 
     @Transactional

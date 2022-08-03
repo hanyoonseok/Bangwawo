@@ -11,5 +11,5 @@ public class VolunteerDto {
     private String name;      // 이름
     private int birth;        // 출생년도
     private String introduce; // 자기소개
-    private Character character;//개인 3d캐릭터에대한 정보
+    private Character character;//개인 3d 캐릭터에 대한 정보
 }
