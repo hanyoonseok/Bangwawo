@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import { useStore } from "vuex";
 import { reactive, ref } from "@vue/runtime-core";
 import { ColorPicker } from "vue-accessible-color-picker";
 import TheCanvas from "@/components/mypage/TheCanvas.vue";
@@ -46,6 +47,7 @@ export default {
     TheCanvas,
   },
   setup(props, { emit }) {
+    const store = useStore();
     let color = ref("#194d33"); // color picker 색
     let change = reactive({
       //canvas로 전달할 색, 타입
@@ -53,15 +55,8 @@ export default {
       type: "body",
     });
 
-    //초기 캐릭터 색 : 백엔드에 저장한 db에서 받아올것임
-    let parts = reactive([
-      { id: "body", color: "f1f1f1" },
-      { id: "mouse", color: "000000" },
-      { id: "lhand", color: "ffffff" },
-      { id: "rhand", color: "527329" },
-      { id: "body", color: "ff9696" },
-      { id: "body", color: "ff9696" },
-    ]);
+    //초기 캐릭터 색 : store에서 받아온 초기 색
+    let parts = reactive(store.state.root.user.characterColors);
 
     const updateColor = (eventData) => {
       console.log(change.color);
@@ -154,7 +149,11 @@ export default {
 
     // DB로 캐릭터 부위별 색상 값 보내기
     const saveCharacter = () => {
-      console.log(parts);
+      const colorArr = parts.map((e) => {
+        return e;
+      });
+      store.state.root.user.characterColors = colorArr;
+      emit("close-character-modal");
     };
 
     return {

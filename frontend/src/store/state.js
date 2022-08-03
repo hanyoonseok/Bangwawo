@@ -6,7 +6,14 @@ const loader = new GLTFLoader();
 
 const user = {
   name: "test",
-  characterColors: ["f1f1f1", "000000", "ffffff", "527329", "ff9696", "ff9696"],
+  characterColors: [
+    { id: "body", color: "f1f1f1" },
+    { id: "mouse", color: "000000" },
+    { id: "lhand", color: "ffffff" },
+    { id: "rhand", color: "527329" },
+    { id: "body", color: "ff9696" },
+    { id: "body", color: "ff9696" },
+  ],
   model: {},
 };
 
