@@ -2,7 +2,7 @@
   <div class="background">
     <HeaderNav />
     <section>
-      <div class="back-btn-wrapper">
+      <div class="back-btn-wrapper" @click="$router.go(-1)">
         <button class="back-btn"></button>
       </div>
       <div class="detail">

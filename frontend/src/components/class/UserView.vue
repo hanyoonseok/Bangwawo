@@ -56,7 +56,9 @@
           <i class="fa-solid fa-video"></i>
           &nbsp;비디오 시작
         </button>
-        <i class="fa-solid fa-xmark xmark"></i>
+        <router-link :to="{ name: 'mypage' }">
+          <i class="fa-solid fa-xmark xmark"></i
+        ></router-link>
       </article>
 
       <article class="bot-right">

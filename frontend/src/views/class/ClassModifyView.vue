@@ -79,7 +79,9 @@
           <RectPostCard :state="state" />
         </div>
       </article>
-      <button class="modify-btn">수정</button>
+      <router-link :to="{ name: 'classdetail' }">
+        <button class="modify-btn">수정</button></router-link
+      >
     </div>
   </div>
 </template>

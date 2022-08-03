@@ -33,7 +33,7 @@ export default {
   },
   setup() {
     const state = reactive({
-      isHost: true,
+      isHost: false,
     });
 
     const dataLen = ref(state.isHost ? 12 : 4);
