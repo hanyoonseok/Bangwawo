@@ -5,6 +5,7 @@ import com.ssafy.banggawawo.domain.entity.Student;
 import com.ssafy.banggawawo.domain.entity.Volunteer;
 import com.ssafy.banggawawo.service.StudentService;
 import com.ssafy.banggawawo.service.VolunteerService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ public class UserController {
 
     // 카카오 토큰으로 유저 확인
     @GetMapping("/{token}")
+    @ApiOperation(value="유저 확인", notes="카카오 토큰을 입력받아 존재하는 회원정보인지 확인 후, 존재할 경우 회원정보 불러옴")
     public Map<String, Object> findByToken(@PathVariable("token") String token){
         Map<String, Object> response = new HashMap<>();
 

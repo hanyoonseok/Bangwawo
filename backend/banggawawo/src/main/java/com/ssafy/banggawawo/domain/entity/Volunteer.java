@@ -1,8 +1,5 @@
 package com.ssafy.banggawawo.domain.entity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,16 +12,27 @@ import java.util.List;
 public class Volunteer {
     @Id
     @GeneratedValue
-    private Long v_id;          // 봉사자 아이디
+    private Long vId;          // 봉사자 아이디
 
     @OneToMany(mappedBy = "volunteer")
-    private List<ClassRoom> class_rooms = new ArrayList<ClassRoom>();
+    private List<ClassRoom> classRooms = new ArrayList<ClassRoom>();
 
-    private String v_token;     // 카카오 토큰
-    private String v_name;      // 이름
-    private int v_birth;        // 출생년도
-    private String v_introduce; // 자기소개
+    private String token;     // 카카오 토큰
+    private String name;      // 이름
+    private int birth;        // 출생년도
+    private String introduce; // 자기소개
 
     @Embedded
     private Character character;//개인 3d캐릭터에대한 정보
+
+    @Builder
+    public Volunteer(Long vId, String token, String name,
+                     int birth, String introduce, Character character){
+        this.vId = vId;
+        this.token = token;
+        this.name = name;
+        this.birth = birth;
+        this.introduce = introduce;
+        this.character = character;
+    }
 }

@@ -1,12 +1,13 @@
 package com.ssafy.banggawawo.domain.dto;
 
 import com.ssafy.banggawawo.domain.entity.Character;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
 public class StudentDto {
-
+    @ApiModelProperty(example = "학생 id")
     private Long s_id;           //학생 아이디
     private String token;      //카카오 토큰
     private String s_name;       // 이름
