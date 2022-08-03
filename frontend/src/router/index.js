@@ -41,13 +41,11 @@ const routes = [
     path: "/secret",
     name: "secret",
     component: () => import("@/views/secret/SecretFriendView"),
-    children: [
-      {
-        path: "secrettalk",
-        name: "secrettalk",
-        component: () => import("@/views/secret/SecretTalkView"),
-      },
-    ],
+  },
+  {
+    path: "/secrettalk",
+    name: "secrettalk",
+    component: () => import("@/views/secret/SecretTalkView"),
   },
 
   {
