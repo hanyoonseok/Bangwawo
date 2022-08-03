@@ -55,20 +55,8 @@ export default {
       type: "body",
     });
 
-<<<<<<< HEAD
-    //초기 캐릭터 색 : 백엔드에 저장한 db에서 받아올것임
-    let parts = reactive([
-      { id: "body", color: "f1f1f1" },
-      { id: "bag", color: "000000" },
-      { id: "clothes", color: "ffffff" },
-      { id: "hat", color: "527329" },
-      { id: "foot", color: "ff9696" },
-      { id: "glasses", color: "ff9696" },
-    ]);
-=======
     //초기 캐릭터 색 : store에서 받아온 초기 색
     let parts = reactive(store.state.root.user.characterColors);
->>>>>>> 64593cf393ad96dc5916ccb3e47635d23dbb51bc
 
     const updateColor = (eventData) => {
       console.log(change.color);

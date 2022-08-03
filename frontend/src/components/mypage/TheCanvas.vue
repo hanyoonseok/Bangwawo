@@ -93,21 +93,6 @@ export default {
     controls.autoRotate = false; // Toggle this if you'd like the chair to automatically rotate
     controls.autoRotateSpeed = 0.2; // 30
 
-<<<<<<< HEAD
-    const MODEL_PATH = "./duck.glb"; // 오리
-
-    // Init the object loader
-    const loader = new GLTFLoader();
-    loader.load(
-      MODEL_PATH,
-      function (gltf) {
-        theModel = gltf.scene;
-
-        theModel.traverse((o) => {
-          if (o.isMesh) {
-            o.castShadow = true;
-            o.receiveShadow = true;
-=======
     const init = () => {
       // Set initial textures
       for (let object of INITIAL_MAP) {
@@ -120,7 +105,6 @@ export default {
               color: parseInt("0x" + item.color),
               shininess: 10,
             });
->>>>>>> 64593cf393ad96dc5916ccb3e47635d23dbb51bc
           }
         });
         //   console.log("result", object.childID, init_mtl);
@@ -128,42 +112,8 @@ export default {
         initColor(theModel, object.childID, init_mtl);
       }
 
-<<<<<<< HEAD
-        // Set the models initial scale
-        theModel.scale.set(4.5, 4.5, 4.5);
-
-        // Add the model to the scene
-        theModel.position.y = -7;
-
-        // Set initial textures
-        for (let object of INITIAL_MAP) {
-          let init_mtl = null;
-          props.parts.forEach((item) => {
-            // console.log("item", item.id);
-            // console.log("object", object.childID);
-            if (item.id === object.childID) {
-              init_mtl = new THREE.MeshPhongMaterial({
-                color: parseInt("0x" + item.color),
-                shininess: 10,
-              });
-            }
-          });
-          //   console.log("result", object.childID, init_mtl);
-
-          initColor(theModel, object.childID, init_mtl);
-        }
-
-        scene.add(theModel);
-      },
-      undefined,
-      function (error) {
-        console.error(error);
-      },
-    );
-=======
       scene.add(toRaw(theModel));
     };
->>>>>>> 64593cf393ad96dc5916ccb3e47635d23dbb51bc
 
     const animate = () => {
       controls.update();
