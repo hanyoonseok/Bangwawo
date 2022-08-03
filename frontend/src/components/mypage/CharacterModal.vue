@@ -18,14 +18,14 @@
           </div>
           <ColorPicker
             class="color-content"
-            :color="color"
+            :color="change.color"
             alpha-channel="hide"
             @color-change="updateColor"
             copy-button="hide"
           />
         </div>
         <div class="right-box">
-          <TheCanvas :change="change" :parts="parts" />
+          <TheCanvas :parts="parts" />
         </div>
       </div>
       <button class="save-btn" @click="saveCharacter">저장하기</button>
@@ -35,7 +35,7 @@
 
 <script>
 import { useStore } from "vuex";
-import { reactive, ref } from "@vue/runtime-core";
+import { reactive } from "@vue/runtime-core";
 import { ColorPicker } from "vue-accessible-color-picker";
 import TheCanvas from "@/components/mypage/TheCanvas.vue";
 
@@ -48,24 +48,17 @@ export default {
   },
   setup(props, { emit }) {
     const store = useStore();
-    let color = ref("#194d33"); // color picker 색
     let change = reactive({
-      //canvas로 전달할 색, 타입
-      color: "194d33",
+      color: "#" + store.state.root.user.characterColors[0].color,
       type: "body",
     });
 
     //초기 캐릭터 색 : store에서 받아온 초기 색
     let parts = reactive(store.state.root.user.characterColors);
+    console.log("처음", parts);
 
     const updateColor = (eventData) => {
-      console.log(change.color);
-      // if (eventData.color === undefined) {
-      //   change.color = "000000";
-      // } else {
-      console.log(eventData.colors);
-      change.color = eventData.colors.hex.replaceAll("#", "").slice(0, 6);
-      // }
+      change.color = eventData.colors.hex.slice(0, 7);
       document.querySelectorAll(".select-btn").forEach((item) => {
         if (item.classList.contains("active")) {
           if (item.classList.contains("body")) {
@@ -83,58 +76,45 @@ export default {
           }
         }
       });
-      console.log(change.type);
-      setColor(change.type);
       for (const item of parts) {
         if (item.id === change.type) {
-          item.color = change.color;
+          item.color = change.color.replaceAll("#", "");
         }
       }
+      setPickerColor(change.type);
     };
 
     const doActive = (e) => {
       document.querySelectorAll(".select-btn").forEach((item) => {
         item.classList.remove("active");
       });
-      // console.log(index);
-      console.log(e);
 
       let part = e.target.classList;
       let set = null;
 
       if (part.contains("body")) {
         set = "body";
-        console.log("몸");
       } else if (part.contains("clothes")) {
-        // set = "clothes";
         set = "clothes";
-        console.log("옷");
       } else if (part.contains("foot")) {
-        // set = "foot";
         set = "foot";
-        console.log("발");
       } else if (part.contains("hat")) {
         set = "hat";
-        console.log("모자");
       } else if (part.contains("bag")) {
         set = "bag";
-        console.log("가방");
       } else if (part.contains("glasses")) {
         set = "glasses";
-        console.log("안경");
       }
       part.add("active");
 
-      console.log(e);
-      setColor(set);
+      setPickerColor(set);
     };
 
     // 탭 눌렀을때 parts에 있는 id값에 맞춰 컬러 피커 색 변경
-    const setColor = (set) => {
-      console.log(set);
+    const setPickerColor = (set) => {
       for (const item of parts) {
         if (item.id === set) {
-          color.value = "#" + item.color;
+          change.color = "#" + item.color;
         }
       }
     };
@@ -145,15 +125,12 @@ export default {
 
     // DB로 캐릭터 부위별 색상 값 보내기
     const saveCharacter = () => {
-      const colorArr = parts.map((e) => {
-        return e;
-      });
-      store.state.root.user.characterColors = colorArr;
+      store.state.root.user.characterColors = parts;
       emit("close-character-modal");
     };
 
     return {
-      color,
+      // color,
       parts,
       change,
       updateColor,

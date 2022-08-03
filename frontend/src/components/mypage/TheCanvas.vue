@@ -12,7 +12,7 @@ import { watch } from "vue";
 
 export default {
   name: "TheCanvas",
-  props: ["change", "parts"],
+  props: ["parts"],
   setup(props) {
     // Initial material
     const store = useStore();
@@ -33,10 +33,12 @@ export default {
     ];
 
     watch(
-      () => [props.change.color, props.change.type],
+      () => props.parts,
       (cur) => {
-        colorChange(cur[0], cur[1]);
+        console.log("cur", cur);
+        colorChange(cur);
       },
+      { deep: true },
     );
 
     const BACKGROUND_COLOR = 0xfff9ef; // 배경 색
@@ -98,8 +100,6 @@ export default {
       for (let object of INITIAL_MAP) {
         let init_mtl = null;
         props.parts.forEach((item) => {
-          // console.log("item", item.id);
-          // console.log("object", object.childID);
           if (item.id === object.childID) {
             init_mtl = new THREE.MeshPhongMaterial({
               color: parseInt("0x" + item.color),
@@ -107,8 +107,6 @@ export default {
             });
           }
         });
-        //   console.log("result", object.childID, init_mtl);
-        console.log(theModel);
         initColor(theModel, object.childID, init_mtl);
       }
 
@@ -155,20 +153,22 @@ export default {
     };
 
     //색 변경
-    const colorChange = (cur, type) => {
-      let color = cur;
-      let new_mtl;
+    const colorChange = (cur) => {
+      for (const part of cur) {
+        let color = part.color;
+        // console.log("color", color);
+        let new_mtl;
 
-      new_mtl = new THREE.MeshPhongMaterial({
-        color: parseInt("0x" + color),
-        shininess: 10,
-      });
+        new_mtl = new THREE.MeshPhongMaterial({
+          color: parseInt("0x" + color),
+          shininess: 10,
+        });
 
-      setMaterial(theModel, type, new_mtl);
+        setMaterial(theModel, part.id, new_mtl);
+      }
     };
 
     const setMaterial = (parent, type, mtl) => {
-      console.log(parent);
       parent.traverse((o) => {
         if (o.isMesh && o.nameID != null) {
           if (o.nameID == type) {
@@ -197,7 +197,7 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 #canvas {
   width: 360px;
   height: 420px;

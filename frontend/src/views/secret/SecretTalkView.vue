@@ -4,10 +4,20 @@
       <h2>비밀친구 대화중</h2>
     </article>
     <article class="user-wrapper">
-      <!-- <div class="user-card"> -->
-      <SecretCanvas :parts="student" class="user-card" :user="stu" id="stu" />
-      <!-- </div> -->
-      <SecretCanvas :parts="volunteer" class="user-card" :user="vol" id="vol" />
+      <SecretCanvas
+        :parts="student"
+        class="user-card"
+        :user="stu"
+        id="stu"
+        :theModel="model"
+      />
+      <!-- <SecretCanvas
+        :parts="volunteer"
+        class="user-card"
+        :user="vol"
+        id="vol"
+        :theModel="model"
+      /> -->
     </article>
     <article class="btn-wrapper">
       <button class="option-btn">
@@ -24,6 +34,7 @@
 <script>
 import SecretCanvas from "@/components/secret/SecretCanvas.vue";
 import { reactive } from "vue";
+import { useStore } from "vuex";
 
 export default {
   name: "SecretTalkView",
@@ -31,23 +42,12 @@ export default {
     SecretCanvas,
   },
   setup() {
+    const store = useStore();
+    console.log(store.state.root.user);
+    let model = store.state.root.user.model;
     //초기 캐릭터 색 : 백엔드에 저장한 db에서 받아올것임
-    let student = reactive([
-      { id: "body", color: "f1f1f1" },
-      { id: "mouse", color: "000000" },
-      { id: "lhand", color: "ffffff" },
-      { id: "rhand", color: "527329" },
-      { id: "body", color: "ff9696" },
-      { id: "body", color: "ff9696" },
-    ]);
-    let volunteer = reactive([
-      { id: "body", color: "f1f1f1" },
-      { id: "mouse", color: "000000" },
-      { id: "lhand", color: "ffffff" },
-      { id: "rhand", color: "527329" },
-      { id: "body", color: "ff9696" },
-      { id: "body", color: "ff9696" },
-    ]);
+    let student = reactive(store.state.root.user.characterColors);
+    let volunteer = reactive(store.state.root.user.characterColors);
 
     let stu = "stu";
     let vol = "vol";
@@ -56,6 +56,7 @@ export default {
       volunteer,
       stu,
       vol,
+      model,
     };
   },
 };

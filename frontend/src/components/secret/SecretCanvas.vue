@@ -3,16 +3,20 @@
 </template>
 
 <script>
+import { useStore } from "vuex";
 import * as THREE from "three";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { onMounted, reactive } from "vue";
+import { onMounted, toRaw } from "vue";
 
 export default {
   name: "SecretCanvas",
-  props: ["parts", "user"],
+  props: ["parts", "user", "theModel"],
   setup(props) {
     // Initial material
+    const store = useStore();
+    const m = store.state.root.user.model;
+    console.log("m", m);
+    console.log("???", props.theModel);
     const INITIAL_MTL = new THREE.MeshPhongMaterial({
       color: 0xffcb57,
       shininess: 10,
@@ -20,13 +24,13 @@ export default {
 
     const INITIAL_MAP = [
       { childID: "body", mtl: INITIAL_MTL },
-      { childID: "mouse", mtl: INITIAL_MTL },
-      { childID: "lhand", mtl: INITIAL_MTL },
-      { childID: "rhand", mtl: INITIAL_MTL },
+      { childID: "foot", mtl: INITIAL_MTL },
+      { childID: "hat", mtl: INITIAL_MTL },
+      { childID: "bag", mtl: INITIAL_MTL },
+      { childID: "glasses", mtl: INITIAL_MTL },
+      { childID: "hair", mtl: INITIAL_MTL },
+      { childID: "clothes", mtl: INITIAL_MTL },
     ];
-
-    const BACKGROUND_COLOR = 0xfff9ef; // 배경 색
-    let theModel = reactive(null); //모델
 
     // 1. 장면 설정
     const scene = new THREE.Scene();
@@ -44,6 +48,7 @@ export default {
 
     // scene.background = new THREE.Color(BACKGROUND_COLOR);
 
+    //배경
     const bg = new THREE.TextureLoader();
     const bgTexture = bg.load("./secretBg.png");
     scene.background = bgTexture;
@@ -52,9 +57,9 @@ export default {
     renderer.setPixelRatio(window.devicePixelRatio); // 픽셀 비율
     renderer.setSize(460, 520);
 
-    camera.position.z = -3;
-    camera.position.x = 15; // 화면에 보여지는 위치인것같음
-    camera.position.y = 2;
+    camera.position.z = -1;
+    camera.position.x = 30; // 화면에 보여지는 위치인것같음
+    camera.position.y = 5;
 
     // 조명
     // HemisphereLight : 전 방향에서 조명을 비춰줌
@@ -62,7 +67,7 @@ export default {
     const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.61);
     hemiLight.position.set(50, 50, 0);
     // Add hemisphere light to scene
-    scene.add(hemiLight);
+    scene.add(toRaw(hemiLight));
 
     // 특정 방향으로 빛 방출
     // 빛 색상, 빛 강도
@@ -71,7 +76,7 @@ export default {
     dirLight.castShadow = true; //광원이 그림자 생성
     dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
     // Add directional Light to scene
-    scene.add(dirLight);
+    scene.add(toRaw(dirLight));
 
     // Add controls
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -84,55 +89,28 @@ export default {
     controls.autoRotate = false; // Toggle this if you'd like the chair to automatically rotate
     controls.autoRotateSpeed = 0.2; // 30
 
-    const MODEL_PATH = "./custom.glb"; // 오리
-
     // Init the object loader
-    const loader = new GLTFLoader();
-    loader.load(
-      MODEL_PATH,
-      function (gltf) {
-        theModel = gltf.scene;
-
-        theModel.traverse((o) => {
-          if (o.isMesh) {
-            o.castShadow = true;
-            o.receiveShadow = true;
+    const init = () => {
+      // Set initial textures
+      for (let object of INITIAL_MAP) {
+        let init_mtl = null;
+        props.parts.forEach((item) => {
+          if (item.id === object.childID) {
+            init_mtl = new THREE.MeshPhongMaterial({
+              color: parseInt("0x" + item.color),
+              shininess: 10,
+            });
           }
         });
+        initColor(props.theModel, object.childID, init_mtl);
+      }
 
-        // Set the models initial scale
-        theModel.scale.set(2.5, 2.5, 2.5);
-        theModel.rotation.y = Math.PI;
-
-        // Add the model to the scene
-        theModel.position.y = -5.5;
-
-        // Set initial textures
-        for (let object of INITIAL_MAP) {
-          let init_mtl = null;
-          props.parts.forEach((item) => {
-            if (item.id === object.childID) {
-              init_mtl = new THREE.MeshPhongMaterial({
-                color: parseInt("0x" + item.color),
-                shininess: 10,
-              });
-            }
-          });
-
-          initColor(theModel, object.childID, init_mtl);
-        }
-
-        scene.add(theModel);
-      },
-      undefined,
-      function (error) {
-        console.error(error);
-      },
-    );
+      scene.add(toRaw(props.theModel));
+    };
 
     const animate = () => {
       controls.update();
-      renderer.render(scene, camera);
+      renderer.render(toRaw(scene), camera);
       requestAnimationFrame(animate);
 
       if (resizeRendererToDisplaySize(renderer)) {
@@ -169,18 +147,32 @@ export default {
       });
     };
 
+    // const gltfLoader = new GLTFLoader();
+    // gltfLoader.load("/models/Fox/glTF/Fox.gltf", (gltf) => {
+    //   scene.add(gltf.scene);
+    // });
+
+    // let mixer = null;
+
+    // gltfLoader.load("/models/Fox/glTF/Fox.gltf", (gltf) => {
+    //   gltf.scene.scale.set(0.03, 0.03, 0.03);
+    //   scene.add(gltf.scene);
+
+    //   mixer = new THREE.AnimationMixer(gltf.scene);
+    //   const action = mixer.clipAction(gltf.animations[0]);
+    //   action.play();
+    // });
+
     onMounted(() => {
-      console.log("?", props.user);
+      init();
       document.getElementById(props.user).appendChild(renderer.domElement);
       animate();
     });
 
     return {
-      theModel,
       scene,
       renderer,
       camera,
-      BACKGROUND_COLOR,
       INITIAL_MAP,
       animate,
       initColor,
