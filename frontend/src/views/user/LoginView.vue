@@ -40,7 +40,6 @@ export default {
   setup() {
     let userBtn;
     const getKakao = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.VUE_APP_KAKAO_RESTAPI_KEY}&redirect_uri=${process.env.VUE_APP_REDIRECT_URL}&response_type=code`;
-
     onMounted(() => {
       userBtn = document.querySelectorAll(".user-btn");
     });
