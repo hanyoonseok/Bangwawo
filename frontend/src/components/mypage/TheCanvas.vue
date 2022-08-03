@@ -22,9 +22,12 @@ export default {
 
     const INITIAL_MAP = [
       { childID: "body", mtl: INITIAL_MTL },
-      { childID: "mouse", mtl: INITIAL_MTL },
-      { childID: "lhand", mtl: INITIAL_MTL },
-      { childID: "rhand", mtl: INITIAL_MTL },
+      { childID: "foot", mtl: INITIAL_MTL },
+      { childID: "hat", mtl: INITIAL_MTL },
+      { childID: "bag", mtl: INITIAL_MTL },
+      { childID: "glasses", mtl: INITIAL_MTL },
+      { childID: "hair", mtl: INITIAL_MTL },
+      { childID: "clothes", mtl: INITIAL_MTL },
     ];
 
     watch(
@@ -64,14 +67,14 @@ export default {
     // 조명
     // HemisphereLight : 전 방향에서 조명을 비춰줌
     // 첫번째 인자 : 위쪽으로 비추는 빛의 컬러, 두번째 인자 : 아래를 비추는 빛의 컬러
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.35);
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.54);
     hemiLight.position.set(50, 50, 0);
     // Add hemisphere light to scene
     scene.add(hemiLight);
 
     // 특정 방향으로 빛 방출
     // 빛 색상, 빛 강도
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.35);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.54);
     dirLight.position.set(1100, 1100, 500);
     dirLight.castShadow = true; //광원이 그림자 생성
     dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
@@ -89,7 +92,7 @@ export default {
     controls.autoRotate = false; // Toggle this if you'd like the chair to automatically rotate
     controls.autoRotateSpeed = 0.2; // 30
 
-    const MODEL_PATH = "./custom.glb"; // 오리
+    const MODEL_PATH = "./duck.glb"; // 오리
 
     // Init the object loader
     const loader = new GLTFLoader();

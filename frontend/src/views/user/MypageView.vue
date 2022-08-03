@@ -3,13 +3,15 @@
     <HeaderNav />
     <div class="mypage-container">
       <div class="profile-info">
-        <profile-card :user="user"></profile-card>
+        <profile-card
+          :user="user"
+          @open-character-modal="openCharacterModal"
+        ></profile-card>
         <div class="left-box calendar">
           <h4>수업 일정</h4>
           <calendar-area />
         </div>
       </div>
-      git
       <div class="lecture-container">
         <ul class="lecture-nav">
           <li class="nav-item active" @click="doActive">예정된 수업</li>
@@ -23,6 +25,10 @@
         ></lecture-area>
       </div>
     </div>
+    <CharacterModal
+      :character="character"
+      @close-character-modal="closeCharacterModal"
+    />
   </div>
 </template>
 
@@ -32,12 +38,15 @@ import CalendarArea from "@/components/mypage/CalendarArea.vue";
 import ProfileCard from "@/components/mypage/ProfileCard.vue";
 import LectureArea from "@/components/mypage/LectureArea.vue";
 import HeaderNav from "@/components/HeaderNav.vue";
+import CharacterModal from "@/components/mypage/CharacterModal.vue";
+import { ref } from "@vue/reactivity";
 import { reactive, onMounted } from "vue";
 export default {
   components: {
     CalendarArea,
     HeaderNav,
     ProfileCard,
+    CharacterModal,
     LectureArea,
   },
   setup() {
@@ -82,6 +91,7 @@ export default {
         },
       ],
     };
+    const character = ref(false);
     const classes = [
       {
         classTeacher: "김오리",
@@ -224,8 +234,18 @@ export default {
       }
     };
 
+    const openCharacterModal = () => {
+      character.value = true;
+    };
+
+    const closeCharacterModal = () => {
+      console.log(character.value);
+      character.value = false;
+      console.log(character.value);
+    };
     return {
       user,
+      character,
       state,
       navItem,
       classes,
@@ -233,6 +253,8 @@ export default {
       endClass,
       scheduledClass,
       doActive,
+      openCharacterModal,
+      closeCharacterModal,
     };
   },
 };
