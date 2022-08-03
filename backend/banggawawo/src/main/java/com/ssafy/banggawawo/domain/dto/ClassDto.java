@@ -1,6 +1,8 @@
 package com.ssafy.banggawawo.domain.dto;
 
 
+import com.ssafy.banggawawo.domain.entity.Request;
+import com.ssafy.banggawawo.domain.entity.Volunteer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,13 +14,14 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClassDto {
-    private Long c_id;              // 수업id
-    private Long v_id;              // 봉사자 id
-    private String c_title;         // 제목
-    private String c_introduce;     // 내용
-    private Date c_stime;           // 시작시간
-    private Date c_etime;           // 종료시간
-    private int c_maxcnt;           // 최대 인원
-    private boolean c_opened;       // 공개여부
-    private String c_thumbnail;     // 썸네일
+    private Long cId;             // 수업id
+    private Volunteer vId;        // 봉사자
+    private Request rId;          // 신청
+    private String title;         // 제목
+    private String introduce;     // 내용
+    private Date stime;           // 시작시간
+    private Date etime;           // 종료시간
+    private Integer maxcnt;       // 최대 인원
+    private Boolean opened;       // 공개여부
+    private String thumbnail;     // 썸네일
 }

@@ -18,21 +18,7 @@ public class ClassController {
 
     @PostMapping
     public ResponseEntity<?> createClass(@RequestBody ClassDto classDto){
-        //서버에 들어온 유저 처리 후 (아니면 DTO에 넣어 온 후)
-        ClassRoom classRoom = ClassRoom.builder()
-                .volunteer(classDto.getV_id())
-                .c_vname()
-                .c_etime()
-                .c_id()
-                .c_introduce()
-                .c_maxcnt()
-                .c_opened()
-                .c_stime()
-                .c_thumbnail()
-                .c_title()
-                .request()
-                .build();
-        Long id = classService
+        int result = classService.createClass(classDto);
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
     @PutMapping
