@@ -224,15 +224,6 @@ export default {
       }
     };
 
-    const openCharacterModal = () => {
-      character.value = true;
-    };
-
-    const closeCharacterModal = () => {
-      console.log(character.value);
-      character.value = false;
-      console.log(character.value);
-    };
     return {
       user,
       state,
@@ -240,8 +231,6 @@ export default {
       classes,
       division,
       endClass,
-      openCharacterModal,
-      closeCharacterModal,
       scheduledClass,
       doActive,
     };
