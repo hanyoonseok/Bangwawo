@@ -4,6 +4,10 @@ spring:
     url: jdbc:mysql://localhost:3306/jpa_test?serverTimezone=UTC&useUniCode=yes&characterEncoding=UTF-8
     username: root
     password: ssafy
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
   jpa:
     hibernate:
       ddl-auto: create
