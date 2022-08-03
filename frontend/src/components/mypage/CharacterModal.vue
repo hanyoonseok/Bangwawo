@@ -28,7 +28,7 @@
           <TheCanvas :change="change" :parts="parts" />
         </div>
       </div>
-      <button class="save-btn">저장하기</button>
+      <button class="save-btn" @click="saveCharacter">저장하기</button>
     </div>
   </div>
 </template>
@@ -158,14 +158,19 @@ export default {
       emit("close-character-modal");
     };
 
+    // DB로 캐릭터 부위별 색상 값 보내기
+    const saveCharacter = () => {
+      console.log(parts);
+    };
+
     return {
       color,
       parts,
-      // selectBtn,
       change,
       updateColor,
       doActive,
       closeCharacterModal,
+      saveCharacter,
     };
   },
 };
