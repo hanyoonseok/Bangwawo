@@ -15,7 +15,7 @@ import java.util.List;
 public class ClassRoom {
     @Id
     @GeneratedValue
-    private Long c_id;          //수업 아이디
+    private Long cId;          //수업 아이디
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="vId")
@@ -38,6 +38,7 @@ public class ClassRoom {
     private Boolean state;    //상태
 
     //classroom 생성시 필요한 builder
+    //여기에 c_id, state만 들어가면 수정용
     @Builder
     public ClassRoom(Volunteer volunteer, Request request,
                      String title, String introduce,
@@ -54,24 +55,10 @@ public class ClassRoom {
         this.thumbnail = thumbnail;
     }
 
-    //classroom 수정시 필요한 builder
-    @Builder
-
-    public ClassRoom(Long c_id,
-                     Volunteer volunteer, Request request,
-                     String title, String introduce,
-                     Integer maxcnt, Date stime, Date etime,
-                     Boolean opened, String thumbnail, Boolean state) {
-        this.c_id = c_id;
-        this.volunteer = volunteer;
-        this.request = request;
-        this.title = title;
-        this.introduce = introduce;
-        this.maxcnt = maxcnt;
-        this.stime = stime;
-        this.etime = etime;
-        this.opened = opened;
-        this.thumbnail = thumbnail;
+    public void setCId(Long c_id) {
+        this.cId = c_id;
+    }
+    public void setState(Boolean state){
         this.state = state;
     }
 }

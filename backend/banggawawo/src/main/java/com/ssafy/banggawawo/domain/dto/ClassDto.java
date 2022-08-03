@@ -24,4 +24,5 @@ public class ClassDto {
     private Integer maxcnt;       // 최대 인원
     private Boolean opened;       // 공개여부
     private String thumbnail;     // 썸네일
+    private Boolean state;        // 상태
 }
