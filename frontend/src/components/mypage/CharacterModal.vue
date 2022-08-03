@@ -12,7 +12,7 @@
             </button>
             <button class="select-btn clothes" @click="doActive">옷</button>
             <button class="select-btn foot" @click="doActive">발</button>
-            <button class="select-btn hair" @click="doActive">머리</button>
+            <button class="select-btn hat" @click="doActive">모자</button>
             <button class="select-btn bag" @click="doActive">가방</button>
             <button class="select-btn glasses" @click="doActive">안경</button>
           </div>
@@ -71,14 +71,11 @@ export default {
           if (item.classList.contains("body")) {
             change.type = "body";
           } else if (item.classList.contains("clothes")) {
-            // change.type = "clothes";
-            change.type = "mouse";
+            change.type = "clothes";
           } else if (item.classList.contains("foot")) {
-            change.type = "lhand";
-            // change.type = "foot";
-          } else if (item.classList.contains("hair")) {
-            // change.type = "hair";
-            change.type = "rhand";
+            change.type = "foot";
+          } else if (item.classList.contains("hat")) {
+            change.type = "hat";
           } else if (item.classList.contains("bag")) {
             change.type = "bag";
           } else if (item.classList.contains("glasses")) {
@@ -110,16 +107,15 @@ export default {
         console.log("몸");
       } else if (part.contains("clothes")) {
         // set = "clothes";
-        set = "mouse";
+        set = "clothes";
         console.log("옷");
       } else if (part.contains("foot")) {
         // set = "foot";
-        set = "lhand";
+        set = "foot";
         console.log("발");
-      } else if (part.contains("hair")) {
-        // set = "hair";
-        set = "rhand";
-        console.log("머리");
+      } else if (part.contains("hat")) {
+        set = "hat";
+        console.log("모자");
       } else if (part.contains("bag")) {
         set = "bag";
         console.log("가방");

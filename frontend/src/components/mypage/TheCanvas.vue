@@ -24,9 +24,12 @@ export default {
 
     const INITIAL_MAP = [
       { childID: "body", mtl: INITIAL_MTL },
-      { childID: "mouse", mtl: INITIAL_MTL },
-      { childID: "lhand", mtl: INITIAL_MTL },
-      { childID: "rhand", mtl: INITIAL_MTL },
+      { childID: "foot", mtl: INITIAL_MTL },
+      { childID: "hat", mtl: INITIAL_MTL },
+      { childID: "bag", mtl: INITIAL_MTL },
+      { childID: "glasses", mtl: INITIAL_MTL },
+      { childID: "hair", mtl: INITIAL_MTL },
+      { childID: "clothes", mtl: INITIAL_MTL },
     ];
 
     watch(
@@ -58,14 +61,14 @@ export default {
     renderer.setPixelRatio(window.devicePixelRatio); // 픽셀 비율
     renderer.setSize(360, 420);
 
-    camera.position.z = -3;
-    camera.position.x = 15; // 화면에 보여지는 위치인것같음
-    camera.position.y = 3;
+    camera.position.z = -2;
+    camera.position.x = 25; // 화면에 보여지는 위치인것같음
+    camera.position.y = -10;
 
     // 조명
     // HemisphereLight : 전 방향에서 조명을 비춰줌
     // 첫번째 인자 : 위쪽으로 비추는 빛의 컬러, 두번째 인자 : 아래를 비추는 빛의 컬러
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.61);
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.54);
     hemiLight.position.set(50, 50, 0);
     // Add hemisphere light to scene
     scene.add(toRaw(hemiLight));
