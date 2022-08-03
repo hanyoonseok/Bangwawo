@@ -15,7 +15,12 @@ public class RequestDto {
     public RequestDto() {
     }
 
-    public RequestDto( Student student, ClassRoom classRoom, String r_title, String r_content, boolean r_solved, int r_count) {
+    public RequestDto(String r_title, String r_content) {
+        this.r_title = r_title;
+        this.r_content = r_content;
+    }
+
+    public RequestDto(Student student, ClassRoom classRoom, String r_title, String r_content, boolean r_solved, int r_count) {
         this.student = student;
         this.classRoom = classRoom;
         this.r_title = r_title;
@@ -74,6 +79,13 @@ public class RequestDto {
 
     @Override
     public String toString() {
-        return "RequestDto{" + ", student=" + student + ", classRoom=" + classRoom + ", r_title='" + r_title + '\'' + ", r_content='" + r_content + '\'' + ", r_solved=" + r_solved + ", r_count=" + r_count + '}';
+        return "RequestDto{" +
+                "student=" + student +
+                ", classRoom=" + classRoom +
+                ", r_title='" + r_title + '\'' +
+                ", r_content='" + r_content + '\'' +
+                ", r_solved=" + r_solved +
+                ", r_count=" + r_count +
+                '}';
     }
 }
