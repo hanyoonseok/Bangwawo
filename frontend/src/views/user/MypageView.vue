@@ -26,7 +26,7 @@
       </div>
     </div>
     <CharacterModal
-      :character="character"
+      v-if="character"
       @close-character-modal="closeCharacterModal"
     />
   </div>
@@ -54,6 +54,7 @@ export default {
     onMounted(() => {
       navItem = document.querySelectorAll(".nav-item");
     });
+
     const user = {
       name: "이화연바보",
       nickname: "애기하연",

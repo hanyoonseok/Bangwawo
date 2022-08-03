@@ -1,5 +1,5 @@
 <template>
-  <div class="character-modal" v-if="character === true">
+  <div class="character-modal">
     <div class="content-wrapper">
       <button class="back-btn" @click="closeCharacterModal">
         <i class="fa-solid fa-xmark"></i>
@@ -34,19 +34,20 @@
 </template>
 
 <script>
+import { useStore } from "vuex";
 import { reactive, ref } from "@vue/runtime-core";
 import { ColorPicker } from "vue-accessible-color-picker";
 import TheCanvas from "@/components/mypage/TheCanvas.vue";
 
 export default {
   name: "CharacterModal",
-  props: ["character"],
   emits: ["close-character-modal"],
   components: {
     ColorPicker,
     TheCanvas,
   },
   setup(props, { emit }) {
+    const store = useStore();
     let color = ref("#194d33"); // color picker 색
     let change = reactive({
       //canvas로 전달할 색, 타입
@@ -54,6 +55,7 @@ export default {
       type: "body",
     });
 
+<<<<<<< HEAD
     //초기 캐릭터 색 : 백엔드에 저장한 db에서 받아올것임
     let parts = reactive([
       { id: "body", color: "f1f1f1" },
@@ -63,6 +65,10 @@ export default {
       { id: "foot", color: "ff9696" },
       { id: "glasses", color: "ff9696" },
     ]);
+=======
+    //초기 캐릭터 색 : store에서 받아온 초기 색
+    let parts = reactive(store.state.root.user.characterColors);
+>>>>>>> 64593cf393ad96dc5916ccb3e47635d23dbb51bc
 
     const updateColor = (eventData) => {
       console.log(change.color);
@@ -97,11 +103,6 @@ export default {
         }
       }
     };
-
-    // let selectBtn;
-    // onMounted(() => {
-    //   selectBtn = document.querySelectorAll(".select-btn");
-    // });
 
     const doActive = (e) => {
       document.querySelectorAll(".select-btn").forEach((item) => {
@@ -156,7 +157,11 @@ export default {
 
     // DB로 캐릭터 부위별 색상 값 보내기
     const saveCharacter = () => {
-      console.log(parts);
+      const colorArr = parts.map((e) => {
+        return e;
+      });
+      store.state.root.user.characterColors = colorArr;
+      emit("close-character-modal");
     };
 
     return {
