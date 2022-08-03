@@ -57,21 +57,21 @@ export default {
     renderer.setPixelRatio(window.devicePixelRatio); // 픽셀 비율
     renderer.setSize(360, 420);
 
-    camera.position.z = -3;
-    camera.position.x = 15; // 화면에 보여지는 위치인것같음
-    camera.position.y = 3;
+    camera.position.z = -2;
+    camera.position.x = 25; // 화면에 보여지는 위치인것같음
+    camera.position.y = -10;
 
     // 조명
     // HemisphereLight : 전 방향에서 조명을 비춰줌
     // 첫번째 인자 : 위쪽으로 비추는 빛의 컬러, 두번째 인자 : 아래를 비추는 빛의 컬러
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.61);
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.35);
     hemiLight.position.set(50, 50, 0);
     // Add hemisphere light to scene
     scene.add(hemiLight);
 
     // 특정 방향으로 빛 방출
     // 빛 색상, 빛 강도
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.54);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.35);
     dirLight.position.set(1100, 1100, 500);
     dirLight.castShadow = true; //광원이 그림자 생성
     dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
@@ -106,11 +106,10 @@ export default {
         });
 
         // Set the models initial scale
-        theModel.scale.set(2.5, 2.5, 2.5);
-        theModel.rotation.y = Math.PI;
+        theModel.scale.set(4.5, 4.5, 4.5);
 
         // Add the model to the scene
-        theModel.position.y = -4;
+        theModel.position.y = -7;
 
         // Set initial textures
         for (let object of INITIAL_MAP) {

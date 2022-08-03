@@ -57,11 +57,11 @@ export default {
     //초기 캐릭터 색 : 백엔드에 저장한 db에서 받아올것임
     let parts = reactive([
       { id: "body", color: "f1f1f1" },
-      { id: "mouse", color: "000000" },
-      { id: "lhand", color: "ffffff" },
-      { id: "rhand", color: "527329" },
-      { id: "body", color: "ff9696" },
-      { id: "body", color: "ff9696" },
+      { id: "hair", color: "ff9696" },
+      { id: "bag", color: "000000" },
+      { id: "clothes", color: "ffffff" },
+      { id: "hat", color: "527329" },
+      { id: "foot", color: "ff9696" },
     ]);
 
     const updateColor = (eventData) => {
@@ -78,13 +78,13 @@ export default {
             change.type = "body";
           } else if (item.classList.contains("clothes")) {
             // change.type = "clothes";
-            change.type = "mouse";
+            change.type = "clothes";
           } else if (item.classList.contains("foot")) {
-            change.type = "lhand";
+            change.type = "foot";
             // change.type = "foot";
           } else if (item.classList.contains("hair")) {
-            // change.type = "hair";
-            change.type = "rhand";
+            change.type = "hair";
+            // change.type = "rhand";
           } else if (item.classList.contains("bag")) {
             change.type = "bag";
           } else if (item.classList.contains("glasses")) {
@@ -121,15 +121,14 @@ export default {
         console.log("몸");
       } else if (part.contains("clothes")) {
         // set = "clothes";
-        set = "mouse";
+        set = "clothes";
         console.log("옷");
       } else if (part.contains("foot")) {
         // set = "foot";
         set = "lhand";
         console.log("발");
       } else if (part.contains("hair")) {
-        // set = "hair";
-        set = "rhand";
+        set = "hair";
         console.log("머리");
       } else if (part.contains("bag")) {
         set = "bag";
