@@ -12,7 +12,7 @@ import { watch } from "vue";
 
 export default {
   name: "TheCanvas",
-  props: ["change"],
+  props: ["change", "parts"],
   setup(props) {
     // Initial material
     const INITIAL_MTL = new THREE.MeshPhongMaterial({
@@ -114,7 +114,20 @@ export default {
 
         // Set initial textures
         for (let object of INITIAL_MAP) {
-          initColor(theModel, object.childID, object.mtl);
+          let init_mtl = null;
+          props.parts.forEach((item) => {
+            // console.log("item", item.id);
+            // console.log("object", object.childID);
+            if (item.id === object.childID) {
+              init_mtl = new THREE.MeshPhongMaterial({
+                color: parseInt("0x" + item.color),
+                shininess: 10,
+              });
+            }
+          });
+          //   console.log("result", object.childID, init_mtl);
+
+          initColor(theModel, object.childID, init_mtl);
         }
 
         scene.add(theModel);

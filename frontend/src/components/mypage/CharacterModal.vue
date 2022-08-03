@@ -7,11 +7,11 @@
       <div class="box">
         <div class="left-box">
           <div class="select options">
-            <button class="select-btn body active option" @click="doActive(0)">
+            <button class="select-btn body active option" @click="doActive">
               몸
             </button>
-            <button class="select-btn clothes" @click="doActive(1)">옷</button>
-            <button class="select-btn foot" @click="doActive(2)">발</button>
+            <button class="select-btn clothes" @click="doActive">옷</button>
+            <button class="select-btn foot" @click="doActive">발</button>
             <button class="select-btn hair" @click="doActive">머리</button>
             <button class="select-btn bag" @click="doActive">가방</button>
             <button class="select-btn glasses" @click="doActive">안경</button>
@@ -25,7 +25,7 @@
           />
         </div>
         <div class="right-box">
-          <TheCanvas :change="change" />
+          <TheCanvas :change="change" :parts="parts" />
         </div>
       </div>
       <button class="save-btn">저장하기</button>
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { onMounted, reactive, ref } from "@vue/runtime-core";
+import { reactive, ref } from "@vue/runtime-core";
 import { ColorPicker } from "vue-accessible-color-picker";
 import TheCanvas from "@/components/mypage/TheCanvas.vue";
 
@@ -54,26 +54,34 @@ export default {
       type: "body",
     });
 
-    // let parts = reactive(["", "", "", "", "", ""]);
+    //초기 캐릭터 색 : 백엔드에 저장한 db에서 받아올것임
+    let parts = reactive([
+      { id: "body", color: "f1f1f1" },
+      { id: "mouse", color: "000000" },
+      { id: "lhand", color: "ffffff" },
+      { id: "rhand", color: "527329" },
+      { id: "body", color: "ff9696" },
+      { id: "body", color: "ff9696" },
+    ]);
 
     const updateColor = (eventData) => {
       console.log(change.color);
       // if (eventData.color === undefined) {
       //   change.color = "000000";
       // } else {
-      console.log(eventData.color);
+      console.log(eventData.colors);
       change.color = eventData.colors.hex.replaceAll("#", "").slice(0, 6);
       // }
       document.querySelectorAll(".select-btn").forEach((item) => {
         if (item.classList.contains("active")) {
           if (item.classList.contains("body")) {
             change.type = "body";
-          } else if (item.classList.contains("foot")) {
-            change.type = "mouse";
-            // change.type = "foot";
           } else if (item.classList.contains("clothes")) {
             // change.type = "clothes";
+            change.type = "mouse";
+          } else if (item.classList.contains("foot")) {
             change.type = "lhand";
+            // change.type = "foot";
           } else if (item.classList.contains("hair")) {
             // change.type = "hair";
             change.type = "rhand";
@@ -85,37 +93,65 @@ export default {
         }
       });
       console.log(change.type);
+      setColor(change.type);
+      for (const item of parts) {
+        if (item.id === change.type) {
+          item.color = change.color;
+        }
+      }
     };
 
-    let selectBtn;
-    onMounted(() => {
-      selectBtn = document.querySelectorAll(".select-btn");
-    });
+    // let selectBtn;
+    // onMounted(() => {
+    //   selectBtn = document.querySelectorAll(".select-btn");
+    // });
 
     const doActive = (e) => {
-      selectBtn.forEach((item) => {
+      document.querySelectorAll(".select-btn").forEach((item) => {
         item.classList.remove("active");
       });
+      // console.log(index);
+      console.log(e);
 
       let part = e.target.classList;
+      let set = null;
 
       if (part.contains("body")) {
+        set = "body";
         console.log("몸");
-      } else if (part.contains("foot")) {
-        console.log("발");
       } else if (part.contains("clothes")) {
+        // set = "clothes";
+        set = "mouse";
         console.log("옷");
+      } else if (part.contains("foot")) {
+        // set = "foot";
+        set = "lhand";
+        console.log("발");
       } else if (part.contains("hair")) {
+        // set = "hair";
+        set = "rhand";
         console.log("머리");
       } else if (part.contains("bag")) {
+        set = "bag";
         console.log("가방");
       } else if (part.contains("glasses")) {
+        set = "glasses";
         console.log("안경");
       }
       part.add("active");
 
       console.log(e);
-      updateColor(e);
+      setColor(set);
+    };
+
+    // 탭 눌렀을때 parts에 있는 id값에 맞춰 컬러 피커 색 변경
+    const setColor = (set) => {
+      console.log(set);
+      for (const item of parts) {
+        if (item.id === set) {
+          color.value = "#" + item.color;
+        }
+      }
     };
 
     const closeCharacterModal = () => {
@@ -124,7 +160,8 @@ export default {
 
     return {
       color,
-      selectBtn,
+      parts,
+      // selectBtn,
       change,
       updateColor,
       doActive,
