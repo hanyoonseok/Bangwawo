@@ -1,22 +1,20 @@
 <template>
-  <div id="canvas"></div>
+  <div @click="walking"></div>
 </template>
 
 <script>
-import { useStore } from "vuex";
+// import { useStore } from "vuex";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { onMounted, toRaw } from "vue";
-import { watch } from "vue";
-// import MODEL_PATH from "../../assets/custom.glb?url"; // 오리
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { onMounted } from "vue";
 
 export default {
-  name: "TheCanvas",
-  props: ["parts"],
+  name: "SecretCanvas",
+  props: ["parts", "user"],
   setup(props) {
     // Initial material
-    const store = useStore();
-    const theModel = store.state.root.user.model;
+    // const store = useStore();
     const INITIAL_MTL = new THREE.MeshPhongMaterial({
       color: 0xffcb57,
       shininess: 10,
@@ -31,16 +29,6 @@ export default {
       { childID: "clothes", mtl: INITIAL_MTL },
     ];
 
-    watch(
-      () => props.parts,
-      (cur) => {
-        colorChange(cur);
-      },
-      { deep: true },
-    );
-
-    const BACKGROUND_COLOR = 0xfff9ef; // 배경 색
-
     // 1. 장면 설정
     const scene = new THREE.Scene();
 
@@ -50,28 +38,31 @@ export default {
     // 3. 카메라 설정
     const camera = new THREE.PerspectiveCamera(
       50, // field of view : FOV 주어진 순간에 디스플레이에 보이는 장면의 범위(카메라 화각), 보통50
-      360 / 420, // aspect ratio : 거의 너비를 높이로 나눈 값 사용, 그렇지 않으면 이미지 찌그러져 보임(화면 비율)
+      460 / 520, // aspect ratio : 거의 너비를 높이로 나눈 값 사용, 그렇지 않으면 이미지 찌그러져 보임(화면 비율)
       0.1, // near : 카메라 시작점
       1000, // far : 카메라 끝 점
     );
 
-    scene.background = new THREE.Color(BACKGROUND_COLOR);
+    //배경
+    const bg = new THREE.TextureLoader();
+    const bgTexture = bg.load("./secretBg.png");
+    scene.background = bgTexture;
 
     renderer.shadowMap.enabled = false; // 그림자
     renderer.setPixelRatio(window.devicePixelRatio); // 픽셀 비율
-    renderer.setSize(360, 420);
+    renderer.setSize(460, 520);
 
-    camera.position.z = -2;
+    camera.position.z = -1;
     camera.position.x = 25; // 화면에 보여지는 위치인것같음
-    camera.position.y = -10;
+    camera.position.y = 5;
 
     // 조명
     // HemisphereLight : 전 방향에서 조명을 비춰줌
     // 첫번째 인자 : 위쪽으로 비추는 빛의 컬러, 두번째 인자 : 아래를 비추는 빛의 컬러
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.54);
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.61);
     hemiLight.position.set(50, 50, 0);
     // Add hemisphere light to scene
-    scene.add(toRaw(hemiLight));
+    scene.add(hemiLight);
 
     // 특정 방향으로 빛 방출
     // 빛 색상, 빛 강도
@@ -80,7 +71,7 @@ export default {
     dirLight.castShadow = true; //광원이 그림자 생성
     dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
     // Add directional Light to scene
-    scene.add(toRaw(dirLight));
+    scene.add(dirLight);
 
     // Add controls
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -93,27 +84,72 @@ export default {
     controls.autoRotate = false; // Toggle this if you'd like the chair to automatically rotate
     controls.autoRotateSpeed = 0.2; // 30
 
-    const init = () => {
-      // Set initial textures
-      for (let object of INITIAL_MAP) {
-        let init_mtl = null;
-        props.parts.forEach((item) => {
-          if (item.id === object.childID) {
-            init_mtl = new THREE.MeshPhongMaterial({
-              color: parseInt("0x" + item.color),
-              shininess: 10,
-            });
+    const MODEL_PATH = "./duck3.glb";
+
+    let mixer = null;
+    let clips = null;
+
+    const loader = new GLTFLoader();
+    // Init the object loader
+    let theModel = null;
+
+    loader.load(
+      MODEL_PATH,
+      function (gltf) {
+        theModel = gltf.scene;
+
+        theModel.traverse((o) => {
+          if (o.isMesh) {
+            o.castShadow = true;
+            o.receiveShadow = true;
           }
         });
-        initColor(theModel, object.childID, init_mtl);
-      }
 
-      scene.add(toRaw(theModel));
+        // Set the models initial scale
+        theModel.scale.set(4.5, 4.5, 4.5);
+        theModel.rotation.y = Math.PI;
+
+        // Add the model to the scene
+        theModel.position.y = -9;
+
+        // Set initial textures
+        for (let object of INITIAL_MAP) {
+          let init_mtl = null;
+          props.parts.forEach((item) => {
+            if (item.id === object.childID) {
+              init_mtl = new THREE.MeshPhongMaterial({
+                color: parseInt("0x" + item.color),
+                shininess: 10,
+              });
+            }
+          });
+          initColor(theModel, object.childID, init_mtl);
+        }
+        scene.add(theModel);
+        mixer = new THREE.AnimationMixer(theModel);
+        clips = gltf.animations;
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      },
+    );
+
+    const walking = () => {
+      let clip = THREE.AnimationClip.findByName(clips, "walking");
+      let action = mixer.clipAction(clip);
+      action.setLoop(THREE.LoopOnce);
+      action.stop();
+      action.play();
     };
+    const clock = new THREE.Clock();
 
     const animate = () => {
+      if (mixer) {
+        mixer.update(clock.getDelta());
+      }
       controls.update();
-      renderer.render(toRaw(scene), camera);
+      renderer.render(scene, camera);
       requestAnimationFrame(animate);
 
       if (resizeRendererToDisplaySize(renderer)) {
@@ -150,35 +186,8 @@ export default {
       });
     };
 
-    //색 변경
-    const colorChange = (cur) => {
-      for (const part of cur) {
-        let color = part.color;
-        // console.log("color", color);
-        let new_mtl;
-
-        new_mtl = new THREE.MeshPhongMaterial({
-          color: parseInt("0x" + color),
-          shininess: 10,
-        });
-
-        setMaterial(theModel, part.id, new_mtl);
-      }
-    };
-
-    const setMaterial = (parent, type, mtl) => {
-      parent.traverse((o) => {
-        if (o.isMesh && o.nameID != null) {
-          if (o.nameID == type) {
-            o.material = mtl;
-          }
-        }
-      });
-    };
-
     onMounted(() => {
-      init();
-      document.getElementById("canvas").appendChild(renderer.domElement);
+      document.getElementById(props.user).appendChild(renderer.domElement);
       animate();
     });
 
@@ -186,18 +195,17 @@ export default {
       scene,
       renderer,
       camera,
-      BACKGROUND_COLOR,
       INITIAL_MAP,
       animate,
       initColor,
-      colorChange,
+      walking,
     };
   },
 };
 </script>
 <style lang="scss" scoped>
-#canvas {
-  width: 360px;
-  height: 420px;
+canvas {
+  width: 460px;
+  height: 520px;
 }
 </style>
