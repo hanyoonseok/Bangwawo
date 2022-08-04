@@ -38,6 +38,11 @@ const routes = [
     component: () => import("@/views/HomeView"),
   },
   {
+    path: "/oauth/redirect",
+    name: "kakao",
+    component: () => import("@/views/user/LoginRedirectView"),
+  },
+  {
     path: "/secret",
     name: "secret",
     component: () => import("@/views/secret/SecretFriendView"),
@@ -49,7 +54,6 @@ const routes = [
       },
     ],
   },
-
   {
     path: "/class",
     name: "class",
