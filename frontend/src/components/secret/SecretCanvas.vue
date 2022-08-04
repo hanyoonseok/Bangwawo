@@ -43,8 +43,6 @@ export default {
       1000, // far : 카메라 끝 점
     );
 
-    // scene.background = new THREE.Color(BACKGROUND_COLOR);
-
     //배경
     const bg = new THREE.TextureLoader();
     const bgTexture = bg.load("./secretBg.png");
@@ -140,9 +138,8 @@ export default {
     const walking = () => {
       let clip = THREE.AnimationClip.findByName(clips, "walking");
       let action = mixer.clipAction(clip);
-      action.loop = 1;
-      action.repetitions = 1;
-      console.log(action);
+      action.setLoop(THREE.LoopOnce);
+      action.stop();
       action.play();
     };
     const clock = new THREE.Clock();
@@ -210,6 +207,5 @@ export default {
 canvas {
   width: 460px;
   height: 520px;
-  /* border-radius: 50px; */
 }
 </style>

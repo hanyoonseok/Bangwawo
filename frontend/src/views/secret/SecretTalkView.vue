@@ -6,8 +6,6 @@
     <article class="user-wrapper">
       <SecretCanvas :parts="student" class="user-card" :user="stu" id="stu" />
       <SecretCanvas :parts="volunteer" class="user-card" :user="vol" id="vol" />
-      <!-- <SCanvas :user="stu" id="stu" />
-      <SCanvas :user="vol" id="vol" /> -->
     </article>
     <article class="btn-wrapper">
       <button class="option-btn">
@@ -23,7 +21,6 @@
 
 <script>
 import SecretCanvas from "@/components/secret/SecretCanvas.vue";
-// import SCanvas from "@/components/secret/SCanvas.vue";
 import { reactive } from "vue";
 import { useStore } from "vuex";
 
@@ -37,6 +34,7 @@ export default {
     const store = useStore();
     console.log(store.state.root.user);
     let model = store.state.root.user.model;
+
     //초기 캐릭터 색 : 백엔드에 저장한 db에서 받아올것임
     let student = reactive(store.state.root.user.characterColors);
     let volunteer = reactive(store.state.root.user.characterColors);
