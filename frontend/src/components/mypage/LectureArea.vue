@@ -33,17 +33,19 @@
         :key="index"
         class="lecture-box"
       >
-        <div class="lecture-thumb">
-          <div class="end-btn">{{ lecture.classStatus }}</div>
-        </div>
-        <div class="lecture-info">
-          <div class="teacher-photo" v-if="!(user.status === 2)">
-            <img src="@/assets/profile.png" />
+        <router-link :to="{ name: 'classdetail' }">
+          <div class="lecture-thumb">
+            <div class="end-btn">{{ lecture.classStatus }}</div>
           </div>
-          <div class="lecture-teacher">{{ lecture.classTeacher }} 강사</div>
-          <div class="lecture-title">{{ lecture.classTitle }}</div>
-          <div class="lecture-date">{{ lecture.classEndTime }} 종료</div>
-        </div>
+          <div class="lecture-info">
+            <div class="teacher-photo" v-if="!(user.status === 2)">
+              <img src="@/assets/profile.png" />
+            </div>
+            <div class="lecture-teacher">{{ lecture.classTeacher }} 강사</div>
+            <div class="lecture-title">{{ lecture.classTitle }}</div>
+            <div class="lecture-date">{{ lecture.classEndTime }} 종료</div>
+          </div>
+        </router-link>
       </div>
     </div>
     <div class="pagination-wrapper">
