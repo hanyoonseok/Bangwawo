@@ -23,7 +23,7 @@
     .listdiv {
       display: flex;
       align-items: center;
-      a {
+      a:not(:first-child) {
         position: relative;
         color: #000000;
         margin-right: 20px;
@@ -42,6 +42,10 @@
         &:hover::after {
           opacity: 1;
         }
+      }
+
+      a.router-link-active::after {
+        opacity: 1;
       }
     }
   }

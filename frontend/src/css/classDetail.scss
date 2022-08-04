@@ -93,6 +93,13 @@ section {
               color: darken($color: $grey, $amount: 5);
               z-index: 20;
               cursor: pointer;
+              i {
+                font-size: 15px;
+                transition: all 200ms ease;
+                &:hover {
+                  color: $dark-grey;
+                }
+              }
             }
           }
         }
@@ -119,6 +126,9 @@ section {
         .class-subscribe-btn {
           @include SubmitBtn;
           background-color: #e2e2e2;
+        }
+        .class-status-btn {
+          background-color: $soft-yellow;
         }
         .class-modify-btn,
         .class-delete-btn {

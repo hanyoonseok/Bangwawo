@@ -50,7 +50,10 @@
           &nbsp;화면 공유
         </button>
         <button class="option-btn" @click="toggleOX()">&nbsp;OX 퀴즈</button>
-        <i class="fa-solid fa-xmark xmark"></i>
+
+        <router-link :to="{ name: 'feedbackSubmit' }">
+          <i class="fa-solid fa-xmark xmark"></i
+        ></router-link>
       </article>
 
       <article class="bot-right">

@@ -6,6 +6,24 @@
   height: 100%;
   padding-top: 80px;
 }
+.back-btn-wrapper {
+  position: absolute;
+  left: 100px;
+  top: 95px;
+  cursor: pointer;
+  z-index: 1;
+  .back-btn {
+    width: 20px;
+    height: 20px;
+    border-top: 4px solid #000;
+    border-left: 4px solid #000;
+    transform: rotate(-45deg);
+    content: "";
+    background-color: transparent;
+    border-color: $yellow;
+    border-radius: 2px;
+  }
+}
 
 .title {
   width: 100%;
@@ -37,6 +55,7 @@
   margin: auto;
   padding: 50px 40px;
   column-gap: 20px;
+  position: relative;
 
   article {
     @include flexBetween;

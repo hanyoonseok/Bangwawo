@@ -25,10 +25,11 @@
         ></lecture-area>
       </div>
     </div>
-    <CharacterModal
-      v-if="character"
-      @close-character-modal="closeCharacterModal"
-    />
+    <transition name="slide-up">
+      <CharacterModal
+        v-if="character"
+        @close-character-modal="closeCharacterModal"
+    /></transition>
   </div>
 </template>
 

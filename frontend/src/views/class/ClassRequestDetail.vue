@@ -2,13 +2,15 @@
   <div class="background">
     <HeaderNav />
     <section class="main-section detail">
-      <div class="back-btn-wrapper">
+      <div class="back-btn-wrapper" @click="$router.go(-1)">
         <button class="back-btn"></button>
       </div>
       <article class="content-section">
         <div class="content-box">
           <img src="@/assets/profile.png" class="header-img" />
-          <h4>애기오리는 이러이러한 수업이 듣고싶습니다. 대충 아무제목...</h4>
+          <div class="content-title">
+            애기오리는 이러이러한 수업이 듣고싶습니다. 대충 아무제목...
+          </div>
           <div class="content-writer">
             애기오리 <label>&nbsp;2022.07.20</label>
           </div>
@@ -33,22 +35,26 @@
               </button>
               <div>
                 <button class="end-btn">
-                  <i class="fa-solid fa-trash-can"></i>&nbsp;삭제</button
-                ><button class="end-btn">
-                  <i class="fa-solid fa-pen"></i>&nbsp;수정
+                  <i class="fa-solid fa-trash-can"></i>&nbsp;삭제
                 </button>
+                <router-link :to="{ name: 'classrequestmodify' }">
+                  <button class="end-btn">
+                    <i class="fa-solid fa-pen"></i>&nbsp;수정
+                  </button></router-link
+                >
               </div>
             </div>
-
-            <div class="yes" v-else>
-              <img :src="post.link.thumbnail" />
-              <div class="column">
-                <label class="link-title">{{ post.link.title }}</label>
-                <label class="link-description">{{
-                  post.link.description
-                }}</label>
-              </div>
-            </div>
+            <router-link :to="{ name: 'classdetail' }" v-else>
+              <div class="yes">
+                <img :src="post.link.thumbnail" />
+                <div class="column">
+                  <label class="link-title">{{ post.link.title }}</label>
+                  <label class="link-description">{{
+                    post.link.description
+                  }}</label>
+                </div>
+              </div></router-link
+            >
           </div>
 
           <div class="end-btn-wrapper" v-if="user.status === 1">
@@ -62,6 +68,7 @@
 
             <div class="yes" v-else>
               <img :src="post.link.thumbnail" />
+
               <div class="column">
                 <label class="link-title">{{ post.link.title }}</label>
                 <label class="link-description">{{
@@ -69,6 +76,7 @@
                 }}</label>
               </div>
             </div>
+            >
           </div>
           <div class="status-wrapper"><label>조회수 33</label></div>
         </div>

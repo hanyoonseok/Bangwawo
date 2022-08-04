@@ -26,8 +26,9 @@
         <label><i class="fa-solid fa-lock-keyhole"></i></label>
         <input class="parent-input" type="text" placeholder="비밀번호" />
       </div>
-
-      <button class="login-submit">로그인</button>
+      <router-link :to="{ name: 'mypage' }">
+        <button class="login-submit">로그인</button></router-link
+      >
     </div>
   </div>
 </template>

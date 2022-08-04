@@ -2,29 +2,55 @@
   <div class="container">
     <section class="left">
       <div class="listdiv" v-if="user.status === 0">
-        <div><img src="@/assets/header.png" /></div>
+        <router-link :to="{ name: 'home' }" class="list">
+          <div><img src="@/assets/header.png" /></div>
+        </router-link>
       </div>
       <div class="listdiv" v-if="user.status === 1">
-        <div><img src="@/assets/header.png" /></div>
-        <router-link to="/class/list" class="list">수업목록</router-link>
-        <router-link to="/class/requestlist" class="list">수업요청</router-link>
-        <router-link to="/secret" class="list">비밀친구</router-link>
+        <router-link :to="{ name: 'classlist' }" class="list"
+          ><div><img src="@/assets/header.png" /></div
+        ></router-link>
+        <router-link :to="{ name: 'classlist' }" class="list"
+          >수업목록</router-link
+        >
+        <router-link :to="{ name: 'classrequest' }" class="list"
+          >수업요청</router-link
+        >
+        <router-link :to="{ name: 'secret' }" class="list"
+          >비밀친구</router-link
+        >
       </div>
       <div class="listdiv" v-if="user.status === 2">
-        <div><img src="@/assets/header.png" /></div>
-        <router-link to="/class/list" class="list">수업목록</router-link>
-        <router-link to="/class/register" class="list">수업등록</router-link>
-        <router-link to="/class/requestlist" class="list">수업요청</router-link>
+        <router-link :to="{ name: 'classlist' }" class="list">
+          <div><img src="@/assets/header.png" /></div>
+        </router-link>
+        <router-link :to="{ name: 'classlist' }" class="list"
+          >수업목록</router-link
+        >
+        <router-link :to="{ name: 'classregister' }" class="list"
+          >수업등록</router-link
+        >
+        <router-link :to="{ name: 'classrequest' }" class="list"
+          >수업요청</router-link
+        >
       </div>
       <div class="listdiv" v-if="user.status === 3">
         <div><img src="@/assets/header.png" /></div>
-        <router-link to="/class/list" class="list">수업목록</router-link>
-        <router-link to="/class/requestlist" class="list">수업요청</router-link>
+        <router-link :to="{ name: 'classlist' }" class="list"
+          >수업목록</router-link
+        >
+        <router-link :to="{ name: 'classrequest' }" class="list"
+          >수업요청</router-link
+        >
       </div>
     </section>
 
     <section class="right">
-      <button class="login" v-if="user.status === 0">로그인</button>
+      <router-link :to="{ name: 'login' }">
+        <button class="login" v-if="user.status === 0">
+          로그인
+        </button></router-link
+      >
       <div class="img-wrapper">
         <img
           src="@/assets/profile.png"
@@ -32,7 +58,7 @@
           @click="toggleProfile"
         />
         <ul v-if="isProfileOpen">
-          <router-link to="/mypage">마이페이지</router-link>
+          <router-link :to="{ name: 'mypage' }">마이페이지</router-link>
           <router-link to="/logout">로그아웃</router-link>
         </ul>
       </div>
