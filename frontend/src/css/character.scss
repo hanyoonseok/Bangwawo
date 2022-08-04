@@ -65,25 +65,25 @@
           background-color: $light-yellow;
         }
       }
-
-      &::v-deep .vacp-color-picker {
-        height: 390px;
-        // margin: auto;
-        border-radius: 27px;
-        padding: 40px;
-        box-shadow: $shadow;
-        --vacp-color-space-width: 360px;
-
-        .vacp-copy-button,
-        .vacp-format-switch-button,
-        .vacp-color-inputs {
-          display: none;
-        }
-      }
     }
 
     .right-box {
       margin-left: 20px;
     }
+  }
+}
+
+.box ::v-deep(.vacp-color-picker) {
+  height: 390px;
+  // margin: auto;
+  border-radius: 27px;
+  padding: 40px;
+  box-shadow: $shadow;
+  --vacp-color-space-width: 360px;
+
+  .vacp-copy-button,
+  .vacp-format-switch-button,
+  .vacp-color-inputs {
+    display: none;
   }
 }
