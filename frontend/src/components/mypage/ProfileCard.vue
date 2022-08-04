@@ -12,8 +12,11 @@
       </div>
     </div>
     <div class="left-box profile">
-      <i class="fa-solid fa-ellipsis-vertical profile-ellipse">
-        <ul>
+      <i
+        class="fa-solid fa-ellipsis-vertical profile-ellipse"
+        @click="doOpenModal"
+      >
+        <ul v-if="isModalOpen">
           <li>
             <i class="fa-solid fa-pen-to-square"></i>
             &nbsp;<span>비밀번호 변경</span>
@@ -45,13 +48,12 @@
   </div>
   <!--유저가 봉사자이거나 학생일 경우-->
   <div class="left-box profile" v-else>
-    <i class="fa-solid fa-ellipsis-vertical profile-ellipse">
-      <ul>
-        <li v-if="user.status === 3">
-          <i class="fa-solid fa-pen-to-square"></i>
-          &nbsp;<span>비밀번호 변경</span>
-        </li>
-        <li v-else>
+    <i
+      class="fa-solid fa-ellipsis-vertical profile-ellipse"
+      @click="doOpenModal"
+    >
+      <ul v-if="isModalOpen">
+        <li>
           <i class="fa-solid fa-pen-to-square"></i>
           &nbsp;<span>정보수정</span>
         </li>
@@ -88,11 +90,17 @@
 <script>
 import { reactive, onMounted } from "vue";
 
+import { ref } from "vue";
 export default {
   props: ["user"],
   emits: ["open-character-modal"],
   setup(props, { emit }) {
     let bookmark;
+
+    let isModalOpen = ref(false);
+    const doOpenModal = () => {
+      isModalOpen.value = !isModalOpen.value;
+    };
     const state = reactive({
       childrenNo: 0,
     });
@@ -129,6 +137,8 @@ export default {
     };
     return {
       doActive,
+      doOpenModal,
+      isModalOpen,
       bookmark,
       state,
       openCharacterModal,

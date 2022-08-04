@@ -2,7 +2,7 @@
   <div class="background">
     <HeaderNav />
     <section>
-      <div class="back-btn-wrapper">
+      <div class="back-btn-wrapper" @click="$router.go(-1)">
         <button class="back-btn"></button>
       </div>
       <div class="detail">
@@ -49,7 +49,12 @@
           <div class="button-box">
             <!-- 봉사자(2), 학생(1) -->
             <div v-if="user.status === 2">
-              <button class="class-status-btn">수업 활성화</button>
+              <router-link :to="{ name: 'inclass' }">
+                <button class="class-status-btn">
+                  수업 활성화
+                </button></router-link
+              >
+
               <router-link to="/class/modify" class="class-modify-btn">
                 <i class="fa-solid fa-pencil"></i>
               </router-link>
@@ -81,9 +86,6 @@
             <p class="info-title post-card">자기소개</p>
             <p class="info-content bg">
               나는 아주 착한 봉사자 선한 봉사자 다정한 봉사자 내가 최고다
-              반가워어ㅓdfsdfsdfsd어ㅓㅓ안여ㅏㅇ나녕안여넝어너어어어 나는 아주
-              착한 봉사자 선한 봉사자 다정한 봉사자 내가 최고다
-              반가워어ㅓdfsdfsdfsd어ㅓㅓ안여ㅏㅇ나녕안여넝어너어어어
             </p>
           </div>
         </div>

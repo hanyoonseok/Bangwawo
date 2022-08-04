@@ -34,7 +34,9 @@
         <img src="@/assets/profile.png" alt="오리" />
         <h2>정말로 제출하시겠습니까?</h2>
         <div class="btn-wrapper">
-          <button class="btn">네</button>
+          <router-link :to="{ name: 'mypage' }"
+            ><button class="btn">네</button></router-link
+          >
           <button class="btn" @click="isConfirm = false">아니요</button>
         </div>
       </div>

@@ -25,7 +25,9 @@
         ></textarea>
       </section>
       <div class="btn-wrapper">
-        <button>등록하기</button>
+        <router-link :to="{ name: 'classrequest' }">
+          <button>등록하기</button></router-link
+        >
       </div>
     </section>
   </div>

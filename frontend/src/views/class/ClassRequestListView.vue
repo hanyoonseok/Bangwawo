@@ -16,7 +16,9 @@
     </div>
     <!-- 봉사자 아닐 경우에만 요청 글 작성 가능 -->
     <div v-if="user.status !== 2">
-      <button class="request-register">작성하기</button>
+      <router-link :to="{ name: 'classrequestregist' }">
+        <button class="request-register">작성하기</button></router-link
+      >
     </div>
     <div class="list">
       <div class="table-header"></div>
