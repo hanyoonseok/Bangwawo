@@ -80,12 +80,6 @@
         right: 25px;
         top: 25px;
         color: $grey;
-        &:hover > ul {
-          display: block;
-        }
-        &:target ul {
-          display: block;
-        }
       }
       ul {
         position: absolute;
@@ -94,7 +88,6 @@
         padding: 8px 10px;
         background-color: $white;
         @include flexColumn;
-        display: none;
         box-shadow: $light-shadow;
         li {
           padding: 6px 0;

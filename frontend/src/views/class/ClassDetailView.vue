@@ -73,25 +73,23 @@
         </div>
       </div>
       <!-- 강사 프로필 -->
-      <transition name="slide-fade">
-        <div class="profile">
-          <div class="profile-img">
-            <img src="@/assets/profile.png" alt="프로필이미지" />
+      <div class="profile">
+        <div class="profile-img">
+          <img src="@/assets/profile.png" alt="프로필이미지" />
+        </div>
+        <div class="profile-info">
+          <div class="info-box">
+            <p class="info-title post-card">이름</p>
+            <p class="info-content">김오리</p>
           </div>
-          <div class="profile-info">
-            <div class="info-box">
-              <p class="info-title post-card">이름</p>
-              <p class="info-content">김오리</p>
-            </div>
-            <div class="info-box">
-              <p class="info-title post-card">자기소개</p>
-              <p class="info-content bg">
-                나는 아주 착한 봉사자 선한 봉사자 다정한 봉사자 내가 최고다
-              </p>
-            </div>
+          <div class="info-box">
+            <p class="info-title post-card">자기소개</p>
+            <p class="info-content bg">
+              나는 아주 착한 봉사자 선한 봉사자 다정한 봉사자 내가 최고다
+            </p>
           </div>
-        </div></transition
-      >
+        </div>
+      </div>
     </section>
     <div class="confirm" v-if="isConfirm.status">
       <div class="container">
