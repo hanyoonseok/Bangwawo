@@ -31,7 +31,6 @@ loader.load(
 
     // Set the models initial scale
     user.model.scale.set(4.5, 4.5, 4.5);
-    // user.model.rotation.y = Math.PI;
 
     // Add the model to the scene
     user.model.position.y = -7;
