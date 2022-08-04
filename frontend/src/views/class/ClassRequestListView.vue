@@ -171,9 +171,9 @@ export default {
         }
         return array;
       }),
-      endPage: 6, // 화면에 보이는 페이지 끝 번호
+      endPage: 5, // 화면에 보이는 페이지 끝 번호
       totalPage: computed(() => {
-        return page.totalCount / 5;
+        return page.totalCount / 6;
       }), // 총 페이지 수
     });
 

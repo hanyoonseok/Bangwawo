@@ -28,7 +28,7 @@ export default defineComponent({
     });
 
     onUnmounted(() => {
-      observer.value.disconnect();
+      observer.value = null;
     });
 
     return {
