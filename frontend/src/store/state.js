@@ -1,6 +1,6 @@
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
-const MODEL_PATH = "./duck.glb";
+const MODEL_PATH = "http://localhost:8080/duck.glb"; //"./duck.glb";
 
 const loader = new GLTFLoader();
 
