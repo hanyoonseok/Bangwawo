@@ -1,5 +1,5 @@
 <template>
-  <div @click="walking"></div>
+  <div></div>
 </template>
 
 <script>
@@ -61,17 +61,54 @@ export default {
     // 첫번째 인자 : 위쪽으로 비추는 빛의 컬러, 두번째 인자 : 아래를 비추는 빛의 컬러
     const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.61);
     hemiLight.position.set(50, 50, 0);
+
     // Add hemisphere light to scene
     scene.add(hemiLight);
 
     // 특정 방향으로 빛 방출
     // 빛 색상, 빛 강도
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.54);
-    dirLight.position.set(1100, 1100, 500);
-    dirLight.castShadow = true; //광원이 그림자 생성
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.55);
+    dirLight.position.set(10000, 3000, 0);
+    dirLight.castShadow = false; //광원이 그림자 생성
     dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
+
+    // const dirLight = new THREE.DirectionalLight(0xffffff, 0.3);
+    // dirLight.position.set(0, 1000, 0);
+    // dirLight.castShadow = false; //광원이 그림자 생성
+    // dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
+
+    // const dirLight2 = new THREE.DirectionalLight(0xffffff, 0.3);
+    // dirLight2.position.set(0, 0, 1000);
+    // dirLight2.castShadow = false; //광원이 그림자 생성
+    // dirLight2.shadow.mapSize = new THREE.Vector2(1024, 1024);
+
+    // const dirLight3 = new THREE.DirectionalLight(0xffffff, 0.3);
+    // dirLight3.position.set(0, -1000, 0);
+    // dirLight3.castShadow = false; //광원이 그림자 생성
+    // dirLight3.shadow.mapSize = new THREE.Vector2(1024, 1024);
+
+    // const dirLight4 = new THREE.DirectionalLight(0xffffff, 0.3);
+    // dirLight4.position.set(0, 0, -1000);
+    // dirLight4.castShadow = false; //광원이 그림자 생성
+    // dirLight4.shadow.mapSize = new THREE.Vector2(1024, 1024);
+
+    // const dirLight5 = new THREE.DirectionalLight(0xffffff, 0.3);
+    // dirLight5.position.set(1000, 0, 0);
+    // dirLight5.castShadow = false; //광원이 그림자 생성
+    // dirLight5.shadow.mapSize = new THREE.Vector2(1024, 1024);
+
+    // const dirLight6 = new THREE.DirectionalLight(0xffffff, 0.2);
+    // dirLight6.position.set(-1000, 0, 0);
+    // dirLight6.castShadow = false; //광원이 그림자 생성
+    // dirLight6.shadow.mapSize = new THREE.Vector2(1024, 1024);
+
     // Add directional Light to scene
     scene.add(dirLight);
+    // scene.add(dirLight2);
+    // scene.add(dirLight3);
+    // scene.add(dirLight4);
+    // scene.add(dirLight5);
+    // scene.add(dirLight6);
 
     // Add controls
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -84,7 +121,7 @@ export default {
     controls.autoRotate = false; // Toggle this if you'd like the chair to automatically rotate
     controls.autoRotateSpeed = 0.2; // 30
 
-    const MODEL_PATH = "./duck3.glb";
+    const MODEL_PATH = "./duckduck.glb";
 
     let mixer = null;
     let clips = null;
@@ -97,7 +134,6 @@ export default {
       MODEL_PATH,
       function (gltf) {
         theModel = gltf.scene;
-
         theModel.traverse((o) => {
           if (o.isMesh) {
             o.castShadow = true;
@@ -107,7 +143,7 @@ export default {
 
         // Set the models initial scale
         theModel.scale.set(4.5, 4.5, 4.5);
-        theModel.rotation.y = Math.PI;
+        //theModel.rotation.y = Math.PI;
 
         // Add the model to the scene
         theModel.position.y = -9;
@@ -128,6 +164,7 @@ export default {
         scene.add(theModel);
         mixer = new THREE.AnimationMixer(theModel);
         clips = gltf.animations;
+        standing();
       },
       undefined,
       function (error) {
@@ -135,11 +172,9 @@ export default {
       },
     );
 
-    const walking = () => {
-      let clip = THREE.AnimationClip.findByName(clips, "walking");
+    const standing = () => {
+      let clip = THREE.AnimationClip.findByName(clips, "stand");
       let action = mixer.clipAction(clip);
-      action.setLoop(THREE.LoopOnce);
-      action.stop();
       action.play();
     };
     const clock = new THREE.Clock();
@@ -198,7 +233,7 @@ export default {
       INITIAL_MAP,
       animate,
       initColor,
-      walking,
+      standing,
     };
   },
 };
