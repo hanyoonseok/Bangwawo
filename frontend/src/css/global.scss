@@ -51,6 +51,31 @@ a:hover,
 a:active {
   text-decoration: none;
 }
+
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5 ease-out;
+}
+.fade-leave-to {
+  opacity: 0;
+}
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateY(20px);
+  opacity: 0;
+}
+
 body {
   height: 100%;
   width: 100%;
@@ -81,21 +106,25 @@ input:focus {
   outline: none;
 }
 h1 {
+  user-select: none;
   font-size: 36px;
   font-weight: bold;
   font-family: $SCore;
 }
 h2 {
+  user-select: none;
   font-size: 30px;
   font-weight: bold;
   font-family: $SCore;
 }
 h3 {
+  user-select: none;
   font-size: 24px;
   font-weight: initial;
   font-family: $SCore;
 }
 h4 {
+  user-select: none;
   font-size: 18px;
   font-weight: bold;
   font-family: $SCore;

@@ -1,6 +1,9 @@
 <template>
   <div class="background">
     <HeaderNav />
+    <div class="back-btn-wrapper" @click="$router.go(-1)">
+      <button class="back-btn"></button>
+    </div>
     <div class="title">
       <h2>수업 수정</h2>
     </div>

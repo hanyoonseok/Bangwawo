@@ -50,6 +50,7 @@
             <!-- 봉사자(2), 학생(1) -->
             <div v-if="user.status === 2">
               <button class="class-status-btn">수업 활성화</button>
+
               <router-link to="/class/modify" class="class-modify-btn">
                 <i class="fa-solid fa-pencil"></i>
               </router-link>
@@ -68,26 +69,25 @@
         </div>
       </div>
       <!-- 강사 프로필 -->
-      <div class="profile">
-        <div class="profile-img">
-          <img src="@/assets/profile.png" alt="프로필이미지" />
-        </div>
-        <div class="profile-info">
-          <div class="info-box">
-            <p class="info-title post-card">이름</p>
-            <p class="info-content">김오리</p>
+      <transition name="slide-fade">
+        <div class="profile">
+          <div class="profile-img">
+            <img src="@/assets/profile.png" alt="프로필이미지" />
           </div>
-          <div class="info-box">
-            <p class="info-title post-card">자기소개</p>
-            <p class="info-content bg">
-              나는 아주 착한 봉사자 선한 봉사자 다정한 봉사자 내가 최고다
-              반가워어ㅓdfsdfsdfsd어ㅓㅓ안여ㅏㅇ나녕안여넝어너어어어 나는 아주
-              착한 봉사자 선한 봉사자 다정한 봉사자 내가 최고다
-              반가워어ㅓdfsdfsdfsd어ㅓㅓ안여ㅏㅇ나녕안여넝어너어어어
-            </p>
+          <div class="profile-info">
+            <div class="info-box">
+              <p class="info-title post-card">이름</p>
+              <p class="info-content">김오리</p>
+            </div>
+            <div class="info-box">
+              <p class="info-title post-card">자기소개</p>
+              <p class="info-content bg">
+                나는 아주 착한 봉사자 선한 봉사자 다정한 봉사자 내가 최고다
+              </p>
+            </div>
           </div>
-        </div>
-      </div>
+        </div></transition
+      >
     </section>
     <div class="confirm" v-if="isConfirm.status">
       <div class="container">

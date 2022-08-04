@@ -95,7 +95,7 @@ export default {
   },
   setup() {
     const post = ref({
-      status: 0, // 0미해결 1해결
+      status: 1, // 0미해결 1해결
       link: {
         thumbnail: require("@/assets/banner-illust.png"),
         title: "오리선생님의 역사 이야기",

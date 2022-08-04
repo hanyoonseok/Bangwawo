@@ -59,11 +59,9 @@ export default {
     let parts = reactive(store.state.root.user.characterColors);
 
     const updateColor = (eventData) => {
-      console.log(change.color);
       // if (eventData.color === undefined) {
       //   change.color = "000000";
       // } else {
-      console.log(eventData.colors);
       change.color = eventData.colors.hex.replaceAll("#", "").slice(0, 6);
       // }
       document.querySelectorAll(".select-btn").forEach((item) => {
