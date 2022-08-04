@@ -1,22 +1,20 @@
 <template>
-  <div></div>
+  <div @click="walking"></div>
 </template>
 
 <script>
-import { useStore } from "vuex";
+// import { useStore } from "vuex";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { onMounted, toRaw } from "vue";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { onMounted } from "vue";
 
 export default {
   name: "SecretCanvas",
-  props: ["parts", "user", "theModel"],
+  props: ["parts", "user"],
   setup(props) {
     // Initial material
-    const store = useStore();
-    const m = store.state.root.user.model;
-    console.log("m", m);
-    console.log("???", props.theModel);
+    // const store = useStore();
     const INITIAL_MTL = new THREE.MeshPhongMaterial({
       color: 0xffcb57,
       shininess: 10,
@@ -28,7 +26,6 @@ export default {
       { childID: "hat", mtl: INITIAL_MTL },
       { childID: "bag", mtl: INITIAL_MTL },
       { childID: "glasses", mtl: INITIAL_MTL },
-      { childID: "hair", mtl: INITIAL_MTL },
       { childID: "clothes", mtl: INITIAL_MTL },
     ];
 
@@ -58,7 +55,7 @@ export default {
     renderer.setSize(460, 520);
 
     camera.position.z = -1;
-    camera.position.x = 30; // 화면에 보여지는 위치인것같음
+    camera.position.x = 25; // 화면에 보여지는 위치인것같음
     camera.position.y = 5;
 
     // 조명
@@ -67,7 +64,7 @@ export default {
     const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.61);
     hemiLight.position.set(50, 50, 0);
     // Add hemisphere light to scene
-    scene.add(toRaw(hemiLight));
+    scene.add(hemiLight);
 
     // 특정 방향으로 빛 방출
     // 빛 색상, 빛 강도
@@ -76,7 +73,7 @@ export default {
     dirLight.castShadow = true; //광원이 그림자 생성
     dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
     // Add directional Light to scene
-    scene.add(toRaw(dirLight));
+    scene.add(dirLight);
 
     // Add controls
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -89,28 +86,73 @@ export default {
     controls.autoRotate = false; // Toggle this if you'd like the chair to automatically rotate
     controls.autoRotateSpeed = 0.2; // 30
 
+    const MODEL_PATH = "./duck3.glb";
+
+    let mixer = null;
+    let clips = null;
+
+    const loader = new GLTFLoader();
     // Init the object loader
-    const init = () => {
-      // Set initial textures
-      for (let object of INITIAL_MAP) {
-        let init_mtl = null;
-        props.parts.forEach((item) => {
-          if (item.id === object.childID) {
-            init_mtl = new THREE.MeshPhongMaterial({
-              color: parseInt("0x" + item.color),
-              shininess: 10,
-            });
+    let theModel = null;
+
+    loader.load(
+      MODEL_PATH,
+      function (gltf) {
+        theModel = gltf.scene;
+
+        theModel.traverse((o) => {
+          if (o.isMesh) {
+            o.castShadow = true;
+            o.receiveShadow = true;
           }
         });
-        initColor(props.theModel, object.childID, init_mtl);
-      }
 
-      scene.add(toRaw(props.theModel));
+        // Set the models initial scale
+        theModel.scale.set(4.5, 4.5, 4.5);
+        theModel.rotation.y = Math.PI;
+
+        // Add the model to the scene
+        theModel.position.y = -9;
+
+        // Set initial textures
+        for (let object of INITIAL_MAP) {
+          let init_mtl = null;
+          props.parts.forEach((item) => {
+            if (item.id === object.childID) {
+              init_mtl = new THREE.MeshPhongMaterial({
+                color: parseInt("0x" + item.color),
+                shininess: 10,
+              });
+            }
+          });
+          initColor(theModel, object.childID, init_mtl);
+        }
+        scene.add(theModel);
+        mixer = new THREE.AnimationMixer(theModel);
+        clips = gltf.animations;
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      },
+    );
+
+    const walking = () => {
+      let clip = THREE.AnimationClip.findByName(clips, "walking");
+      let action = mixer.clipAction(clip);
+      action.loop = 1;
+      action.repetitions = 1;
+      console.log(action);
+      action.play();
     };
+    const clock = new THREE.Clock();
 
     const animate = () => {
+      if (mixer) {
+        mixer.update(clock.getDelta());
+      }
       controls.update();
-      renderer.render(toRaw(scene), camera);
+      renderer.render(scene, camera);
       requestAnimationFrame(animate);
 
       if (resizeRendererToDisplaySize(renderer)) {
@@ -147,24 +189,7 @@ export default {
       });
     };
 
-    // const gltfLoader = new GLTFLoader();
-    // gltfLoader.load("/models/Fox/glTF/Fox.gltf", (gltf) => {
-    //   scene.add(gltf.scene);
-    // });
-
-    // let mixer = null;
-
-    // gltfLoader.load("/models/Fox/glTF/Fox.gltf", (gltf) => {
-    //   gltf.scene.scale.set(0.03, 0.03, 0.03);
-    //   scene.add(gltf.scene);
-
-    //   mixer = new THREE.AnimationMixer(gltf.scene);
-    //   const action = mixer.clipAction(gltf.animations[0]);
-    //   action.play();
-    // });
-
     onMounted(() => {
-      init();
       document.getElementById(props.user).appendChild(renderer.domElement);
       animate();
     });
@@ -176,12 +201,13 @@ export default {
       INITIAL_MAP,
       animate,
       initColor,
+      walking,
     };
   },
 };
 </script>
 <style lang="scss" scoped>
-#canvas {
+canvas {
   width: 460px;
   height: 520px;
   /* border-radius: 50px; */

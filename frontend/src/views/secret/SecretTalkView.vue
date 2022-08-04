@@ -4,20 +4,10 @@
       <h2>비밀친구 대화중</h2>
     </article>
     <article class="user-wrapper">
-      <SecretCanvas
-        :parts="student"
-        class="user-card"
-        :user="stu"
-        id="stu"
-        :theModel="model"
-      />
-      <!-- <SecretCanvas
-        :parts="volunteer"
-        class="user-card"
-        :user="vol"
-        id="vol"
-        :theModel="model"
-      /> -->
+      <SecretCanvas :parts="student" class="user-card" :user="stu" id="stu" />
+      <SecretCanvas :parts="volunteer" class="user-card" :user="vol" id="vol" />
+      <!-- <SCanvas :user="stu" id="stu" />
+      <SCanvas :user="vol" id="vol" /> -->
     </article>
     <article class="btn-wrapper">
       <button class="option-btn">
@@ -33,6 +23,7 @@
 
 <script>
 import SecretCanvas from "@/components/secret/SecretCanvas.vue";
+// import SCanvas from "@/components/secret/SCanvas.vue";
 import { reactive } from "vue";
 import { useStore } from "vuex";
 
@@ -40,6 +31,7 @@ export default {
   name: "SecretTalkView",
   components: {
     SecretCanvas,
+    // SCanvas,
   },
   setup() {
     const store = useStore();

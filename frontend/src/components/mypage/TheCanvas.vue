@@ -28,7 +28,6 @@ export default {
       { childID: "hat", mtl: INITIAL_MTL },
       { childID: "bag", mtl: INITIAL_MTL },
       { childID: "glasses", mtl: INITIAL_MTL },
-      { childID: "hair", mtl: INITIAL_MTL },
       { childID: "clothes", mtl: INITIAL_MTL },
     ];
 
