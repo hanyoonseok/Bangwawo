@@ -7,19 +7,19 @@
       <div class="listdiv" v-if="user.status === 1">
         <div><img src="@/assets/header.png" /></div>
         <router-link to="/class/list" class="list">수업목록</router-link>
-        <router-link to="/class/request" class="list">수업요청</router-link>
+        <router-link to="/class/requestlist" class="list">수업요청</router-link>
         <router-link to="/secret" class="list">비밀친구</router-link>
       </div>
       <div class="listdiv" v-if="user.status === 2">
         <div><img src="@/assets/header.png" /></div>
         <router-link to="/class/list" class="list">수업목록</router-link>
         <router-link to="/class/register" class="list">수업등록</router-link>
-        <router-link to="/class/request" class="list">수업요청</router-link>
+        <router-link to="/class/requestlist" class="list">수업요청</router-link>
       </div>
       <div class="listdiv" v-if="user.status === 3">
         <div><img src="@/assets/header.png" /></div>
         <router-link to="/class/list" class="list">수업목록</router-link>
-        <router-link to="/class/request" class="list">수업요청</router-link>
+        <router-link to="/class/requestlist" class="list">수업요청</router-link>
       </div>
     </section>
 

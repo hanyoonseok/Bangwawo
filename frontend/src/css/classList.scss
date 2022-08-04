@@ -39,6 +39,9 @@ html {
     margin: 0 148px;
 
     .swiper-wrapper {
+      &::after {
+        font-size: 33px;
+      }
       .swiper-slide a {
         width: 330px;
         height: 200px;
@@ -57,21 +60,33 @@ html {
       }
     }
 
-    &::v-deep .swiper-button-prev {
-      left: -5px;
+    // &::v-deep .swiper-button-prev {
+    //   left: -5px;
 
-      &::after {
-        font-size: 33px;
-      }
-    }
+    //   &::after {
+    //     font-size: 33px;
+    //   }
+    // }
 
-    &::v-deep .swiper-button-next {
-      right: -5px;
+    // &::v-deep .swiper-button-next {
+    //   right: -5px;
 
-      &::after {
-        font-size: 33px;
-      }
-    }
+    //   &::after {
+    //     font-size: 33px;
+    //   }
+    // }
+  }
+}
+.swiper ::v-deep(.swiper-button-prev) {
+  left: -5px;
+  &::after {
+    font-size: 33px;
+  }
+}
+.swiper ::v-deep(.swiper-button-next) {
+  right: -5px;
+  &::after {
+    font-size: 33px;
   }
 }
 

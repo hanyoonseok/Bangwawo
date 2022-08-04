@@ -22,9 +22,12 @@
 </template>
 
 <script>
-import { reactive, ref } from "vue";
+import { reactive, ref, onBeforeUnmount } from "vue";
+import axios from "axios";
+import { OpenVidu } from "openvidu-browser";
 import HostView from "@/components/class/HostView.vue";
 import UserView from "@/components/class/UserView.vue";
+
 export default {
   name: "InClassView",
   components: {
@@ -32,8 +35,178 @@ export default {
     UserView,
   },
   setup() {
+    const OPENVIDU_SERVER_URL = process.env.VUE_APP_OV_DOMAIN_TEST;
+    const OPENVIDU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
+
     const state = reactive({
+      OV: undefined,
+      session: undefined,
+      mainStreamManager: undefined,
+      publisher: undefined,
+      subscribers: [],
+      mySessionId: "1",
+      myUserName: "myName",
+      joinedPlayerNumbers: 0,
+
       isHost: true,
+    });
+
+    /* 
+  닉네임:사용자
+  sessionName : 방 이름?
+  token : 토큰 들어오는데 이건 입장 할때마다 바뀌는 값
+  userName : 아이디인데 아마 로그인할대 아이디로 쓸듯?
+*/
+
+    const joinSession = () => {
+      // --- Get an OpenVidu object ---
+      state.OV = new OpenVidu();
+      // --- Init a session ---
+      state.session = state.OV.initSession();
+      // On every new Stream received...
+      state.session.on("streamCreated", ({ stream }) => {
+        const subscriber = state.session.subscribe(stream);
+        state.subscribers.push(subscriber);
+        if (subscriber.videos !== []) state.joinedPlayerNumbers++;
+      });
+      // On every Stream destroyed...
+      state.session.on("streamDestroyed", ({ stream }) => {
+        const index = state.subscribers.indexOf(stream.streamManager, 0);
+        if (index >= 0) {
+          const subscriber = state.subscribers[index];
+          if (subscriber.videos !== []) state.joinedPlayerNumbers--;
+          state.subscribers.splice(index, 1);
+        }
+      });
+      // On every asynchronous exception...
+      state.session.on("exception", ({ exception }) => {
+        console.warn(exception);
+      });
+      // 'getToken' method is simulating what your server-side should do.
+      // 'token' parameter should be retrieved and returned by your own backend
+      getToken(state.mySessionId).then((token) => {
+        state.session
+          .connect(token, { clientData: state.myUserName })
+          .then(() => {
+            // --- Get your own camera stream with the desired properties ---
+            let publisher = state.OV.initPublisher(undefined, {
+              audioSource: undefined, // The source of audio. If undefined default microphone
+              videoSource: undefined, // The source of video. If undefined default webcam
+              publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+              publishVideo: true, // Whether you want to start publishing with your video enabled or not
+              resolution: "600x320", // The resolution of your video
+              frameRate: 30, // The frame rate of your video
+              insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
+              mirror: false, // Whether to mirror your local video or not
+            });
+            state.mainStreamManager = publisher;
+            state.publisher = publisher;
+            state.joinedPlayerNumbers++;
+            state.session.publish(publisher);
+          })
+          .catch((error) => {
+            console.log(
+              "There was an error connecting to the session:",
+              error.code,
+              error.message,
+            );
+          });
+      });
+      window.addEventListener("beforeunload", leaveSession);
+    };
+
+    const leaveSession = () => {
+      // --- Leave the session by calling 'disconnect' method over the Session object ---
+      if (state.session) {
+        state.session.disconnect();
+      }
+      state.session = undefined;
+      state.mainStreamManager = undefined;
+      state.publisher = undefined;
+      state.subscribers = [];
+      state.OV = undefined;
+      window.removeEventListener("beforeunload", leaveSession);
+    };
+
+    const getToken = (mySessionId) => {
+      return createSession(mySessionId).then((sessionId) =>
+        createToken(sessionId),
+      );
+    };
+
+    const createSession = (sessionId) => {
+      return new Promise((resolve, reject) => {
+        axios
+          .post(
+            `${OPENVIDU_SERVER_URL}/openvidu/api/sessions`,
+            JSON.stringify({
+              customSessionId: sessionId,
+            }),
+            {
+              auth: {
+                username: "OPENVIDUAPP",
+                password: OPENVIDU_SERVER_SECRET,
+              },
+            },
+          )
+          .then((response) => response.data)
+          .then((data) => resolve(data.id))
+          .catch((error) => {
+            if (error.response.status === 409) {
+              resolve(sessionId);
+            } else {
+              console.warn(
+                `No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}`,
+              );
+              if (
+                window.confirm(
+                  `No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}\n\nClick OK to navigate and accept it. If no certificate warning is shown, then check that your OpenVidu Server is up and running at "${OPENVIDU_SERVER_URL}"`,
+                )
+              ) {
+                location.assign(`https://i7b201.p.ssafy.io`);
+              }
+              reject(error.response);
+            }
+          });
+      });
+    };
+
+    const createToken = (sessionId) => {
+      return new Promise((resolve, reject) => {
+        axios
+          .post(
+            `${OPENVIDU_SERVER_URL}/openvidu/api/sessions/${sessionId}/connection`,
+            {
+              type: "WEBRTC",
+              role: "PUBLISHER",
+              kurentoOptions: {
+                videoMaxRecvBandwidth: 1000,
+                videoMinRecvBandwidth: 300,
+                videoMaxSendBandwidth: 1000,
+                videoMinSendBandwidth: 300,
+                allowedFilters: ["GStreamerFilter", "FaceOverlayFilter"],
+              },
+            },
+            {
+              auth: {
+                username: "OPENVIDUAPP",
+                password: OPENVIDU_SERVER_SECRET,
+              },
+            },
+          )
+          .then((response) => {
+            console.log(response.data);
+            return response.data;
+          })
+          .then((data) => resolve(data.token))
+          .catch((error) => reject(error.response));
+      });
+    };
+
+    joinSession();
+    onBeforeUnmount(() => {
+      state.joinedPlayerNumbers = 0;
+      leaveSession();
     });
 
     const dataLen = ref(state.isHost ? 12 : 4);
@@ -113,7 +286,6 @@ export default {
         tempArr.push(students.value[i]);
       }
       currentStudents.value = tempArr;
-      console.log(currentStudents.value);
     };
 
     const nextClick = () => {
