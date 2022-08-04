@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import { useStore } from "vuex";
 import * as THREE from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { onMounted, toRaw } from "vue";
 import { watch } from "vue";
@@ -15,8 +15,6 @@ export default {
   props: ["parts"],
   setup(props) {
     // Initial material
-    const store = useStore();
-    const theModel = store.state.root.user.model;
     const INITIAL_MTL = new THREE.MeshPhongMaterial({
       color: 0xffcb57,
       shininess: 10,
@@ -75,9 +73,9 @@ export default {
 
     // 특정 방향으로 빛 방출
     // 빛 색상, 빛 강도
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.54);
-    dirLight.position.set(1100, 1100, 500);
-    dirLight.castShadow = true; //광원이 그림자 생성
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.55);
+    dirLight.position.set(10000, 3000, 0);
+    dirLight.castShadow = false; //광원이 그림자 생성
     dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
     // Add directional Light to scene
     scene.add(toRaw(dirLight));
@@ -93,25 +91,69 @@ export default {
     controls.autoRotate = false; // Toggle this if you'd like the chair to automatically rotate
     controls.autoRotateSpeed = 0.2; // 30
 
-    const init = () => {
-      // Set initial textures
-      for (let object of INITIAL_MAP) {
-        let init_mtl = null;
-        props.parts.forEach((item) => {
-          if (item.id === object.childID) {
-            init_mtl = new THREE.MeshPhongMaterial({
-              color: parseInt("0x" + item.color),
-              shininess: 10,
-            });
+    const MODEL_PATH = "./duckduck.glb";
+
+    let mixer = null;
+    let clips = null;
+
+    const loader = new GLTFLoader();
+    // Init the object loader
+    let theModel = null;
+
+    loader.load(
+      MODEL_PATH,
+      function (gltf) {
+        theModel = gltf.scene;
+
+        theModel.traverse((o) => {
+          if (o.isMesh) {
+            o.castShadow = true;
+            o.receiveShadow = true;
           }
         });
-        initColor(theModel, object.childID, init_mtl);
-      }
 
-      scene.add(toRaw(theModel));
+        // Set the models initial scale
+        theModel.scale.set(5, 5, 5);
+
+        // Add the model to the scene
+        theModel.position.y = -10;
+
+        // Set initial textures
+        for (let object of INITIAL_MAP) {
+          let init_mtl = null;
+          props.parts.forEach((item) => {
+            if (item.id === object.childID) {
+              init_mtl = new THREE.MeshPhongMaterial({
+                color: parseInt("0x" + item.color),
+                shininess: 10,
+              });
+            }
+          });
+          initColor(theModel, object.childID, init_mtl);
+        }
+        scene.add(theModel);
+        mixer = new THREE.AnimationMixer(theModel);
+        clips = gltf.animations;
+        standing();
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      },
+    );
+
+    const standing = () => {
+      let clip = THREE.AnimationClip.findByName(clips, "stand");
+      let action = mixer.clipAction(clip);
+
+      action.play();
     };
+    const clock = new THREE.Clock();
 
     const animate = () => {
+      if (mixer) {
+        mixer.update(clock.getDelta());
+      }
       controls.update();
       renderer.render(toRaw(scene), camera);
       requestAnimationFrame(animate);
@@ -177,7 +219,6 @@ export default {
     };
 
     onMounted(() => {
-      init();
       document.getElementById("canvas").appendChild(renderer.domElement);
       animate();
     });

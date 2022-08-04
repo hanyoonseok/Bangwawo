@@ -1,5 +1,5 @@
 <template>
-  <div id="profile-canvas" @click="walking"></div>
+  <div id="profile-canvas"></div>
 </template>
 
 <script>
@@ -90,9 +90,9 @@ export default {
 
     // 특정 방향으로 빛 방출
     // 빛 색상, 빛 강도
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.54);
-    dirLight.position.set(1100, 1100, 500);
-    dirLight.castShadow = true; //광원이 그림자 생성
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.55);
+    dirLight.position.set(10000, 3000, 0);
+    dirLight.castShadow = false; //광원이 그림자 생성
     dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
     // Add directional Light to scene
     scene.add(dirLight);
@@ -108,7 +108,7 @@ export default {
     controls.autoRotate = false; // Toggle this if you'd like the chair to automatically rotate
     controls.autoRotateSpeed = 0.2; // 30
 
-    const MODEL_PATH = "./duck.glb";
+    const MODEL_PATH = "./duckduck.glb";
 
     let mixer = null;
     let clips = null;
@@ -151,6 +151,7 @@ export default {
         scene.add(theModel);
         mixer = new THREE.AnimationMixer(theModel);
         clips = gltf.animations;
+        standing();
       },
       undefined,
       function (error) {
@@ -158,11 +159,10 @@ export default {
       },
     );
 
-    const walking = () => {
-      let clip = THREE.AnimationClip.findByName(clips, "walking");
+    const standing = () => {
+      let clip = THREE.AnimationClip.findByName(clips, "stand");
       let action = mixer.clipAction(clip);
-      action.setLoop(THREE.LoopOnce);
-      action.stop();
+
       action.play();
     };
     const clock = new THREE.Clock();
@@ -223,7 +223,6 @@ export default {
       INITIAL_MAP,
       animate,
       initColor,
-      walking,
     };
   },
 };
