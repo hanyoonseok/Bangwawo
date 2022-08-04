@@ -65,7 +65,8 @@
       </ul></i
     >
     <div class="img-box" @click="openCharacterModal">
-      <img src="@/assets/profile.png" />
+      <ProfileCanvas />
+      <!-- <img src="@/assets/profile.png" /> -->
       <div class="img-hover-box">캐릭터 편집</div>
     </div>
     <div class="person-info">
@@ -89,11 +90,13 @@
 
 <script>
 import { reactive, onMounted } from "vue";
+import ProfileCanvas from "@/components/mypage/ProfileCanvas.vue";
 
 import { ref } from "vue";
 export default {
   props: ["user"],
   emits: ["open-character-modal"],
+  components: { ProfileCanvas },
   setup(props, { emit }) {
     let bookmark;
 
