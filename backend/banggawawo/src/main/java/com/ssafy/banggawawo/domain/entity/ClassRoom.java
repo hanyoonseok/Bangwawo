@@ -1,11 +1,14 @@
 package com.ssafy.banggawawo.domain.entity;
 
 import lombok.*;
+import org.hibernate.Hibernate;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 
 @Entity
@@ -28,23 +31,23 @@ public class ClassRoom {
     @JoinColumn(name = "rId")
     private Request request;
 
-    private String title;     //제목
-    private String introduce; //소개글
-    private Integer maxcnt;       //최대인원수
-    private Date stime;       //시작시간
-    private Date etime;       //종료시간
-    private Boolean opened;   //공개여부
-    private String thumbnail;   //썸네일
-    private Boolean state;    //상태
+    private String title;        //제목
+    private String introduce;   //소개글
+    private Integer maxcnt;     //최대인원수
+    private Date stime;          //시작시간
+    private Date etime;          //종료시간
+    private Boolean opened;      //공개여부
+    private String thumbnail;       //썸네일
 
-    //classroom 생성시 필요한 builder
-    //여기에 c_id, state만 들어가면 수정용
+    private Boolean state;       //상태  (대기, 끝)
+
+    //classroom 생성시 필요f한 builder
     @Builder
-    public ClassRoom(Volunteer volunteer, Request request,
-                     String title, String introduce,
-                     Integer maxcnt, Date stime, Date etime,
-                     Boolean opened, String thumbnail) {
+
+    public ClassRoom(Long cId, Volunteer volunteer, List<Enrol> enrols, Request request, String title, String introduce, Integer maxcnt, Date stime, Date etime, Boolean opened, String thumbnail, Boolean state) {
+        this.cId = cId;
         this.volunteer = volunteer;
+        this.enrols = enrols;
         this.request = request;
         this.title = title;
         this.introduce = introduce;
@@ -53,12 +56,19 @@ public class ClassRoom {
         this.etime = etime;
         this.opened = opened;
         this.thumbnail = thumbnail;
+        this.state = state;
     }
 
-    public void setCId(Long c_id) {
-        this.cId = c_id;
+    //cid가 같으면 무조건 같은걸로 판단하자
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        ClassRoom classRoom = (ClassRoom) o;
+        return cId.equals(classRoom.cId);
     }
-    public void setState(Boolean state){
-        this.state = state;
+    @Override
+    public int hashCode() {
+        return Objects.hash(cId);
     }
 }

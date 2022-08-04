@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Getter @Setter
@@ -25,4 +27,11 @@ public class ClassDto {
     private Boolean opened;       // 공개여부
     private String thumbnail;     // 썸네일
     private Boolean state;        // 상태
+
+    public ClassDto setSearchfQuery(String title, Boolean opened, Boolean state){
+        this.title = title;
+        this.opened = opened;
+        this.state = state;
+        return this;
+    }
 }
