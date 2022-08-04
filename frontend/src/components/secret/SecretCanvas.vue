@@ -84,7 +84,7 @@ export default {
     controls.autoRotate = false; // Toggle this if you'd like the chair to automatically rotate
     controls.autoRotateSpeed = 0.2; // 30
 
-    const MODEL_PATH = "./duck3.glb";
+    const MODEL_PATH = "./duckduck.glb";
 
     let mixer = null;
     let clips = null;
@@ -107,7 +107,6 @@ export default {
 
         // Set the models initial scale
         theModel.scale.set(4.5, 4.5, 4.5);
-        theModel.rotation.y = Math.PI;
 
         // Add the model to the scene
         theModel.position.y = -9;
@@ -128,6 +127,11 @@ export default {
         scene.add(theModel);
         mixer = new THREE.AnimationMixer(theModel);
         clips = gltf.animations;
+        let clip = THREE.AnimationClip.findByName(clips, "talking");
+        let action = mixer.clipAction(clip);
+        // action.setLoop(THREE.LoopOnce);
+        // action.stop();
+        action.play();
       },
       undefined,
       function (error) {
@@ -136,10 +140,10 @@ export default {
     );
 
     const walking = () => {
-      let clip = THREE.AnimationClip.findByName(clips, "walking");
+      let clip = THREE.AnimationClip.findByName(clips, "stand");
       let action = mixer.clipAction(clip);
-      action.setLoop(THREE.LoopOnce);
-      action.stop();
+      // action.setLoop(THREE.LoopOnce);
+      // action.stop();
       action.play();
     };
     const clock = new THREE.Clock();

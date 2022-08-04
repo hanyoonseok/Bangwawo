@@ -1,6 +1,6 @@
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
-const MODEL_PATH = "http://localhost:8080/duck.glb"; //"./duck.glb";
+const MODEL_PATH = "http://localhost:8080/duckduck.glb"; //"./duck.glb";
 
 const loader = new GLTFLoader();
 
@@ -10,7 +10,7 @@ const user = {
     { id: "body", color: "f1f1f1" },
     { id: "bag", color: "000000" },
     { id: "clothes", color: "ffffff" },
-    { id: "hat", color: "527329" },
+    { id: "hat", color: "FFD89B" },
     { id: "foot", color: "ff9696" },
     { id: "glasses", color: "ff9696" },
   ],
