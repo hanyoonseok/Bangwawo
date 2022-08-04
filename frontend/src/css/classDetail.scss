@@ -127,6 +127,9 @@ section {
           @include SubmitBtn;
           background-color: #e2e2e2;
         }
+        .class-status-btn {
+          background-color: $soft-yellow;
+        }
         .class-modify-btn,
         .class-delete-btn {
           background-color: transparent;

@@ -60,7 +60,7 @@ export default {
       name: "이화연바보",
       nickname: "애기하연",
       description: "자기소개입니다",
-      status: 3,
+      status: 1,
       subscribe: 0,
       children: [
         {
