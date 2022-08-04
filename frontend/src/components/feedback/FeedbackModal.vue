@@ -24,7 +24,7 @@
           <textarea></textarea>
         </article>
         <article class="btn-wrapper">
-          <button class="submit-btn">작성 완료</button>
+          <button class="submit-btn" @click="close">작성 완료</button>
         </article>
       </div>
     </div>

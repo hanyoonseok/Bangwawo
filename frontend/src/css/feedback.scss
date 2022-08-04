@@ -135,7 +135,10 @@
   align-items: center;
   padding: 15px;
   cursor: pointer;
-
+  transition: all 200ms ease;
+  &:hover {
+    transform: scale(1.04);
+  }
   img {
     width: 100px;
     height: 100px;
@@ -149,6 +152,7 @@
     color: #7b7777;
     label {
       @include inputTitleLabel;
+      width: 55px;
       margin: 0 15px;
     }
   }
@@ -297,8 +301,9 @@
       height: 30px;
       padding: 8px;
       @include SubmitBtn;
+      margin-left: 20px;
     }
-    .btn + .btn {
+    a + .btn {
       margin-left: 20px;
     }
   }

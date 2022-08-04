@@ -55,7 +55,6 @@ export default {
 
     //초기 캐릭터 색 : store에서 받아온 초기 색
     let parts = reactive(store.state.root.user.characterColors);
-    console.log("처음", parts);
 
     const updateColor = (eventData) => {
       change.color = eventData.colors.hex.slice(0, 7);

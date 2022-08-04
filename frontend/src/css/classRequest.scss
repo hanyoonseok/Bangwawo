@@ -126,6 +126,10 @@
       text-overflow: ellipsis;
       flex-shrink: 0;
     }
+    .content-title {
+      font-size: 20px;
+      font-family: $appleB;
+    }
     .content-writer {
       font-size: 16px;
       color: #3e3e3e;
@@ -141,7 +145,7 @@
       justify-content: flex-end;
       margin-top: 14px;
       .status-btn {
-        width: 66px;
+        width: 70px;
         &.no {
           @include StatusBtn(false);
         }
@@ -172,6 +176,7 @@
         @include flexBetween;
       }
       .yes {
+        cursor: pointer;
         display: flex;
         align-items: center;
         width: 100%;
@@ -179,6 +184,10 @@
         height: 100px;
         border-radius: 20px;
         padding: 10px;
+        transition: all 200ms ease;
+        &:hover {
+          transform: scale(1.02);
+        }
         img {
           width: 180px;
           height: 80px;
@@ -187,11 +196,13 @@
           @include flexColumn;
         }
         .link-title {
+          cursor: pointer;
           font-family: $SCore;
           font-size: 16px;
           color: #3e3e3e;
         }
         .link-description {
+          cursor: pointer;
           font-size: 16px;
           font-family: $appleM;
           color: #a9a9a9;
@@ -217,7 +228,7 @@
           background-color: darken(#f1f1f1, 10%);
         }
       }
-      .end-btn + .end-btn {
+      .end-btn + a {
         margin-left: 20px;
       }
       .notice-img {

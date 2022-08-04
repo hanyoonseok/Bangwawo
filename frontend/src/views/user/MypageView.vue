@@ -25,10 +25,11 @@
         ></lecture-area>
       </div>
     </div>
-    <CharacterModal
-      v-if="character"
-      @close-character-modal="closeCharacterModal"
-    />
+    <transition name="slide-up">
+      <CharacterModal
+        v-if="character"
+        @close-character-modal="closeCharacterModal"
+    /></transition>
   </div>
 </template>
 
@@ -240,9 +241,7 @@ export default {
     };
 
     const closeCharacterModal = () => {
-      console.log(character.value);
       character.value = false;
-      console.log(character.value);
     };
     return {
       user,

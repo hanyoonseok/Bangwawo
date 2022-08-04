@@ -34,7 +34,6 @@ export default {
     watch(
       () => props.parts,
       (cur) => {
-        console.log("cur", cur);
         colorChange(cur);
       },
       { deep: true },
