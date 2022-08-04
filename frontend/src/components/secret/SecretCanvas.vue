@@ -1,5 +1,5 @@
 <template>
-  <div @click="walking"></div>
+  <div></div>
 </template>
 
 <script>
@@ -59,19 +59,32 @@ export default {
     // 조명
     // HemisphereLight : 전 방향에서 조명을 비춰줌
     // 첫번째 인자 : 위쪽으로 비추는 빛의 컬러, 두번째 인자 : 아래를 비추는 빛의 컬러
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.61);
-    hemiLight.position.set(50, 50, 0);
-    // Add hemisphere light to scene
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xcbcbcb, 1.06);
+    hemiLight.position.set(50, 50, 50);
     scene.add(hemiLight);
+    // scene.add(hemiLight2);
+    // scene.add(hemiLight3);
 
     // 특정 방향으로 빛 방출
     // 빛 색상, 빛 강도
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.54);
-    dirLight.position.set(1100, 1100, 500);
-    dirLight.castShadow = true; //광원이 그림자 생성
-    dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
+    // const dirLight = new THREE.DirectionalLight(0xffffff, 0.4);
+    // dirLight.position.set(10000, 3000, 0);
+    // dirLight.castShadow = false; //광원이 그림자 생성
+    // dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
+
+    // const dirLight = new THREE.DirectionalLight(0xffffff, 0.1);
+    // dirLight.position.set(0, 1000, 0);
+    // dirLight.castShadow = false; //광원이 그림자 생성
+    // dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
+
+    // const dirLight2 = new THREE.DirectionalLight(0xffffff, 0.4);
+    // dirLight2.position.set(0, 0, 1000);
+    // dirLight2.castShadow = false; //광원이 그림자 생성
+    // dirLight2.shadow.mapSize = new THREE.Vector2(1024, 1024);
     // Add directional Light to scene
-    scene.add(dirLight);
+
+    // scene.add(dirLight);
+    // scene.add(dirLight2);
 
     // Add controls
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -97,7 +110,6 @@ export default {
       MODEL_PATH,
       function (gltf) {
         theModel = gltf.scene;
-
         theModel.traverse((o) => {
           if (o.isMesh) {
             o.castShadow = true;
@@ -127,11 +139,7 @@ export default {
         scene.add(theModel);
         mixer = new THREE.AnimationMixer(theModel);
         clips = gltf.animations;
-        let clip = THREE.AnimationClip.findByName(clips, "talking");
-        let action = mixer.clipAction(clip);
-        // action.setLoop(THREE.LoopOnce);
-        // action.stop();
-        action.play();
+        standing();
       },
       undefined,
       function (error) {
@@ -139,11 +147,9 @@ export default {
       },
     );
 
-    const walking = () => {
+    const standing = () => {
       let clip = THREE.AnimationClip.findByName(clips, "stand");
       let action = mixer.clipAction(clip);
-      // action.setLoop(THREE.LoopOnce);
-      // action.stop();
       action.play();
     };
     const clock = new THREE.Clock();
@@ -202,7 +208,7 @@ export default {
       INITIAL_MAP,
       animate,
       initColor,
-      walking,
+      standing,
     };
   },
 };

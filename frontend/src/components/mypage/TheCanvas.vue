@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import { useStore } from "vuex";
 import * as THREE from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { onMounted, toRaw } from "vue";
 import { watch } from "vue";
@@ -15,8 +15,6 @@ export default {
   props: ["parts"],
   setup(props) {
     // Initial material
-    const store = useStore();
-    const theModel = store.state.root.user.model;
     const INITIAL_MTL = new THREE.MeshPhongMaterial({
       color: 0xffcb57,
       shininess: 10,
@@ -68,19 +66,24 @@ export default {
     // 조명
     // HemisphereLight : 전 방향에서 조명을 비춰줌
     // 첫번째 인자 : 위쪽으로 비추는 빛의 컬러, 두번째 인자 : 아래를 비추는 빛의 컬러
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.54);
-    hemiLight.position.set(50, 50, 0);
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xcbcbcb, 1.1);
+    hemiLight.position.set(50, 50, 50);
+    // const hemiLight2 = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.6);
+    // hemiLight.position.set(100, 100, 100);
+    // const hemiLight3 = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.2);
+    // hemiLight.position.set(150, 150, 150);
+
     // Add hemisphere light to scene
-    scene.add(toRaw(hemiLight));
+    scene.add(hemiLight);
 
     // 특정 방향으로 빛 방출
     // 빛 색상, 빛 강도
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.54);
-    dirLight.position.set(1100, 1100, 500);
-    dirLight.castShadow = true; //광원이 그림자 생성
-    dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
-    // Add directional Light to scene
-    scene.add(toRaw(dirLight));
+    // const dirLight = new THREE.DirectionalLight(0xffffff, 0.55);
+    // dirLight.position.set(10000, 3000, 0);
+    // dirLight.castShadow = false; //광원이 그림자 생성
+    // dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
+    // // Add directional Light to scene
+    // scene.add(toRaw(dirLight));
 
     // Add controls
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -93,25 +96,81 @@ export default {
     controls.autoRotate = false; // Toggle this if you'd like the chair to automatically rotate
     controls.autoRotateSpeed = 0.2; // 30
 
-    const init = () => {
-      // Set initial textures
-      for (let object of INITIAL_MAP) {
-        let init_mtl = null;
-        props.parts.forEach((item) => {
-          if (item.id === object.childID) {
-            init_mtl = new THREE.MeshPhongMaterial({
-              color: parseInt("0x" + item.color),
-              shininess: 10,
-            });
+    const MODEL_PATH = "./duckduck.glb";
+
+    let mixer = null;
+    let clips = null;
+
+    const loader = new GLTFLoader();
+    // Init the object loader
+    let theModel = null;
+
+    loader.load(
+      MODEL_PATH,
+      function (gltf) {
+        theModel = gltf.scene;
+
+        theModel.traverse((o) => {
+          if (o.isMesh) {
+            o.castShadow = true;
+            o.receiveShadow = true;
           }
         });
-        initColor(theModel, object.childID, init_mtl);
-      }
 
-      scene.add(toRaw(theModel));
+        // Set the models initial scale
+        theModel.scale.set(5, 5, 5);
+
+        // Add the model to the scene
+        theModel.position.y = -10;
+
+        // Set initial textures
+        for (let object of INITIAL_MAP) {
+          let init_mtl = null;
+          props.parts.forEach((item) => {
+            if (item.id === object.childID) {
+              init_mtl = new THREE.MeshPhongMaterial({
+                color: parseInt("0x" + item.color),
+                shininess: 10,
+              });
+            }
+          });
+          initColor(theModel, object.childID, init_mtl);
+        }
+        scene.add(theModel);
+        mixer = new THREE.AnimationMixer(theModel);
+        clips = gltf.animations;
+        standing();
+
+        // 가로/세로/앞뒤 모두 1미터 크기의 박스 뼈대 생성
+        // var bone = new THREE.PlaneBufferGeometry(200, 200, 2, 2);
+        // // 최근의 THREE.js 에서는
+        // // 기존의 BoxGeometry 를 대신하여 재사용이 용이한 BoxBufferGeometry를 추천하고 있다.
+        // // 재질의 색깔을 녹색으로 생성
+        // var material = new THREE.MeshBasicMaterial({ color: 0x00000 });
+
+        // // 뼈대와 재질을 섞어 "박스"라는 메쉬오브젝트 생성
+        // var floor = new THREE.Mesh(bone, material);
+
+        // scene.add(floor); // "장면" 에 "박스" 메쉬오브젝트 추가
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      },
+    );
+
+    const standing = () => {
+      let clip = THREE.AnimationClip.findByName(clips, "stand");
+      let action = mixer.clipAction(clip);
+
+      action.play();
     };
+    const clock = new THREE.Clock();
 
     const animate = () => {
+      if (mixer) {
+        mixer.update(clock.getDelta());
+      }
       controls.update();
       renderer.render(toRaw(scene), camera);
       requestAnimationFrame(animate);
@@ -177,7 +236,6 @@ export default {
     };
 
     onMounted(() => {
-      init();
       document.getElementById("canvas").appendChild(renderer.domElement);
       animate();
     });
