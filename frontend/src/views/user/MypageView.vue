@@ -25,7 +25,7 @@
         ></lecture-area>
       </div>
     </div>
-    <transition name="slide-fade">
+    <transition name="slide-up">
       <CharacterModal
         v-if="character"
         @close-character-modal="closeCharacterModal"
