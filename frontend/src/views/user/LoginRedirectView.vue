@@ -11,16 +11,18 @@ export default {
     const route = useRoute();
     const { code } = route.query;
     console.log(code);
-    axios
-      .post(
-        `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${process.env.VUE_APP_KAKAO_RESTAPI_KEY}&redirect_uri=${process.env.VUE_APP_REDIRECT_URL}&code=${code}`,
-      )
-      .then((res) => {
-        console.log(res);
-        axios
-          .get(`${process.env.VUE_APP_API_URL}/users/${res.data.access_token}`)
-          .then((result) => console.log(result));
-      });
+
+    const getLoginInfo = async () => {
+      const response = await axios.get(
+        `${process.env.VUE_APP_API_URL}/api/kakao/${code}`,
+      );
+
+      console.log(response);
+      //로컬스토리지랑 vuex에 저장하고 메인으로 리다이렉트
+      route.push("/class/list");
+    };
+
+    getLoginInfo();
   },
 };
 </script>
