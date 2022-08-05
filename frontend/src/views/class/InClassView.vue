@@ -1,16 +1,14 @@
 <template>
   <section class="background">
-    <HostView
-      v-if="state.isHost"
-      :dataLen="dataLen"
-      :currentStudents="currentStudents"
-      :initCurrentStudents="initCurrentStudents"
-      :prevClick="prevClick"
-      :nextClick="nextClick"
-      @changeDataLen="changeDataLen"
-      :roomInfo="state"
-      :stream-manager="state.publisher"
-    />
+    <!-- <HostView
+        v-if="state.isHost"
+        :dataLen="dataLen"
+        :currentStudents="currentStudents"
+        :initCurrentStudents="initCurrentStudents"
+        :prevClick="prevClick"
+        :nextClick="nextClick"
+        @changeDataLen="changeDataLen"
+      />
     <UserView
       v-else
       :dataLen="dataLen"
@@ -19,7 +17,34 @@
       :prevClick="prevClick"
       :nextClick="nextClick"
       @changeDataLen="changeDataLen"
-    />
+    /> -->
+    <div id="session" v-if="state.session">
+      <div id="session-header">
+        <h1 id="session-title">{{ state.mySessionId }}</h1>
+        <input
+          class="btn btn-large btn-danger"
+          type="button"
+          id="buttonLeaveSession"
+          @click="leaveSession"
+          value="Leave session"
+        />
+      </div>
+      <div id="main-video" class="col-md-6">
+        <user-video :stream-manager="state.mainStreamManager" />
+      </div>
+      <div id="video-container" class="col-md-6">
+        <user-video
+          :stream-manager="state.publisher"
+          @click="updateMainVideoStreamManager(state.publisher)"
+        />
+        <user-video
+          v-for="sub in state.subscribers"
+          :key="sub.stream.connection.connectionId"
+          :stream-manager="sub"
+          @click="updateMainVideoStreamManager(sub)"
+        />
+      </div>
+    </div>
   </section>
 </template>
 
@@ -27,32 +52,44 @@
 import { reactive, ref, onBeforeUnmount } from "vue";
 import axios from "axios";
 import { OpenVidu } from "openvidu-browser";
-import HostView from "@/components/class/HostView.vue";
-import UserView from "@/components/class/UserView.vue";
+// import HostView from "@/components/class/HostView.vue";
+// import UserView from "@/components/class/UserView.vue";
+import UserVideo from "@/components/class/UserVideo";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 export default {
   name: "InClassView",
   components: {
-    HostView,
-    UserView,
+    // HostView,
+    // UserView,
+    UserVideo,
   },
   setup() {
     // const OPENVI00DU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
 
     // 테스트용
-    const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
-    const OPENVIDU_SERVER_SECRET = "MY_SECRET";
+    const OPENVIDU_SERVER_URL = "https://i7b201.p.ssafy.io";
+    const OPENVIDU_SERVER_SECRET = "BANGGWAWO_SECRET";
+    const OV = new OpenVidu();
 
     const state = reactive({
-      OV: undefined,
+      OV: OV,
       session: undefined,
       mainStreamManager: undefined,
-      publisher: undefined,
+      publisher: OV.initPublisher(undefined, {
+        audioSource: undefined, // The source of audio. If undefined default microphone
+        videoSource: undefined, // The source of video. If undefined default webcam
+        publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+        publishVideo: true, // Whether you want to start publishing with your video enabled or not
+        resolution: "600x320", // The resolution of your video
+        frameRate: 30, // The frame rate of your video
+        insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
+        mirror: false, // Whether to mirror your local video or not
+      }),
       subscribers: [],
-      mySessionId: "1",
-      myUserName: "myName",
+      mySessionId: "SessionA",
+      myUserName: "Participant" + Math.floor(Math.random() * 100),
       joinedPlayerNumbers: 0,
 
       isHost: true,
@@ -67,6 +104,7 @@ export default {
 
     // 사용자가 방에 참여하겠다는 버튼 누를때마다 호출
     const joinSession = () => {
+      console.log("join session");
       // Opnevidu 객체 가져오기
       state.OV = new OpenVidu();
       // 초기화
@@ -91,6 +129,8 @@ export default {
         console.warn(exception);
       });
 
+      console.log("sessionid", state.mySessionId);
+      console.log("user name", state.myUserName);
       // 'getToken' method is simulating what your server-side should do.
       // 'token' parameter should be retrieved and returned by your own backend
       // 세션에 연결하려면 서버에 토큰 요청 => 백엔드가 처리해줘야 할 부분, 일단 임시 테스트
@@ -98,6 +138,7 @@ export default {
         state.session
           .connect(token, { clientData: state.myUserName })
           .then(() => {
+            console.log("getToken2222222222");
             // --- Get your own camera stream with the desired properties ---
             let publisher = state.OV.initPublisher(undefined, {
               audioSource: undefined, // The source of audio. If undefined default microphone
@@ -109,8 +150,11 @@ export default {
               insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
               mirror: false, // Whether to mirror your local video or not
             });
+            console.log("p", publisher);
             state.mainStreamManager = publisher;
             state.publisher = publisher;
+            console.log("state.pu", state.publisher);
+
             state.joinedPlayerNumbers++;
             state.session.publish(publisher);
           })
@@ -139,12 +183,14 @@ export default {
     };
 
     const getToken = (mySessionId) => {
+      console.log("getToken");
       return createSession(mySessionId).then((sessionId) =>
         createToken(sessionId),
       );
     };
 
     const createSession = (sessionId) => {
+      console.log("createSession");
       return new Promise((resolve, reject) => {
         axios
           .post(
@@ -159,7 +205,10 @@ export default {
               },
             },
           )
-          .then((response) => response.data)
+          .then((response) => {
+            console.log(response);
+            response.data;
+          })
           .then((data) => resolve(data.id))
           .catch((error) => {
             if (error.response.status === 409) {
@@ -173,7 +222,8 @@ export default {
                   `No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}\n\nClick OK to navigate and accept it. If no certificate warning is shown, then check that your OpenVidu Server is up and running at "${OPENVIDU_SERVER_URL}"`,
                 )
               ) {
-                location.assign(`https://i7b201.p.ssafy.io`);
+                // location.assign(`https://i7b201.p.ssafy.io`);
+                location.assign(`${OPENVIDU_SERVER_URL}/accept-certificate`);
               }
               reject(error.response);
             }
