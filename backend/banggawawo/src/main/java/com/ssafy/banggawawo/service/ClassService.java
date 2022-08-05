@@ -87,6 +87,7 @@ public class ClassService {
         if(classDto.getOpened() != null){
             list = list.stream().filter(classRoom -> classRoom.getOpened() == classDto.getOpened()).collect(Collectors.toList());
         }
+        list = list.stream().sorted((o1, o2) -> (int)(o2.getCId() - o1.getCId())).collect(Collectors.toList());
         return list;
     }
 }
