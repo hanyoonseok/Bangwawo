@@ -19,6 +19,7 @@
           v-for="student in currentStudents"
           :key="student.id"
         >
+          <video autoplay />
           <div class="hover-wrapper">{{ student.name }}</div>
           <div class="user-card"></div>
         </div>
@@ -71,7 +72,7 @@
 </template>
 
 <script>
-import { reactive } from "vue";
+import { reactive, onMounted } from "vue";
 import ParticipantsList from "@/components/class/ParticipantsList.vue";
 import ChatForm from "@/components/class/ChatForm.vue";
 import OXForm from "@/components/class/OXForm.vue";
@@ -85,6 +86,7 @@ export default {
     "initCurrentStudents",
     "prevClick",
     "nextClick",
+    "streamManager",
   ],
   setup(props) {
     const state = reactive({
@@ -115,7 +117,10 @@ export default {
       state.isChatOpen = !state.isChatOpen;
     };
 
-    props.initCurrentStudents();
+    onMounted(() => {
+      props.streamManager.addVideoElement(this.$el);
+    }),
+      props.initCurrentStudents();
     return {
       state,
       toggleParticipants,

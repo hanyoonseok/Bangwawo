@@ -8,6 +8,8 @@
       :prevClick="prevClick"
       :nextClick="nextClick"
       @changeDataLen="changeDataLen"
+      :roomInfo="state"
+      :stream-manager="state.publisher"
     />
     <UserView
       v-else
@@ -28,6 +30,8 @@ import { OpenVidu } from "openvidu-browser";
 import HostView from "@/components/class/HostView.vue";
 import UserView from "@/components/class/UserView.vue";
 
+axios.defaults.headers.post["Content-Type"] = "application/json";
+
 export default {
   name: "InClassView",
   components: {
@@ -35,8 +39,11 @@ export default {
     UserView,
   },
   setup() {
-    const OPENVIDU_SERVER_URL = process.env.VUE_APP_OV_DOMAIN_TEST;
-    const OPENVIDU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
+    // const OPENVI00DU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
+
+    // 테스트용
+    const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
+    const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 
     const state = reactive({
       OV: undefined,
@@ -58,18 +65,19 @@ export default {
   userName : 아이디인데 아마 로그인할대 아이디로 쓸듯?
 */
 
+    // 사용자가 방에 참여하겠다는 버튼 누를때마다 호출
     const joinSession = () => {
-      // --- Get an OpenVidu object ---
+      // Opnevidu 객체 가져오기
       state.OV = new OpenVidu();
-      // --- Init a session ---
+      // 초기화
       state.session = state.OV.initSession();
-      // On every new Stream received...
+      // 새로운 Stream을 구독하고 subscribers배열에 저장
       state.session.on("streamCreated", ({ stream }) => {
         const subscriber = state.session.subscribe(stream);
         state.subscribers.push(subscriber);
         if (subscriber.videos !== []) state.joinedPlayerNumbers++;
       });
-      // On every Stream destroyed...
+      // 사용자가 화상 회의에서 나갔을때 나간 사용자 제거
       state.session.on("streamDestroyed", ({ stream }) => {
         const index = state.subscribers.indexOf(stream.streamManager, 0);
         if (index >= 0) {
@@ -82,8 +90,10 @@ export default {
       state.session.on("exception", ({ exception }) => {
         console.warn(exception);
       });
+
       // 'getToken' method is simulating what your server-side should do.
       // 'token' parameter should be retrieved and returned by your own backend
+      // 세션에 연결하려면 서버에 토큰 요청 => 백엔드가 처리해줘야 할 부분, 일단 임시 테스트
       getToken(state.mySessionId).then((token) => {
         state.session
           .connect(token, { clientData: state.myUserName })
