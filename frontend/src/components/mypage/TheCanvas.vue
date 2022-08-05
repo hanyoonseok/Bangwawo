@@ -72,12 +72,12 @@ export default {
     scene.add(hemiLight);
     // 특정 방향으로 빛 방출
     // 빛 색상, 빛 강도
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.4);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.32);
     dirLight.position.set(10000, 3000, 0);
     // Add directional Light to scene
     dirLight.dispose();
     scene.add(dirLight);
-    const dirLight2 = new THREE.DirectionalLight(0xffffff, 0.4);
+    const dirLight2 = new THREE.DirectionalLight(0xffffff, 0.32);
     dirLight2.position.set(-10000, -3000, 0);
     // Add directional Light to scene
     scene.add(dirLight2);
