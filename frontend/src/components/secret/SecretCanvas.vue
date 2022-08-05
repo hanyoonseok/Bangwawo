@@ -61,13 +61,10 @@ export default {
     // 조명
     // HemisphereLight : 전 방향에서 조명을 비춰줌
     // 첫번째 인자 : 위쪽으로 비추는 빛의 컬러, 두번째 인자 : 아래를 비추는 빛의 컬러
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xabb6c3, 0.75);
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x9199a3, 0.7);
     const amLight = new THREE.AmbientLight(0xf1f7ff); // soft white light
-    amLight.intensity = 0.2;
-    hemiLight.position.set(1, 0.25, 0.25);
-    const pointLight = new THREE.PointLight(0xedf5ff, 0.07, 100);
-    pointLight.position.set(50, 50, 50);
-    scene.add(pointLight);
+    amLight.intensity = 0.35;
+    hemiLight.position.set(1, -2, 1);
     scene.add(hemiLight);
     scene.add(amLight);
     // scene.add(hemiLight2);
@@ -78,10 +75,6 @@ export default {
     const dirLight = new THREE.DirectionalLight(0xfbfbfb, 0.2);
     dirLight.position.set(50, 50, 50);
     dirLight.castShadow = false; //광원이 그림자 생성
-    // const dirLight2 = new THREE.DirectionalLight(0xffffff, 0.1);
-    // dirLight.position.set(1, 0.25, 2);
-    // dirLight.castShadow = false; //광원이 그림자 생성
-    // dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
 
     // const dirLight2 = new THREE.DirectionalLight(0xffffff, 0.1);
     // dirLight2.position.set(0, 0, 1000);
@@ -90,7 +83,7 @@ export default {
     // // Add directional Light to scene
 
     scene.add(dirLight);
-    // scene.add(light);
+    // // scene.add(light);
     // scene.add(dirLight2);
     // scene.add(dirLight2);
     renderer.shadowMap.enabled = true;
@@ -127,7 +120,7 @@ export default {
         });
 
         // Set the models initial scale
-        theModel.scale.set(4.5, 4.5, 4.5);
+        theModel.scale.set(4.3, 4.3, 4.3);
 
         // Add the model to the scene
         theModel.position.y = -9;
