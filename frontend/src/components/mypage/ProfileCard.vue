@@ -1,6 +1,6 @@
 <template>
   <div v-if="user.status === 3" class="parent-profile">
-    <div class="bookmark-area" @click="doActive">
+    <div class="bookmark-area" @click="changeChildTab">
       <!--부모일경우 북마크 추가-->
       <div
         class="children-bookmark"
@@ -14,10 +14,10 @@
     <div class="left-box profile">
       <i
         class="fa-solid fa-ellipsis-vertical profile-ellipse"
-        @click="doOpenModal"
+        @click="toggleModal"
       >
         <ul v-if="isModalOpen">
-          <li>
+          <li @click="toggleModifyModal">
             <i class="fa-solid fa-pen-to-square"></i>
             &nbsp;<span>비밀번호 변경</span>
           </li>
@@ -46,14 +46,15 @@
       </div>
     </div>
   </div>
+
   <!--유저가 봉사자이거나 학생일 경우-->
   <div class="left-box profile" v-else>
     <i
       class="fa-solid fa-ellipsis-vertical profile-ellipse"
-      @click="doOpenModal"
+      @click.stop="toggleModal"
     >
       <ul v-if="isModalOpen">
-        <li>
+        <li @click="toggleModifyModal">
           <i class="fa-solid fa-pen-to-square"></i>
           &nbsp;<span>정보수정</span>
         </li>
@@ -62,8 +63,8 @@
           <i class="fa-solid fa-arrow-right-from-bracket"></i>
           &nbsp;<span>회원탈퇴</span>
         </li>
-      </ul></i
-    >
+      </ul>
+    </i>
     <div class="img-box" @click="openCharacterModal">
       <ProfileCanvas />
       <!-- <img src="@/assets/profile.png" /> -->
@@ -72,18 +73,26 @@
     <div class="person-info">
       <label>이름</label>
       <div class="label-value volunteer-value" v-if="user.status === 2">
-        {{ user.nickname }}
+        {{ user.name }}
       </div>
-      <div class="label-value" v-else>{{ user.nickname }}</div>
+      <div class="label-value" v-else>{{ user.name }}</div>
     </div>
 
     <div class="person-info" v-if="user.status === 2">
       <label>자기소개</label>
-      <div class="label-value introduce">{{ user.description }}</div>
+      <div class="label-value introduce">
+        {{ user.description }}
+      </div>
+      <textarea
+        v-if="isModifyOpen"
+        v-model="curDescription"
+        class="modify-textarea"
+      ></textarea
+      ><i class="fa-solid fa-check" v-if="isModifyOpen"></i>
     </div>
-    <div class="person-info" v-else>
+    <div class="person-info" v-else @submit.prevent="submitModify">
       <label>별명</label>
-      <div class="label-value">애기화연</div>
+      <div class="label-value">{{ user.nickname }}</div>
     </div>
   </div>
 </template>
@@ -91,17 +100,17 @@
 <script>
 import { reactive, onMounted } from "vue";
 import ProfileCanvas from "@/components/mypage/ProfileCanvas.vue";
-
 import { ref } from "vue";
 export default {
-  props: ["user"],
+  props: ["user", "toggleModifyModal"],
   emits: ["open-character-modal"],
   components: { ProfileCanvas },
   setup(props, { emit }) {
     let bookmark;
-
     let isModalOpen = ref(false);
-    const doOpenModal = () => {
+    let isModifyOpen = ref(false);
+
+    const toggleModal = () => {
       isModalOpen.value = !isModalOpen.value;
     };
     const state = reactive({
@@ -113,7 +122,7 @@ export default {
         bookmark[0].parentNode.classList.add("active");
       }
     });
-    const doActive = (e) => {
+    const changeChildTab = (e) => {
       const parentBox = e.target.parentNode;
       if (!parentBox.classList.contains("active")) {
         parentBox.classList.add("active");
@@ -138,13 +147,15 @@ export default {
     const openCharacterModal = () => {
       emit("open-character-modal");
     };
+
     return {
-      doActive,
-      doOpenModal,
+      changeChildTab,
+      toggleModal,
       isModalOpen,
       bookmark,
       state,
       openCharacterModal,
+      isModifyOpen,
     };
   },
 };
