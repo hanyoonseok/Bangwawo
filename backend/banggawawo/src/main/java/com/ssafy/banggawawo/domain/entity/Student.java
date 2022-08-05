@@ -25,7 +25,7 @@ public class Student {
     private List<SecritChat> secritChats = new ArrayList<SecritChat>();   //비밀친구 대화 리스트
 
     @OneToMany(mappedBy = "student")
-    private List<Like> likes = new ArrayList<Like>();   //좋아요 리스트
+    private List<Likes> likes = new ArrayList<Likes>();   //좋아요 리스트
 
     private String token;       //카카오 토큰
     private int ageRange;        //연령대
