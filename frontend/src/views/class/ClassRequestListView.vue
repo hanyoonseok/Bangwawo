@@ -600,21 +600,28 @@ export default {
           ? parseInt(currentPage, 10) + parseInt(1, 10)
           : null;
 
-      let flag = false; // 현재 묶여진 페이지안에 totalpage수가 포함되어 있는지 확인하기 위한 변수
       //5개씩 묶기
       let startIndex = (Math.ceil(currentPage / block) - 1) * block + 1;
       let endIndex =
         startIndex + block > totalPage ? totalPage : startIndex + block - 1;
       let list = [];
       for (let index = startIndex; index <= endIndex; index++) {
-        if (index === totalPage) {
-          flag = true;
-        }
         list.push(index);
       }
 
-      let startPage = currentPage > 5 ? 1 : null;
-      totalPage = flag ? null : totalPage;
+      let startPage = 1;
+      // console.log(
+      //   "first",
+      //   first,
+      //   "end",
+      //   end,
+      //   "currentPage",
+      //   currentPage,
+      //   "totalPage",
+      //   totalPage,
+      //   "startPage",
+      //   startPage,
+      // );
       return { first, end, list, currentPage, totalPage, startPage };
     };
 
