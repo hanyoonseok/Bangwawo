@@ -55,43 +55,52 @@ export default {
     camera.position.z = -1;
     camera.position.x = 25; // 화면에 보여지는 위치인것같음
     camera.position.y = 5;
+    // const hemiLight = new THREE.HemisphereLight(0xffffff, 0x080820, 1);
+    // scene.add(hemiLight);
 
     // 조명
     // HemisphereLight : 전 방향에서 조명을 비춰줌
     // 첫번째 인자 : 위쪽으로 비추는 빛의 컬러, 두번째 인자 : 아래를 비추는 빛의 컬러
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xcbcbcb, 1.06);
-    hemiLight.position.set(50, 50, 50);
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xabb6c3, 0.75);
+    const amLight = new THREE.AmbientLight(0xf1f7ff); // soft white light
+    amLight.intensity = 0.2;
+    hemiLight.position.set(1, 0.25, 0.25);
+    const pointLight = new THREE.PointLight(0xedf5ff, 0.07, 100);
+    pointLight.position.set(50, 50, 50);
+    scene.add(pointLight);
     scene.add(hemiLight);
+    scene.add(amLight);
     // scene.add(hemiLight2);
     // scene.add(hemiLight3);
 
     // 특정 방향으로 빛 방출
-    // 빛 색상, 빛 강도
-    // const dirLight = new THREE.DirectionalLight(0xffffff, 0.4);
-    // dirLight.position.set(10000, 3000, 0);
+    // // 빛 색상, 빛 강도
+    const dirLight = new THREE.DirectionalLight(0xfbfbfb, 0.2);
+    dirLight.position.set(50, 50, 50);
+    dirLight.castShadow = false; //광원이 그림자 생성
+    // const dirLight2 = new THREE.DirectionalLight(0xffffff, 0.1);
+    // dirLight.position.set(1, 0.25, 2);
     // dirLight.castShadow = false; //광원이 그림자 생성
     // dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
 
-    // const dirLight = new THREE.DirectionalLight(0xffffff, 0.1);
-    // dirLight.position.set(0, 1000, 0);
-    // dirLight.castShadow = false; //광원이 그림자 생성
-    // dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
-
-    // const dirLight2 = new THREE.DirectionalLight(0xffffff, 0.4);
+    // const dirLight2 = new THREE.DirectionalLight(0xffffff, 0.1);
     // dirLight2.position.set(0, 0, 1000);
     // dirLight2.castShadow = false; //광원이 그림자 생성
     // dirLight2.shadow.mapSize = new THREE.Vector2(1024, 1024);
-    // Add directional Light to scene
+    // // Add directional Light to scene
 
-    // scene.add(dirLight);
+    scene.add(dirLight);
+    // scene.add(light);
     // scene.add(dirLight2);
+    // scene.add(dirLight2);
+    renderer.shadowMap.enabled = true;
 
     // Add controls
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.maxPolarAngle = Math.PI / 2;
     controls.minPolarAngle = Math.PI / 3;
     controls.enableDamping = true;
-    controls.enableZoom = false;
+    controls.enableZoom = true;
     controls.enablePan = false;
     controls.dampingFactor = 0.1;
     controls.autoRotate = false; // Toggle this if you'd like the chair to automatically rotate
@@ -148,7 +157,7 @@ export default {
     );
 
     const standing = () => {
-      let clip = THREE.AnimationClip.findByName(clips, "talking");
+      let clip = THREE.AnimationClip.findByName(clips, "stand");
       let action = mixer.clipAction(clip);
       action.play();
     };
