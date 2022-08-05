@@ -48,23 +48,6 @@
         </router-link>
       </div>
     </div>
-    <div class="pagination-wrapper">
-      <div v-if="page.startPage > 1">
-        <i class="fa-solid fa-angles-left"></i>
-      </div>
-      <div v-if="page.startPage > 1">
-        <i class="fa-solid fa-angle-left"></i>
-      </div>
-      <div class="page" v-for="(item, index) in page.pageRange" :key="index">
-        <router-link to="item">&nbsp;</router-link>
-      </div>
-      <div v-if="page.endPage > page.totalPage">
-        <i class="fa-solid fa-angle-right"></i>
-      </div>
-      <div v-if="page.endPage + 2 > page.totalPage">
-        <i class="fa-solid fa-angles-right"></i>
-      </div>
-    </div>
   </div>
 </template>
 

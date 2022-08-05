@@ -5,6 +5,7 @@
       <div class="profile-info">
         <profile-card
           :user="user"
+          :toggleModifyModal="toggleModifyModal"
           @open-character-modal="openCharacterModal"
         ></profile-card>
         <div class="left-box calendar">
@@ -27,9 +28,10 @@
     </div>
     <transition name="slide-up">
       <CharacterModal
-        v-if="character"
+        v-if="isCharacterModalOpen"
         @close-character-modal="closeCharacterModal"
     /></transition>
+    <ModifyModal v-if="isModifyOpen" :user="user" @modifyInfo="modifyInfo" />
   </div>
 </template>
 
@@ -40,6 +42,8 @@ import ProfileCard from "@/components/mypage/ProfileCard.vue";
 import LectureArea from "@/components/mypage/LectureArea.vue";
 import HeaderNav from "@/components/HeaderNav.vue";
 import CharacterModal from "@/components/mypage/CharacterModal.vue";
+import ModifyModal from "@/components/mypage/ModifyModal.vue";
+
 import { ref } from "@vue/reactivity";
 import { reactive, onMounted } from "vue";
 export default {
@@ -49,6 +53,7 @@ export default {
     ProfileCard,
     CharacterModal,
     LectureArea,
+    ModifyModal,
   },
   setup() {
     let navItem;
@@ -56,12 +61,16 @@ export default {
       navItem = document.querySelectorAll(".nav-item");
     });
 
-    const user = {
+    let isModifyOpen = ref(false);
+    const isCharacterModalOpen = ref(false);
+
+    const user = reactive({
       name: "이화연바보",
       nickname: "애기하연",
       description: "자기소개입니다",
-      status: 1,
+      status: 3, //1학생 2봉사자 3부모
       subscribe: 0,
+      password: "abcdefg",
       children: [
         {
           name: "일화연",
@@ -92,8 +101,7 @@ export default {
           subscribe: 0,
         },
       ],
-    };
-    const character = ref(false);
+    });
     const classes = [
       {
         classTeacher: "김오리",
@@ -237,15 +245,28 @@ export default {
     };
 
     const openCharacterModal = () => {
-      character.value = true;
+      isCharacterModalOpen.value = true;
     };
 
     const closeCharacterModal = () => {
-      character.value = false;
+      isCharacterModalOpen.value = false;
     };
+
+    const toggleModifyModal = () => {
+      isModifyOpen.value = !isModifyOpen.value;
+    };
+
+    const modifyInfo = (changeData) => {
+      if (user.status === 1) user.nickname = changeData;
+      else if (user.status === 2) user.description = changeData;
+      else if (user.status === 3) user.password = changeData;
+      console.log(user);
+      isModifyOpen.value = false;
+    };
+
     return {
       user,
-      character,
+      isCharacterModalOpen,
       state,
       navItem,
       classes,
@@ -255,6 +276,9 @@ export default {
       doActive,
       openCharacterModal,
       closeCharacterModal,
+      isModifyOpen,
+      toggleModifyModal,
+      modifyInfo,
     };
   },
 };
