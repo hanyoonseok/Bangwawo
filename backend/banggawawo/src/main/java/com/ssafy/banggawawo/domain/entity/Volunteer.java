@@ -18,20 +18,20 @@ public class Volunteer {
     private List<ClassRoom> classRooms = new ArrayList<ClassRoom>();
 
     private String token;     // 카카오 토큰
-    private String name;      // 이름
-    private int birth;        // 출생년도
+    private String nickname;      // 별명
+    private int ageRange;        // 출생년도
     private String introduce; // 자기소개
 
     @Embedded
     private Character character;//개인 3d캐릭터에대한 정보
 
     @Builder
-    public Volunteer(Long vId, String token, String name,
-                     int birth, String introduce, Character character){
+    public Volunteer(Long vId, String token, String nickname,
+                     int ageRange, String introduce, Character character){
         this.vId = vId;
+        this.nickname = nickname;
         this.token = token;
-        this.name = name;
-        this.birth = birth;
+        this.ageRange = ageRange;
         this.introduce = introduce;
         this.character = character;
     }

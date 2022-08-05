@@ -8,7 +8,6 @@ import com.ssafy.banggawawo.service.StudentService;
 import com.ssafy.banggawawo.service.VolunteerService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 

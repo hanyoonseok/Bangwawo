@@ -28,8 +28,7 @@ public class Student {
     private List<Like> likes = new ArrayList<Like>();   //좋아요 리스트
 
     private String token;       //카카오 토큰
-    private String name;      //이름
-    private int birth;        //출생년도
+    private int ageRange;        //연령대
     private String nickname;    //별명
     private String pemail;   //부모이메일
     private String ppw;       //부모 비밀번호
@@ -38,11 +37,10 @@ public class Student {
     private Character character;//개인 3d캐릭터에 대한 정보
 
     @Builder
-        public Student(String token, String name, int birth,
+        public Student(String token, int ageRange,
                        String nickname, String pemail, String ppw, Character character){
         this.token = token;
-        this.name = name;
-        this.birth = birth;
+        this.ageRange = ageRange;
         this.nickname = nickname;
         this.pemail = pemail;
         this.ppw = ppw;

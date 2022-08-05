@@ -10,8 +10,7 @@ public class StudentDto {
     @ApiModelProperty(example = "12345")
     private Long sId;           //학생 아이디
     private String token;      //카카오 토큰
-    private String name;       //이름
-    private int birth;         //출생년도
+    private int ageRange;         //연령대
     private String nickname;   //별명
     private String pemail;     //부모이메일
     private String ppw;        //부모 비밀번호

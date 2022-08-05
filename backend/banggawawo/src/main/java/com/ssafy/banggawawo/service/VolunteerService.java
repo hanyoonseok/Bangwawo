@@ -33,8 +33,8 @@ public class VolunteerService {
     public Volunteer save(VolunteerDto volunteerDto) {
         Volunteer volunteer = Volunteer.builder()
                 .token(volunteerDto.getToken())
-                .name(volunteerDto.getName())
-                .birth(volunteerDto.getBirth())
+                .nickname(volunteerDto.getNickname())
+                .ageRange(volunteerDto.getAgeRange())
                 .introduce(volunteerDto.getIntroduce())
                 .character(volunteerDto.getCharacter()).build();
         return volunteerRepository.save(volunteer);

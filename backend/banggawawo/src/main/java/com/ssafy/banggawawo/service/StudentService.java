@@ -33,8 +33,7 @@ public class StudentService {
     public Student save(StudentDto studentDto){
         Student student = Student.builder()
                                     .token(studentDto.getToken())
-                                    .name(studentDto.getName())
-                                    .birth(studentDto.getBirth())
+                                    .ageRange(studentDto.getAgeRange())
                                     .nickname(studentDto.getNickname())
                                     .pemail(studentDto.getPemail())
                                     .ppw(studentDto.getPpw())
