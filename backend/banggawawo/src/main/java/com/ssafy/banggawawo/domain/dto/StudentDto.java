@@ -9,7 +9,7 @@ import lombok.Setter;
 public class StudentDto {
     @ApiModelProperty(example = "12345")
     private Long sId;           //학생 아이디
-    private String token;      //카카오 토큰
+    private String token;      //카카오 회원번호
     private int ageRange;         //연령대
     private String nickname;   //별명
     private String pemail;     //부모이메일

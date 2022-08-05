@@ -22,33 +22,8 @@ public class UserController {
     private final StudentService studentService;
     private final VolunteerService volunteerService;
 
-    // 카카오 토큰으로 유저 확인
-    @GetMapping("/{token}")
-    @ApiOperation(value="유저 확인", notes="카카오 토큰을 입력받아 존재하는 회원정보인지 확인 후, 존재할 경우 회원정보 불러옴")
-    public Map<String, Object> findByToken(@PathVariable("token") String token){
-        Map<String, Object> response = new HashMap<>();
-
-        Optional<Student> oStudent = studentService.findByToken(token);
-        if(oStudent.isPresent()){
-            response.put("result", "SUCCESS");
-            response.put("type", "STUDENT");
-            response.put("user", oStudent.get());
-        }else{
-            Optional<Volunteer> oVolunteer = volunteerService.findByToken(token);
-            if(oVolunteer.isPresent()){
-                response.put("result", "SUCCESS");
-                response.put("type", "VOLUNTEER");
-                response.put("user", oVolunteer.get());
-            }else{
-                response.put("result", "FAIL");
-                response.put("reason", "존재하지 않는 토큰");
-            }
-        }
-        return response;
-    }
-
     // Student ///////////////////////////////////////////////////////////////////////////////////////////////
-    // 학생 정보 조회
+    @ApiOperation(value="학생 정보 조회", notes="학생 id(sid)를 받아 학생 정보를 제공한다.")
     @GetMapping("/student/{id}")
     public Map<String, Object> findByStudentId(@PathVariable("sId") Long id){
         Map<String, Object> response = new HashMap<>();
@@ -65,15 +40,25 @@ public class UserController {
     }
 
 
-    // 학생 회원가입
+    @ApiOperation(value="학생 화원가입", notes="학생 정보를 입력받아 회원가입을 진행한다.")
     @PostMapping("/student")
     public Map<String, Object> saveStudent(@RequestBody StudentDto value){
         Map<String, Object> response = new HashMap<>();
 
         // 부모 이메일로 임시 비밀번호 발급 후 전송
-        //
+        String parentsPassword = "";
+        for (int i = 0; i < 8; i++) {
+            int rndVal = (int) (Math.random() * 62);
+            if (rndVal < 10) {
+                parentsPassword += rndVal;
+            } else if (rndVal > 35) {
+                parentsPassword += (char) (rndVal + 61);
+            } else {
+                parentsPassword += (char) (rndVal + 55);
+            }
+        }
 
-        // value.setS_ppw(발급한 임시 비밀번호);
+        value.setPpw(parentsPassword);
         Student student = studentService.save(value);
 
         if(student != null){
@@ -86,7 +71,7 @@ public class UserController {
         return response;
     }
 
-    // 학생 정보 수정
+    @ApiOperation(value="학생 정보 수정", notes="학생 정보를 입력받아 그대로 내용 수정")
     @PutMapping("/student")
     public Map<String, Object> updateStudent(@RequestBody StudentDto value){
         Map<String, Object> response = new HashMap<>();
@@ -103,7 +88,7 @@ public class UserController {
         return response;
     }
 
-    // 학생 정보 삭제
+    @ApiOperation(value="학생 정보 삭제", notes="해당 학생 정보를 받아 삭제한다")
     @DeleteMapping("/student")
     public Map<String, Object> deleteStudent(@ RequestBody StudentDto value){
         Map<String, Object> response = new HashMap<>();
@@ -122,6 +107,7 @@ public class UserController {
 
     // Volunteer ///////////////////////////////////////////////////////////////////////////////////////////////
     // 봉사자 정보 조회
+    @ApiOperation(value="유저 확인", notes="")
     @GetMapping("/volunteer/{id}")
     public Map<String, Object> findByVolunteerId(@PathVariable("vId") Long id){
         Map<String, Object> response = new HashMap<>();

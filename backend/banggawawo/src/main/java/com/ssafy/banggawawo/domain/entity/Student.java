@@ -27,7 +27,7 @@ public class Student {
     @OneToMany(mappedBy = "student")
     private List<Likes> likes = new ArrayList<Likes>();   //좋아요 리스트
 
-    private String token;       //카카오 토큰
+    private String token;       //카카오 회원번호
     private int ageRange;        //연령대
     private String nickname;    //별명
     private String pemail;   //부모이메일
