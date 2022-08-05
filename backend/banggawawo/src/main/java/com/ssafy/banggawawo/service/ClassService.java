@@ -34,7 +34,7 @@ public class ClassService {
     private ClassRoom build(ClassDto classDto){
         ClassRoom classRoom = ClassRoom.builder()
                 .volunteer(classDto.getVId())    //여기 유저(봉사자) 자리
-                .request(classDto.getRId())
+//                .request(classDto.getRId())
                 .thumbnail(classDto.getThumbnail())
                 .etime(classDto.getEtime())
                 .stime(classDto.getStime())

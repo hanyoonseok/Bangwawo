@@ -1,11 +1,10 @@
 package com.ssafy.banggawawo.domain.entity;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 
 @Entity
@@ -15,17 +14,44 @@ import javax.persistence.*;
 public class Enrol {
     @Id
     @GeneratedValue
-    private Long e_id;            //신청 아이디
+    private Long eId;            //신청 아이디
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="s_id")
+    @JoinColumn(name="sId")
     private Student student;      //학생
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="c_id")
+    @JoinColumn(name="cId")
     private ClassRoom class_room;            //수업
 
-    private String e_feedback;    //봉사자 피드백
-    private String e_emotion;     //감정 피드백(아직 자료형 미정)
-    private String e_recording;   //녹화영상
+    private String feedback;    //봉사자 피드백
+    private String emotion;     //감정 피드백(아직 자료형 미정)
+    private String recording;   //녹화영상
+
+    @Builder
+    public Enrol(Long eId,
+                 Student student,
+                 ClassRoom class_room,
+                 String feedback, String emotion,
+                 String recording) {
+        this.eId = eId;
+        this.student = student;
+        this.class_room = class_room;
+        this.feedback = feedback;
+        this.emotion = emotion;
+        this.recording = recording;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Enrol enrol = (Enrol) o;
+        return eId.equals(enrol.eId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(eId);
+    }
 }

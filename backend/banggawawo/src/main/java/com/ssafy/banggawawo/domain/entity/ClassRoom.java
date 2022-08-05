@@ -24,8 +24,9 @@ public class ClassRoom {
     @JoinColumn(name="vId")
     private Volunteer volunteer;//봉사자
 
-    @OneToMany
-    private List<Enrol> enrols = new ArrayList<Enrol>(); //수강신청목록
+    //클래스 룸에서 수강신청 목록이 필요한가? 수강신청에서는 클래스룸 필요함!
+    //@OneToMany
+    //private List<Enrol> enrols = new ArrayList<Enrol>(); //수강신청목록
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rId")
@@ -41,13 +42,15 @@ public class ClassRoom {
 
     private Boolean state;       //상태  (대기, 끝)
 
-    //classroom 생성시 필요f한 builder
+    //classroom 생성시 필요한 builder
     @Builder
-
-    public ClassRoom(Long cId, Volunteer volunteer, List<Enrol> enrols, Request request, String title, String introduce, Integer maxcnt, Date stime, Date etime, Boolean opened, String thumbnail, Boolean state) {
+    public ClassRoom(Long cId,
+                     Volunteer volunteer,
+                     //List<Enrol> enrols,
+                     Request request, String title, String introduce, Integer maxcnt, Date stime, Date etime, Boolean opened, String thumbnail, Boolean state) {
         this.cId = cId;
         this.volunteer = volunteer;
-        this.enrols = enrols;
+        //this.enrols = enrols;
         this.request = request;
         this.title = title;
         this.introduce = introduce;
