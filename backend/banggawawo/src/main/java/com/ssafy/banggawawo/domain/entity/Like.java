@@ -1,12 +1,7 @@
 package com.ssafy.banggawawo.domain.entity;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import lombok.*;
 import javax.persistence.*;
-
 
 @Entity
 @Getter
@@ -22,10 +17,15 @@ public class Like {
     @JoinColumn(name="s_id")
     private Student student;    //학생 아이디
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="r_id")
-    private Request request;    //요청 아이디
+    private Long rId;           //요청 아이디
+    private Boolean lOpened;   // 수업 개설 여부
+    private Boolean lRead;     // 알림 읽음 여부
 
-    private boolean l_opened;   // 수업 개설 여부
-    private boolean l_read;     // 알림 읽음 여부
+    @Builder
+    public Like(Student student,Long rId,boolean lOpened,boolean lRead) {
+        this.student = student;
+        this.rId = rId;
+        this.lOpened = lOpened;
+        this.lRead = lRead;
+    }
 }
