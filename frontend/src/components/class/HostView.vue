@@ -14,14 +14,15 @@
         <div class="idx-btn-wrapper prev" @click="prevClick">
           <button class="idx-btn prev"></button>
         </div>
-        <div
+        <!-- <div
           class="user-card-wrapper"
           v-for="student in currentStudents"
           :key="student.id"
         >
           <div class="hover-wrapper">{{ student.name }}</div>
+
           <div class="user-card"></div>
-        </div>
+        </div> -->
       </article>
 
       <article class="top-right" v-if="state.isTopOpen || state.isChatOpen">
@@ -85,6 +86,7 @@ export default {
     "initCurrentStudents",
     "prevClick",
     "nextClick",
+    "updateMainVideoStreamManager",
   ],
   setup(props) {
     const state = reactive({
@@ -127,6 +129,7 @@ export default {
     ParticipantsList,
     ChatForm,
     OXForm,
+    // UserVideo,
     OXResult,
   },
 };

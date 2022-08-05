@@ -1,6 +1,6 @@
 <template>
   <section class="background">
-    <HostView
+    <!-- <HostView
       v-if="state.isHost"
       :dataLen="dataLen"
       :currentStudents="currentStudents"
@@ -8,6 +8,7 @@
       :prevClick="prevClick"
       :nextClick="nextClick"
       @changeDataLen="changeDataLen"
+      :subscribers="subscribers"
     />
     <UserView
       v-else
@@ -17,7 +18,34 @@
       :prevClick="prevClick"
       :nextClick="nextClick"
       @changeDataLen="changeDataLen"
-    />
+    /> -->
+    <button @click="joinSession()" v-if="!state.session">세션입장</button>
+    <div id="session" v-if="state.session">
+      <div id="session-header">
+        <h1 id="session-title">{{ state.mySessionId }}</h1>
+        <input
+          class="btn btn-large btn-danger"
+          type="button"
+          id="buttonLeaveSession"
+          value="Leave session"
+        />
+      </div>
+      <div id="main-video" class="col-md-6">
+        <user-video :stream-manager="state.mainStreamManager" />
+      </div>
+      <div id="video-container" class="col-md-6">
+        <user-video
+          :stream-manager="publisher"
+          @click="updateMainVideoStreamManager(state.publisher)"
+        />
+        <user-video
+          v-for="sub in state.subscribers"
+          :key="sub.stream.connection.connectionId"
+          :stream-manager="state.sub"
+          @click="updateMainVideoStreamManager(state.sub)"
+        />
+      </div>
+    </div>
   </section>
 </template>
 
@@ -25,24 +53,27 @@
 import { reactive, ref, onBeforeUnmount } from "vue";
 import axios from "axios";
 import { OpenVidu } from "openvidu-browser";
-import HostView from "@/components/class/HostView.vue";
-import UserView from "@/components/class/UserView.vue";
+// import HostView from "@/components/class/HostView.vue";
+// import UserView from "@/components/class/UserView.vue";
+import UserVideo from "@/views/class/components/UserVideo";
 
 export default {
   name: "InClassView",
   components: {
-    HostView,
-    UserView,
+    // HostView,
+    // UserView,
+    UserVideo,
   },
   setup() {
-    const OPENVIDU_SERVER_URL = process.env.VUE_APP_OV_DOMAIN_TEST;
-    const OPENVIDU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
+    axios.defaults.headers.post["Content-Type"] = "application/json";
+    const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
+    const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 
     const state = reactive({
       OV: undefined,
       session: undefined,
       mainStreamManager: undefined,
-      publisher: undefined,
+      publishers: undefined,
       subscribers: [],
       mySessionId: "1",
       myUserName: "myName",
@@ -51,13 +82,12 @@ export default {
       isHost: true,
     });
 
-    /* 
+    /*
   닉네임:사용자
   sessionName : 방 이름?
   token : 토큰 들어오는데 이건 입장 할때마다 바뀌는 값
   userName : 아이디인데 아마 로그인할대 아이디로 쓸듯?
 */
-
     const joinSession = () => {
       // --- Get an OpenVidu object ---
       state.OV = new OpenVidu();
@@ -78,6 +108,7 @@ export default {
           state.subscribers.splice(index, 1);
         }
       });
+      console.log(state.session);
       // On every asynchronous exception...
       state.session.on("exception", ({ exception }) => {
         console.warn(exception);
@@ -203,7 +234,6 @@ export default {
       });
     };
 
-    joinSession();
     onBeforeUnmount(() => {
       state.joinedPlayerNumbers = 0;
       leaveSession();
@@ -328,6 +358,7 @@ export default {
       prevClick,
       nextClick,
       changeDataLen,
+      joinSession,
     };
   },
 };

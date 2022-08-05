@@ -68,7 +68,7 @@ export default {
       name: "이화연바보",
       nickname: "애기하연",
       description: "자기소개입니다",
-      status: 3, //1학생 2봉사자 3부모
+      status: 1, //1학생 2봉사자 3부모
       subscribe: 0,
       password: "abcdefg",
       children: [
