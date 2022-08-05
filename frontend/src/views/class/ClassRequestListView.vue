@@ -11,7 +11,13 @@
       </button>
     </div>
     <div class="filter">
-      <input type="checkbox" name="unresolved" id="unresolved" />
+      <input
+        type="checkbox"
+        name="unresolved"
+        id="unresolved"
+        v-model="unresolved"
+        @change="check($event)"
+      />
       <label for="">미해결 요청만 보기</label>
     </div>
     <!-- 봉사자 아닐 경우에만 요청 글 작성 가능 -->
@@ -35,7 +41,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in requests" :key="item.num">
+          <tr v-for="item in pages.listData" :key="item.num">
             <td>{{ item.num }}</td>
             <td>{{ item.writer }}</td>
             <td>
@@ -58,34 +64,25 @@
         </tbody>
       </table>
     </div>
-    <div class="pagination-wrapper">
-      <div v-if="page.startPage > 1">
-        <i class="fa-solid fa-angles-left"></i>
-      </div>
-      <div v-if="page.startPage > 1">
-        <i class="fa-solid fa-angle-left"></i>
-      </div>
-      <div class="page" v-for="(item, index) in page.pageRange" :key="index">
-        <router-link to="item">{{ item }}</router-link>
-      </div>
-      <div v-if="page.endPage < page.totalPage">
-        <i class="fa-solid fa-angle-right"></i>
-      </div>
-      <div v-if="page.endPage + 2 < page.totalPage">
-        <i class="fa-solid fa-angles-right"></i>
-      </div>
-    </div>
+    <PaginationView
+      :pageSetting="
+        pageDataSetting(pages.total, pages.limit, pages.block, pages.page)
+      "
+      @paging="pagingMethod"
+    />
   </div>
 </template>
 
 <script>
 import HeaderNav from "@/components/HeaderNav.vue";
-import { computed, reactive } from "vue";
+import PaginationView from "@/components/class/PaginationView.vue";
+import { onMounted, reactive, ref } from "vue";
 
 export default {
   name: "ClassRequestListView",
   components: {
     HeaderNav,
+    PaginationView,
   },
   setup() {
     const user = {
@@ -93,7 +90,7 @@ export default {
       subscribe: 0,
     };
 
-    const requests = [
+    let requests = reactive([
       {
         num: 1,
         writer: "앵그리윤석",
@@ -154,51 +151,996 @@ export default {
         views: 1,
         want: 1,
       },
-    ];
+      {
+        num: 1,
+        writer: "애기다빈",
+        title:
+          "애기다빈이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기수콩(김)",
+        title:
+          "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: false,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "앵그리윤석",
+        title:
+          "앵그리윤석이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기진호",
+        title:
+          "애기진호는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: false,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
 
-    const page = reactive({
-      startPage: 2, //화면에 보이는 페이지 시작 번호
-      currentPage: 3, // 현재 페이지 번호
-      totalCount: 50, // 총 게시글 수
-      pageRange: computed(() => {
-        let array = [];
-        for (
-          let index = page.currentPage - 2;
-          index <= page.currentPage + 2;
-          index++
-        ) {
-          array.push(index);
-        }
-        return array;
-      }),
-      endPage: 5, // 화면에 보이는 페이지 끝 번호
-      totalPage: computed(() => {
-        return page.totalCount / 6;
-      }), // 총 페이지 수
+      {
+        num: 1,
+        writer: "애기수콩(정)",
+        title:
+          "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기화연",
+        title:
+          "애기화연이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "앵그리윤석",
+        title:
+          "앵그리윤석이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기진호",
+        title:
+          "애기진호는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: false,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기다빈",
+        title:
+          "애기다빈이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기수콩(김)",
+        title:
+          "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: false,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기화연",
+        title:
+          "애기화연이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기수콩(정)",
+        title:
+          "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기수콩(김)",
+        title:
+          "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: false,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기화연",
+        title:
+          "애기화연이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기수콩(정)",
+        title:
+          "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기수콩(김)",
+        title:
+          "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: false,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기화연",
+        title:
+          "애기화연이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기수콩(정)",
+        title:
+          "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기수콩(김)",
+        title:
+          "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: false,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기화연",
+        title:
+          "애기화연이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기수콩(정)",
+        title:
+          "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "앵그리윤석",
+        title:
+          "앵그리윤석이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기진호",
+        title:
+          "애기진호는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: false,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기수콩(김)",
+        title:
+          "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: false,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기화연",
+        title:
+          "애기화연이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기수콩(정)",
+        title:
+          "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기수콩(김)",
+        title:
+          "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: false,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "앵그리윤석",
+        title:
+          "앵그리윤석이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기진호",
+        title:
+          "애기진호는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: false,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기화연",
+        title:
+          "애기화연이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기수콩(정)",
+        title:
+          "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기수콩(김)",
+        title:
+          "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: false,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기화연",
+        title:
+          "애기화연이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기수콩(정)",
+        title:
+          "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기수콩(김)",
+        title:
+          "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: false,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "앵그리윤석",
+        title:
+          "앵그리윤석이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기진호",
+        title:
+          "애기진호는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: false,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기화연",
+        title:
+          "애기화연이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기수콩(정)",
+        title:
+          "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기수콩(김)",
+        title:
+          "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: false,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기화연",
+        title:
+          "애기화연이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+      {
+        num: 1,
+        writer: "애기수콩(정)",
+        title:
+          "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+        solved: true,
+        time: "14:55",
+        views: 1,
+        want: 1,
+      },
+    ]);
+
+    const pages = reactive({
+      listData: [], // 6개의 페이지가 담겨질 것
+      page: 1, // 현재 어느 페이지에 있는지
+      limit: 6, // 한 페이지당 나타날 게시글 개수
+      block: 5, // 한번에 보여질 페이지 수
+      total: requests.length, // 총 게시글 수
     });
 
-    // const pageRange = computed(() => {
-    //   let array = [];
-    //   for (
-    //     let index = page.currentPage - 2;
-    //     index <= page.currentPage + 2;
-    //     index++
-    //   ) {
-    //     array.push(index);
-    //   }
-    //   return array;
-    // });
+    const pagingMethod = (p) => {
+      pages.listData = requests.slice((p - 1) * pages.limit, p * pages.limit); //6개 잘라서 넣기
+      pages.page = p;
+      pageDataSetting(pages.total, pages.limit, pages.block, p);
+    };
 
-    // const totalPage = computed(() => {
-    //   return page.totalCount / 5;
-    // });
+    const pageDataSetting = (total, limit, block, page) => {
+      let totalPage = Math.ceil(total / limit); //  총 몇개의 페이지가 나와야 하는지
+      let currentPage = page; //현재 페이지
+      //이전 버튼
+      const first =
+        currentPage > 1 ? parseInt(currentPage, 10) - parseInt(1, 10) : null;
+      // 다음버튼
+      const end =
+        totalPage !== currentPage
+          ? parseInt(currentPage, 10) + parseInt(1, 10)
+          : null;
+
+      //5개씩 묶기
+      let startIndex = (Math.ceil(currentPage / block) - 1) * block + 1;
+      let endIndex =
+        startIndex + block > totalPage ? totalPage : startIndex + block - 1;
+      let list = [];
+      for (let index = startIndex; index <= endIndex; index++) {
+        list.push(index);
+      }
+
+      let startPage = 1;
+      // console.log(
+      //   "first",
+      //   first,
+      //   "end",
+      //   end,
+      //   "currentPage",
+      //   currentPage,
+      //   "totalPage",
+      //   totalPage,
+      //   "startPage",
+      //   startPage,
+      // );
+      return { first, end, list, currentPage, totalPage, startPage };
+    };
+
+    const unresolved = ref(false);
+
+    const check = (e) => {
+      if (e.target.checked === true) {
+        let arr = [];
+        for (const item of requests) {
+          if (item.solved === false) {
+            // 미해결만 배열에 담기
+            arr.push(item);
+          }
+        }
+        requests = arr;
+        pages.total = requests.length;
+        pagingMethod(pages.page);
+      } else {
+        console.log("false");
+        // 나중에 다시 api에서 데이터 불러올것 지금 임시로 넣어놈
+        requests = [
+          {
+            num: 1,
+            writer: "앵그리윤석",
+            title:
+              "앵그리윤석이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기진호",
+            title:
+              "애기진호는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: false,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기다빈",
+            title:
+              "애기다빈이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기수콩(김)",
+            title:
+              "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: false,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기화연",
+            title:
+              "애기화연이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기수콩(정)",
+            title:
+              "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기다빈",
+            title:
+              "애기다빈이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기수콩(김)",
+            title:
+              "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: false,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "앵그리윤석",
+            title:
+              "앵그리윤석이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기진호",
+            title:
+              "애기진호는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: false,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+
+          {
+            num: 1,
+            writer: "애기수콩(정)",
+            title:
+              "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기화연",
+            title:
+              "애기화연이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "앵그리윤석",
+            title:
+              "앵그리윤석이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기진호",
+            title:
+              "애기진호는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: false,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기다빈",
+            title:
+              "애기다빈이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기수콩(김)",
+            title:
+              "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: false,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기화연",
+            title:
+              "애기화연이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기수콩(정)",
+            title:
+              "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기수콩(김)",
+            title:
+              "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: false,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기화연",
+            title:
+              "애기화연이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기수콩(정)",
+            title:
+              "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기수콩(김)",
+            title:
+              "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: false,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기화연",
+            title:
+              "애기화연이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기수콩(정)",
+            title:
+              "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기수콩(김)",
+            title:
+              "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: false,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기화연",
+            title:
+              "애기화연이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기수콩(정)",
+            title:
+              "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "앵그리윤석",
+            title:
+              "앵그리윤석이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기진호",
+            title:
+              "애기진호는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: false,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기수콩(김)",
+            title:
+              "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: false,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기화연",
+            title:
+              "애기화연이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기수콩(정)",
+            title:
+              "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기수콩(김)",
+            title:
+              "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: false,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "앵그리윤석",
+            title:
+              "앵그리윤석이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기진호",
+            title:
+              "애기진호는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: false,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기화연",
+            title:
+              "애기화연이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기수콩(정)",
+            title:
+              "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기수콩(김)",
+            title:
+              "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: false,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기화연",
+            title:
+              "애기화연이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기수콩(정)",
+            title:
+              "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기수콩(김)",
+            title:
+              "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: false,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "앵그리윤석",
+            title:
+              "앵그리윤석이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기진호",
+            title:
+              "애기진호는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: false,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기화연",
+            title:
+              "애기화연이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기수콩(정)",
+            title:
+              "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기수콩(김)",
+            title:
+              "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: false,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기화연",
+            title:
+              "애기화연이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+          {
+            num: 1,
+            writer: "애기수콩(정)",
+            title:
+              "애기수콩이는 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다 이러이러한 수업을 듣고 싶슴다",
+            solved: true,
+            time: "14:55",
+            views: 1,
+            want: 1,
+          },
+        ];
+        pages.total = requests.length;
+        pagingMethod(pages.page);
+      }
+    };
+    onMounted(() => {
+      pagingMethod(pages.page);
+    });
 
     return {
       user,
       requests,
-      page,
-      // pageRange,
-      // totalPage,
+      pages,
+      unresolved,
+      pagingMethod,
+      pageDataSetting,
+      check,
     };
   },
 };
