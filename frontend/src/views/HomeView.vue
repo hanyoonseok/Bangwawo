@@ -157,6 +157,9 @@
         <div class="request-img"><img src="@/assets/request-img.png" /></div>
       </div>
     </section>
+    <router-link :to="{ name: 'login' }" class="fixed-btn"
+      >지금 시작하기</router-link
+    >
   </div>
 </template>
 
