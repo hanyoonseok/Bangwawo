@@ -97,7 +97,7 @@ export default {
     controls.autoRotate = false; // Toggle this if you'd like the chair to automatically rotate
     controls.autoRotateSpeed = 0.2; // 30
 
-    const MODEL_PATH = "./duckduck.glb";
+    const MODEL_PATH = "./duckduck3.glb";
 
     let mixer = null;
     let clips = null;
@@ -148,7 +148,7 @@ export default {
     );
 
     const standing = () => {
-      let clip = THREE.AnimationClip.findByName(clips, "stand");
+      let clip = THREE.AnimationClip.findByName(clips, "talking");
       let action = mixer.clipAction(clip);
       action.play();
     };
