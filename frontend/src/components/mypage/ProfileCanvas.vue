@@ -80,22 +80,20 @@ export default {
     camera.position.x = 14; // 화면에 보여지는 위치인것같음
     camera.position.y = -3;
 
-    // 조명
-    // HemisphereLight : 전 방향에서 조명을 비춰줌
-    // 첫번째 인자 : 위쪽으로 비추는 빛의 컬러, 두번째 인자 : 아래를 비추는 빛의 컬러
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.61);
-    hemiLight.position.set(50, 50, 0);
-    // Add hemisphere light to scene
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.75);
+    hemiLight.position.set(1, -2, 1);
     scene.add(hemiLight);
-
     // 특정 방향으로 빛 방출
     // 빛 색상, 빛 강도
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.55);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.4);
     dirLight.position.set(10000, 3000, 0);
-    dirLight.castShadow = false; //광원이 그림자 생성
-    dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
     // Add directional Light to scene
+    dirLight.dispose();
     scene.add(dirLight);
+    const dirLight2 = new THREE.DirectionalLight(0xffffff, 0.4);
+    dirLight2.position.set(-10000, -3000, 0);
+    // Add directional Light to scene
+    scene.add(dirLight2);
 
     // Add controls
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -108,7 +106,7 @@ export default {
     controls.autoRotate = false; // Toggle this if you'd like the chair to automatically rotate
     controls.autoRotateSpeed = 0.2; // 30
 
-    const MODEL_PATH = "./duckduck.glb";
+    const MODEL_PATH = "./duckduck3.glb";
 
     let mixer = null;
     let clips = null;

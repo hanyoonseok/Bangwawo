@@ -64,21 +64,23 @@ export default {
     camera.position.y = -10;
 
     // 조명
+    // 조명
     // HemisphereLight : 전 방향에서 조명을 비춰줌
     // 첫번째 인자 : 위쪽으로 비추는 빛의 컬러, 두번째 인자 : 아래를 비추는 빛의 컬러
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.54);
-    hemiLight.position.set(50, 50, 0);
-    // Add hemisphere light to scene
-    scene.add(toRaw(hemiLight));
-
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.75);
+    hemiLight.position.set(1, -2, 1);
+    scene.add(hemiLight);
     // 특정 방향으로 빛 방출
     // 빛 색상, 빛 강도
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.55);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.32);
     dirLight.position.set(10000, 3000, 0);
-    dirLight.castShadow = false; //광원이 그림자 생성
-    dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
     // Add directional Light to scene
-    scene.add(toRaw(dirLight));
+    dirLight.dispose();
+    scene.add(dirLight);
+    const dirLight2 = new THREE.DirectionalLight(0xffffff, 0.32);
+    dirLight2.position.set(-10000, -3000, 0);
+    // Add directional Light to scene
+    scene.add(dirLight2);
 
     // Add controls
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -91,7 +93,7 @@ export default {
     controls.autoRotate = false; // Toggle this if you'd like the chair to automatically rotate
     controls.autoRotateSpeed = 0.2; // 30
 
-    const MODEL_PATH = "./duckduck.glb";
+    const MODEL_PATH = "./duckduck3.glb";
 
     let mixer = null;
     let clips = null;
@@ -135,6 +137,18 @@ export default {
         mixer = new THREE.AnimationMixer(theModel);
         clips = gltf.animations;
         standing();
+
+        // 가로/세로/앞뒤 모두 1미터 크기의 박스 뼈대 생성
+        // var bone = new THREE.PlaneBufferGeometry(200, 200, 2, 2);
+        // // 최근의 THREE.js 에서는
+        // // 기존의 BoxGeometry 를 대신하여 재사용이 용이한 BoxBufferGeometry를 추천하고 있다.
+        // // 재질의 색깔을 녹색으로 생성
+        // var material = new THREE.MeshBasicMaterial({ color: 0x00000 });
+
+        // // 뼈대와 재질을 섞어 "박스"라는 메쉬오브젝트 생성
+        // var floor = new THREE.Mesh(bone, material);
+
+        // scene.add(floor); // "장면" 에 "박스" 메쉬오브젝트 추가
       },
       undefined,
       function (error) {
