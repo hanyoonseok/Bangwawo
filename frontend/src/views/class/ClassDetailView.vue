@@ -49,7 +49,7 @@
           <div class="button-box">
             <!-- 봉사자(2), 학생(1) -->
             <div v-if="user.status === 2">
-              <router-link :to="{ name: 'inclass' }">
+              <router-link :to="{ name: 'inclass' }" target="_blank">
                 <button class="class-status-btn">
                   수업 활성화
                 </button></router-link
