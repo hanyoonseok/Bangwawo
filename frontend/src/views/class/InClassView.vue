@@ -1,24 +1,31 @@
 <template>
   <section class="background">
-    <!-- <HostView
-        v-if="state.isHost"
-        :dataLen="dataLen"
-        :currentStudents="currentStudents"
-        :initCurrentStudents="initCurrentStudents"
-        :prevClick="prevClick"
-        :nextClick="nextClick"
-        @changeDataLen="changeDataLen"
-      />
-    <UserView
-      v-else
+    <HostView
+      v-if="state.isHost && state.session"
       :dataLen="dataLen"
       :currentStudents="currentStudents"
       :initCurrentStudents="initCurrentStudents"
       :prevClick="prevClick"
       :nextClick="nextClick"
       @changeDataLen="changeDataLen"
-    /> -->
-    <div id="session" v-if="state.session">
+      :leaveSession="leaveSession"
+      :me="state.publisher"
+      :subs="state.subscribers"
+    />
+    <UserView
+      v-if="!state.isHost && state.session"
+      :dataLen="dataLen"
+      :currentStudents="currentStudents"
+      :initCurrentStudents="initCurrentStudents"
+      :prevClick="prevClick"
+      :nextClick="nextClick"
+      @changeDataLen="changeDataLen"
+      :leaveSession="leaveSession"
+      :state="state"
+      :me="state.publisher"
+      :subs="state.subscribers"
+    />
+    <!-- <div id="session" v-if="state.session">
       <div id="session-header">
         <h1 id="session-title">{{ state.mySessionId }}</h1>
         <input
@@ -44,7 +51,7 @@
           @click="updateMainVideoStreamManager(sub)"
         />
       </div>
-    </div>
+    </div> -->
   </section>
 </template>
 
@@ -52,25 +59,23 @@
 import { reactive, ref, onBeforeUnmount } from "vue";
 import axios from "axios";
 import { OpenVidu } from "openvidu-browser";
-// import HostView from "@/components/class/HostView.vue";
-// import UserView from "@/components/class/UserView.vue";
-import UserVideo from "@/components/class/UserVideo";
+import HostView from "@/components/class/HostView.vue";
+import UserView from "@/components/class/UserView.vue";
+// import UserVideo from "@/components/class/UserVideo";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 export default {
   name: "InClassView",
   components: {
-    // HostView,
-    // UserView,
-    UserVideo,
+    HostView,
+    UserView,
+    // UserVideo,
   },
   setup() {
-    // const OPENVI00DU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
-
     // 테스트용
-    const OPENVIDU_SERVER_URL = "https://i7b201.p.ssafy.io";
-    const OPENVIDU_SERVER_SECRET = "BANGGWAWO_SECRET";
+    const OPENVIDU_SERVER_URL = process.env.VUE_APP_API_URL;
+    const OPENVIDU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
     const OV = new OpenVidu();
 
     const state = reactive({
@@ -138,7 +143,6 @@ export default {
         state.session
           .connect(token, { clientData: state.myUserName })
           .then(() => {
-            console.log("getToken2222222222");
             // --- Get your own camera stream with the desired properties ---
             let publisher = state.OV.initPublisher(undefined, {
               audioSource: undefined, // The source of audio. If undefined default microphone
@@ -150,10 +154,8 @@ export default {
               insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
               mirror: false, // Whether to mirror your local video or not
             });
-            console.log("p", publisher);
             state.mainStreamManager = publisher;
             state.publisher = publisher;
-            console.log("state.pu", state.publisher);
 
             state.joinedPlayerNumbers++;
             state.session.publish(publisher);
@@ -167,6 +169,7 @@ export default {
           });
       });
       window.addEventListener("beforeunload", leaveSession);
+      console.log("@@@@subscribers@@@@", state.subscribers);
     };
 
     const leaveSession = () => {
@@ -208,6 +211,7 @@ export default {
           .then((response) => {
             console.log(response);
             response.data;
+            return response.data;
           })
           .then((data) => resolve(data.id))
           .catch((error) => {
@@ -338,6 +342,7 @@ export default {
 
     const initCurrentStudents = () => {
       const tempArr = [];
+
       for (
         let i = dataIdx.value;
         i < Math.min(dataIdx.value + dataLen.value, students.value.length);

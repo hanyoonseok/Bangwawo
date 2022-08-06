@@ -14,14 +14,19 @@
         <div class="idx-btn-wrapper prev" @click="prevClick">
           <button class="idx-btn prev"></button>
         </div>
+        <div class="user-card-wrapper">
+          <div class="hover-wrapper">내이름</div>
+          <div class="user-card">
+            <OvVideo :stream-manager="me" />
+          </div>
+        </div>
         <div
           class="user-card-wrapper"
-          v-for="student in currentStudents"
+          v-for="(student, i) in subs"
           :key="student.id"
         >
-          <ov-video :stream-manager="streamManager" />
-          <div class="hover-wrapper">{{ student.name }}</div>
-          <div class="user-card"></div>
+          <div class="hover-wrapper">이름{{ i }}</div>
+          <div class="user-card"><OvVideo :stream-manager="student" /></div>
         </div>
       </article>
 
@@ -72,7 +77,7 @@
 </template>
 
 <script>
-import { reactive, onMounted } from "vue";
+import { reactive, computed } from "vue";
 import ParticipantsList from "@/components/class/ParticipantsList.vue";
 import ChatForm from "@/components/class/ChatForm.vue";
 import OXForm from "@/components/class/OXForm.vue";
@@ -87,8 +92,9 @@ export default {
     "initCurrentStudents",
     "prevClick",
     "nextClick",
-    "streamManager",
-    "roomInfo",
+    "leaveSession",
+    "me",
+    "subs",
   ],
   setup(props) {
     console.log("props.room", props.roomInfo);
@@ -98,7 +104,18 @@ export default {
       isOXOpen: false,
       isTopOpen: false,
       isOXResult: false,
+
+      clientData: computed(() => {
+        const { clientData } = getConnectionData();
+        return clientData;
+      }),
     });
+
+    const getConnectionData = () => {
+      console.log(props.me.stream);
+      const { connection } = props.me.stream;
+      return JSON.parse(connection.data);
+    };
 
     const toggleParticipants = () => {
       if (state.isOXOpen) state.isOXOpen = false;
@@ -120,12 +137,6 @@ export default {
       state.isChatOpen = !state.isChatOpen;
     };
 
-    onMounted(() => {
-      console.log(props.streamManager);
-      // const instance = getCurrentInstance();
-      props.roomInfo.publisher.addVideoElement(this.$el);
-    }),
-      props.initCurrentStudents();
     return {
       state,
       toggleParticipants,
