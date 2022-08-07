@@ -41,6 +41,9 @@
   },
   "eslintConfig": {
     "root": true,
+    "globals": {
+      "faceapi": "writable"
+    },
     "env": {
       "node": true
     },

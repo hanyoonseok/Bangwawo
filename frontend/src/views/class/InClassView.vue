@@ -3,11 +3,7 @@
     <HostView
       v-if="state.isHost && state.session"
       :dataLen="dataLen"
-      :currentStudents="currentStudents"
-      :initCurrentStudents="initCurrentStudents"
-      :prevClick="prevClick"
-      :nextClick="nextClick"
-      @changeDataLen="changeDataLen"
+      :currentUsers="currentUsers"
       :leaveSession="leaveSession"
       :me="state.publisher"
       :subs="state.subscribers"
@@ -15,11 +11,7 @@
     <UserView
       v-if="!state.isHost && state.session"
       :dataLen="dataLen"
-      :currentStudents="currentStudents"
-      :initCurrentStudents="initCurrentStudents"
-      :prevClick="prevClick"
-      :nextClick="nextClick"
-      @changeDataLen="changeDataLen"
+      :currentUsers="currentUsers"
       :leaveSession="leaveSession"
       :state="state"
       :me="state.publisher"
@@ -56,7 +48,7 @@
 </template>
 
 <script>
-import { reactive, ref, onBeforeUnmount } from "vue";
+import { reactive, onBeforeUnmount, computed } from "vue";
 import axios from "axios";
 import { OpenVidu } from "openvidu-browser";
 import HostView from "@/components/class/HostView.vue";
@@ -97,7 +89,17 @@ export default {
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       joinedPlayerNumbers: 0,
 
+      currentUsers: computed(() => {
+        return state.subscribers.slice(
+          state.dataIdx,
+          Math.min(state.dataIdx + state.dataLen, state.subscribers.length + 1),
+        );
+      }),
       isHost: true,
+      dataLen: computed(() => {
+        return state.isHost ? 12 : 4;
+      }),
+      dataIdx: 0,
     });
 
     /* 
@@ -273,126 +275,46 @@ export default {
       leaveSession();
     });
 
-    const dataLen = ref(state.isHost ? 12 : 4);
-    const dataIdx = ref(0);
-    const students = ref([
-      {
-        id: 1,
-        name: "김수빈수빈1",
-      },
-      {
-        id: 2,
-        name: "김수빈수빈2",
-      },
-      {
-        id: 3,
-        name: "김수빈수빈3",
-      },
-      {
-        id: 4,
-        name: "김수빈수빈4",
-      },
-      {
-        id: 5,
-        name: "김수빈수빈5",
-      },
-      {
-        id: 6,
-        name: "김수빈수빈6",
-      },
-      {
-        id: 7,
-        name: "김수빈수빈7",
-      },
-      {
-        id: 8,
-        name: "김수빈수빈8",
-      },
-      {
-        id: 9,
-        name: "김수빈수빈9",
-      },
-      {
-        id: 10,
-        name: "김수빈수빈10",
-      },
-      {
-        id: 11,
-        name: "김수빈수빈11",
-      },
-      {
-        id: 12,
-        name: "김수빈수빈12",
-      },
-      {
-        id: 13,
-        name: "김수빈수빈13",
-      },
-      {
-        id: 14,
-        name: "김수빈수빈14",
-      },
-      {
-        id: 15,
-        name: "김수빈수빈15",
-      },
-    ]);
+    // const nextClick = () => {
+    //   if (dataIdx.value + dataLen.value >= students.value.length) return;
+    //   dataIdx.value += dataLen.value;
+    //   const currentTempArr = [];
+    //   for (
+    //     let i = dataIdx.value;
+    //     i < Math.min(dataIdx.value + dataLen.value, students.value.length);
+    //     i++
+    //   ) {
+    //     currentTempArr.push(students.value[i]);
+    //   }
+    //   currentUsers.value = currentTempArr;
+    // };
 
-    const currentStudents = ref([]);
+    // const prevClick = () => {
+    //   if (dataIdx.value - dataLen.value < 0) return;
+    //   dataIdx.value -= dataLen.value;
+    //   const currentTempArr = [];
+    //   for (
+    //     let i = Math.max(0, dataIdx.value);
+    //     i < dataIdx.value + dataLen.value;
+    //     i++
+    //   ) {
+    //     currentTempArr.push(students.value[i]);
+    //   }
+    //   currentUsers.value = currentTempArr;
+    // };
 
-    const initCurrentStudents = () => {
-      const tempArr = [];
-
-      for (
-        let i = dataIdx.value;
-        i < Math.min(dataIdx.value + dataLen.value, students.value.length);
-        i++
-      ) {
-        tempArr.push(students.value[i]);
-      }
-      currentStudents.value = tempArr;
-    };
-
-    const nextClick = () => {
-      if (dataIdx.value + dataLen.value >= students.value.length) return;
-      dataIdx.value += dataLen.value;
-      const currentTempArr = [];
-      for (
-        let i = dataIdx.value;
-        i < Math.min(dataIdx.value + dataLen.value, students.value.length);
-        i++
-      ) {
-        currentTempArr.push(students.value[i]);
-      }
-      currentStudents.value = currentTempArr;
-    };
-
-    const prevClick = () => {
-      if (dataIdx.value - dataLen.value < 0) return;
-      dataIdx.value -= dataLen.value;
-      const currentTempArr = [];
-      for (
-        let i = Math.max(0, dataIdx.value);
-        i < dataIdx.value + dataLen.value;
-        i++
-      ) {
-        currentTempArr.push(students.value[i]);
-      }
-      currentStudents.value = currentTempArr;
-    };
-
-    const changeDataLen = (param) => {
-      dataLen.value = param;
-    };
+    // const changeDataLen = (param) => {
+    //   dataLen.value = param;
+    // };
 
     return {
       state,
-      dataLen,
-      currentStudents,
-      initCurrentStudents,
-      prevClick,
-      nextClick,
-      changeDataLen,
+      // dataLen,
+      // currentUsers,
+      // initCurrentUsers,
+      // prevClick,
+      // nextClick,
+      // changeDataLen,
     };
   },
 };

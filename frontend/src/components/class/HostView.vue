@@ -15,19 +15,13 @@
           <button class="idx-btn prev"></button>
         </div>
         <div class="user-card-wrapper">
-          <div class="hover-wrapper">내이름</div>
-          <div class="user-card">
-            <OvVideo :stream-manager="me" />
-          </div>
+          <div class="hover-wrapper">나</div>
+          <div class="user-card"><OvVideo :stream-manager="me" /></div>
         </div>
-        <div
-          class="user-card-wrapper"
-          v-for="(student, i) in subs"
-          :key="student.id"
-        >
+        <!-- <div class="user-card-wrapper" v-for="(user, i) in subs" :key="user.id">
           <div class="hover-wrapper">이름{{ i }}</div>
-          <div class="user-card"><OvVideo :stream-manager="student" /></div>
-        </div>
+          <div class="user-card"><OvVideo :stream-manager="user" /></div>
+        </div> -->
       </article>
 
       <article class="top-right" v-if="state.isTopOpen || state.isChatOpen">
@@ -88,8 +82,7 @@ export default {
   name: "HostView",
   props: [
     "dataLen",
-    "currentStudents",
-    "initCurrentStudents",
+    "currentUsers",
     "prevClick",
     "nextClick",
     "leaveSession",
