@@ -20,6 +20,7 @@
 .top-section {
   width: 100%;
   height: calc(100% - 60px);
+
   @include flexCenter;
   .top-left {
     //flex: 7.5;
@@ -28,7 +29,8 @@
     background-color: $light-yellow;
     border-radius: 15px;
 
-    &.host {
+    transition: all 200ms ease;
+    &.host-12orless {
       box-shadow: $light-shadow;
       padding: 15px;
       display: grid;
@@ -37,56 +39,99 @@
       grid-column-gap: 16px;
       grid-row-gap: 16px;
       position: relative;
-      .user-card-wrapper {
+      &.expand {
         width: 100%;
         height: 100%;
-        .user-card {
-          width: 100%;
-          height: 100%;
-        }
-        position: relative;
-
-        .hover-wrapper {
-          opacity: 0;
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          content: "";
-          background-color: rgba(53, 53, 53, 0.25);
-          color: $white;
-          font-size: 16px;
-          font-family: $appleM;
-          font-weight: bold;
-          @include flexCenter;
-          border-radius: 18px;
-          &:hover {
-            transition: 0.3s ease;
-            opacity: 0.5;
-          }
-        }
-      }
-      .idx-btn-wrapper {
-        &.prev {
-          left: 0;
-          &.prev {
-            transform: rotate(-45deg);
-          }
-        }
-        &.next {
-          right: 0;
-          &.next {
-            transform: rotate(135deg);
-          }
-        }
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(3, 1fr);
       }
     }
-    &.expand {
+    &.host-2orless {
+      box-shadow: $light-shadow;
+      padding: 15px;
+      display: grid;
+      grid-template-rows: 1fr;
+      grid-template-columns: 1fr 1fr;
+      grid-row-gap: 16px;
+      grid-column-gap: 16px;
+      position: relative;
+      &.expand {
+        width: 100%;
+      }
+    }
+    &.host-4orless {
+      box-shadow: $light-shadow;
+      height: 100%;
+      padding: 15px;
+      display: grid;
+      grid-template-rows: repeat(2, 1fr);
+      grid-template-columns: repeat(2, 1fr);
+      grid-row-gap: 15px;
+      grid-column-gap: 60px;
+      position: relative;
+      &.expand {
+        width: 100%;
+        padding: 10px 60px;
+      }
+    }
+    &.host-6orless {
+      box-shadow: $light-shadow;
+      padding: 15px;
+      display: grid;
+      grid-template-rows: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
+      grid-column-gap: 16px;
+      grid-row-gap: 16px;
+      position: relative;
+      &.expand {
+        width: 100%;
+        padding: 10px 60px;
+      }
+    }
+    .user-card-wrapper {
       width: 100%;
-      grid-template-columns: repeat(4, 1fr);
-    }
+      height: 100%;
+      .user-card {
+        width: 100%;
+        height: 100%;
+      }
+      position: relative;
 
+      .hover-wrapper {
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        content: "";
+        background-color: rgba(53, 53, 53, 0.25);
+        color: $white;
+        font-size: 16px;
+        font-family: $appleM;
+        font-weight: bold;
+        @include flexCenter;
+        border-radius: 18px;
+        &:hover {
+          transition: 0.3s ease;
+          opacity: 0.5;
+        }
+      }
+    }
+    .idx-btn-wrapper {
+      &.prev {
+        left: 0;
+        &.prev {
+          transform: rotate(-45deg);
+        }
+      }
+      &.next {
+        right: 0;
+        &.next {
+          transform: rotate(135deg);
+        }
+      }
+    }
     &.user {
       @include flexColumn;
       background-color: transparent;
@@ -549,4 +594,15 @@
   width: 100%;
   height: 100%;
   background-color: $light-grey;
+}
+
+.volunteer-video {
+  position: absolute;
+  width: 300px;
+  height: 200px;
+}
+
+.student-video {
+  width: 300px;
+  height: 200px;
 }

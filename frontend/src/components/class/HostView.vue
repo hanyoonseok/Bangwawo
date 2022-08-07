@@ -4,7 +4,12 @@
       <article
         :class="{
           'top-left': true,
-          host: true,
+          'host-2orless': roomInfo.subscribers.length <= 2,
+          'host-4orless':
+            roomInfo.subscribers.length <= 4 && roomInfo.subscribers.length > 2,
+          'host-6orless':
+            roomInfo.subscribers.length <= 6 && roomInfo.subscribers.length > 4,
+          'host-12orless': roomInfo.subscribers.length > 6,
           expand: !state.isTopOpen && !state.isChatOpen,
         }"
       >
@@ -16,12 +21,21 @@
         </div>
         <div
           class="user-card-wrapper"
-          v-for="student in currentStudents"
-          :key="student.id"
+          v-for="student in roomInfo.subscribers"
+          :key="student.stream.connection.connectionId"
         >
-          <ov-video :stream-manager="streamManager" />
-          <div class="hover-wrapper">{{ student.name }}</div>
-          <div class="user-card"></div>
+          <user-video
+            :stream-manager="student"
+            @click="updateMainVideoStreamManager(student)"
+          />
+
+          <div class="hover-wrapper">이름들어갈곳</div>
+        </div>
+        <div class="volunteer-video">
+          <user-video
+            :stream-manager="roomInfo.publisher"
+            @click="updateMainVideoStreamManager(roomInfo.publisher)"
+          />
         </div>
       </article>
 
@@ -38,7 +52,7 @@
 
     <section class="bot-section">
       <article class="bot-left">
-        <button class="option-btn red">
+        <button class="option-btn red" @click="doMute">
           <i class="fa-solid fa-microphone-slash"></i>
           &nbsp;음소거 해제
         </button>
@@ -77,7 +91,7 @@ import ParticipantsList from "@/components/class/ParticipantsList.vue";
 import ChatForm from "@/components/class/ChatForm.vue";
 import OXForm from "@/components/class/OXForm.vue";
 import OXResult from "@/components/class/OXResult.vue";
-import OvVideo from "./OvVideo";
+import UserVideo from "@/components/class/UserVideo.vue";
 
 export default {
   name: "HostView",
@@ -89,6 +103,7 @@ export default {
     "nextClick",
     "streamManager",
     "roomInfo",
+    "joinSession",
   ],
   setup(props) {
     console.log("props.room", props.roomInfo);
@@ -120,10 +135,15 @@ export default {
       state.isChatOpen = !state.isChatOpen;
     };
 
+    const doMute = (e) => {
+      console.log(e.target);
+      console.log(props.roomInfo);
+    };
+    props.joinSession();
     onMounted(() => {
       console.log(props.streamManager);
       // const instance = getCurrentInstance();
-      props.roomInfo.publisher.addVideoElement(this.$el);
+      // props.roomInfo.publisher.addVideoElement(this.$el);
     }),
       props.initCurrentStudents();
     return {
@@ -131,6 +151,7 @@ export default {
       toggleParticipants,
       toggleChat,
       toggleOX,
+      doMute,
     };
   },
   components: {
@@ -138,7 +159,7 @@ export default {
     ChatForm,
     OXForm,
     OXResult,
-    OvVideo,
+    UserVideo,
   },
 };
 </script>

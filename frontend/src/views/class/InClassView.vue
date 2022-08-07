@@ -1,14 +1,16 @@
 <template>
   <section class="background">
-    <!-- <HostView
-        v-if="state.isHost"
-        :dataLen="dataLen"
-        :currentStudents="currentStudents"
-        :initCurrentStudents="initCurrentStudents"
-        :prevClick="prevClick"
-        :nextClick="nextClick"
-        @changeDataLen="changeDataLen"
-      />
+    <HostView
+      v-if="state.isHost"
+      :dataLen="dataLen"
+      :currentStudents="currentStudents"
+      :initCurrentStudents="initCurrentStudents"
+      :prevClick="prevClick"
+      :nextClick="nextClick"
+      @changeDataLen="changeDataLen"
+      :roomInfo="state"
+      :joinSession="joinSession"
+    />
     <UserView
       v-else
       :dataLen="dataLen"
@@ -17,8 +19,8 @@
       :prevClick="prevClick"
       :nextClick="nextClick"
       @changeDataLen="changeDataLen"
-    /> -->
-    <div id="session" v-if="state.session">
+    />
+    <!-- <div id="session" v-if="state.session">
       <div id="session-header">
         <h1 id="session-title">{{ state.mySessionId }}</h1>
         <input
@@ -29,10 +31,10 @@
           value="Leave session"
         />
       </div>
-      <div id="main-video" class="col-md-6">
+      <div id="main-video">
         <user-video :stream-manager="state.mainStreamManager" />
       </div>
-      <div id="video-container" class="col-md-6">
+      <div id="video-container">
         <user-video
           :stream-manager="state.publisher"
           @click="updateMainVideoStreamManager(state.publisher)"
@@ -44,7 +46,7 @@
           @click="updateMainVideoStreamManager(sub)"
         />
       </div>
-    </div>
+    </div> -->
   </section>
 </template>
 
@@ -52,25 +54,25 @@
 import { reactive, ref, onBeforeUnmount } from "vue";
 import axios from "axios";
 import { OpenVidu } from "openvidu-browser";
-// import HostView from "@/components/class/HostView.vue";
-// import UserView from "@/components/class/UserView.vue";
-import UserVideo from "@/components/class/UserVideo";
+import HostView from "@/components/class/HostView.vue";
+import UserView from "@/components/class/UserView.vue";
+// import UserVideo from "@/components/class/UserVideo";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 export default {
   name: "InClassView",
   components: {
-    // HostView,
-    // UserView,
-    UserVideo,
+    HostView,
+    UserView,
+    // UserVideo,
   },
   setup() {
     // const OPENVI00DU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
 
     // 테스트용
-    const OPENVIDU_SERVER_URL = "https://i7b201.p.ssafy.io";
-    const OPENVIDU_SERVER_SECRET = "BANGGWAWO_SECRET";
+    const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
+    const OPENVIDU_SERVER_SECRET = "MY_SECRET";
     const OV = new OpenVidu();
 
     const state = reactive({
@@ -82,7 +84,7 @@ export default {
         videoSource: undefined, // The source of video. If undefined default webcam
         publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
         publishVideo: true, // Whether you want to start publishing with your video enabled or not
-        resolution: "600x320", // The resolution of your video
+        resolution: "640x480", // The resolution of your video
         frameRate: 30, // The frame rate of your video
         insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
         mirror: false, // Whether to mirror your local video or not
@@ -262,8 +264,6 @@ export default {
           .catch((error) => reject(error.response));
       });
     };
-
-    joinSession();
     onBeforeUnmount(() => {
       state.joinedPlayerNumbers = 0;
       leaveSession();
@@ -388,6 +388,7 @@ export default {
       prevClick,
       nextClick,
       changeDataLen,
+      joinSession,
     };
   },
 };
