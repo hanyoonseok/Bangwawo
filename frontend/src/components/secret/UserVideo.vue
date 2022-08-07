@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import OvVideo from "@/components/class/OvVideo";
+import OvVideo from "@/components/secret/OvVideo";
 import { computed, reactive } from "vue";
 export default {
   name: "UserVideo",

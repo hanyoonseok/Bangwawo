@@ -11,9 +11,6 @@
       <div id="session-header">
         <h1 id="session-title">{{ state.mySessionId }}</h1>
       </div>
-      <div id="main-video" class="col-md-6">
-        <user-video :stream-manager="state.mainStreamManager" />
-      </div>
       <div id="video-container" class="col-md-6">
         <user-video
           :stream-manager="state.publisher"
@@ -55,6 +52,10 @@ import { OpenVidu } from "openvidu-browser";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 import UserVideo from "@/components/secret/UserVideo";
 
+// SpeechRecognition 인터페이스 초기화
+const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new Recognition();
+
 export default {
   name: "SecretTalkView",
   components: {
@@ -95,7 +96,11 @@ export default {
       joinedPlayerNumbers: 0,
       audioState: true,
       isHost: true,
+      danger: 0,
     });
+
+    //위험 단어 리스트
+    const dangerWord = ["안녕", "자살", "타살", "괴롭힘", "왕따", "따돌림"];
 
     /*
   닉네임:사용자
@@ -134,6 +139,20 @@ export default {
         console.warn(exception);
       });
 
+      //음성 감지
+      state.session.on("publisherStartSpeaking", (event) => {
+        console.log(
+          "User " + event.connection.connectionId + " start speaking",
+        );
+        voiceDetection();
+      });
+
+      //음성 감지 종료
+      state.session.on("publisherStopSpeaking", (event) => {
+        console.log("User " + event.connection.connectionId + " stop speaking");
+        recognition.stop();
+      });
+
       console.log("sessionid", state.mySessionId);
       console.log("user name", state.myUserName);
       // 'getToken' method is simulating what your server-side should do.
@@ -149,7 +168,7 @@ export default {
               audioSource: undefined, // The source of audio. If undefined default microphone
               videoSource: undefined, // The source of video. If undefined default webcam
               publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-              publishVideo: true, // Whether you want to start publishing with your video enabled or not
+              publishVideo: false, // Whether you want to start publishing with your video enabled or not
               resolution: "600x320", // The resolution of your video
               frameRate: 30, // The frame rate of your video
               insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
@@ -187,6 +206,7 @@ export default {
       state.OV = undefined;
       console.log("state", state);
       window.removeEventListener("beforeunload", leaveSession);
+      console.log("대화종료 후 위험단어 수 : ", state.danger);
       router.push({ name: "secret" });
     };
 
@@ -281,6 +301,48 @@ export default {
       state.joinedPlayerNumbers = 0;
       leaveSession();
     });
+
+    if (!Recognition) {
+      alert(
+        "Speech Recognition API is not supported in this browser, try chrome",
+      );
+    }
+
+    recognition.lang = "ko-KR"; // 한국어 지정
+    recognition.onresult = (event) => {
+      const text = event.results[0][0].transcript;
+      console.log("transcript", text);
+      for (const item of dangerWord) {
+        if (text.indexOf(item) >= 0) {
+          state.danger++;
+          console.log("위험하다아ㅏㅏ");
+        }
+      }
+    };
+
+    recognition.onspeechend = () => {
+      console.log("stopped");
+    };
+
+    recognition.onnomatch = (event) => {
+      console.log(event, "no match");
+    };
+
+    recognition.onstart = () => {};
+
+    recognition.onend = () => {
+      console.log("end");
+      recognition.stop();
+    };
+
+    recognition.onerror = (event) => {
+      console.log("error", event);
+    };
+
+    const voiceDetection = () => {
+      console.log("start");
+      recognition.start();
+    };
 
     return {
       state,
