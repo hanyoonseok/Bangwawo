@@ -14,7 +14,7 @@ import java.util.Objects;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name="class_room")
+@Table(name="classes")
 public class ClassRoom {
     @Id
     @GeneratedValue
@@ -24,9 +24,8 @@ public class ClassRoom {
     @JoinColumn(name="vId")
     private Volunteer volunteer;//봉사자
 
-    //클래스 룸에서 수강신청 목록이 필요한가? 수강신청에서는 클래스룸 필요함!
-    //@OneToMany
-    //private List<Enrol> enrols = new ArrayList<Enrol>(); //수강신청목록
+    @OneToMany
+    private List<Enrol> enrols = new ArrayList<Enrol>(); //수강신청목록
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rId")

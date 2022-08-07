@@ -22,7 +22,7 @@ public class Enrol {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="cId")
-    private ClassRoom class_room;            //수업
+    private ClassRoom classes;            //수업
 
     private String feedback;    //봉사자 피드백
     private String emotion;     //감정 피드백(아직 자료형 미정)
@@ -31,12 +31,12 @@ public class Enrol {
     @Builder
     public Enrol(Long eId,
                  Student student,
-                 ClassRoom class_room,
+                 ClassRoom classes,
                  String feedback, String emotion,
                  String recording) {
         this.eId = eId;
         this.student = student;
-        this.class_room = class_room;
+        this.classes = classes;
         this.feedback = feedback;
         this.emotion = emotion;
         this.recording = recording;
