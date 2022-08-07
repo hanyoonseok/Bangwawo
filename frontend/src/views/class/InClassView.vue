@@ -73,8 +73,9 @@ export default {
     // const OPENVI00DU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
 
     // 테스트용
-    const OPENVIDU_SERVER_URL = "https://i7b201.p.ssafy.io/";
-    const OPENVIDU_SERVER_SECRET = "BANGGWAWO_SECRET";
+    const OPENVIDU_SERVER_URL = process.env.VUE_APP_API_URL;
+    const OPENVIDU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
+
     const OV = new OpenVidu();
 
     const state = reactive({
@@ -92,11 +93,11 @@ export default {
         mirror: false, // Whether to mirror your local video or not
       }),
       subscribers: [],
-      mySessionId: "SessionA",
+      mySessionId: "SessionD",
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       joinedPlayerNumbers: 0,
 
-      isHost: true,
+      isHost: false,
     });
 
     /* 

@@ -64,9 +64,15 @@
             </div>
             <div v-else>
               <!-- 수업 신청한 경우(1), 수업 신청 안한 경우(0) -->
-              <button v-if="user.subscribe === 1" class="class-entrance-btn">
-                수업 입장
-              </button>
+              <router-link
+                :to="{ name: 'inclass' }"
+                v-if="user.subscribe === 1"
+                target="_blank"
+              >
+                <button class="class-entrance-btn">
+                  수업 입장
+                </button></router-link
+              >
               <button v-else class="class-subscribe-btn">수업 신청</button>
             </div>
           </div>
@@ -125,8 +131,8 @@ export default {
     };
 
     const user = {
-      status: 2,
-      subscribe: 0,
+      status: 1,
+      subscribe: 1,
     };
 
     const showProfile = () => {

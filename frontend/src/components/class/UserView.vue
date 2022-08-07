@@ -24,11 +24,13 @@
           </div>
           <div
             class="user-card-wrapper"
-            v-for="student in currentStudents"
-            :key="student.id"
+            v-for="student in roomInfo.subscribers"
+            :key="student.stream.connection.connectionId"
           >
-            <div class="hover-wrapper">{{ student.name }}</div>
-            <div class="user-card"></div>
+            <user-video
+              :stream-manager="student"
+              @click="updateMainVideoStreamManager(student)"
+            />
           </div>
         </article>
         <article class="top-article-left bot">
@@ -52,8 +54,13 @@
 
     <section class="bot-section">
       <article class="bot-left">
-        <button class="option-btn red">
+        <button class="option-btn" @click="clickMute" v-if="state.audioState">
           <i class="fa-solid fa-microphone-slash"></i>
+          &nbsp;음소거
+        </button>
+
+        <button class="option-btn red" v-else>
+          <i class="fa-solid fa-microphone-slash" @click="clickMute"></i>
           &nbsp;음소거 해제
         </button>
         <button class="option-btn">
@@ -85,6 +92,7 @@ import ParticipantsList from "@/components/class/ParticipantsList.vue";
 import ChatForm from "@/components/class/ChatForm.vue";
 import StudentOX from "@/components/class/StudentOX.vue";
 import StudentInclass from "@/components/class/StudentInclass.vue";
+import UserVideo from "@/components/class/UserVideo.vue";
 
 export default {
   name: "UserView",
@@ -101,6 +109,7 @@ export default {
     const state = reactive({
       isParticipantsOpen: false,
       isChatOpen: false,
+      audioState: true,
       isTopOpen: false,
       isOXOpen: false,
     });
@@ -125,17 +134,25 @@ export default {
     };
     props.joinSession();
     props.initCurrentStudents();
+    const clickMute = () => {
+      state.audioState = !state.audioState;
+      props.roomInfo.publisher.publishAudio(state.audioState);
+    };
+
     return {
       state,
       toggleParticipants,
       toggleChat,
+      clickMute,
     };
   },
+
   components: {
     ParticipantsList,
     ChatForm,
     StudentOX,
     StudentInclass,
+    UserVideo,
   },
 };
 </script>

@@ -52,7 +52,12 @@
 
     <section class="bot-section">
       <article class="bot-left">
-        <button class="option-btn red" @click="muteAudio">
+        <button class="option-btn" @click="clickMute" v-if="state.audioState">
+          <i class="fa-solid fa-microphone-slash"></i>
+          &nbsp;음소거
+        </button>
+
+        <button class="option-btn red" @click="clickMute" v-else>
           <i class="fa-solid fa-microphone-slash"></i>
           &nbsp;음소거 해제
         </button>
@@ -106,6 +111,7 @@ export default {
     "joinSession",
   ],
   setup(props) {
+    console.log("subscriber 지금 콘ㄱ솔창", props.roomInfo.subscribers);
     console.log("props.room", props.roomInfo);
     const state = reactive({
       isParticipantsOpen: false,
@@ -113,6 +119,7 @@ export default {
       isOXOpen: false,
       isTopOpen: false,
       isOXResult: false,
+      audioState: true,
     });
 
     const toggleParticipants = () => {
@@ -135,13 +142,9 @@ export default {
       state.isChatOpen = !state.isChatOpen;
     };
 
-    const muteAudio = () => {
-      console.log("publisher", props.roomInfo.publishAudio(false));
-      console.log("subscriber", props.roomInfo.subscribers);
-      props.roomInfo.publishAudio(false);
-      // props.roomInfo.publisher.publishAudio(false);
-      // props.roomInfo.publisher.stream.audioActive =
-      //   !props.roomInfo.publisher.stream.audioActive; // true to unmute the audio track, false to mute it
+    const clickMute = () => {
+      state.audioState = !state.audioState;
+      props.roomInfo.publisher.publishAudio(state.audioState);
     };
     props.joinSession();
     onMounted(() => {
@@ -155,7 +158,7 @@ export default {
       toggleParticipants,
       toggleChat,
       toggleOX,
-      muteAudio,
+      clickMute,
     };
   },
   components: {

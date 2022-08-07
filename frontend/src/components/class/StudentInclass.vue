@@ -8,13 +8,14 @@
 </template>
 
 <script>
+import UserVideo from "@/components/class/UserVideo.vue";
 export default {
   name: "StudentOX",
   props: ["publisher", "joinSession"],
   setup(props) {
     props.joinSession();
   },
-  components: {},
+  components: { UserVideo },
 };
 </script>
 
