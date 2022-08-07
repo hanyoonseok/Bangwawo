@@ -73,8 +73,8 @@ export default {
     // const OPENVI00DU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
 
     // 테스트용
-    const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
-    const OPENVIDU_SERVER_SECRET = "MY_SECRET";
+    const OPENVIDU_SERVER_URL = "https://i7b201.p.ssafy.io/";
+    const OPENVIDU_SERVER_SECRET = "BANGGWAWO_SECRET";
     const OV = new OpenVidu();
 
     const state = reactive({
@@ -226,8 +226,8 @@ export default {
                   `No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}\n\nClick OK to navigate and accept it. If no certificate warning is shown, then check that your OpenVidu Server is up and running at "${OPENVIDU_SERVER_URL}"`,
                 )
               ) {
-                // location.assign(`https://i7b201.p.ssafy.io`);
-                location.assign(`${OPENVIDU_SERVER_URL}/accept-certificate`);
+                location.assign(`https://i7b201.p.ssafy.io`);
+                // location.assign(`${OPENVIDU_SERVER_URL}/accept-certificate`);
               }
               reject(error.response);
             }
