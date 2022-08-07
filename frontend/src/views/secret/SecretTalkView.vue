@@ -4,31 +4,34 @@
       <h2>비밀친구 대화중</h2>
     </article>
     <article class="user-wrapper" v-if="state.session">
-      <SecretCanvas
-        :parts="student"
-        class="user-card"
-        :user="stu"
-        id="stu"
-        :stream-manager="state.publisher"
-        @click="updateMainVideoStreamManager(state.publisher)"
-      />
-      <SecretCanvas
-        :parts="volunteer"
-        class="user-card"
-        :user="vol"
-        id="vol"
-        :stream-manager="state.subscribers[0]"
-        @click="updateMainVideoStreamManager(state.state.subscribers[0])"
-      />
+      <SecretCanvas :parts="student" class="user-card" :user="stu" id="stu" />
+      <SecretCanvas :parts="volunteer" class="user-card" :user="vol" id="vol" />
     </article>
+    <div id="session" v-if="state.session">
+      <div id="session-header">
+        <h1 id="session-title">{{ state.mySessionId }}</h1>
+      </div>
+      <div id="video-container" class="col-md-6">
+        <user-video
+          :stream-manager="state.publisher"
+          @click="updateMainVideoStreamManager(state.publisher)"
+        />
+        <user-video
+          v-for="sub in state.subscribers"
+          :key="sub.stream.connection.connectionId"
+          :stream-manager="sub"
+          @click="updateMainVideoStreamManager(sub)"
+        />
+      </div>
+    </div>
     <article class="btn-wrapper">
       <button class="option-btn" @click="clickMute" v-if="state.audioState">
         <i class="fa-solid fa-microphone-slash"></i>
-        &nbsp;음소거 해제
+        &nbsp;음소거
       </button>
       <button class="option-btn" @click="clickMute" v-else>
         <i class="fa-solid fa-microphone-slash"></i>
-        &nbsp;음소거
+        &nbsp;음소거 해제
       </button>
       <button class="option-btn" @click="leaveSession">
         <i class="fa-solid fa-xmark"></i> &nbsp;대화 종료
@@ -47,11 +50,18 @@ import { useRouter } from "vue-router";
 import axios from "axios";
 import { OpenVidu } from "openvidu-browser";
 axios.defaults.headers.post["Content-Type"] = "application/json";
+import UserVideo from "@/components/secret/UserVideo";
+
+// SpeechRecognition 인터페이스 초기화
+const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new Recognition();
 
 export default {
   name: "SecretTalkView",
   components: {
     SecretCanvas,
+    UserVideo,
+
     // SCanvas,
   },
   setup() {
@@ -68,8 +78,11 @@ export default {
     let vol = "vol";
 
     // 테스트용
-    const OPENVIDU_SERVER_URL = "https://i7b201.p.ssafy.io";
-    const OPENVIDU_SERVER_SECRET = "BANGGWAWO_SECRET";
+    const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
+    const OPENVIDU_SERVER_SECRET = "MY_SECRET";
+
+    // const OPENVIDU_SERVER_URL = "https://i7b201.p.ssafy.io";
+    // const OPENVIDU_SERVER_SECRET = "BANGGWAWO_SECRET";
     const OV = new OpenVidu();
 
     const state = reactive({
@@ -81,9 +94,13 @@ export default {
       mySessionId: "SessionA",
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       joinedPlayerNumbers: 0,
-      audioState: true, //음소거 상태 여부 true:음소거O, false : 음소거X
+      audioState: true,
       isHost: true,
+      danger: 0,
     });
+
+    //위험 단어 리스트
+    const dangerWord = ["안녕", "자살", "타살", "괴롭힘", "왕따", "따돌림"];
 
     /*
   닉네임:사용자
@@ -102,8 +119,10 @@ export default {
       // 새로운 Stream을 구독하고 subscribers배열에 저장
       state.session.on("streamCreated", ({ stream }) => {
         const subscriber = state.session.subscribe(stream);
-        subscriber.subscribeToVideo(false); // true to enable the video, false to disable it
+        console.log("subscriber", subscriber);
+        // subscriber.subscribeToVideo(false); // true to enable the video, false to disable it
         state.subscribers.push(subscriber);
+        console.log("subscribers", state.subscribers);
         if (subscriber.videos !== []) state.joinedPlayerNumbers++;
       });
       // 사용자가 화상 회의에서 나갔을때 나간 사용자 제거
@@ -120,6 +139,20 @@ export default {
         console.warn(exception);
       });
 
+      //음성 감지
+      state.session.on("publisherStartSpeaking", (event) => {
+        console.log(
+          "User " + event.connection.connectionId + " start speaking",
+        );
+        voiceDetection();
+      });
+
+      //음성 감지 종료
+      state.session.on("publisherStopSpeaking", (event) => {
+        console.log("User " + event.connection.connectionId + " stop speaking");
+        recognition.stop();
+      });
+
       console.log("sessionid", state.mySessionId);
       console.log("user name", state.myUserName);
       // 'getToken' method is simulating what your server-side should do.
@@ -133,7 +166,7 @@ export default {
             // --- Get your own camera stream with the desired properties ---
             let publisher = state.OV.initPublisher(undefined, {
               audioSource: undefined, // The source of audio. If undefined default microphone
-              videoSource: false, // The source of video. If undefined default webcam
+              videoSource: undefined, // The source of video. If undefined default webcam
               publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
               publishVideo: false, // Whether you want to start publishing with your video enabled or not
               resolution: "600x320", // The resolution of your video
@@ -142,7 +175,7 @@ export default {
               mirror: false, // Whether to mirror your local video or not
             });
             console.log("p", publisher);
-            publisher.publishVideo(false); // true to enable the video track, false to disable it
+            // publisher.publishVideo(false); // true to enable the video track, false to disable it
             state.mainStreamManager = publisher;
             state.publisher = publisher;
             console.log("state.pu", state.publisher);
@@ -173,6 +206,7 @@ export default {
       state.OV = undefined;
       console.log("state", state);
       window.removeEventListener("beforeunload", leaveSession);
+      console.log("대화종료 후 위험단어 수 : ", state.danger);
       router.push({ name: "secret" });
     };
 
@@ -259,7 +293,6 @@ export default {
 
     const clickMute = () => {
       state.audioState = !state.audioState;
-      console.log(state.audioState ? "음소거 한 상태" : "음소거 안한 상태");
       state.publisher.publishAudio(state.audioState);
     };
 
@@ -268,6 +301,48 @@ export default {
       state.joinedPlayerNumbers = 0;
       leaveSession();
     });
+
+    if (!Recognition) {
+      alert(
+        "Speech Recognition API is not supported in this browser, try chrome",
+      );
+    }
+
+    recognition.lang = "ko-KR"; // 한국어 지정
+    recognition.onresult = (event) => {
+      const text = event.results[0][0].transcript;
+      console.log("transcript", text);
+      for (const item of dangerWord) {
+        if (text.indexOf(item) >= 0) {
+          state.danger++;
+          console.log("위험하다아ㅏㅏ");
+        }
+      }
+    };
+
+    recognition.onspeechend = () => {
+      console.log("stopped");
+    };
+
+    recognition.onnomatch = (event) => {
+      console.log(event, "no match");
+    };
+
+    recognition.onstart = () => {};
+
+    recognition.onend = () => {
+      console.log("end");
+      recognition.stop();
+    };
+
+    recognition.onerror = (event) => {
+      console.log("error", event);
+    };
+
+    const voiceDetection = () => {
+      console.log("start");
+      recognition.start();
+    };
 
     return {
       state,
