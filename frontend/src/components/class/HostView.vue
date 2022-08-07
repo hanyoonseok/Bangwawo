@@ -29,7 +29,7 @@
             @click="updateMainVideoStreamManager(student)"
           />
 
-          <div class="hover-wrapper">이름들어갈곳</div>
+          <div class="hover-wrapper">김수빈</div>
         </div>
         <div class="volunteer-video">
           <user-video
@@ -52,7 +52,7 @@
 
     <section class="bot-section">
       <article class="bot-left">
-        <button class="option-btn red" @click="doMute">
+        <button class="option-btn red" @click="muteAudio">
           <i class="fa-solid fa-microphone-slash"></i>
           &nbsp;음소거 해제
         </button>
@@ -135,9 +135,12 @@ export default {
       state.isChatOpen = !state.isChatOpen;
     };
 
-    const doMute = (e) => {
-      console.log(e.target);
-      console.log(props.roomInfo);
+    const muteAudio = () => {
+      console.log("publisher", props.roomInfo.publisher);
+      console.log("subscriber", props.roomInfo.subscribers);
+      // props.roomInfo.publisher.publishAudio(false);
+      // props.roomInfo.publisher.stream.audioActive =
+      //   !props.roomInfo.publisher.stream.audioActive; // true to unmute the audio track, false to mute it
     };
     props.joinSession();
     onMounted(() => {
@@ -151,7 +154,7 @@ export default {
       toggleParticipants,
       toggleChat,
       toggleOX,
-      doMute,
+      muteAudio,
     };
   },
   components: {

@@ -33,7 +33,11 @@
         </article>
         <article class="top-article-left bot">
           <StudentOX v-if="state.isOXOpen" />
-          <StudentInclass v-else />
+          <StudentInclass
+            :publisher="roomInfo.publisher"
+            :joinSession="joinSession"
+            v-else
+          />
         </article>
       </article>
 
@@ -90,6 +94,8 @@ export default {
     "initCurrentStudents",
     "prevClick",
     "nextClick",
+    "joinSession",
+    "roomInfo",
   ],
   setup(props, { emit }) {
     const state = reactive({
@@ -117,7 +123,7 @@ export default {
         props.initCurrentStudents();
       }
     };
-
+    props.joinSession();
     props.initCurrentStudents();
     return {
       state,

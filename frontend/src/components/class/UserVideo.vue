@@ -25,6 +25,7 @@ export default {
         return clientData;
       }),
     });
+
     const getConnectionData = () => {
       console.log(props.streamManager.stream);
       const { connection } = props.streamManager.stream;

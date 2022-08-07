@@ -15,12 +15,22 @@
       </div>
       <div class="lecture-container">
         <ul class="lecture-nav">
-          <li class="nav-item active" @click="doActive">예정된 수업</li>
-          <li class="nav-item" @click="doActive">종료된 수업</li>
+          <li
+            :class="{ 'nav-item': true, active: !state.isEndedMenuActive }"
+            @click="doMenuActive"
+          >
+            예정된 수업
+          </li>
+          <li
+            :class="{ 'nav-item': true, active: state.isEndedMenuActive }"
+            @click="doMenuActive"
+          >
+            종료된 수업
+          </li>
         </ul>
         <lecture-area
           :user="user"
-          :isEnd="state.isEnd"
+          :isEnd="state.isEndedMenuActive"
           :endClass="endClass"
           :scheduledClass="scheduledClass"
         ></lecture-area>
@@ -205,9 +215,6 @@ export default {
     ];
     let endClass = [];
     let scheduledClass = [];
-    // 나중에 수정해야할것같은데 일단 해놓음.
-    // 종료된거랑 종료 전이랑 어떻게 나눌지...
-    // 아마 데이터 받아오면 mutation? 어디지 암튼 거기서 나눠줘야하나?
 
     const division = () => {
       classes.forEach((e) => {
@@ -224,23 +231,13 @@ export default {
     };
     division();
     const state = reactive({
-      isEnd: false,
+      isEndedMenuActive: false,
     });
-    const doActive = (e) => {
-      if (!e.target.classList.contains("active")) {
-        e.target.classList.add("active");
-      }
+    const doMenuActive = (e) => {
       if (e.target.innerText === "예정된 수업") {
-        if (state.isEnd) {
-          state.isEnd = !state.isEnd;
-        }
-        navItem[1].classList.remove("active");
+        state.isEndedMenuActive = false;
       } else {
-        //만약 종료된수업을 눌렀다면!
-        if (!state.isEnd) {
-          state.isEnd = !state.isEnd;
-        }
-        navItem[0].classList.remove("active");
+        state.isEndedMenuActive = true;
       }
     };
 
@@ -273,7 +270,7 @@ export default {
       division,
       endClass,
       scheduledClass,
-      doActive,
+      doMenuActive,
       openCharacterModal,
       closeCharacterModal,
       isModifyOpen,

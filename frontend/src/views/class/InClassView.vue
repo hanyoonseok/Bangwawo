@@ -17,8 +17,10 @@
       :currentStudents="currentStudents"
       :initCurrentStudents="initCurrentStudents"
       :prevClick="prevClick"
+      :roomInfo="state"
       :nextClick="nextClick"
       @changeDataLen="changeDataLen"
+      :joinSession="joinSession"
     />
     <!-- <div id="session" v-if="state.session">
       <div id="session-header">

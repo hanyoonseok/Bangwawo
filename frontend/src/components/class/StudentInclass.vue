@@ -1,11 +1,19 @@
 <template>
-  <div class="stu-inclass-container"></div>
+  <div class="stu-inclass-container">
+    <user-video
+      :stream-manager="publisher"
+      @click="updateMainVideoStreamManager(publisher)"
+    />
+  </div>
 </template>
 
 <script>
 export default {
   name: "StudentOX",
-  setup() {},
+  props: ["publisher", "joinSession"],
+  setup(props) {
+    props.joinSession();
+  },
   components: {},
 };
 </script>
