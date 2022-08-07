@@ -3,7 +3,6 @@ module.exports = {
   env: {
     node: true,
     browser: true,
-    faceapi: true,
   },
   extends: [
     "plugin:vue/essential",
@@ -16,7 +15,6 @@ module.exports = {
   rules: {
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
-    "no-undef": "off",
     "prettier/prettier": [
       "error",
       {
