@@ -136,8 +136,9 @@ export default {
     };
 
     const muteAudio = () => {
-      console.log("publisher", props.roomInfo.publisher);
+      console.log("publisher", props.roomInfo.publishAudio(false));
       console.log("subscriber", props.roomInfo.subscribers);
+      props.roomInfo.publishAudio(false);
       // props.roomInfo.publisher.publishAudio(false);
       // props.roomInfo.publisher.stream.audioActive =
       //   !props.roomInfo.publisher.stream.audioActive; // true to unmute the audio track, false to mute it
