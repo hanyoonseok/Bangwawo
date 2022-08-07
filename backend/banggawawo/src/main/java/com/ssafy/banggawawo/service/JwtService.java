@@ -2,19 +2,10 @@ package com.ssafy.banggawawo.service;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
-import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
-import com.ssafy.banggawawo.exception.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -26,14 +17,14 @@ public class JwtService {
     private static final String SALT = "ssafySecret";
     private static final int EXPIRE_MINUTES = 60;
 
-    public <T> String create(String userType, String userId) {
+    public <T> String create(String userType, Object user) {
         String jwt = Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setHeaderParam("regDate", System.currentTimeMillis())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * EXPIRE_MINUTES))
                 .setSubject("userInfo")
                 .claim("userType", userType)
-                .claim("userId", userId)
+                .claim("userId", user)
                 .signWith(SignatureAlgorithm.HS256, this.generateKey())
                 .compact();
         return jwt;

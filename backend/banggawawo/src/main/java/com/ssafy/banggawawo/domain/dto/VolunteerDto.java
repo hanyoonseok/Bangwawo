@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter @Setter
 public class VolunteerDto {
     private Long vId;          // 봉사자 아이디
-    private String token;     // 카카오 토큰
+    private String kakaoId;     // 카카오 회원번호
     private String nickname;      // 별명
     private int ageRange;        // 연령대
     private String introduce; // 자기소개

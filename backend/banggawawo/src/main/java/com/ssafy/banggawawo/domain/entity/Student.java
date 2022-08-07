@@ -15,19 +15,19 @@ public class Student {
     @GeneratedValue
     private Long sId;          //학생 아이디
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
     private List<Enrol> enrols = new ArrayList<Enrol>(); //수강신청 목록 & 피드백 목록
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
     private List<Request> requests = new ArrayList<Request>(); //수업요청 리스트
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
     private List<SecritChat> secritChats = new ArrayList<SecritChat>();   //비밀친구 대화 리스트
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
     private List<Likes> likes = new ArrayList<Likes>();   //좋아요 리스트
 
-    private String token;       //카카오 회원번호
+    private String kakaoId;       //카카오 회원번호
     private int ageRange;        //연령대
     private String nickname;    //별명
     private String pemail;   //부모이메일
@@ -37,9 +37,9 @@ public class Student {
     private Character character;//개인 3d캐릭터에 대한 정보
 
     @Builder
-        public Student(String token, int ageRange,
+        public Student(String kakaoId, int ageRange,
                        String nickname, String pemail, String ppw, Character character){
-        this.token = token;
+        this.kakaoId = kakaoId;
         this.ageRange = ageRange;
         this.nickname = nickname;
         this.pemail = pemail;

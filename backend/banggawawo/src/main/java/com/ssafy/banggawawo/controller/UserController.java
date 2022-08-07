@@ -25,7 +25,7 @@ public class UserController {
     // Student ///////////////////////////////////////////////////////////////////////////////////////////////
     @ApiOperation(value="학생 정보 조회", notes="학생 id(sid)를 받아 학생 정보를 제공한다.")
     @GetMapping("/student/{id}")
-    public Map<String, Object> findByStudentId(@PathVariable("sId") Long id){
+    public Map<String, Object> findByStudentId(@PathVariable("id") Long id){
         Map<String, Object> response = new HashMap<>();
         Optional<Student> oStudent = studentService.findById(id);
         if(oStudent.isPresent()){
@@ -109,7 +109,7 @@ public class UserController {
     // 봉사자 정보 조회
     @ApiOperation(value="유저 확인", notes="")
     @GetMapping("/volunteer/{id}")
-    public Map<String, Object> findByVolunteerId(@PathVariable("vId") Long id){
+    public Map<String, Object> findByVolunteerId(@PathVariable("id") Long id){
         Map<String, Object> response = new HashMap<>();
         Optional<Volunteer> oVolunteer = volunteerService.findById(id);
         if(oVolunteer.isPresent()){
