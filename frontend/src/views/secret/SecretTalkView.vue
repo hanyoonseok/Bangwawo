@@ -4,31 +4,37 @@
       <h2>비밀친구 대화중</h2>
     </article>
     <article class="user-wrapper" v-if="state.session">
-      <SecretCanvas
-        :parts="student"
-        class="user-card"
-        :user="stu"
-        id="stu"
-        :stream-manager="state.publisher"
-        @click="updateMainVideoStreamManager(state.publisher)"
-      />
-      <SecretCanvas
-        :parts="volunteer"
-        class="user-card"
-        :user="vol"
-        id="vol"
-        :stream-manager="state.subscribers[0]"
-        @click="updateMainVideoStreamManager(state.state.subscribers[0])"
-      />
+      <SecretCanvas :parts="student" class="user-card" :user="stu" id="stu" />
+      <SecretCanvas :parts="volunteer" class="user-card" :user="vol" id="vol" />
     </article>
+    <div id="session" v-if="state.session">
+      <div id="session-header">
+        <h1 id="session-title">{{ state.mySessionId }}</h1>
+      </div>
+      <div id="main-video" class="col-md-6">
+        <user-video :stream-manager="state.mainStreamManager" />
+      </div>
+      <div id="video-container" class="col-md-6">
+        <user-video
+          :stream-manager="state.publisher"
+          @click="updateMainVideoStreamManager(state.publisher)"
+        />
+        <user-video
+          v-for="sub in state.subscribers"
+          :key="sub.stream.connection.connectionId"
+          :stream-manager="sub"
+          @click="updateMainVideoStreamManager(sub)"
+        />
+      </div>
+    </div>
     <article class="btn-wrapper">
       <button class="option-btn" @click="clickMute" v-if="state.audioState">
         <i class="fa-solid fa-microphone-slash"></i>
-        &nbsp;음소거 해제
+        &nbsp;음소거
       </button>
       <button class="option-btn" @click="clickMute" v-else>
         <i class="fa-solid fa-microphone-slash"></i>
-        &nbsp;음소거
+        &nbsp;음소거 해제
       </button>
       <button class="option-btn" @click="leaveSession">
         <i class="fa-solid fa-xmark"></i> &nbsp;대화 종료
@@ -47,11 +53,14 @@ import { useRouter } from "vue-router";
 import axios from "axios";
 import { OpenVidu } from "openvidu-browser";
 axios.defaults.headers.post["Content-Type"] = "application/json";
+import UserVideo from "@/components/secret/UserVideo";
 
 export default {
   name: "SecretTalkView",
   components: {
     SecretCanvas,
+    UserVideo,
+
     // SCanvas,
   },
   setup() {
@@ -68,8 +77,11 @@ export default {
     let vol = "vol";
 
     // 테스트용
-    const OPENVIDU_SERVER_URL = "https://i7b201.p.ssafy.io";
-    const OPENVIDU_SERVER_SECRET = "BANGGWAWO_SECRET";
+    const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
+    const OPENVIDU_SERVER_SECRET = "MY_SECRET";
+
+    // const OPENVIDU_SERVER_URL = "https://i7b201.p.ssafy.io";
+    // const OPENVIDU_SERVER_SECRET = "BANGGWAWO_SECRET";
     const OV = new OpenVidu();
 
     const state = reactive({
@@ -81,7 +93,7 @@ export default {
       mySessionId: "SessionA",
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       joinedPlayerNumbers: 0,
-      audioState: true, //음소거 상태 여부 true:음소거O, false : 음소거X
+      audioState: true,
       isHost: true,
     });
 
@@ -102,8 +114,10 @@ export default {
       // 새로운 Stream을 구독하고 subscribers배열에 저장
       state.session.on("streamCreated", ({ stream }) => {
         const subscriber = state.session.subscribe(stream);
-        subscriber.subscribeToVideo(false); // true to enable the video, false to disable it
+        console.log("subscriber", subscriber);
+        // subscriber.subscribeToVideo(false); // true to enable the video, false to disable it
         state.subscribers.push(subscriber);
+        console.log("subscribers", state.subscribers);
         if (subscriber.videos !== []) state.joinedPlayerNumbers++;
       });
       // 사용자가 화상 회의에서 나갔을때 나간 사용자 제거
@@ -133,16 +147,16 @@ export default {
             // --- Get your own camera stream with the desired properties ---
             let publisher = state.OV.initPublisher(undefined, {
               audioSource: undefined, // The source of audio. If undefined default microphone
-              videoSource: false, // The source of video. If undefined default webcam
+              videoSource: undefined, // The source of video. If undefined default webcam
               publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-              publishVideo: false, // Whether you want to start publishing with your video enabled or not
+              publishVideo: true, // Whether you want to start publishing with your video enabled or not
               resolution: "600x320", // The resolution of your video
               frameRate: 30, // The frame rate of your video
               insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
               mirror: false, // Whether to mirror your local video or not
             });
             console.log("p", publisher);
-            publisher.publishVideo(false); // true to enable the video track, false to disable it
+            // publisher.publishVideo(false); // true to enable the video track, false to disable it
             state.mainStreamManager = publisher;
             state.publisher = publisher;
             console.log("state.pu", state.publisher);
@@ -259,7 +273,6 @@ export default {
 
     const clickMute = () => {
       state.audioState = !state.audioState;
-      console.log(state.audioState ? "음소거 한 상태" : "음소거 안한 상태");
       state.publisher.publishAudio(state.audioState);
     };
 
