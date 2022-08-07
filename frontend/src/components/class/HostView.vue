@@ -19,6 +19,7 @@
           v-for="student in currentStudents"
           :key="student.id"
         >
+          <ov-video :stream-manager="streamManager" />
           <div class="hover-wrapper">{{ student.name }}</div>
           <div class="user-card"></div>
         </div>
@@ -71,11 +72,12 @@
 </template>
 
 <script>
-import { reactive } from "vue";
+import { reactive, onMounted } from "vue";
 import ParticipantsList from "@/components/class/ParticipantsList.vue";
 import ChatForm from "@/components/class/ChatForm.vue";
 import OXForm from "@/components/class/OXForm.vue";
 import OXResult from "@/components/class/OXResult.vue";
+import OvVideo from "./OvVideo";
 
 export default {
   name: "HostView",
@@ -85,8 +87,11 @@ export default {
     "initCurrentStudents",
     "prevClick",
     "nextClick",
+    "streamManager",
+    "roomInfo",
   ],
   setup(props) {
+    console.log("props.room", props.roomInfo);
     const state = reactive({
       isParticipantsOpen: false,
       isChatOpen: false,
@@ -115,7 +120,12 @@ export default {
       state.isChatOpen = !state.isChatOpen;
     };
 
-    props.initCurrentStudents();
+    onMounted(() => {
+      console.log(props.streamManager);
+      // const instance = getCurrentInstance();
+      props.roomInfo.publisher.addVideoElement(this.$el);
+    }),
+      props.initCurrentStudents();
     return {
       state,
       toggleParticipants,
@@ -128,6 +138,7 @@ export default {
     ChatForm,
     OXForm,
     OXResult,
+    OvVideo,
   },
 };
 </script>
