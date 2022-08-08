@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
 
@@ -30,7 +31,7 @@ public class StudentService {
     }
 
     @Transactional(readOnly = true) // 조회 시 데이터 변경 방지
-    public Optional<Student> findByPemail(String email){
+    public List<Student> findByPemail(String email){
         return studentRepository.findByPemail(email);
     }
 
