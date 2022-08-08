@@ -9,7 +9,7 @@
       :subs="state.subscribers"
       @activeVideo="activeVideo"
       @activeMute="activeMute"
-      @activeScreenShare="activeScreenShare"
+      @publishScreenShare="publishScreenShare"
     />
     <UserView
       v-if="!state.isHost && state.session"
@@ -19,6 +19,9 @@
       :state="state"
       :me="state.publisher"
       :subs="state.subscribers"
+      @activeVideo="activeVideo"
+      @activeMute="activeMute"
+      @publishScreenShare="publishScreenShare"
     />
     <!-- <div id="session" v-if="state.session">
       <div id="session-header">
@@ -85,7 +88,8 @@ export default {
 
     const state = reactive({
       OV: OV,
-      OVScreen = OVScreen,
+      OVScreen: OVScreen,
+      sessionScreen: undefined,
       session: undefined,
       mainStreamManager: undefined,
       publisher: OV.initPublisher(undefined, {
@@ -99,7 +103,7 @@ export default {
         mirror: false, // Whether to mirror your local video or not
       }),
       subscribers: [],
-      mySessionId: "SessionAA",
+      mySessionId: "SessionAAA",
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       joinedPlayerNumbers: 0,
 
@@ -114,6 +118,8 @@ export default {
         return state.isHost ? 12 : 4;
       }),
       dataIdx: 0,
+
+      screenShareState: true, //화면공유 여부
     });
 
     /*
@@ -128,6 +134,8 @@ export default {
       console.log("join session");
       // 초기화
       state.session = state.OV.initSession();
+      state.sessionScreen = state.OVScreen.initSession();
+
       // 새로운 Stream을 구독하고 subscribers배열에 저장
       state.session.on("streamCreated", ({ stream }) => {
         const subscriber = state.session.subscribe(stream);
@@ -146,6 +154,22 @@ export default {
       // On every asynchronous exception...
       state.session.on("exception", ({ exception }) => {
         console.warn(exception);
+      });
+
+      // 화면 공유
+      state.sessionScreen.on("streamCreated", (event) => {
+        if (event.stream.typeOfVideo == "SCREEN") {
+          // Subscribe to the Stream to receive it. HTML video will be appended to element with 'container-screens' id
+          var subscriberScreen = state.sessionScreen.subscribe(
+            event.stream,
+            "container-screens",
+          );
+          // When the HTML video has been appended to DOM...
+          subscriberScreen.on("videoElementCreated", () => {
+            // Add a new <p> element for the user's nickname just below its video
+            // appendUserData(event.element, subscriberScreen.stream.connection);
+          });
+        }
       });
 
       // 'getToken' method is simulating what your server-side should do.
@@ -179,6 +203,23 @@ export default {
             );
           });
       });
+
+      getToken(state.mySessionId).then((tokenScreen) => {
+        // Create a token for screen share
+        state.sessionScreen
+          .connect(tokenScreen, { clientData: state.myUserName })
+          .then(() => {
+            console.log("Session screen connected");
+          })
+          .catch((error) => {
+            console.warn(
+              "There was an error connecting to the session for screen share:",
+              error.code,
+              error.message,
+            );
+          });
+      });
+
       window.addEventListener("beforeunload", leaveSession);
     };
 
@@ -187,7 +228,12 @@ export default {
       if (state.session) {
         state.session.disconnect();
       }
+
+      if (state.sessionScreen) {
+        state.sessionScreen.disconnect();
+      }
       state.session = undefined;
+      state.sessionScreen = undefined;
       state.mainStreamManager = undefined;
       state.publisher = undefined;
       state.subscribers = [];
@@ -277,6 +323,37 @@ export default {
       });
     };
 
+    const publishScreenShare = (screenShareState) => {
+      var publisherScreen = state.OVScreen.initPublisher("container-screens", {
+        videoSource: "screen",
+      });
+
+      publisherScreen.once("accessAllowed", () => {
+        state.screenShareState = screenShareState;
+        document.getElementById("screenShareStart").style.display = "none";
+        publisherScreen.stream
+          .getMediaStream()
+          .getVideoTracks()[0]
+          .addEventListener("ended", () => {
+            document.getElementById("screenShareStart").style.display = "block";
+            console.log(
+              "화면 공유를 멈췄ㄸ따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ",
+            );
+            state.sessionScreen.unpublish(publisherScreen);
+            state.screenShareState = false;
+          });
+        state.sessionScreen.publish(publisherScreen);
+      });
+
+      publisherScreen.on("videoElementCreated", function (event) {
+        event.element["muted"] = true;
+      });
+
+      publisherScreen.once("accessDenied", () => {
+        console.error("Screen Share: Access Denied");
+      });
+    };
+
     joinSession();
     onBeforeUnmount(() => {
       state.joinedPlayerNumbers = 0;
@@ -322,27 +399,6 @@ export default {
       state.publisher.publishAudio(audioState);
     };
 
-    const activeScreenShare = (screenShareState) => {
-      if (screenShareState) {
-        state.publisher = OV.initPublisher("screenShare", {
-          videoSource: "screen",
-        });
-        state.publisher.once("accessAllowed", () => {
-          state.publisher.stream
-            .getMediaStream()
-            .getVideoTracks()[0]
-            .addEventListener("ended", () => {
-              console.log('User pressed the "Stop sharing" button');
-            });
-          state.session.publish(state.publisher);
-        });
-      } else {
-        state.publisher = OV.initPublisher("screenShare", {
-          videoSource: undefined,
-        });
-      }
-    };
-
     return {
       state,
       // dataLen,
@@ -353,7 +409,7 @@ export default {
       // changeDataLen,
       activeVideo,
       activeMute,
-      activeScreenShare,
+      publishScreenShare,
     };
   },
 };

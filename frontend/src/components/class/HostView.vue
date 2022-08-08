@@ -22,9 +22,10 @@
           <div class="hover-wrapper">이름{{ i }}</div>
           <div class="user-card"><OvVideo :stream-manager="user" /></div>
         </div>
+        <div id="container-screens">
+          <h4>화면 공유</h4>
+        </div>
       </article>
-
-      <div id="screenShare"></div>
 
       <article class="top-right" v-if="state.isTopOpen || state.isChatOpen">
         <ParticipantsList
@@ -57,13 +58,9 @@
         </button>
         <button
           class="option-btn"
-          @click="activeScreenShare"
-          v-if="state.screenShareState"
+          @click="publishScreenShare"
+          id="screenShareStart"
         >
-          <i class="fa-solid fa-arrow-up-from-square"></i>
-          &nbsp;화면 공유 중지
-        </button>
-        <button class="option-btn" @click="activeScreenShare" v-else>
           <i class="fa-solid fa-arrow-up-from-square"></i>
           &nbsp;화면 공유 시작
         </button>
@@ -108,7 +105,6 @@ export default {
     "subs",
   ],
   setup(props, { emit }) {
-    console.log("me???????", props.me);
     const state = reactive({
       isParticipantsOpen: false,
       isChatOpen: false,
@@ -117,7 +113,6 @@ export default {
       isOXResult: false,
       videoState: true, // 비디오 on,off
       audioState: true, // 소리 on,off
-      screenShareState: true, // 화면공유 on,off
 
       clientData: computed(() => {
         const { clientData } = getConnectionData();
@@ -171,9 +166,8 @@ export default {
       emit("activeMute", state.audioState);
     };
 
-    const activeScreenShare = () => {
-      state.screenShareState = !state.screenShareState;
-      emit("activeScreenShare", state.screenShareState);
+    const publishScreenShare = () => {
+      emit("publishScreenShare");
     };
 
     return {
@@ -183,7 +177,7 @@ export default {
       toggleOX,
       activeVideo,
       activeMute,
-      activeScreenShare,
+      publishScreenShare,
     };
   },
   components: {
@@ -196,4 +190,15 @@ export default {
 };
 </script>
 
-<style scoped src="@/css/class.scss" lang="scss"></style>
+<style scoped src="@/css/class.scss" lang="scss">
+/* .top-section ::v-deep(#container-screens video) {
+  width: 100px;
+  height: 100px;
+} */
+
+#container-screens video {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+</style>
