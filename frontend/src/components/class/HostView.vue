@@ -31,7 +31,12 @@
         />
         <OXForm :state="state" :toggleOX="toggleOX" />
         <OXResult :state="state" :toggleOX="toggleOX" />
-        <ChatForm :state="state" :toggleChat="toggleChat" />
+        <ChatForm
+          :state="state"
+          :toggleChat="toggleChat"
+          :session="session"
+          :chats="chats"
+        />
       </article>
     </section>
 
@@ -88,9 +93,10 @@ export default {
     "leaveSession",
     "me",
     "subs",
+    "session",
+    "chats",
   ],
   setup(props) {
-    console.log("props.room", props.roomInfo);
     const state = reactive({
       isParticipantsOpen: false,
       isChatOpen: false,

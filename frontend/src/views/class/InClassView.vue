@@ -7,6 +7,8 @@
       :leaveSession="leaveSession"
       :me="state.publisher"
       :subs="state.subscribers"
+      :session="state.session"
+      :chats="state.chats"
     />
     <UserView
       v-if="!state.isHost && state.session"
@@ -50,6 +52,7 @@
 <script>
 import { reactive, onBeforeUnmount, computed } from "vue";
 import axios from "axios";
+import moment from "moment";
 import { OpenVidu } from "openvidu-browser";
 import HostView from "@/components/class/HostView.vue";
 import UserView from "@/components/class/UserView.vue";
@@ -85,9 +88,10 @@ export default {
         mirror: false, // Whether to mirror your local video or not
       }),
       subscribers: [],
-      mySessionId: "SessionB",
+      mySessionId: "SessionC",
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       joinedPlayerNumbers: 0,
+      chats: [],
 
       currentUsers: computed(() => {
         return state.subscribers.slice(
@@ -102,7 +106,7 @@ export default {
       dataIdx: 0,
     });
 
-    /* 
+    /*
   닉네임:사용자
   sessionName : 방 이름?
   token : 토큰 들어오는데 이건 입장 할때마다 바뀌는 값
@@ -134,6 +138,21 @@ export default {
       // On every asynchronous exception...
       state.session.on("exception", ({ exception }) => {
         console.warn(exception);
+      });
+
+      state.session.on("signal:my-chat", (e) => {
+        console.log(e.data); // Message
+        console.log(e.from); // Connection object of the sender
+        console.log(e.type); // The type of message ("my-chat")
+        const parsedDate = moment(new Date()).format("HH:mm");
+        const hour = parsedDate.split(":")[0];
+        const finalDate =
+          hour < 12 ? "오전 " + parsedDate : "오후 " + parsedDate;
+        state.chats.push({
+          sender: JSON.parse(e.from.data).clientData,
+          msg: e.data,
+          date: finalDate,
+        });
       });
 
       console.log("sessionid", state.mySessionId);
