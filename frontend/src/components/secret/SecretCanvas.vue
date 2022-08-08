@@ -11,7 +11,13 @@ import { reactive, onMounted, watch } from "vue";
 
 export default {
   name: "SecretCanvas",
-  props: ["parts", "user", "isTalking"],
+  props: [
+    "parts",
+    "user",
+    "isSubscribeTalking",
+    "isPublisherTalking",
+    "isPublisher",
+  ],
   setup(props) {
     // Initial material
     // const store = useStore();
@@ -20,9 +26,7 @@ export default {
       shininess: 10,
     });
     const state = reactive({
-      isTalking: props.isTalking,
       actionStanding: undefined,
-      startTime: undefined,
     });
 
     const INITIAL_MAP = [
@@ -198,16 +202,30 @@ export default {
     });
 
     watch(
-      () => props.isTalking,
-      (cur) => {
-        playTalkingAnimation(cur);
+      () => {
+        props.isPublisherTalking;
       },
+      () => {
+        playTalkingAnimation("publisher", props.isPublisherTalking);
+      },
+      { deep: true },
     );
-    const playTalkingAnimation = (cur) => {
-      state.startTime = mixer.time;
+    watch(
+      () => {
+        props.isSubscribeTalking;
+      },
+      () => {
+        playTalkingAnimation("subscriber", props.isSubscribeTalking);
+      },
+      { deep: true },
+    );
+
+    const playTalkingAnimation = (talkingUser, isTalking) => {
+      console.log("안올거냐 ㅠㅠㅠㅠ 너무하다", talkingUser);
       let clip = THREE.AnimationClip.findByName(clips, "talking");
       let actionTalking = mixer.clipAction(clip);
-      if (cur) {
+      if (props.user === talkingUser && isTalking) {
+        console.log("이제좀돼라");
         actionTalking.timeScale = 1;
         actionTalking.clampWhenFinished = true;
         state.actionStanding.stop();
@@ -224,11 +242,11 @@ export default {
       scene,
       renderer,
       camera,
-      playTalkingAnimation,
       INITIAL_MAP,
       animate,
       initColor,
       standing,
+      playTalkingAnimation,
       state,
     };
   },
