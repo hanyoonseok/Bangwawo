@@ -20,7 +20,7 @@ public class SecritChatService {
     @Transactional
     public int warning(SecritChatDto secritChatDto) throws Exception {
         SecritChat secritChat = SecritChat.builder()
-                .student(secritChatDto.getStudent())
+                .student(secritChatDto.getSId())
                 .scContent(secritChatDto.getScContent())
                 .scDate(secritChatDto.getScDate())
                 .parentsCheck(false)

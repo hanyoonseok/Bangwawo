@@ -18,7 +18,7 @@ public class LikesService {
     @Transactional
     public int sympathy(LikesDto likesDto) throws Exception {
         Likes likes = Likes.builder()
-                .student(likesDto.getStudent())
+                .student(likesDto.getSId())
                 .rId(likesDto.getRId())
                 .lOpened(false)
                 .lRead(false)

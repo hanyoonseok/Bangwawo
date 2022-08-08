@@ -20,8 +20,8 @@ public class RequestService {
     @Transactional
     public int write(RequestDto requestDto) throws Exception {
         Request request = Request.builder()
-                .student(requestDto.getStudent())
-                .classRoom(requestDto.getClassRoom())
+                .student(requestDto.getSId())
+                .classRoom(requestDto.getCId())
                 .content(requestDto.getContent())
                 .title(requestDto.getTitle())
                 .solved(false)
@@ -34,7 +34,8 @@ public class RequestService {
     //요청글 목록
     @Transactional(readOnly = true)
     public Map<String, Object> list(int scrollcnt) throws Exception {
-        Page<Request> requestsList = requestRepository.findAll(PageRequest.of((scrollcnt-1), 6));
+        System.out.println(scrollcnt);
+        Page<Request> requestsList = requestRepository.findAll(PageRequest.of(scrollcnt-1, 6));
         HashMap<String, Object> result = new HashMap<String, Object>();
         result.put("requestsList", requestsList);
         return result;

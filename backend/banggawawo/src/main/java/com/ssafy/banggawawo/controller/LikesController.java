@@ -26,14 +26,15 @@ public class LikesController {
     @ApiOperation(value = "요청글에 대한 공감")
     public ResponseEntity<?> sympathy(@RequestBody LikesDto likeDto) throws Exception {
         System.out.println("들어옴??");
-        System.out.println(likeDto.getLid());
-        System.out.println(likeDto.getStudent().toString());
-        Optional<Likes> likes = likeService.readonly(likeDto.getLid());
+        System.out.println(likeDto.getRId().toString()+"////1번입니다");
+        System.out.println(likeDto.getSId().getSId().toString()+"///2번입니다");
+        System.out.println(likeDto.getLId().toString()+"///2번입니다");
+        Optional<Likes> likes = likeService.readonly(likeDto.getLId());
         // 요청글에대한 공감을 이미 했는지 안했는지 확인작업
         if(!likes.isPresent()){
             System.out.println("이미 작성");
             // 이미 공감버튼을 누른 경우 삭제된다.
-            likeService.delete(likeDto.getLid());
+            likeService.delete(likeDto.getLId());
             return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
         }else{
             System.out.println("새로 작성");

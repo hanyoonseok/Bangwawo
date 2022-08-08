@@ -10,7 +10,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SecritChatDto {
-    private Student student;      // 비밀 친구 사용학생
+    private Student sId;      // 비밀 친구 사용학생
     private Long scId;            // 비밀 친구 아이디
     private String scContent;     // 위험 내용
     private Date scDate;          // 날짜
