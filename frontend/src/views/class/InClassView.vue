@@ -1,24 +1,25 @@
 <template>
   <section class="background">
-    <!-- <HostView
-        v-if="state.isHost"
-        :dataLen="dataLen"
-        :currentStudents="currentStudents"
-        :initCurrentStudents="initCurrentStudents"
-        :prevClick="prevClick"
-        :nextClick="nextClick"
-        @changeDataLen="changeDataLen"
-      />
-    <UserView
-      v-else
+    <HostView
+      v-if="state.isHost && state.session"
       :dataLen="dataLen"
-      :currentStudents="currentStudents"
-      :initCurrentStudents="initCurrentStudents"
-      :prevClick="prevClick"
-      :nextClick="nextClick"
-      @changeDataLen="changeDataLen"
-    /> -->
-    <div id="session" v-if="state.session">
+      :currentUsers="currentUsers"
+      :leaveSession="leaveSession"
+      :me="state.publisher"
+      :subs="state.subscribers"
+      :session="state.session"
+      :chats="state.chats"
+    />
+    <UserView
+      v-if="!state.isHost && state.session"
+      :dataLen="dataLen"
+      :currentUsers="currentUsers"
+      :leaveSession="leaveSession"
+      :state="state"
+      :me="state.publisher"
+      :subs="state.subscribers"
+    />
+    <!-- <div id="session" v-if="state.session">
       <div id="session-header">
         <h1 id="session-title">{{ state.mySessionId }}</h1>
         <input
@@ -44,33 +45,32 @@
           @click="updateMainVideoStreamManager(sub)"
         />
       </div>
-    </div>
+    </div> -->
   </section>
 </template>
 
 <script>
-import { reactive, ref, onBeforeUnmount } from "vue";
+import { reactive, onBeforeUnmount, computed } from "vue";
 import axios from "axios";
+import moment from "moment";
 import { OpenVidu } from "openvidu-browser";
-// import HostView from "@/components/class/HostView.vue";
-// import UserView from "@/components/class/UserView.vue";
-import UserVideo from "@/components/class/UserVideo";
+import HostView from "@/components/class/HostView.vue";
+import UserView from "@/components/class/UserView.vue";
+// import UserVideo from "@/components/class/UserVideo";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 export default {
   name: "InClassView",
   components: {
-    // HostView,
-    // UserView,
-    UserVideo,
+    HostView,
+    UserView,
+    // UserVideo,
   },
   setup() {
-    // const OPENVI00DU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
-
     // 테스트용
-    const OPENVIDU_SERVER_URL = "https://i7b201.p.ssafy.io";
-    const OPENVIDU_SERVER_SECRET = "BANGGWAWO_SECRET";
+    const OPENVIDU_SERVER_URL = process.env.VUE_APP_OV_DOMAIN;
+    const OPENVIDU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
     const OV = new OpenVidu();
 
     const state = reactive({
@@ -88,14 +88,25 @@ export default {
         mirror: false, // Whether to mirror your local video or not
       }),
       subscribers: [],
-      mySessionId: "SessionA",
+      mySessionId: "SessionC",
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       joinedPlayerNumbers: 0,
+      chats: [],
 
+      currentUsers: computed(() => {
+        return state.subscribers.slice(
+          state.dataIdx,
+          Math.min(state.dataIdx + state.dataLen, state.subscribers.length + 1),
+        );
+      }),
       isHost: true,
+      dataLen: computed(() => {
+        return state.isHost ? 12 : 4;
+      }),
+      dataIdx: 0,
     });
 
-    /* 
+    /*
   닉네임:사용자
   sessionName : 방 이름?
   token : 토큰 들어오는데 이건 입장 할때마다 바뀌는 값
@@ -129,6 +140,21 @@ export default {
         console.warn(exception);
       });
 
+      state.session.on("signal:my-chat", (e) => {
+        console.log(e.data); // Message
+        console.log(e.from); // Connection object of the sender
+        console.log(e.type); // The type of message ("my-chat")
+        const parsedDate = moment(new Date()).format("HH:mm");
+        const hour = parsedDate.split(":")[0];
+        const finalDate =
+          hour < 12 ? "오전 " + parsedDate : "오후 " + parsedDate;
+        state.chats.push({
+          sender: JSON.parse(e.from.data).clientData,
+          msg: e.data,
+          date: finalDate,
+        });
+      });
+
       console.log("sessionid", state.mySessionId);
       console.log("user name", state.myUserName);
       // 'getToken' method is simulating what your server-side should do.
@@ -138,7 +164,6 @@ export default {
         state.session
           .connect(token, { clientData: state.myUserName })
           .then(() => {
-            console.log("getToken2222222222");
             // --- Get your own camera stream with the desired properties ---
             let publisher = state.OV.initPublisher(undefined, {
               audioSource: undefined, // The source of audio. If undefined default microphone
@@ -150,10 +175,8 @@ export default {
               insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
               mirror: false, // Whether to mirror your local video or not
             });
-            console.log("p", publisher);
             state.mainStreamManager = publisher;
             state.publisher = publisher;
-            console.log("state.pu", state.publisher);
 
             state.joinedPlayerNumbers++;
             state.session.publish(publisher);
@@ -167,6 +190,7 @@ export default {
           });
       });
       window.addEventListener("beforeunload", leaveSession);
+      console.log("@@@@subscribers@@@@", state.subscribers);
     };
 
     const leaveSession = () => {
@@ -208,6 +232,7 @@ export default {
           .then((response) => {
             console.log(response);
             response.data;
+            return response.data;
           })
           .then((data) => resolve(data.id))
           .catch((error) => {
@@ -269,125 +294,46 @@ export default {
       leaveSession();
     });
 
-    const dataLen = ref(state.isHost ? 12 : 4);
-    const dataIdx = ref(0);
-    const students = ref([
-      {
-        id: 1,
-        name: "김수빈수빈1",
-      },
-      {
-        id: 2,
-        name: "김수빈수빈2",
-      },
-      {
-        id: 3,
-        name: "김수빈수빈3",
-      },
-      {
-        id: 4,
-        name: "김수빈수빈4",
-      },
-      {
-        id: 5,
-        name: "김수빈수빈5",
-      },
-      {
-        id: 6,
-        name: "김수빈수빈6",
-      },
-      {
-        id: 7,
-        name: "김수빈수빈7",
-      },
-      {
-        id: 8,
-        name: "김수빈수빈8",
-      },
-      {
-        id: 9,
-        name: "김수빈수빈9",
-      },
-      {
-        id: 10,
-        name: "김수빈수빈10",
-      },
-      {
-        id: 11,
-        name: "김수빈수빈11",
-      },
-      {
-        id: 12,
-        name: "김수빈수빈12",
-      },
-      {
-        id: 13,
-        name: "김수빈수빈13",
-      },
-      {
-        id: 14,
-        name: "김수빈수빈14",
-      },
-      {
-        id: 15,
-        name: "김수빈수빈15",
-      },
-    ]);
+    // const nextClick = () => {
+    //   if (dataIdx.value + dataLen.value >= students.value.length) return;
+    //   dataIdx.value += dataLen.value;
+    //   const currentTempArr = [];
+    //   for (
+    //     let i = dataIdx.value;
+    //     i < Math.min(dataIdx.value + dataLen.value, students.value.length);
+    //     i++
+    //   ) {
+    //     currentTempArr.push(students.value[i]);
+    //   }
+    //   currentUsers.value = currentTempArr;
+    // };
 
-    const currentStudents = ref([]);
+    // const prevClick = () => {
+    //   if (dataIdx.value - dataLen.value < 0) return;
+    //   dataIdx.value -= dataLen.value;
+    //   const currentTempArr = [];
+    //   for (
+    //     let i = Math.max(0, dataIdx.value);
+    //     i < dataIdx.value + dataLen.value;
+    //     i++
+    //   ) {
+    //     currentTempArr.push(students.value[i]);
+    //   }
+    //   currentUsers.value = currentTempArr;
+    // };
 
-    const initCurrentStudents = () => {
-      const tempArr = [];
-      for (
-        let i = dataIdx.value;
-        i < Math.min(dataIdx.value + dataLen.value, students.value.length);
-        i++
-      ) {
-        tempArr.push(students.value[i]);
-      }
-      currentStudents.value = tempArr;
-    };
-
-    const nextClick = () => {
-      if (dataIdx.value + dataLen.value >= students.value.length) return;
-      dataIdx.value += dataLen.value;
-      const currentTempArr = [];
-      for (
-        let i = dataIdx.value;
-        i < Math.min(dataIdx.value + dataLen.value, students.value.length);
-        i++
-      ) {
-        currentTempArr.push(students.value[i]);
-      }
-      currentStudents.value = currentTempArr;
-    };
-
-    const prevClick = () => {
-      if (dataIdx.value - dataLen.value < 0) return;
-      dataIdx.value -= dataLen.value;
-      const currentTempArr = [];
-      for (
-        let i = Math.max(0, dataIdx.value);
-        i < dataIdx.value + dataLen.value;
-        i++
-      ) {
-        currentTempArr.push(students.value[i]);
-      }
-      currentStudents.value = currentTempArr;
-    };
-
-    const changeDataLen = (param) => {
-      dataLen.value = param;
-    };
+    // const changeDataLen = (param) => {
+    //   dataLen.value = param;
+    // };
 
     return {
       state,
-      dataLen,
-      currentStudents,
-      initCurrentStudents,
-      prevClick,
-      nextClick,
-      changeDataLen,
+      // dataLen,
+      // currentUsers,
+      // initCurrentUsers,
+      // prevClick,
+      // nextClick,
+      // changeDataLen,
     };
   },
 };

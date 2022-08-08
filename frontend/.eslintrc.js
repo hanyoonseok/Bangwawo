@@ -2,6 +2,7 @@ module.exports = {
   root: true,
   env: {
     node: true,
+    browser: true,
   },
   extends: [
     "plugin:vue/essential",
@@ -29,4 +30,12 @@ module.exports = {
       },
     ],
   },
+  overrides: [
+    {
+      files: "*.vue",
+      globals: {
+        faceapi: "readable",
+      },
+    },
+  ],
 };

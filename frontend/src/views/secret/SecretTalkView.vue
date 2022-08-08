@@ -91,7 +91,7 @@ export default {
       mainStreamManager: undefined,
       publisher: undefined,
       subscribers: [],
-      mySessionId: "SessionA",
+      mySessionId: "SessionX",
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       joinedPlayerNumbers: 0,
       audioState: true,
