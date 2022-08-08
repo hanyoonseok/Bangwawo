@@ -19,23 +19,13 @@
         <div class="idx-btn-wrapper prev" @click="prevClick">
           <button class="idx-btn prev"></button>
         </div>
-        <div
-          class="user-card-wrapper"
-          v-for="student in roomInfo.subscribers"
-          :key="student.stream.connection.connectionId"
-        >
-          <user-video
-            :stream-manager="student"
-            @click="updateMainVideoStreamManager(student)"
-          />
-
-          <div class="hover-wrapper">김수빈</div>
+        <div class="user-card-wrapper">
+          <div class="hover-wrapper">나</div>
+          <div class="user-card"><OvVideo :stream-manager="me" /></div>
         </div>
-        <div class="volunteer-video">
-          <user-video
-            :stream-manager="roomInfo.publisher"
-            @click="updateMainVideoStreamManager(roomInfo.publisher)"
-          />
+        <div class="user-card-wrapper" v-for="(user, i) in subs" :key="user.id">
+          <div class="hover-wrapper">이름{{ i }}</div>
+          <div class="user-card"><OvVideo :stream-manager="user" /></div>
         </div>
       </article>
 
@@ -46,7 +36,12 @@
         />
         <OXForm :state="state" :toggleOX="toggleOX" />
         <OXResult :state="state" :toggleOX="toggleOX" />
-        <ChatForm :state="state" :toggleChat="toggleChat" />
+        <ChatForm
+          :state="state"
+          :toggleChat="toggleChat"
+          :session="session"
+          :chats="chats"
+        />
       </article>
     </section>
 
@@ -91,36 +86,44 @@
 </template>
 
 <script>
-import { reactive, onMounted } from "vue";
+import { reactive, computed } from "vue";
 import ParticipantsList from "@/components/class/ParticipantsList.vue";
 import ChatForm from "@/components/class/ChatForm.vue";
 import OXForm from "@/components/class/OXForm.vue";
 import OXResult from "@/components/class/OXResult.vue";
-import UserVideo from "@/components/class/UserVideo.vue";
 
 export default {
   name: "HostView",
   props: [
     "dataLen",
-    "currentStudents",
-    "initCurrentStudents",
+    "currentUsers",
     "prevClick",
     "nextClick",
-    "streamManager",
-    "roomInfo",
-    "joinSession",
+    "leaveSession",
+    "me",
+    "subs",
+    "session",
+    "chats",
   ],
   setup(props) {
-    console.log("subscriber 지금 콘ㄱ솔창", props.roomInfo.subscribers);
-    console.log("props.room", props.roomInfo);
     const state = reactive({
       isParticipantsOpen: false,
       isChatOpen: false,
       isOXOpen: false,
       isTopOpen: false,
       isOXResult: false,
-      audioState: true,
+
+      clientData: computed(() => {
+        const { clientData } = getConnectionData();
+        return clientData;
+      }),
     });
+
+    const getConnectionData = () => {
+      console.log(props.me.stream);
+      const { connection } = props.me.stream;
+      return JSON.parse(connection.data);
+    };
 
     const toggleParticipants = () => {
       if (state.isOXOpen) state.isOXOpen = false;
@@ -142,23 +145,11 @@ export default {
       state.isChatOpen = !state.isChatOpen;
     };
 
-    const clickMute = () => {
-      state.audioState = !state.audioState;
-      props.roomInfo.publisher.publishAudio(state.audioState);
-    };
-    props.joinSession();
-    onMounted(() => {
-      console.log(props.streamManager);
-      // const instance = getCurrentInstance();
-      // props.roomInfo.publisher.addVideoElement(this.$el);
-    }),
-      props.initCurrentStudents();
     return {
       state,
       toggleParticipants,
       toggleChat,
       toggleOX,
-      clickMute,
     };
   },
   components: {
@@ -166,7 +157,6 @@ export default {
     ChatForm,
     OXForm,
     OXResult,
-    UserVideo,
   },
 };
 </script>

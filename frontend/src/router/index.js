@@ -114,11 +114,13 @@ const routes = [
         path: "signup/student",
         name: "signupStudent",
         component: () => import("@/views/user/SignupStudentView"),
+        props: true,
       },
       {
         path: "signup/volunteer",
         name: "signupVolunteer",
         component: () => import("@/views/user/SignupVolunteerView"),
+        props: true,
       },
     ],
   },

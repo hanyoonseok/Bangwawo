@@ -22,15 +22,17 @@
           <div class="idx-btn-wrapper prev" @click="prevClick">
             <button class="idx-btn prev"></button>
           </div>
+          <div class="user-card-wrapper">
+            <div class="hover-wrapper">나</div>
+            <div class="user-card"><OvVideo :stream-manager="me" /></div>
+          </div>
           <div
             class="user-card-wrapper"
-            v-for="student in roomInfo.subscribers"
-            :key="student.stream.connection.connectionId"
+            v-for="(user, i) in subs"
+            :key="user.id"
           >
-            <user-video
-              :stream-manager="student"
-              @click="updateMainVideoStreamManager(student)"
-            />
+            <div class="hover-wrapper">이름{{ i }}</div>
+            <div class="user-card"><OvVideo :stream-manager="user" /></div>
           </div>
         </article>
         <article class="top-article-left bot">
@@ -92,20 +94,20 @@ import ParticipantsList from "@/components/class/ParticipantsList.vue";
 import ChatForm from "@/components/class/ChatForm.vue";
 import StudentOX from "@/components/class/StudentOX.vue";
 import StudentInclass from "@/components/class/StudentInclass.vue";
-import UserVideo from "@/components/class/UserVideo.vue";
+import OvVideo from "./OvVideo";
 
 export default {
   name: "UserView",
   props: [
     "dataLen",
-    "currentStudents",
-    "initCurrentStudents",
+    "currentUsers",
     "prevClick",
     "nextClick",
-    "joinSession",
-    "roomInfo",
+    "leaveSession",
+    "me",
+    "subs",
   ],
-  setup(props, { emit }) {
+  setup() {
     const state = reactive({
       isParticipantsOpen: false,
       isChatOpen: false,
@@ -117,33 +119,27 @@ export default {
     const toggleParticipants = () => {
       state.isParticipantsOpen = !state.isParticipantsOpen;
       state.isTopOpen = state.isParticipantsOpen;
-      const len = !state.isTopOpen && !state.isChatOpen ? 4 : 5;
-      if (len != props.dataLen.value) {
-        emit("changeDataLen", len);
-        props.initCurrentStudents();
-      }
+      // const len = !state.isTopOpen && !state.isChatOpen ? 4 : 5;
+      // if (len != props.dataLen.value) {
+      //   emit("changeDataLen", len);
+      //   props.initCurrentStudents();
+      // }
     };
 
     const toggleChat = () => {
       state.isChatOpen = !state.isChatOpen;
-      const len = !state.isTopOpen && !state.isChatOpen ? 4 : 5;
-      if (len != props.dataLen.value) {
-        emit("changeDataLen", len);
-        props.initCurrentStudents();
-      }
-    };
-    props.joinSession();
-    props.initCurrentStudents();
-    const clickMute = () => {
-      state.audioState = !state.audioState;
-      props.roomInfo.publisher.publishAudio(state.audioState);
+      // const len = !state.isTopOpen && !state.isChatOpen ? 4 : 5;
+      // if (len != props.dataLen.value) {
+      //   emit("changeDataLen", len);
+      //   props.initCurrentStudents();
+      // }
     };
 
+    //props.initCurrentStudents();
     return {
       state,
       toggleParticipants,
       toggleChat,
-      clickMute,
     };
   },
 
@@ -152,7 +148,7 @@ export default {
     ChatForm,
     StudentOX,
     StudentInclass,
-    UserVideo,
+    OvVideo,
   },
 };
 </script>
