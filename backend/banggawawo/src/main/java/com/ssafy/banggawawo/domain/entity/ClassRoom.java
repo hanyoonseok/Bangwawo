@@ -1,5 +1,6 @@
 package com.ssafy.banggawawo.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.springframework.boot.context.properties.bind.DefaultValue;
@@ -13,19 +14,20 @@ import java.util.Objects;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name="class_room")
+@Table(name="classes")
 public class ClassRoom {
     @Id
     @GeneratedValue
     private Long cId;          //수업 아이디
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="vId")
     private Volunteer volunteer;//봉사자
 
-    @OneToMany
-    private List<Enrol> enrols = new ArrayList<Enrol>(); //수강신청목록
+    //@OneToMany(mappedBy="classes")
+    //private List<Enrol> enrols = new ArrayList<Enrol>(); //수강신청목록
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rId")
@@ -43,11 +45,16 @@ public class ClassRoom {
 
     //classroom 생성시 필요한 builder
     @Builder
-
-    public ClassRoom(Long cId, Volunteer volunteer, List<Enrol> enrols, Request request, String title, String introduce, Integer maxcnt, Date stime, Date etime, Boolean opened, String thumbnail, Boolean state) {
+    public ClassRoom(Long cId,
+                     Volunteer volunteer,
+                     //List<Enrol> enrols,
+                     Request request,
+                     String title, String introduce,
+                     Integer maxcnt, Date stime, Date etime,
+                     Boolean opened, String thumbnail, Boolean state) {
         this.cId = cId;
         this.volunteer = volunteer;
-        this.enrols = enrols;
+        //this.enrols = enrols;
         this.request = request;
         this.title = title;
         this.introduce = introduce;
