@@ -30,7 +30,12 @@ public class VolunteerService {
     }
 
     @Transactional
-    public Volunteer save(VolunteerDto volunteerDto) {
+    public Volunteer save(Volunteer volunteer) {
+        return volunteerRepository.save(volunteer);
+    }
+
+    @Transactional
+    public Volunteer create(VolunteerDto volunteerDto) {
         Volunteer volunteer = Volunteer.builder()
                 .kakaoId(volunteerDto.getKakaoId())
                 .nickname(volunteerDto.getNickname())

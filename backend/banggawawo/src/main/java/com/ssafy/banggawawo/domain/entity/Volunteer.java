@@ -14,8 +14,8 @@ public class Volunteer {
     @GeneratedValue
     private Long vId;          // 봉사자 아이디
 
-    @OneToMany(mappedBy = "volunteer", fetch = FetchType.EAGER) // proxy 객체가 담겨서 반환되지 않도록 Eager로 설정
-    private List<ClassRoom> classRooms = new ArrayList<ClassRoom>();
+//    @OneToMany(mappedBy = "volunteer", fetch = FetchType.EAGER) // proxy 객체가 담겨서 반환되지 않도록 Eager로 설정
+//    private List<ClassRoom> classRooms = new ArrayList<ClassRoom>();
 
     private String kakaoId;     // 카카오 회원번호
     private String nickname;      // 별명

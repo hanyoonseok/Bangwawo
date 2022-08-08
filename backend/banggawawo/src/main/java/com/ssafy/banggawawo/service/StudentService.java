@@ -30,7 +30,12 @@ public class StudentService {
     }
 
     @Transactional
-    public Student save(StudentDto studentDto){
+    public Student save(Student student){
+        return studentRepository.save(student);
+    }
+
+    @Transactional
+    public Student create(StudentDto studentDto){
         Student student = Student.builder()
                                     .kakaoId(studentDto.getKakaoId())
                                     .ageRange(studentDto.getAgeRange())
