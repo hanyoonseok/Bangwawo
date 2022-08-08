@@ -1,12 +1,15 @@
 <template>
   <div class="container">
     <section class="left">
-      <div class="listdiv" v-if="user.status === 0">
+      <div class="listdiv" v-if="!user">
         <router-link :to="{ name: 'home' }" class="list">
           <div><img src="@/assets/header.png" /></div>
         </router-link>
+        <router-link :to="{ name: 'classlist' }" class="list"
+          >수업목록</router-link
+        >
       </div>
-      <div class="listdiv" v-if="user.status === 1">
+      <div class="listdiv" v-if="user && user.status === 1">
         <router-link :to="{ name: 'classlist' }" class="list"
           ><div><img src="@/assets/header.png" /></div
         ></router-link>
@@ -20,7 +23,7 @@
           >비밀친구</router-link
         >
       </div>
-      <div class="listdiv" v-if="user.status === 2">
+      <div class="listdiv" v-if="user && user.status === 2">
         <router-link :to="{ name: 'classlist' }" class="list">
           <div><img src="@/assets/header.png" /></div>
         </router-link>
@@ -34,7 +37,7 @@
           >수업요청</router-link
         >
       </div>
-      <div class="listdiv" v-if="user.status === 3">
+      <div class="listdiv" v-if="user && user.status === 3">
         <div><img src="@/assets/header.png" /></div>
         <router-link :to="{ name: 'classlist' }" class="list"
           >수업목록</router-link
@@ -46,70 +49,34 @@
     </section>
 
     <section class="right">
-      <router-link :to="{ name: 'login' }">
-        <button class="login" v-if="user.status === 0">
-          로그인
-        </button></router-link
-      >
-      <div class="img-wrapper">
+      <router-link :to="{ name: 'login' }" v-if="!user">
+        <button class="login">로그인</button>
+      </router-link>
+      <div class="img-wrapper" v-if="user">
         <img
           src="@/assets/profile.png"
           v-if="user.status >= 1"
-          @click="toggleProfile"
+          @click="toggleProfileModal"
         />
         <ul v-if="isProfileOpen">
           <router-link :to="{ name: 'mypage' }">마이페이지</router-link>
-          <router-link to="/logout">로그아웃</router-link>
+          <a href="" @click.prevent="logout">로그아웃</a>
         </ul>
       </div>
-      <div class="bell-wrapper">
+      <div class="bell-wrapper" v-if="user">
         <i
           class="fa-solid fa-bell"
           v-if="user.status === 1 || user.status === 3"
-          @click="toggleModal"
-          ><div class="count" v-if="user.messages.length > 0">
-            {{ user.messages.length }}
-          </div></i
+          @click="toggleNoticeModal"
+          ><div class="count">{{ notices.length }}</div></i
         >
-        <article class="modal" v-if="isModalOpen">
+        <article class="modal" v-if="isNoticeOpen">
           <div class="title-wrapper">
             <i class="fa-solid fa-bell"></i>
             알림창
           </div>
           <div class="row-wrapper">
-            <div class="row">
-              <img src="@/assets/profile.png" />
-              <label
-                ><p>자녀의 상담중 위험 용어가 발생했습니다.</p>
-                <p class="date">2022-07-25</p></label
-              >
-              <i class="fa-solid fa-xmark close"></i>
-            </div>
-            <div class="row">
-              <img src="@/assets/profile.png" />
-              <label
-                ><p>자녀의 상담중 위험 용어가 발생했습니다.</p>
-                <p class="date">2022-07-25</p></label
-              >
-              <i class="fa-solid fa-xmark close"></i>
-            </div>
-            <div class="row">
-              <img src="@/assets/profile.png" />
-              <label
-                ><p>자녀의 상담중 위험 용어가 발생했습니다.</p>
-                <p class="date">2022-07-25</p></label
-              >
-              <i class="fa-solid fa-xmark close"></i>
-            </div>
-            <div class="row">
-              <img src="@/assets/profile.png" />
-              <label
-                ><p>자녀의 상담중 위험 용어가 발생했습니다.</p>
-                <p class="date">2022-07-25</p></label
-              >
-              <i class="fa-solid fa-xmark close"></i>
-            </div>
-            <div class="row">
+            <div class="row" v-for="notice in notices" :key="notice.id">
               <img src="@/assets/profile.png" />
               <label
                 ><p>자녀의 상담중 위험 용어가 발생했습니다.</p>
@@ -121,7 +88,7 @@
         </article>
       </div>
 
-      <button class="consult" v-if="user.status === 2">
+      <button class="consult on" v-if="user && user.status === 2">
         <i class="fa-solid fa-circle"></i>&nbsp;상담 ON
       </button>
     </section>
@@ -130,33 +97,64 @@
 
 <script>
 import { ref } from "vue";
+
 export default {
   name: "HeaderNav",
   setup() {
-    const user = {
-      status: 1, //0비로그인 1로그인
-      messages: ["asd"],
-    };
+    const user = ref(JSON.parse(localStorage.getItem("user")));
+    console.log(user);
+    if (user.value) user.value.status = 1;
 
-    let isModalOpen = ref(false);
+    let isNoticeOpen = ref(false);
 
     let isProfileOpen = ref(false);
 
-    const toggleProfile = () => {
-      isModalOpen.value = false;
+    const notices = ref([
+      {
+        id: "1",
+        content: "자녀의 상담중 위험 단어를 감지했습니다.",
+        date: "07-22",
+      },
+      {
+        id: "2",
+        content: "자녀의 상담중 위험 단어를 감지했습니다.",
+        date: "07-22",
+      },
+      {
+        id: "3",
+        content: "자녀의 상담중 위험 단어를 감지했습니다.",
+        date: "07-22",
+      },
+      {
+        id: "4",
+        content: "자녀의 상담중 위험 단어를 감지했습니다.",
+        date: "07-22",
+      },
+    ]);
+
+    const toggleProfileModal = () => {
+      isNoticeOpen.value = false;
       isProfileOpen.value = !isProfileOpen.value;
     };
 
-    const toggleModal = () => {
+    const toggleNoticeModal = () => {
       isProfileOpen.value = false;
-      isModalOpen.value = !isModalOpen.value;
+      isNoticeOpen.value = !isNoticeOpen.value;
     };
+
+    const logout = () => {
+      localStorage.removeItem("user");
+      location.href = "/";
+    };
+
     return {
       user,
-      isModalOpen,
+      isNoticeOpen,
       isProfileOpen,
-      toggleProfile,
-      toggleModal,
+      toggleProfileModal,
+      toggleNoticeModal,
+      notices,
+      logout,
     };
   },
 };
