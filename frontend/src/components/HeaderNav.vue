@@ -9,7 +9,7 @@
           >수업목록</router-link
         >
       </div>
-      <div class="listdiv" v-if="user && user.status === 1">
+      <div class="listdiv" v-if="user && user.userType === 'STUDENT'">
         <router-link :to="{ name: 'classlist' }" class="list"
           ><div><img src="@/assets/header.png" /></div
         ></router-link>
@@ -23,7 +23,7 @@
           >비밀친구</router-link
         >
       </div>
-      <div class="listdiv" v-if="user && user.status === 2">
+      <div class="listdiv" v-if="user && user.userType === 'VOLUNTEER'">
         <router-link :to="{ name: 'classlist' }" class="list">
           <div><img src="@/assets/header.png" /></div>
         </router-link>
@@ -37,7 +37,7 @@
           >수업요청</router-link
         >
       </div>
-      <div class="listdiv" v-if="user && user.status === 3">
+      <div class="listdiv" v-if="user && user.userType === 'PARENT'">
         <div><img src="@/assets/header.png" /></div>
         <router-link :to="{ name: 'classlist' }" class="list"
           >수업목록</router-link
@@ -53,11 +53,7 @@
         <button class="login">로그인</button>
       </router-link>
       <div class="img-wrapper" v-if="user">
-        <img
-          src="@/assets/profile.png"
-          v-if="user.status >= 1"
-          @click="toggleProfileModal"
-        />
+        <img src="@/assets/profile.png" @click="toggleProfileModal" />
         <ul v-if="isProfileOpen">
           <router-link :to="{ name: 'mypage' }">마이페이지</router-link>
           <a href="" @click.prevent="logout">로그아웃</a>
@@ -66,7 +62,7 @@
       <div class="bell-wrapper" v-if="user">
         <i
           class="fa-solid fa-bell"
-          v-if="user.status === 1 || user.status === 3"
+          v-if="user.userType === 'STUDENT' || user.userType === 'PARENT'"
           @click="toggleNoticeModal"
           ><div class="count">{{ notices.length }}</div></i
         >
@@ -88,7 +84,7 @@
         </article>
       </div>
 
-      <button class="consult on" v-if="user && user.status === 2">
+      <button class="consult on" v-if="user && user.userType === 'VOLUNTEER'">
         <i class="fa-solid fa-circle"></i>&nbsp;상담 ON
       </button>
     </section>
@@ -102,8 +98,6 @@ export default {
   name: "HeaderNav",
   setup() {
     const user = ref(JSON.parse(localStorage.getItem("user")));
-    console.log(user);
-    if (user.value) user.value.status = 1;
 
     let isNoticeOpen = ref(false);
 
