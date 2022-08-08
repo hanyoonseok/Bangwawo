@@ -9,6 +9,7 @@
       :subs="state.subscribers"
       @activeVideo="activeVideo"
       @activeMute="activeMute"
+      @activeScreenShare="activeScreenShare"
     />
     <UserView
       v-if="!state.isHost && state.session"
@@ -80,9 +81,11 @@ export default {
     const OPENVIDU_SERVER_URL = process.env.VUE_APP_API_URL;
     const OPENVIDU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
     const OV = new OpenVidu();
+    const OVScreen = new OpenVidu(); // 화면 공유
 
     const state = reactive({
       OV: OV,
+      OVScreen = OVScreen,
       session: undefined,
       mainStreamManager: undefined,
       publisher: OV.initPublisher(undefined, {
@@ -113,7 +116,7 @@ export default {
       dataIdx: 0,
     });
 
-    /* 
+    /*
   닉네임:사용자
   sessionName : 방 이름?
   token : 토큰 들어오는데 이건 입장 할때마다 바뀌는 값
@@ -319,6 +322,27 @@ export default {
       state.publisher.publishAudio(audioState);
     };
 
+    const activeScreenShare = (screenShareState) => {
+      if (screenShareState) {
+        state.publisher = OV.initPublisher("screenShare", {
+          videoSource: "screen",
+        });
+        state.publisher.once("accessAllowed", () => {
+          state.publisher.stream
+            .getMediaStream()
+            .getVideoTracks()[0]
+            .addEventListener("ended", () => {
+              console.log('User pressed the "Stop sharing" button');
+            });
+          state.session.publish(state.publisher);
+        });
+      } else {
+        state.publisher = OV.initPublisher("screenShare", {
+          videoSource: undefined,
+        });
+      }
+    };
+
     return {
       state,
       // dataLen,
@@ -329,6 +353,7 @@ export default {
       // changeDataLen,
       activeVideo,
       activeMute,
+      activeScreenShare,
     };
   },
 };

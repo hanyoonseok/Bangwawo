@@ -24,6 +24,8 @@
         </div>
       </article>
 
+      <div id="screenShare"></div>
+
       <article class="top-right" v-if="state.isTopOpen || state.isChatOpen">
         <ParticipantsList
           :state="state"
@@ -53,9 +55,17 @@
           <i class="fa-solid fa-video"></i>
           &nbsp;비디오 시작
         </button>
-        <button class="option-btn">
+        <button
+          class="option-btn"
+          @click="activeScreenShare"
+          v-if="state.screenShareState"
+        >
           <i class="fa-solid fa-arrow-up-from-square"></i>
-          &nbsp;화면 공유
+          &nbsp;화면 공유 중지
+        </button>
+        <button class="option-btn" @click="activeScreenShare" v-else>
+          <i class="fa-solid fa-arrow-up-from-square"></i>
+          &nbsp;화면 공유 시작
         </button>
         <button class="option-btn" @click="toggleOX()">&nbsp;OX 퀴즈</button>
 
@@ -107,6 +117,7 @@ export default {
       isOXResult: false,
       videoState: true, // 비디오 on,off
       audioState: true, // 소리 on,off
+      screenShareState: true, // 화면공유 on,off
 
       clientData: computed(() => {
         const { clientData } = getConnectionData();
@@ -160,6 +171,11 @@ export default {
       emit("activeMute", state.audioState);
     };
 
+    const activeScreenShare = () => {
+      state.screenShareState = !state.screenShareState;
+      emit("activeScreenShare", state.screenShareState);
+    };
+
     return {
       state,
       toggleParticipants,
@@ -167,6 +183,7 @@ export default {
       toggleOX,
       activeVideo,
       activeMute,
+      activeScreenShare,
     };
   },
   components: {
