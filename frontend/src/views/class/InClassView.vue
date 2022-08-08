@@ -7,6 +7,8 @@
       :leaveSession="leaveSession"
       :me="state.publisher"
       :subs="state.subscribers"
+      @activeVideo="activeVideo"
+      @activeMute="activeMute"
     />
     <UserView
       v-if="!state.isHost && state.session"
@@ -29,7 +31,18 @@
         />
       </div>
       <div id="main-video" class="col-md-6">
-        <user-video :stream-manager="state.mainStreamManager" />
+        <user-video
+          :stream-manager="state.mainStreamManager"
+          v-if="state.isHost && state.session"
+          :dataLen="dataLen"
+          :currentUsers="currentUsers"
+          :leaveSession="leaveSession"
+          :me="state.publisher"
+          :subs="state.subscribers"
+          @activeVideo="activeVideo"
+          @activeMute="activeMute"
+          @click="updateMainVideoStreamManager(state.publisher)"
+        />
       </div>
       <div id="video-container" class="col-md-6">
         <user-video
@@ -53,7 +66,6 @@ import axios from "axios";
 import { OpenVidu } from "openvidu-browser";
 import HostView from "@/components/class/HostView.vue";
 import UserView from "@/components/class/UserView.vue";
-// import UserVideo from "@/components/class/UserVideo";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
@@ -62,7 +74,6 @@ export default {
   components: {
     HostView,
     UserView,
-    // UserVideo,
   },
   setup() {
     // 테스트용
@@ -85,7 +96,7 @@ export default {
         mirror: false, // Whether to mirror your local video or not
       }),
       subscribers: [],
-      mySessionId: "SessionB",
+      mySessionId: "SessionAA",
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       joinedPlayerNumbers: 0,
 
@@ -112,8 +123,6 @@ export default {
     // 사용자가 방에 참여하겠다는 버튼 누를때마다 호출
     const joinSession = () => {
       console.log("join session");
-      // Opnevidu 객체 가져오기
-      state.OV = new OpenVidu();
       // 초기화
       state.session = state.OV.initSession();
       // 새로운 Stream을 구독하고 subscribers배열에 저장
@@ -136,8 +145,6 @@ export default {
         console.warn(exception);
       });
 
-      console.log("sessionid", state.mySessionId);
-      console.log("user name", state.myUserName);
       // 'getToken' method is simulating what your server-side should do.
       // 'token' parameter should be retrieved and returned by your own backend
       // 세션에 연결하려면 서버에 토큰 요청 => 백엔드가 처리해줘야 할 부분, 일단 임시 테스트
@@ -158,7 +165,6 @@ export default {
             });
             state.mainStreamManager = publisher;
             state.publisher = publisher;
-
             state.joinedPlayerNumbers++;
             state.session.publish(publisher);
           })
@@ -171,7 +177,6 @@ export default {
           });
       });
       window.addEventListener("beforeunload", leaveSession);
-      console.log("@@@@subscribers@@@@", state.subscribers);
     };
 
     const leaveSession = () => {
@@ -307,6 +312,13 @@ export default {
     //   dataLen.value = param;
     // };
 
+    const activeVideo = (videoState) => {
+      state.publisher.publishVideo(videoState); // true to enable the video track, false to disable it
+    };
+    const activeMute = (audioState) => {
+      state.publisher.publishAudio(audioState);
+    };
+
     return {
       state,
       // dataLen,
@@ -315,6 +327,8 @@ export default {
       // prevClick,
       // nextClick,
       // changeDataLen,
+      activeVideo,
+      activeMute,
     };
   },
 };
