@@ -18,10 +18,10 @@
           <div class="hover-wrapper">나</div>
           <div class="user-card"><OvVideo :stream-manager="me" /></div>
         </div>
-        <!-- <div class="user-card-wrapper" v-for="(user, i) in subs" :key="user.id">
+        <div class="user-card-wrapper" v-for="(user, i) in subs" :key="user.id">
           <div class="hover-wrapper">이름{{ i }}</div>
           <div class="user-card"><OvVideo :stream-manager="user" /></div>
-        </div> -->
+        </div>
       </article>
 
       <article class="top-right" v-if="state.isTopOpen || state.isChatOpen">
