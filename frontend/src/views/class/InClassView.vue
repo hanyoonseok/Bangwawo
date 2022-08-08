@@ -138,9 +138,11 @@ export default {
 
       // 새로운 Stream을 구독하고 subscribers배열에 저장
       state.session.on("streamCreated", ({ stream }) => {
-        const subscriber = state.session.subscribe(stream);
-        state.subscribers.push(subscriber);
-        if (subscriber.videos !== []) state.joinedPlayerNumbers++;
+        if (stream.typeOfVideo == "CAMERA") {
+          const subscriber = state.session.subscribe(stream);
+          state.subscribers.push(subscriber);
+          if (subscriber.videos !== []) state.joinedPlayerNumbers++;
+        }
       });
       // 사용자가 화상 회의에서 나갔을때 나간 사용자 제거
       state.session.on("streamDestroyed", ({ stream }) => {
@@ -323,6 +325,7 @@ export default {
       });
     };
 
+    // 화면공유 활성화 함수
     const publishScreenShare = (screenShareState) => {
       var publisherScreen = state.OVScreen.initPublisher("container-screens", {
         videoSource: "screen",
@@ -331,11 +334,13 @@ export default {
       publisherScreen.once("accessAllowed", () => {
         state.screenShareState = screenShareState;
         document.getElementById("screenShareStart").style.display = "none";
+        document.getElementById("container-screens").style.display = "block";
         publisherScreen.stream
           .getMediaStream()
           .getVideoTracks()[0]
           .addEventListener("ended", () => {
             document.getElementById("screenShareStart").style.display = "block";
+            document.getElementById("container-screens").style.display = "none";
             console.log(
               "화면 공유를 멈췄ㄸ따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ",
             );
@@ -346,6 +351,9 @@ export default {
       });
 
       publisherScreen.on("videoElementCreated", function (event) {
+        console.log(event.element);
+        event.element.className += "screen-share";
+        console.log(event.element);
         event.element["muted"] = true;
       });
 

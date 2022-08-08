@@ -32,7 +32,7 @@ export default {
 
     video.addEventListener("play", () => {
       const canvas = faceapi.createCanvasFromMedia(video);
-      console.log(canvas, video.width);
+      // console.log(canvas, video.width);
       document.body.append(canvas);
       // const displaySize = { width: video.width, height: video.height };
       const displaySize = { width: 300, height: 200 };
@@ -47,7 +47,7 @@ export default {
           displaySize,
         );
         if (resizedDetections.length > 0) {
-          console.log(resizedDetections[0].expressions);
+          // console.log(resizedDetections[0].expressions);
         }
         canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
         faceapi.draw.drawFaceExpressions(canvas, resizedDetections); // 감정 상태
