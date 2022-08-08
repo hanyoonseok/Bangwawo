@@ -25,14 +25,19 @@ public class StudentService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Student> findByToken(String token) {
-        return studentRepository.findByToken(token);
+    public Optional<Student> findByKakaoId(String kakaoId) {
+        return studentRepository.findByKakaoId(kakaoId);
     }
 
     @Transactional
-    public Student save(StudentDto studentDto){
+    public Student save(Student student){
+        return studentRepository.save(student);
+    }
+
+    @Transactional
+    public Student create(StudentDto studentDto){
         Student student = Student.builder()
-                                    .token(studentDto.getToken())
+                                    .kakaoId(studentDto.getKakaoId())
                                     .ageRange(studentDto.getAgeRange())
                                     .nickname(studentDto.getNickname())
                                     .pemail(studentDto.getPemail())

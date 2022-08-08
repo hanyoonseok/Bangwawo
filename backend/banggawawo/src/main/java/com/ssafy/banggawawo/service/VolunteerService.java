@@ -25,14 +25,19 @@ public class VolunteerService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Volunteer> findByToken(String token) {
-        return volunteerRepository.findByToken(token);
+    public Optional<Volunteer> findByKakaoId(String kakaoId) {
+        return volunteerRepository.findByKakaoId(kakaoId);
     }
 
     @Transactional
-    public Volunteer save(VolunteerDto volunteerDto) {
+    public Volunteer save(Volunteer volunteer) {
+        return volunteerRepository.save(volunteer);
+    }
+
+    @Transactional
+    public Volunteer create(VolunteerDto volunteerDto) {
         Volunteer volunteer = Volunteer.builder()
-                .token(volunteerDto.getToken())
+                .kakaoId(volunteerDto.getKakaoId())
                 .nickname(volunteerDto.getNickname())
                 .ageRange(volunteerDto.getAgeRange())
                 .introduce(volunteerDto.getIntroduce())

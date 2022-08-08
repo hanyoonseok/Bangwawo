@@ -27,7 +27,7 @@ public class Student {
     @OneToMany(mappedBy = "student")
     private List<Likes> likes = new ArrayList<Likes>();   //좋아요 리스트
 
-    private String token;       //카카오 토큰
+    private String kakaoId;       //카카오 회원번호
     private int ageRange;        //연령대
     private String nickname;    //별명
     private String pemail;   //부모이메일
@@ -37,9 +37,10 @@ public class Student {
     private Character character;//개인 3d캐릭터에 대한 정보
 
     @Builder
-        public Student(String token, int ageRange,
-                       String nickname, String pemail, String ppw, Character character){
-        this.token = token;
+    public Student(Long sId, String kakaoId, int ageRange,
+                   String nickname, String pemail, String ppw, Character character){
+        this.sId = sId;
+        this.kakaoId = kakaoId;
         this.ageRange = ageRange;
         this.nickname = nickname;
         this.pemail = pemail;
