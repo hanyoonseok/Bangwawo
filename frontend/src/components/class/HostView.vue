@@ -14,7 +14,7 @@
         <div class="idx-btn-wrapper prev" @click="prevClick">
           <button class="idx-btn prev"></button>
         </div>
-        <div id="container-screens" style="display: none">
+        <div id="container-screens">
           <h4>화면 공유</h4>
         </div>
         <div class="user-card-wrapper" id="myVideo">
@@ -34,7 +34,12 @@
         />
         <OXForm :state="state" :toggleOX="toggleOX" />
         <OXResult :state="state" :toggleOX="toggleOX" />
-        <ChatForm :state="state" :toggleChat="toggleChat" />
+        <ChatForm
+          :state="state"
+          :toggleChat="toggleChat"
+          :session="session"
+          :chats="chats"
+        />
       </article>
     </section>
 
@@ -103,6 +108,8 @@ export default {
     "leaveSession",
     "me",
     "subs",
+    "session",
+    "chats",
   ],
   setup(props, { emit }) {
     const state = reactive({

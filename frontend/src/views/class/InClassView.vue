@@ -10,6 +10,8 @@
       @activeVideo="activeVideo"
       @activeMute="activeMute"
       @publishScreenShare="publishScreenShare"
+      :session="state.session"
+      :chats="state.chats"
     />
     <UserView
       v-if="!state.isHost && state.session"
@@ -67,6 +69,7 @@
 <script>
 import { reactive, onBeforeUnmount, computed } from "vue";
 import axios from "axios";
+import moment from "moment";
 import { OpenVidu } from "openvidu-browser";
 import HostView from "@/components/class/HostView.vue";
 import UserView from "@/components/class/UserView.vue";
@@ -81,7 +84,7 @@ export default {
   },
   setup() {
     // 테스트용
-    const OPENVIDU_SERVER_URL = process.env.VUE_APP_API_URL;
+    const OPENVIDU_SERVER_URL = process.env.VUE_APP_OV_DOMAIN;
     const OPENVIDU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
     const OV = new OpenVidu();
     const OVScreen = new OpenVidu(); // 화면 공유
@@ -106,6 +109,7 @@ export default {
       mySessionId: "SessionAAA",
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       joinedPlayerNumbers: 0,
+      chats: [],
 
       currentUsers: computed(() => {
         return state.subscribers.slice(
@@ -174,6 +178,23 @@ export default {
         }
       });
 
+      state.session.on("signal:my-chat", (e) => {
+        console.log(e.data); // Message
+        console.log(e.from); // Connection object of the sender
+        console.log(e.type); // The type of message ("my-chat")
+        const parsedDate = moment(new Date()).format("HH:mm");
+        const hour = parsedDate.split(":")[0];
+        const finalDate =
+          hour < 12 ? "오전 " + parsedDate : "오후 " + parsedDate;
+        state.chats.push({
+          sender: JSON.parse(e.from.data).clientData,
+          msg: e.data,
+          date: finalDate,
+        });
+      });
+
+      console.log("sessionid", state.mySessionId);
+      console.log("user name", state.myUserName);
       // 'getToken' method is simulating what your server-side should do.
       // 'token' parameter should be retrieved and returned by your own backend
       // 세션에 연결하려면 서버에 토큰 요청 => 백엔드가 처리해줘야 할 부분, 일단 임시 테스트
