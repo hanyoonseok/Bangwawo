@@ -56,4 +56,8 @@ public class StudentService {
     public void delete(Student value) {
         studentRepository.delete(value);
     }
+
+    public int updatePpw(String email, String password) {
+        return studentRepository.updatePpw(email, password);
+    }
 }

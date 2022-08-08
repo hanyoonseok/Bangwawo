@@ -75,4 +75,20 @@ public class ParentController {
         return response;
     }
 
+    @ApiOperation(value="학부모 비밀번호 수정", notes="학부모 이메일과 변경할 비밀번호를 입력받아 비밀번호 수정")
+    @PutMapping("")
+    public Map<String, Object> updateStudent(@RequestParam String email, @RequestParam String password){
+        Map<String, Object> response = new HashMap<>();
+        try{
+            if(studentService.updatePpw(email, password)==0) throw new Exception("비밀번호 변경 실패");
+            response.put("result", "SUCCESS");
+        }catch(Exception e){
+            System.out.println("에러 메세지 : " + e.getMessage());
+            e.printStackTrace();
+            response.put("result", "FAIL");
+            response.put("reason", e.getMessage());
+        }
+        return response;
+    }
+
 }
