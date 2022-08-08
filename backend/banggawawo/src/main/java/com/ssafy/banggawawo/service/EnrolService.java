@@ -23,37 +23,58 @@ public class EnrolService {
      */
     private Enrol build(EnrolDto enrolDto){
         Enrol enrol = Enrol.builder()
-                .classes(enrolDto.getClassRoom())
+                .classes(enrolDto.getCId())
                 .eId(enrolDto.getEId())
-                .student(enrolDto.getStudent())
+                .student(enrolDto.getSId())
+                .emotion(enrolDto.getEmotion())
+                .feedback(enrolDto.getFeedback())
+                .recording(enrolDto.getRecording())
                 .build();
         return enrol;
     }
+    private EnrolDto trans(Enrol enrol){
+        EnrolDto enrolDto = EnrolDto.builder()
+                .cId(enrol.getClasses())
+                .eId(enrol.getEId())
+                .sId(enrol.getStudent())
+                .emotion(enrol.getEmotion())
+                .feedback(enrol.getFeedback())
+                .recording(enrol.getRecording())
+                .build();
+        return enrolDto;
+    }
 
     @Transactional
-    public Enrol save(EnrolDto enrolDto){
+    public EnrolDto save(EnrolDto enrolDto){
         Enrol enrol = build(enrolDto);
         enrol = enrolRepository.save(enrol);
-        return enrol;
+        return trans(enrol);
     }
 
+
     @Transactional
-    public List<Enrol> findByClassRoom(EnrolDto enrolDto){
-        Enrol enrol = build(enrolDto);
-        List<Enrol> list = enrolRepository.findEnrolsByStudent_sId(enrol);
+    public List<Enrol> findByClassRoom(Long cid){;
+        List<Enrol> list = enrolRepository.findEnrolsByClasses_cId(cid);
         return list;
     }
 
     @Transactional
-    public List<Enrol> findByStudent(EnrolDto enrolDto){
-        Enrol enrol = build(enrolDto);
-        List<Enrol> list = enrolRepository.findEnrolsByClasses_cId(enrol);
+    public List<Enrol> findByStudent(Long sid){
+        List<Enrol> list = enrolRepository.findEnrolsByStudent_sId(sid);
         return list;
     }
 
     @Transactional
-    public Enrol update(EnrolDto enrolDto){
-        Enrol enrol = build(enrolDto);
-        return enrolRepository.save(enrol);
+    public EnrolDto update(EnrolDto enrolDto){
+        Enrol enrol = enrolRepository.findEnrolByClasses_cIdAndStudent_sId(enrolDto.getCId().getCId(), enrolDto.getSId().getSId());
+        enrol.setFeedback(enrolDto.getFeedback());
+        enrol.setEmotion(enrolDto.getEmotion());
+        enrol.setRecording(enrolDto.getRecording());
+        return trans(enrolRepository.save(enrol));
+    }
+
+    @Transactional
+    public EnrolDto findByClassAndStudent(Long cid, Long sid){
+        return trans(enrolRepository.findEnrolByClasses_cIdAndStudent_sId(cid,sid));
     }
 }

@@ -14,6 +14,7 @@ import java.util.Objects;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name="classes")
 public class ClassRoom {

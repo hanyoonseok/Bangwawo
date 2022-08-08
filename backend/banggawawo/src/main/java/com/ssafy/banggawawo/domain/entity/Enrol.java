@@ -17,11 +17,11 @@ public class Enrol {
     @GeneratedValue
     private Long eId;            //신청 아이디
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="sId")
     private Student student;      //학생
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="cId")
     private ClassRoom classes;            //수업
 
