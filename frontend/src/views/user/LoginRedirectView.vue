@@ -4,6 +4,7 @@
 
 <script>
 import { useRoute, useRouter } from "vue-router";
+import jwt_decode from "jwt-decode";
 
 import axios from "axios";
 export default {
@@ -20,7 +21,8 @@ export default {
       console.log(data);
       if (data.isUser) {
         //data 복호화 하고 로컬스토리지에 담기
-        localStorage.setItem("user", data);
+        const decode_jwt = jwt_decode(data.JWT);
+        localStorage.setItem("user", JSON.stringify(decode_jwt.user));
         router.push("/class/list");
       } else {
         data.ageRange < 20

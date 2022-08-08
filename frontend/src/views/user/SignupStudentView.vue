@@ -1,11 +1,12 @@
 <template>
   <div class="signup-container">
     <div class="input-box">
-      <input class="sign-input" placeholder="학부모 이메일을 입력해주세요." />
-      <input class="sign-input" placeholder="별명을 입력해주세요." />
-      <router-link :to="{ name: 'classlist' }">
-        <button class="signup-submit">로그인</button></router-link
-      >
+      <input
+        class="sign-input"
+        placeholder="학부모 이메일을 입력해주세요."
+        v-model="emailValue"
+      />
+      <button class="signup-submit" @click="submitRegister">로그인</button>
     </div>
     <div class="duck-img">
       <div class="guide">별명, 부모님 이메일을 알려줘~</div>
@@ -15,15 +16,41 @@
 </template>
 
 <script>
-import { useRoute } from "vue-router";
+import { ref } from "vue";
+import axios from "axios";
+import jwt_decode from "jwt-decode";
+import { useRouter } from "vue-router";
+
 export default {
-  name: "SignupStudent",
-  props: ["data"],
+  name: "SignupUpVolunteer",
+  props: ["isUser", "ageRange", "kakaoId", "nickname"],
   setup(props) {
-    const route = useRoute();
-    const data = route.props;
-    console.log(data);
-    console.log(props.isUser);
+    let emailValue = ref("");
+    const registObj = ref({ ...props });
+    const router = useRouter();
+
+    registObj.value.character = {
+      bag: "FFD89B",
+      body: "f1f1f1",
+      dress: "FFAEAE",
+      glasses: "ff9696",
+      legs: "ff9696",
+      hat: "FFD89B",
+    };
+
+    const submitRegister = async () => {
+      registObj.value.pemail = emailValue.value;
+      console.log(registObj.value);
+      const response = await axios.post(
+        `${process.env.VUE_APP_API_URL}/student/`,
+        registObj.value,
+      );
+      const decode_jwt = jwt_decode(response.data.JWT);
+      localStorage.setItem("user", JSON.stringify(decode_jwt.user));
+      router.push("/class/list");
+    };
+
+    return { emailValue, submitRegister };
   },
 };
 </script>

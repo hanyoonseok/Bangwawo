@@ -16,12 +16,17 @@
 <script>
 import axios from "axios";
 import { ref } from "vue";
+import jwt_decode from "jwt-decode";
+import { useRouter } from "vue-router";
+
 export default {
   name: "SignupUpVolunteer",
   props: ["isUser", "ageRange", "kakaoId", "nickname"],
   setup(props) {
     let textareaValue = ref("");
     const registObj = ref({ ...props });
+    const router = useRouter();
+
     registObj.value.character = {
       bag: "FFD89B",
       body: "f1f1f1",
@@ -39,7 +44,9 @@ export default {
         registObj.value,
       );
 
-      console.log(response);
+      const decode_jwt = jwt_decode(response.data.JWT);
+      localStorage.setItem("user", JSON.stringify(decode_jwt.user));
+      router.push("/class/list");
     };
 
     return { textareaValue, submitRegister };
