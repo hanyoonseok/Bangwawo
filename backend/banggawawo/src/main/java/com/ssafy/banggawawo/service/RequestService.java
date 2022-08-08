@@ -1,7 +1,9 @@
 package com.ssafy.banggawawo.service;
 
 import com.ssafy.banggawawo.domain.dto.RequestDto;
+import com.ssafy.banggawawo.domain.entity.Likes;
 import com.ssafy.banggawawo.domain.entity.Request;
+import com.ssafy.banggawawo.repository.LikesRepository;
 import com.ssafy.banggawawo.repository.RequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

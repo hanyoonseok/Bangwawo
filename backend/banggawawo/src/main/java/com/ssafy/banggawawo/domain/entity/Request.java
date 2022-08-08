@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+
 public class Request {
     @Id
     @GeneratedValue
@@ -22,9 +23,6 @@ public class Request {
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "request")
     private ClassRoom classRoom;          // 수업 아이디
-
-//    @OneToOne(fetch = FetchType.LAZY, mappedBy = "request")
-//    private Likes likes;          // 수업 아이디
 
     private String title;     // 제목
     private String content;   // 내용
