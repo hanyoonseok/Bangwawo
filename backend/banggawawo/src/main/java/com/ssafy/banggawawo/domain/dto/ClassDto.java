@@ -3,10 +3,7 @@ package com.ssafy.banggawawo.domain.dto;
 
 import com.ssafy.banggawawo.domain.entity.Request;
 import com.ssafy.banggawawo.domain.entity.Volunteer;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
