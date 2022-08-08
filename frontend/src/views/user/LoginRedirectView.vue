@@ -19,6 +19,7 @@ export default {
       );
       console.log(data);
       if (data.isUser) {
+        //data 복호화 하고 로컬스토리지에 담기
         localStorage.setItem("user", data);
         router.push("/class/list");
       } else {
