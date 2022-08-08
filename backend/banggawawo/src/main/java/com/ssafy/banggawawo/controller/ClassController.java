@@ -67,7 +67,9 @@ public class ClassController {
     @ApiOperation(value = "수업 하나 가져오기")
     @GetMapping("/{id}")
     public ResponseEntity<?> findByCId(@PathVariable("id") Long id){
-        return new ResponseEntity<>(classService.findByCId(id), HttpStatus.OK);
+        ClassDto classDto = classService.findByCId(id);
+        System.out.println(classDto.toString());
+        return new ResponseEntity<>(classDto, HttpStatus.OK);
     }
     @ApiOperation(value = "수업 삭제")
     @DeleteMapping("/{id}")

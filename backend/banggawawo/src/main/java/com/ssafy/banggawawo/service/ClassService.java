@@ -72,11 +72,12 @@ public class ClassService {
     }
     @Transactional
     public ClassDto update(ClassDto classDto){
+        classRepository.findById(classDto.getCId()).get();
         ClassRoom classRoom = build(classDto);
         classRoom = classRepository.save(classRoom);
         return trans(classRoom);
     }
-    @Transactional(readOnly = true)
+    @Transactional
     public ClassDto findByCId(Long id){
         ClassDto classDto = null;
         Optional<ClassRoom> classRoom = classRepository.findById(id);

@@ -21,12 +21,12 @@ public class ClassRoom {
     @GeneratedValue
     private Long cId;          //수업 아이디
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="vId")
     private Volunteer volunteer;//봉사자
 
-    @OneToMany(mappedBy="classes")
-    private List<Enrol> enrols = new ArrayList<Enrol>(); //수강신청목록
+    //@OneToMany(mappedBy="classes")
+    //private List<Enrol> enrols = new ArrayList<Enrol>(); //수강신청목록
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rId")
