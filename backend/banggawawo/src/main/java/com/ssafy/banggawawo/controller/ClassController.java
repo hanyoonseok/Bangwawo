@@ -4,9 +4,11 @@ import com.ssafy.banggawawo.domain.dto.ClassDto;
 import com.ssafy.banggawawo.domain.entity.ClassRoom;
 import com.ssafy.banggawawo.service.ClassService;
 import com.ssafy.banggawawo.util.FileUploadUtil;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,14 +34,14 @@ public class ClassController {
     }
     @ApiOperation(value = "수업 생성")
     @PostMapping
-    public ResponseEntity<?> save(@RequestParam ClassDto classDto){
+    public ResponseEntity<?> save(@RequestBody ClassDto classDto){
         return new ResponseEntity<>(classService.save(classDto), HttpStatus.OK);
     }
     @ApiOperation(value = "이미지 등록")
     @PostMapping("/image")
     public ResponseEntity<String> fileImage(@RequestParam(name = "thumbnail") MultipartFile multipartFile){
         LocalDateTime now = LocalDateTime.now();
-        String dir = "class_thumbnail/"+now.getYear()+now.getMonth()+now.getDayOfMonth();
+        String dir = "src/main/resources/static/class_thumbnail/"+now.getYear()+now.getMonth()+now.getDayOfMonth();
         String ext = multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf(".") + 1);
         String fileName = Long.toString(now.toEpochSecond(ZoneOffset.UTC))+"."+ext;
         try{
@@ -50,7 +52,7 @@ public class ClassController {
     }
     @ApiOperation(value = "수업 수정")
     @PutMapping
-    public ResponseEntity<?> update(@RequestParam ClassDto classDto){
+    public ResponseEntity<?> update(@RequestBody ClassDto classDto){
         return new ResponseEntity<>(classService.update(classDto), HttpStatus.OK);
     }
     @ApiOperation(value = "수업 리스트 가져오기")
@@ -64,13 +66,18 @@ public class ClassController {
     }
     @ApiOperation(value = "수업 하나 가져오기")
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<ClassRoom>> findByCId(@PathVariable("id") Long id){
-        return new ResponseEntity<>(classService.findByCId(id), HttpStatus.OK);
+    public ResponseEntity<?> findByCId(@PathVariable("id") Long id){
+        ClassDto classDto = classService.findByCId(id);
+        System.out.println(classDto.toString());
+        return new ResponseEntity<>(classDto, HttpStatus.OK);
     }
     @ApiOperation(value = "수업 삭제")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id){
-        classService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        if(classService.deleteById(id)){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        }
     }
 }
