@@ -19,33 +19,6 @@
       :me="state.publisher"
       :subs="state.subscribers"
     />
-    <!-- <div id="session" v-if="state.session">
-      <div id="session-header">
-        <h1 id="session-title">{{ state.mySessionId }}</h1>
-        <input
-          class="btn btn-large btn-danger"
-          type="button"
-          id="buttonLeaveSession"
-          @click="leaveSession"
-          value="Leave session"
-        />
-      </div>
-      <div id="main-video">
-        <user-video :stream-manager="state.mainStreamManager" />
-      </div>
-      <div id="video-container">
-        <user-video
-          :stream-manager="state.publisher"
-          @click="updateMainVideoStreamManager(state.publisher)"
-        />
-        <user-video
-          v-for="sub in state.subscribers"
-          :key="sub.stream.connection.connectionId"
-          :stream-manager="sub"
-          @click="updateMainVideoStreamManager(sub)"
-        />
-      </div>
-    </div> -->
   </section>
 </template>
 
@@ -56,7 +29,6 @@ import moment from "moment";
 import { OpenVidu } from "openvidu-browser";
 import HostView from "@/components/class/HostView.vue";
 import UserView from "@/components/class/UserView.vue";
-// import UserVideo from "@/components/class/UserVideo";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
@@ -82,7 +54,7 @@ export default {
         videoSource: undefined, // The source of video. If undefined default webcam
         publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
         publishVideo: true, // Whether you want to start publishing with your video enabled or not
-        resolution: "640x480", // The resolution of your video
+        resolution: "1280x720", // The resolution of your video
         frameRate: 30, // The frame rate of your video
         insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
         mirror: false, // Whether to mirror your local video or not
@@ -247,8 +219,8 @@ export default {
                   `No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}\n\nClick OK to navigate and accept it. If no certificate warning is shown, then check that your OpenVidu Server is up and running at "${OPENVIDU_SERVER_URL}"`,
                 )
               ) {
-                location.assign(`https://i7b201.p.ssafy.io`);
-                // location.assign(`${OPENVIDU_SERVER_URL}/accept-certificate`);
+                // location.assign(`https://i7b201.p.ssafy.io`);
+                location.assign(`${OPENVIDU_SERVER_URL}/accept-certificate`);
               }
               reject(error.response);
             }
@@ -287,8 +259,8 @@ export default {
           .catch((error) => reject(error.response));
       });
     };
-    joinSession();
 
+    joinSession();
     onBeforeUnmount(() => {
       state.joinedPlayerNumbers = 0;
       leaveSession();

@@ -1,5 +1,8 @@
 <template>
-  <div v-if="streamManager" style="position: relative; height: 100%">
+  <div
+    v-if="streamManager"
+    style="position: relative; height: 100%; object-fit: cover"
+  >
     <ov-video :stream-manager="streamManager" />
     <div class="nameTag">
       <!-- <p>{{ state.clientData }}</p> -->

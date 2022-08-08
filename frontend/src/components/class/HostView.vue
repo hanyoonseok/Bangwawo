@@ -4,12 +4,10 @@
       <article
         :class="{
           'top-left': true,
-          'host-2orless': roomInfo.subscribers.length <= 2,
-          'host-4orless':
-            roomInfo.subscribers.length <= 4 && roomInfo.subscribers.length > 2,
-          'host-6orless':
-            roomInfo.subscribers.length <= 6 && roomInfo.subscribers.length > 4,
-          'host-12orless': roomInfo.subscribers.length > 6,
+          'host-2orless': subs.length < 2,
+          'host-4orless': subs.length < 4 && subs.length >= 2,
+          'host-6orless': subs.length < 6 && subs.length >= 4,
+          'host-12orless': subs.length >= 6,
           expand: !state.isTopOpen && !state.isChatOpen,
         }"
       >
@@ -21,11 +19,11 @@
         </div>
         <div class="user-card-wrapper">
           <div class="hover-wrapper">나</div>
-          <div class="user-card"><OvVideo :stream-manager="me" /></div>
+          <div class="user-card"><user-video :stream-manager="me" /></div>
         </div>
         <div class="user-card-wrapper" v-for="(user, i) in subs" :key="user.id">
           <div class="hover-wrapper">이름{{ i }}</div>
-          <div class="user-card"><OvVideo :stream-manager="user" /></div>
+          <div class="user-card"><user-video :stream-manager="user" /></div>
         </div>
       </article>
 
@@ -91,6 +89,7 @@ import ParticipantsList from "@/components/class/ParticipantsList.vue";
 import ChatForm from "@/components/class/ChatForm.vue";
 import OXForm from "@/components/class/OXForm.vue";
 import OXResult from "@/components/class/OXResult.vue";
+import UserVideo from "@/components/class/UserVideo.vue";
 
 export default {
   name: "HostView",
@@ -112,6 +111,7 @@ export default {
       isOXOpen: false,
       isTopOpen: false,
       isOXResult: false,
+      audioState: true,
 
       clientData: computed(() => {
         const { clientData } = getConnectionData();
@@ -145,11 +145,16 @@ export default {
       state.isChatOpen = !state.isChatOpen;
     };
 
+    const clickMute = () => {
+      state.audioState = !state.audioState;
+      props.me.publishAudio(state.audioState);
+    };
     return {
       state,
       toggleParticipants,
       toggleChat,
       toggleOX,
+      clickMute,
     };
   },
   components: {
@@ -157,6 +162,7 @@ export default {
     ChatForm,
     OXForm,
     OXResult,
+    UserVideo,
   },
 };
 </script>

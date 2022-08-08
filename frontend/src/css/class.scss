@@ -20,7 +20,6 @@
 .top-section {
   width: 100%;
   height: calc(100% - 60px);
-
   @include flexCenter;
   .top-left {
     //flex: 7.5;
@@ -40,49 +39,9 @@
       grid-row-gap: 16px;
       position: relative;
       &.expand {
-        width: 100%;
-        height: 100%;
-        .user-card {
-          width: 100%;
-          height: 100%;
-        }
-        position: relative;
-
-        .hover-wrapper {
-          opacity: 0;
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          content: "";
-          background-color: rgba(53, 53, 53, 0.25);
-          color: $white;
-          font-size: 16px;
-          font-family: $appleM;
-          font-weight: bold;
-          @include flexCenter;
-          border-radius: 20px;
-          z-index: 2;
-          &:hover {
-            transition: 0.3s ease;
-            opacity: 0.5;
-          }
-        }
-      }
-      .idx-btn-wrapper {
-        &.prev {
-          left: 0;
-          &.prev {
-            transform: rotate(-45deg);
-          }
-        }
-        &.next {
-          right: 0;
-          &.next {
-            transform: rotate(135deg);
-          }
-        }
+        width: 95%;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(3, 1fr);
       }
     }
     &.host-2orless {
@@ -95,7 +54,8 @@
       grid-column-gap: 16px;
       position: relative;
       &.expand {
-        width: 100%;
+        width: 95%;
+        padding: 20px 60px;
       }
     }
     &.host-4orless {
@@ -108,8 +68,8 @@
       grid-column-gap: 60px;
       position: relative;
       &.expand {
-        width: 100%;
-        padding: 10px 60px;
+        width: 95%;
+        padding: 20px 130px;
       }
     }
     &.host-6orless {
@@ -122,10 +82,11 @@
       grid-row-gap: 16px;
       position: relative;
       &.expand {
-        width: 100%;
+        width: 95%;
         padding: 10px 60px;
       }
     }
+
     .user-card-wrapper {
       width: 100%;
       height: 100%;
@@ -149,7 +110,7 @@
         font-family: $appleM;
         font-weight: bold;
         @include flexCenter;
-        border-radius: 18px;
+        border-radius: 20px;
         &:hover {
           transition: 0.3s ease;
           opacity: 0.5;
@@ -635,15 +596,4 @@
   width: 100%;
   height: 100%;
   background-color: $light-grey;
-}
-
-.volunteer-video {
-  position: absolute;
-  width: 300px;
-  height: 200px;
-}
-
-.student-video {
-  width: 300px;
-  height: 200px;
 }

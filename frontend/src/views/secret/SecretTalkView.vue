@@ -59,7 +59,7 @@
 
 <script>
 import SecretCanvas from "@/components/secret/SecretCanvas.vue";
-import { reactive, onBeforeUnmount, onMounted } from "vue";
+import { reactive, onBeforeUnmount } from "vue";
 import { useStore } from "vuex";
 
 import { useRouter } from "vue-router";
@@ -94,7 +94,7 @@ export default {
     // const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
     // const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 
-    const OPENVIDU_SERVER_URL = process.env.VUE_APP_API_URL;
+    const OPENVIDU_SERVER_URL = process.env.VUE_APP_OV_DOMAIN;
     const OPENVIDU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
     const OV = new OpenVidu();
 
@@ -340,9 +340,6 @@ export default {
     onBeforeUnmount(() => {
       state.joinedPlayerNumbers = 0;
       leaveSession();
-    });
-    onMounted(() => {
-      // applyVoiceFilter();
     });
 
     if (!Recognition) {
