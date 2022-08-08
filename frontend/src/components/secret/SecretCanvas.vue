@@ -7,7 +7,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { reactive, onMounted } from "vue";
+import { reactive, onMounted, watch } from "vue";
 
 export default {
   name: "SecretCanvas",
@@ -21,6 +21,8 @@ export default {
     });
     const state = reactive({
       isTalking: props.isTalking,
+      actionStanding: undefined,
+      startTime: undefined,
     });
 
     const INITIAL_MAP = [
@@ -79,16 +81,7 @@ export default {
     dirLight.position.set(50, 50, 50);
     dirLight.castShadow = false; //광원이 그림자 생성
 
-    // const dirLight2 = new THREE.DirectionalLight(0xffffff, 0.1);
-    // dirLight2.position.set(0, 0, 1000);
-    // dirLight2.castShadow = false; //광원이 그림자 생성
-    // dirLight2.shadow.mapSize = new THREE.Vector2(1024, 1024);
-    // // Add directional Light to scene
-
     scene.add(dirLight);
-    // // scene.add(light);
-    // scene.add(dirLight2);
-    // scene.add(dirLight2);
     renderer.shadowMap.enabled = true;
 
     // Add controls
@@ -153,8 +146,8 @@ export default {
     );
     const standing = () => {
       let clip = THREE.AnimationClip.findByName(clips, "stand");
-      let action = mixer.clipAction(clip);
-      action.play();
+      state.actionStanding = mixer.clipAction(clip);
+      state.actionStanding.play();
     };
     const clock = new THREE.Clock();
 
@@ -204,27 +197,34 @@ export default {
       animate();
     });
 
-    // watch(
-    //   () => props.isTalking,
-    //   (cur) => {
-    //     playTalkingAnimation(cur);
-    //   },
-    // );
-
-    // const playTalkingAnimation = (cur) => {
-    //   if (cur) {
-    //     let clip = THREE.AnimationClip.findByName(clips, "talking");
-    //     let action = mixer.clipAction(clip);
-    //     action.stop();
-    //     action.play();
-    //   }
-    // };
-
+    watch(
+      () => props.isTalking,
+      (cur) => {
+        playTalkingAnimation(cur);
+      },
+    );
+    const playTalkingAnimation = (cur) => {
+      state.startTime = mixer.time;
+      let clip = THREE.AnimationClip.findByName(clips, "talking");
+      let actionTalking = mixer.clipAction(clip);
+      if (cur) {
+        actionTalking.timeScale = 1;
+        actionTalking.clampWhenFinished = true;
+        state.actionStanding.stop();
+        actionTalking.setLoop(0, 1);
+        actionTalking.stop();
+        actionTalking.play();
+        setTimeout(() => {
+          actionTalking.stop();
+          state.actionStanding.play();
+        }, 3500);
+      }
+    };
     return {
       scene,
       renderer,
       camera,
-      // playTalkingAnimation,
+      playTalkingAnimation,
       INITIAL_MAP,
       animate,
       initColor,

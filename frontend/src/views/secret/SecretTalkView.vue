@@ -190,7 +190,7 @@ export default {
               filter: {
                 type: "GStreamerFilter",
                 options: {
-                  command: "pitch pitch=1.2",
+                  command: "pitch pitch=1.4",
                 },
               },
             });
