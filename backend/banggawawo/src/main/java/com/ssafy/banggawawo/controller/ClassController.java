@@ -34,12 +34,12 @@ public class ClassController {
     }
     @ApiOperation(value = "수업 생성")
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody ClassDto classDto){
+    public ResponseEntity<?> save(@RequestBody ClassDto classDto) throws Exception{
         return new ResponseEntity<>(classService.save(classDto), HttpStatus.OK);
     }
     @ApiOperation(value = "이미지 등록")
     @PostMapping("/image")
-    public ResponseEntity<String> fileImage(@RequestParam(name = "thumbnail") MultipartFile multipartFile){
+    public ResponseEntity<String> fileImage(@RequestParam(name = "thumbnail") MultipartFile multipartFile) throws Exception{
         LocalDateTime now = LocalDateTime.now();
         String dir = "src/main/resources/static/class_thumbnail/"+now.getYear()+now.getMonth()+now.getDayOfMonth();
         String ext = multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf(".") + 1);
@@ -52,28 +52,28 @@ public class ClassController {
     }
     @ApiOperation(value = "수업 수정")
     @PutMapping
-    public ResponseEntity<?> update(@RequestBody ClassDto classDto){
+    public ResponseEntity<?> update(@RequestBody ClassDto classDto) throws Exception{
         return new ResponseEntity<>(classService.update(classDto), HttpStatus.OK);
     }
     @ApiOperation(value = "수업 리스트 가져오기")
     @GetMapping
     public ResponseEntity<List<ClassRoom>> findAll(@RequestParam(required = false, name = "title") String title,
                                                    @RequestParam(required = false, name = "opened") Boolean opened,
-                                                   @RequestParam(required = false, name = "state") Boolean state){
+                                                   @RequestParam(required = false, name = "state") Boolean state) throws Exception{
         ClassDto classDto = new ClassDto();
         classDto.setSearchfQuery(title, opened, state);
         return new ResponseEntity<List<ClassRoom>>(classService.findAll(classDto), HttpStatus.OK);
     }
     @ApiOperation(value = "수업 하나 가져오기")
     @GetMapping("/{id}")
-    public ResponseEntity<?> findByCId(@PathVariable("id") Long id){
+    public ResponseEntity<?> findByCId(@PathVariable("id") Long id) throws Exception{
         ClassDto classDto = classService.findByCId(id);
         System.out.println(classDto.toString());
         return new ResponseEntity<>(classDto, HttpStatus.OK);
     }
     @ApiOperation(value = "수업 삭제")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") Long id){
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) throws Exception{
         if(classService.deleteById(id)){
             return new ResponseEntity<>(HttpStatus.OK);
         }else{

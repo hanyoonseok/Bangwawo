@@ -13,5 +13,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ClassRepository extends JpaRepository<ClassRoom, Long>, JpaSpecificationExecutor<ClassRoom> {
-    List<ClassRoom> findClassRoomsByTitleContaining(String title);
+    List<ClassRoom> findClassRoomsByTitleContaining(String title) throws Exception;
 }
