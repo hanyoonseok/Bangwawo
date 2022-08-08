@@ -4,8 +4,20 @@
       <h2>비밀친구 대화중</h2>
     </article>
     <article class="user-wrapper" v-if="state.session">
-      <SecretCanvas :parts="student" class="user-card" :user="stu" id="stu" />
-      <SecretCanvas :parts="volunteer" class="user-card" :user="vol" id="vol" />
+      <SecretCanvas
+        :parts="student"
+        class="user-card"
+        :user="stu"
+        id="stu"
+        :isTalking="state.isTalking"
+      />
+      <SecretCanvas
+        :parts="volunteer"
+        class="user-card"
+        :user="vol"
+        id="vol"
+        :isTalking="state.isTalking"
+      />
     </article>
     <div id="session" v-if="state.session">
       <div id="session-header">
@@ -42,7 +54,7 @@
 
 <script>
 import SecretCanvas from "@/components/secret/SecretCanvas.vue";
-import { reactive, onBeforeUnmount } from "vue";
+import { reactive, onBeforeUnmount, onMounted } from "vue";
 import { useStore } from "vuex";
 
 import { useRouter } from "vue-router";
@@ -78,11 +90,11 @@ export default {
     let vol = "vol";
 
     // 테스트용
-    const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
-    const OPENVIDU_SERVER_SECRET = "MY_SECRET";
+    // const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
+    // const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 
-    // const OPENVIDU_SERVER_URL = "https://i7b201.p.ssafy.io";
-    // const OPENVIDU_SERVER_SECRET = "BANGGWAWO_SECRET";
+    const OPENVIDU_SERVER_URL = process.env.VUE_APP_API_URL;
+    const OPENVIDU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
     const OV = new OpenVidu();
 
     const state = reactive({
@@ -91,12 +103,13 @@ export default {
       mainStreamManager: undefined,
       publisher: undefined,
       subscribers: [],
-      mySessionId: "SessionA",
+      mySessionId: "SessionX",
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       joinedPlayerNumbers: 0,
       audioState: true,
       isHost: true,
       danger: 0,
+      isTalking: false,
     });
 
     //위험 단어 리스트
@@ -150,6 +163,7 @@ export default {
       //음성 감지 종료
       state.session.on("publisherStopSpeaking", (event) => {
         console.log("User " + event.connection.connectionId + " stop speaking");
+        state.isTalking = false;
         recognition.stop();
       });
 
@@ -173,6 +187,12 @@ export default {
               frameRate: 30, // The frame rate of your video
               insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
               mirror: false, // Whether to mirror your local video or not
+              filter: {
+                type: "GStreamerFilter",
+                options: {
+                  command: "pitch pitch=1.2",
+                },
+              },
             });
             console.log("p", publisher);
             // publisher.publishVideo(false); // true to enable the video track, false to disable it
@@ -301,6 +321,9 @@ export default {
       state.joinedPlayerNumbers = 0;
       leaveSession();
     });
+    onMounted(() => {
+      // applyVoiceFilter();
+    });
 
     if (!Recognition) {
       alert(
@@ -341,7 +364,23 @@ export default {
 
     const voiceDetection = () => {
       console.log("start");
+      state.isTalking = true;
       recognition.start();
+    };
+    const applyVoiceFilter = () => {
+      state.publisher.stream
+        .applyFilter("GStreamerFilter", { command: "pitch pitch=1.4" })
+        .then((f) => {
+          if (f.type === "FaceOverlayFilter") {
+            f.execMethod("setOverlayedImage", {
+              uri: "https://cdn.pixabay.com/photo/2017/09/30/09/29/cowboy-hat-2801582_960_720.png",
+              offsetXPercent: "-0.1F",
+              offsetYPercent: "-0.8F",
+              widthPercent: "1.5F",
+              heightPercent: "1.0F",
+            });
+          }
+        });
     };
 
     return {
@@ -351,6 +390,7 @@ export default {
       stu,
       vol,
       model,
+      applyVoiceFilter,
       leaveSession,
       clickMute,
     };

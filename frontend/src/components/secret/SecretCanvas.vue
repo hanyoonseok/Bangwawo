@@ -7,17 +7,20 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { onMounted } from "vue";
+import { reactive, onMounted } from "vue";
 
 export default {
   name: "SecretCanvas",
-  props: ["parts", "user"],
+  props: ["parts", "user", "isTalking"],
   setup(props) {
     // Initial material
     // const store = useStore();
     const INITIAL_MTL = new THREE.MeshPhongMaterial({
       color: 0xffcb57,
       shininess: 10,
+    });
+    const state = reactive({
+      isTalking: props.isTalking,
     });
 
     const INITIAL_MAP = [
@@ -148,7 +151,6 @@ export default {
         console.error(error);
       },
     );
-
     const standing = () => {
       let clip = THREE.AnimationClip.findByName(clips, "stand");
       let action = mixer.clipAction(clip);
@@ -197,20 +199,37 @@ export default {
         }
       });
     };
-
     onMounted(() => {
       document.getElementById(props.user).appendChild(renderer.domElement);
       animate();
     });
 
+    // watch(
+    //   () => props.isTalking,
+    //   (cur) => {
+    //     playTalkingAnimation(cur);
+    //   },
+    // );
+
+    // const playTalkingAnimation = (cur) => {
+    //   if (cur) {
+    //     let clip = THREE.AnimationClip.findByName(clips, "talking");
+    //     let action = mixer.clipAction(clip);
+    //     action.stop();
+    //     action.play();
+    //   }
+    // };
+
     return {
       scene,
       renderer,
       camera,
+      // playTalkingAnimation,
       INITIAL_MAP,
       animate,
       initColor,
       standing,
+      state,
     };
   },
 };
