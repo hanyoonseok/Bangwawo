@@ -3,6 +3,7 @@ package com.ssafy.banggawawo.controller;
 import com.ssafy.banggawawo.domain.dto.EnrolDto;
 import com.ssafy.banggawawo.domain.entity.ClassRoom;
 import com.ssafy.banggawawo.domain.entity.Enrol;
+import com.ssafy.banggawawo.domain.entity.Student;
 import com.ssafy.banggawawo.service.EnrolService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +41,13 @@ public class EnrolController {
     @GetMapping("/student/{id}")
     public ResponseEntity<List<Enrol>> findByStudent(@PathVariable("id") Long sId){
         EnrolDto enrolDto = new EnrolDto();
-        //enrolDto.setStudent(Student.builder().);
-        //return new ResponseEntity<>(enrolService.findByStudent(sId), HttpStatus.OK);
-        return null;
+        enrolDto.setStudent(Student.builder().sId(sId).build());
+        return new ResponseEntity<>(enrolService.findByStudent(enrolDto), HttpStatus.OK);
     }
 
+    @ApiOperation("피드백 작성")
+    @PutMapping("/peedback")
+    public ResponseEntity<?> update(@RequestBody EnrolDto enrolDto){
+        return new ResponseEntity<>(enrolService.update(enrolDto),HttpStatus.OK);
+    }
 }

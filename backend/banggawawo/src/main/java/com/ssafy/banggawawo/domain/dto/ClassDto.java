@@ -3,10 +3,7 @@ package com.ssafy.banggawawo.domain.dto;
 
 import com.ssafy.banggawawo.domain.entity.Request;
 import com.ssafy.banggawawo.domain.entity.Volunteer;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -14,7 +11,6 @@ import java.util.Date;
 
 @Getter @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class ClassDto {
     private Long cId;             // 수업id
     private Volunteer vId;        // 봉사자
@@ -33,5 +29,26 @@ public class ClassDto {
         this.opened = opened;
         this.state = state;
         return this;
+    }
+
+    @Builder
+    public ClassDto(Long cId,
+                    Volunteer vId,
+                    Request rId,
+                    String title, String introduce,
+                    Date stime, Date etime,
+                    Integer maxcnt, Boolean opened,
+                    String thumbnail, Boolean state) {
+        this.cId = cId;
+        this.vId = vId;
+        this.rId = rId;
+        this.title = title;
+        this.introduce = introduce;
+        this.stime = stime;
+        this.etime = etime;
+        this.maxcnt = maxcnt;
+        this.opened = opened;
+        this.thumbnail = thumbnail;
+        this.state = state;
     }
 }

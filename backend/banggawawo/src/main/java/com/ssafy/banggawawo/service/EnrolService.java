@@ -50,4 +50,10 @@ public class EnrolService {
         List<Enrol> list = enrolRepository.findEnrolsByClasses_cId(enrol);
         return list;
     }
+
+    @Transactional
+    public Enrol update(EnrolDto enrolDto){
+        Enrol enrol = build(enrolDto);
+        return enrolRepository.save(enrol);
+    }
 }

@@ -1,5 +1,6 @@
 package com.ssafy.banggawawo.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.springframework.boot.context.properties.bind.DefaultValue;
@@ -24,7 +25,7 @@ public class ClassRoom {
     @JoinColumn(name="vId")
     private Volunteer volunteer;//봉사자
 
-    @OneToMany
+    @OneToMany(mappedBy="classes")
     private List<Enrol> enrols = new ArrayList<Enrol>(); //수강신청목록
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -46,7 +47,10 @@ public class ClassRoom {
     public ClassRoom(Long cId,
                      Volunteer volunteer,
                      //List<Enrol> enrols,
-                     Request request, String title, String introduce, Integer maxcnt, Date stime, Date etime, Boolean opened, String thumbnail, Boolean state) {
+                     Request request,
+                     String title, String introduce,
+                     Integer maxcnt, Date stime, Date etime,
+                     Boolean opened, String thumbnail, Boolean state) {
         this.cId = cId;
         this.volunteer = volunteer;
         //this.enrols = enrols;

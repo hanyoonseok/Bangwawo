@@ -8,6 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -65,13 +66,16 @@ public class ClassController {
     }
     @ApiOperation(value = "수업 하나 가져오기")
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<ClassRoom>> findByCId(@PathVariable("id") Long id){
+    public ResponseEntity<?> findByCId(@PathVariable("id") Long id){
         return new ResponseEntity<>(classService.findByCId(id), HttpStatus.OK);
     }
     @ApiOperation(value = "수업 삭제")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id){
-        classService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        if(classService.deleteById(id)){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        }
     }
 }

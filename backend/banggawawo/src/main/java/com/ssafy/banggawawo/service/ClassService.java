@@ -33,8 +33,9 @@ public class ClassService {
      */
     private ClassRoom build(ClassDto classDto){
         ClassRoom classRoom = ClassRoom.builder()
+                .cId(classDto.getCId())
                 .volunteer(classDto.getVId())    //여기 유저(봉사자) 자리
-//                .request(classDto.getRId())
+                .request(classDto.getRId())
                 .thumbnail(classDto.getThumbnail())
                 .etime(classDto.getEtime())
                 .stime(classDto.getStime())
@@ -42,31 +43,56 @@ public class ClassService {
                 .maxcnt(classDto.getMaxcnt())
                 .opened(classDto.getOpened())
                 .title(classDto.getTitle())
-                .cId(classDto.getCId())
                 .state(classDto.getState())
                 .build();
         return classRoom;
     }
+    private ClassDto trans(ClassRoom classRoom){
+        ClassDto classDto = ClassDto.builder()
+                .cId(classRoom.getCId())
+                .vId(classRoom.getVolunteer())
+                .rId(classRoom.getRequest())
+                .thumbnail(classRoom.getThumbnail())
+                .etime(classRoom.getEtime())
+                .stime(classRoom.getStime())
+                .introduce(classRoom.getIntroduce())
+                .maxcnt(classRoom.getMaxcnt())
+                .opened(classRoom.getOpened())
+                .title(classRoom.getTitle())
+                .state(classRoom.getState())
+                .build();
+        return classDto;
+    }
     @Transactional
-    public ClassRoom save(ClassDto classDto){
+    public ClassDto save(ClassDto classDto){
         //클래스 저장
         ClassRoom classRoom = build(classDto);
         classRoom = classRepository.save(classRoom);
-
-        return classRoom;
+        return trans(classRoom);
     }
     @Transactional
-    public ClassRoom update(ClassDto classDto){
+    public ClassDto update(ClassDto classDto){
         ClassRoom classRoom = build(classDto);
-        return classRepository.save(classRoom);
+        classRoom = classRepository.save(classRoom);
+        return trans(classRoom);
     }
     @Transactional(readOnly = true)
-    public Optional<ClassRoom> findByCId(Long id){
-        return classRepository.findById(id);
+    public ClassDto findByCId(Long id){
+        ClassDto classDto = null;
+        Optional<ClassRoom> classRoom = classRepository.findById(id);
+        if(classRoom.isPresent()){
+            classDto = trans(classRoom.get());
+        }
+        return classDto;
     }
     @Transactional
-    public void deleteById(Long id){
-        classRepository.deleteById(id);
+    public boolean deleteById(Long id){
+        try{
+            classRepository.deleteById(id);
+            return true;
+        }catch(Exception e){
+            return false;
+        }
     }
     @Transactional
     public List<ClassRoom> findAll(ClassDto classDto){
