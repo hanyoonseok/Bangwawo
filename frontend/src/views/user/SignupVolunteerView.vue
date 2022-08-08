@@ -15,6 +15,10 @@
 <script>
 export default {
   name: "SignupUpVolunteer",
+  props: ["isUser", "ageRange", "kakaoId", "nickname"],
+  setup(props) {
+    console.log(props);
+  },
 };
 </script>
 

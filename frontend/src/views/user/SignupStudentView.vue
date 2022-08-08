@@ -15,8 +15,16 @@
 </template>
 
 <script>
+import { useRoute } from "vue-router";
 export default {
   name: "SignupStudent",
+  props: ["data"],
+  setup(props) {
+    const route = useRoute();
+    const data = route.props;
+    console.log(data);
+    console.log(props.isUser);
+  },
 };
 </script>
 

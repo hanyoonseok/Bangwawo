@@ -69,7 +69,7 @@ export default {
   },
   setup() {
     // 테스트용
-    const OPENVIDU_SERVER_URL = process.env.VUE_APP_API_URL;
+    const OPENVIDU_SERVER_URL = process.env.VUE_APP_OV_DOMAIN;
     const OPENVIDU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
     const OV = new OpenVidu();
 
