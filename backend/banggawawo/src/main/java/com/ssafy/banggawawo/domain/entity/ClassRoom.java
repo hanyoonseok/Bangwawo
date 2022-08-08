@@ -41,7 +41,7 @@ public class ClassRoom {
 
     private Boolean state;       //상태  (대기, 끝)
 
-    //classroom 생성시 필요f한 builder
+    //classroom 생성시 필요한 builder
     @Builder
 
     public ClassRoom(Long cId, Volunteer volunteer, List<Enrol> enrols, Request request, String title, String introduce, Integer maxcnt, Date stime, Date etime, Boolean opened, String thumbnail, Boolean state) {

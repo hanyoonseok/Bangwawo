@@ -35,6 +35,7 @@ public class RequestController {
     @GetMapping()
     @ApiOperation(value = "요청글 전체 목록보기(한번스크롤당 6개씩 추가)")
     public ResponseEntity<?> list(@RequestParam(value = "scrollcnt", defaultValue = "1") int scrollcnt) {
+        System.out.println("목록보기 들어옴"+scrollcnt);
         try {
             return new ResponseEntity<Map<String, Object>>(requestservice.list(scrollcnt), HttpStatus.ACCEPTED);
         } catch (Exception e) {

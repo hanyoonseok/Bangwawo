@@ -16,19 +16,20 @@ public class Request {
     @GeneratedValue
     private Long rId;          // 요청 아이디
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="sid")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="sId")
     private Student student;          // 글 쓴 학생
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "request")
     private ClassRoom classRoom;          // 수업 아이디
 
+//    @OneToOne(fetch = FetchType.LAZY, mappedBy = "request")
+//    private Likes likes;          // 수업 아이디
+
     private String title;     // 제목
     private String content;   // 내용
     private boolean solved;   // 해결여부
 
-//    @OneToMany
-//    private List<Student> likes = new ArrayList<>(); // 좋아요
     private int count;        // 조회수
     private int likes;
     @Builder

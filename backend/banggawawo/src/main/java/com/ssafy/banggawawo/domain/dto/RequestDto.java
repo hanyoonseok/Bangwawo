@@ -14,8 +14,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class RequestDto {
     private Long rId;               // 요청글 아이디
-    private Student student;        // 글 쓴 학생
-    private ClassRoom classRoom;    // 수업 아이디
+    private Student sId;        // 글 쓴 학생
+    private ClassRoom cId;    // 수업 아이디
     private String Title;           // 제목
     private String Content;         // 내용
     private Boolean Solved;         // 해결여부
