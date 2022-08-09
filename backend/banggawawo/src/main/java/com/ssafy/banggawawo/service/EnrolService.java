@@ -1,7 +1,10 @@
 package com.ssafy.banggawawo.service;
 
+import com.ssafy.banggawawo.domain.dto.ClassDto;
 import com.ssafy.banggawawo.domain.dto.EnrolDto;
+import com.ssafy.banggawawo.domain.entity.ClassRoom;
 import com.ssafy.banggawawo.domain.entity.Enrol;
+import com.ssafy.banggawawo.repository.ClassRepository;
 import com.ssafy.banggawawo.repository.EnrolRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,9 @@ public class EnrolService {
     public EnrolService(EnrolRepository enrolRepository){
         this.enrolRepository = enrolRepository;
     }
+
+    @Autowired
+    private ClassRepository classRepository;
 
     /**
      * @param enrolDto
@@ -45,27 +51,35 @@ public class EnrolService {
     }
 
     @Transactional
-    public EnrolDto save(EnrolDto enrolDto){
+    public EnrolDto save(EnrolDto enrolDto) throws Exception{
         Enrol enrol = build(enrolDto);
+        //제한인원 확인
+        Long cid = enrolDto.getCId().getCId();
+        ClassRoom classRoom = classRepository.findById(cid).get();
+        if(classRoom != null) {
+            int maxCnt = classRoom.getMaxcnt();
+            int size = enrolRepository.findEnrolsByClasses_cId(cid).size();
+            if(maxCnt <= size) return null;
+        }
         enrol = enrolRepository.save(enrol);
         return trans(enrol);
     }
 
 
     @Transactional
-    public List<Enrol> findByClassRoom(Long cid){;
+    public List<Enrol> findByClassRoom(Long cid) throws Exception {
         List<Enrol> list = enrolRepository.findEnrolsByClasses_cId(cid);
         return list;
     }
 
     @Transactional
-    public List<Enrol> findByStudent(Long sid){
+    public List<Enrol> findByStudent(Long sid) throws Exception{
         List<Enrol> list = enrolRepository.findEnrolsByStudent_sId(sid);
         return list;
     }
 
     @Transactional
-    public EnrolDto update(EnrolDto enrolDto){
+    public EnrolDto update(EnrolDto enrolDto) throws Exception{
         Enrol enrol = enrolRepository.findEnrolByClasses_cIdAndStudent_sId(enrolDto.getCId().getCId(), enrolDto.getSId().getSId());
         enrol.setFeedback(enrolDto.getFeedback());
         enrol.setEmotion(enrolDto.getEmotion());
@@ -74,7 +88,7 @@ public class EnrolService {
     }
 
     @Transactional
-    public EnrolDto findByClassAndStudent(Long cid, Long sid){
+    public EnrolDto findByClassAndStudent(Long cid, Long sid) throws Exception {
         return trans(enrolRepository.findEnrolByClasses_cIdAndStudent_sId(cid,sid));
     }
 }
