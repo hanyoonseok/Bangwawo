@@ -41,14 +41,16 @@ public class ClassController {
     @PostMapping("/image")
     public ResponseEntity<String> fileImage(@RequestParam(name = "thumbnail") MultipartFile multipartFile) throws Exception{
         LocalDateTime now = LocalDateTime.now();
-        String dir = "src/main/resources/static/class_thumbnail/"+now.getYear()+now.getMonth()+now.getDayOfMonth();
+        String dir1 = "src/main/resources/static";
+        String dir2 = "/class_thumbnail/"+now.getYear()+now.getMonth()+now.getDayOfMonth();
         String ext = multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf(".") + 1);
         String fileName = Long.toString(now.toEpochSecond(ZoneOffset.UTC))+"."+ext;
         try{
-            FileUploadUtil.saveFile(dir,fileName,multipartFile);
+            FileUploadUtil.saveFile(dir1+dir2,fileName,multipartFile);
         }catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
-        }        return new ResponseEntity<>(dir+fileName, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(dir2+"/"+fileName, HttpStatus.OK);
     }
     @ApiOperation(value = "수업 수정")
     @PutMapping
@@ -57,13 +59,13 @@ public class ClassController {
     }
     @ApiOperation(value = "수업 리스트 가져오기")
     @GetMapping
-    public ResponseEntity<List<ClassRoom>> findAll(@RequestParam(required = false, name = "title") String title,
+    public ResponseEntity<List<ClassDto>> findAll(@RequestParam(required = false, name = "title") String title,
                                                    @RequestParam(required = false, name = "opened") Boolean opened,
-                                                   @RequestParam(required = false, name = "state") Boolean state,
+                                                   @RequestParam(required = false, name = "state") Integer state,
                                                    @RequestParam(required = false, name = "vid") Long vid) throws Exception{
         ClassDto classDto = new ClassDto();
         classDto.setSearchfQuery(title, opened, state, vid);
-        return new ResponseEntity<List<ClassRoom>>(classService.findAll(classDto), HttpStatus.OK);
+        return new ResponseEntity<List<ClassDto>>(classService.findAll(classDto), HttpStatus.OK);
     }
     @ApiOperation(value = "수업 하나 가져오기")
     @GetMapping("/{id}")
