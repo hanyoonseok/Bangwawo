@@ -1,9 +1,6 @@
 package com.ssafy.banggawawo.controller;
 
-import com.ssafy.banggawawo.domain.dto.LikesDto;
 import com.ssafy.banggawawo.domain.dto.SecritChatDto;
-import com.ssafy.banggawawo.domain.entity.Likes;
-import com.ssafy.banggawawo.domain.entity.Request;
 import com.ssafy.banggawawo.domain.entity.SecritChat;
 import com.ssafy.banggawawo.service.SecritChatService;
 import io.swagger.annotations.ApiOperation;
