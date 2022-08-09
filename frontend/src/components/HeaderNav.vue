@@ -9,7 +9,7 @@
           >수업목록</router-link
         >
       </div>
-      <div class="listdiv" v-if="user && user.userType === 'STUDENT'">
+      <div class="listdiv" v-if="user && user.userType === 'student'">
         <router-link :to="{ name: 'classlist' }" class="list"
           ><div><img src="@/assets/header.png" /></div
         ></router-link>
@@ -23,7 +23,7 @@
           >비밀친구</router-link
         >
       </div>
-      <div class="listdiv" v-if="user && user.userType === 'VOLUNTEER'">
+      <div class="listdiv" v-if="user && user.userType === 'volunteer'">
         <router-link :to="{ name: 'classlist' }" class="list">
           <div><img src="@/assets/header.png" /></div>
         </router-link>
@@ -37,7 +37,7 @@
           >수업요청</router-link
         >
       </div>
-      <div class="listdiv" v-if="user && user.userType === 'PARENT'">
+      <div class="listdiv" v-if="user && user.userType === 'parent'">
         <div><img src="@/assets/header.png" /></div>
         <router-link :to="{ name: 'classlist' }" class="list"
           >수업목록</router-link
@@ -62,7 +62,7 @@
       <div class="bell-wrapper" v-if="user">
         <i
           class="fa-solid fa-bell"
-          v-if="user.userType === 'STUDENT' || user.userType === 'PARENT'"
+          v-if="user.userType === 'student' || user.userType === 'parent'"
           @click="toggleNoticeModal"
           ><div class="count">{{ notices.length }}</div></i
         >
@@ -84,7 +84,7 @@
         </article>
       </div>
 
-      <button class="consult on" v-if="user && user.userType === 'VOLUNTEER'">
+      <button class="consult on" v-if="user && user.userType === 'volunteer'">
         <i class="fa-solid fa-circle"></i>&nbsp;상담 ON
       </button>
     </section>

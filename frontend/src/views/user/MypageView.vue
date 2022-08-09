@@ -67,7 +67,7 @@ export default {
 
     const getUserInfo = async () => {
       const userInfo = JSON.parse(localStorage.getItem("user"));
-      const userType = userInfo.userType.toLowerCase();
+      const userType = userInfo.userType;
       const response = await axios.get(
         `${process.env.VUE_APP_API_URL}/${userType}/${userInfo.vid}`,
       );
