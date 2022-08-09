@@ -110,6 +110,7 @@ export default {
     "subs",
     "session",
     "chats",
+    "screen",
   ],
   setup(props, { emit }) {
     const state = reactive({

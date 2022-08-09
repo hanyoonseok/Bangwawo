@@ -12,6 +12,7 @@
       @publishScreenShare="publishScreenShare"
       :session="state.session"
       :chats="state.chats"
+      :screen="state.screenShareState"
     />
     <UserView
       v-if="!state.isHost && state.session"
@@ -67,7 +68,7 @@
 </template>
 
 <script>
-import { reactive, onBeforeUnmount, computed } from "vue";
+import { reactive, onBeforeUnmount, computed, onMounted, watch } from "vue";
 import axios from "axios";
 import moment from "moment";
 import { OpenVidu } from "openvidu-browser";
@@ -123,8 +124,27 @@ export default {
       }),
       dataIdx: 0,
 
-      screenShareState: true, //화면공유 여부
+      screenShareState: false, //화면공유 여부
     });
+
+    watch(
+      () => state.screenShareState,
+      (cur) => {
+        screenShare(cur);
+      },
+      { deep: true },
+    );
+
+    const screenShare = (cur) => {
+      console.log("싱태", cur);
+      if (cur) {
+        document.getElementById("screenShareStart").style.display = "none";
+        document.getElementById("container-screens").style.display = "block";
+      } else {
+        document.getElementById("screenShareStart").style.display = "block";
+        document.getElementById("container-screens").style.display = "none";
+      }
+    };
 
     /*
   닉네임:사용자
@@ -347,26 +367,31 @@ export default {
     };
 
     // 화면공유 활성화 함수
-    const publishScreenShare = (screenShareState) => {
+    const publishScreenShare = () => {
       var publisherScreen = state.OVScreen.initPublisher("container-screens", {
+        audioSource: false,
         videoSource: "screen",
       });
 
       publisherScreen.once("accessAllowed", () => {
-        state.screenShareState = screenShareState;
-        document.getElementById("screenShareStart").style.display = "none";
-        document.getElementById("container-screens").style.display = "block";
+        console.log("화면공유시작????");
+        state.screenShareState = true;
+        console.log(state.screenShareState);
         publisherScreen.stream
-          .getMediaStream()
+          .getMediaStream({
+            video: true,
+            audio: false,
+          })
           .getVideoTracks()[0]
           .addEventListener("ended", () => {
-            document.getElementById("screenShareStart").style.display = "block";
-            document.getElementById("container-screens").style.display = "none";
+            // document.getElementById("screenShareStart").style.display = "block";
+            // document.getElementById("container-screens").style.display = "none";
             console.log(
               "화면 공유를 멈췄ㄸ따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ",
             );
             state.sessionScreen.unpublish(publisherScreen);
             state.screenShareState = false;
+            console.log(state.screenShareState);
           });
         state.sessionScreen.publish(publisherScreen);
       });
@@ -376,6 +401,7 @@ export default {
         event.element.className += "screen-share";
         console.log(event.element);
         event.element["muted"] = true;
+        console.log(event.element["muted"]);
       });
 
       publisherScreen.once("accessDenied", () => {
@@ -427,6 +453,11 @@ export default {
     const activeMute = (audioState) => {
       state.publisher.publishAudio(audioState);
     };
+
+    onMounted(() => {
+      document.getElementById("screenShareStart").style.display = "block";
+      document.getElementById("container-screens").style.display = "none";
+    });
 
     return {
       state,
