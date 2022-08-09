@@ -8,6 +8,7 @@ import com.ssafy.banggawawo.service.VolunteerService;
 import io.swagger.annotations.ApiOperation;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +22,10 @@ import java.util.Optional;
 @RequestMapping("/kakao")
 public class AuthController {
 
-    private final String KAKAO_API_KEY = "디스코드 참고";
-
-    private final String REDIRECT_URL = "디스코드 참고";
+    @Value("${KAKAO_API_KEY}")
+    private String KAKAO_API_KEY;
+    @Value("${REDIRECT_URL}")
+    private String REDIRECT_URL;
 
     @Autowired
     private StudentService studentService;

@@ -36,3 +36,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+#ignore properties file
+**/resources/application-API-KEY.properties
+**/resources/application.yml
