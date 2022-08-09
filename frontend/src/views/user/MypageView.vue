@@ -4,7 +4,8 @@
     <div class="mypage-container">
       <div class="profile-info">
         <profile-card
-          :user="user"
+          :user="userInfo"
+          :children="children"
           :toggleModifyModal="toggleModifyModal"
           @open-character-modal="openCharacterModal"
         ></profile-card>
@@ -19,7 +20,7 @@
           <li class="nav-item" @click="doActive">종료된 수업</li>
         </ul>
         <lecture-area
-          :user="user"
+          :user="userInfo"
           :isEnd="state.isEnd"
           :endClass="endClass"
           :scheduledClass="scheduledClass"
@@ -31,7 +32,11 @@
         v-if="isCharacterModalOpen"
         @close-character-modal="closeCharacterModal"
     /></transition>
-    <ModifyModal v-if="isModifyOpen" :user="user" @modifyInfo="modifyInfo" />
+    <ModifyModal
+      v-if="isModifyOpen"
+      :user="userInfo"
+      @modifyInfo="modifyInfo"
+    />
   </div>
 </template>
 
@@ -57,63 +62,34 @@ export default {
     ModifyModal,
   },
   setup() {
-    let navItem;
     onMounted(() => {
       navItem = document.querySelectorAll(".nav-item");
     });
 
+    let navItem;
     let isModifyOpen = ref(false);
     const isCharacterModalOpen = ref(false);
+    const children = ref(null);
+    let userInfo = ref(null);
 
     const getUserInfo = async () => {
-      const userInfo = JSON.parse(localStorage.getItem("user"));
-      const userType = userInfo.userType;
-      const response = await axios.get(
-        `${process.env.VUE_APP_API_URL}/${userType}/${userInfo.vid}`,
-      );
+      userInfo.value = JSON.parse(localStorage.getItem("user"));
+      const userType = userInfo.value.userType;
 
-      console.log(response);
+      if (userType === "parent") {
+        const response = await axios.get(
+          `${process.env.VUE_APP_API_URL}/parent/${userInfo.value.email}`,
+        );
+        children.value = response.data.childs;
+      } else {
+        const response = await axios.get(
+          `${process.env.VUE_APP_API_URL}/${userType}/${userInfo.vid}`,
+        );
+        console.log(response);
+      }
     };
     getUserInfo();
 
-    const user = reactive({
-      name: "이화연바보",
-      nickname: "애기하연",
-      description: "자기소개입니다",
-      status: 3, //1학생 2봉사자 3부모
-      subscribe: 0,
-      password: "abcdefg",
-      children: [
-        {
-          name: "일화연",
-          nickname: "애긔화연",
-          description: "자기소개입니다",
-          status: 1,
-          subscribe: 0,
-        },
-        {
-          name: "이화연",
-          nickname: "애기화연애긔",
-          description: "자기소개입니다",
-          status: 1,
-          subscribe: 0,
-        },
-        {
-          name: "삼화연",
-          nickname: "애긩화연",
-          description: "자기소개입니다",
-          status: 1,
-          subscribe: 0,
-        },
-        {
-          name: "사화연",
-          nickname: "아긩화연",
-          description: "자기소개입니다",
-          status: 1,
-          subscribe: 0,
-        },
-      ],
-    });
     const classes = [
       {
         classTeacher: "김오리",
@@ -269,15 +245,14 @@ export default {
     };
 
     const modifyInfo = (changeData) => {
-      if (user.status === 1) user.nickname = changeData;
-      else if (user.status === 2) user.description = changeData;
-      else if (user.status === 3) user.password = changeData;
-      console.log(user);
+      if (userInfo.userType === "student") userInfo.nickname = changeData;
+      else if (userInfo.userType === "volunteer")
+        userInfo.description = changeData;
+      else if (userInfo.userType === "parent") userInfo.password = changeData;
       isModifyOpen.value = false;
     };
 
     return {
-      user,
       isCharacterModalOpen,
       state,
       navItem,
@@ -291,6 +266,8 @@ export default {
       isModifyOpen,
       toggleModifyModal,
       modifyInfo,
+      children,
+      userInfo,
     };
   },
 };

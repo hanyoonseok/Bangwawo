@@ -22,7 +22,7 @@ export default {
       if (data.isUser) {
         //data 복호화 하고 로컬스토리지에 담기
         const decode_jwt = jwt_decode(data.JWT);
-        decode_jwt.user.userType = decode_jwt.userType;
+        decode_jwt.user.userType = decode_jwt.userType.toLowerCase();
         localStorage.setItem("user", JSON.stringify(decode_jwt.user));
         router.push("/class/list");
       } else {

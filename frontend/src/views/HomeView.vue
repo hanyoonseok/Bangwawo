@@ -157,17 +157,27 @@
         <div class="request-img"><img src="@/assets/request-img.png" /></div>
       </div>
     </section>
-    <router-link :to="{ name: 'login' }" class="fixed-btn"
-      >지금 시작하기</router-link
-    >
+    <button class="fixed-btn" @click="clickStart">지금 시작하기</button>
   </div>
 </template>
 
 <script>
+import { useRouter } from "vue-router";
 import HeaderNav from "@/components/HeaderNav.vue";
 export default {
   name: "HomeView",
-  setup() {},
+  setup() {
+    const router = useRouter();
+    const clickStart = () => {
+      const userInfo = JSON.parse(localStorage.getItem("user"));
+      if (userInfo) router.push("/class/list");
+      else router.push("/user/login");
+    };
+
+    return {
+      clickStart,
+    };
+  },
   components: {
     HeaderNav,
   },

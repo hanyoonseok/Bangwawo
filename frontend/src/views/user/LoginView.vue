@@ -43,6 +43,7 @@
 
 <script>
 import axios from "axios";
+import { useRouter } from "vue-router";
 import jwt_decode from "jwt-decode";
 import { reactive, onMounted, ref } from "vue";
 
@@ -52,6 +53,8 @@ export default {
     let userBtn;
     let pEmail = ref("");
     let pPassword = ref("");
+    const router = useRouter();
+
     const getKakao = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.VUE_APP_KAKAO_RESTAPI_KEY}&redirect_uri=${process.env.VUE_APP_REDIRECT_URL}&response_type=code`;
     onMounted(() => {
       userBtn = document.querySelectorAll(".user-btn");
@@ -66,7 +69,6 @@ export default {
     };
 
     const doActive = (e) => {
-      console.log(state.isStudent);
       if (!e.target.classList.contains("active")) {
         e.target.classList.add("active");
       }
@@ -86,17 +88,19 @@ export default {
 
     const loginParent = async () => {
       const loginObj = {
-        email: pEmail,
-        password: pPassword,
+        email: pEmail.value,
+        password: pPassword.value,
       };
+      console.log(loginObj);
 
       await axios
         .post(`${process.env.VUE_APP_API_URL}/parent`, loginObj)
         .then((res) => {
           console.log(res.data);
           const decode_jwt = jwt_decode(res.data.JWT);
-          decode_jwt.user.userType = decode_jwt.userType;
+          decode_jwt.user.userType = decode_jwt.userType.toLowerCase();
           localStorage.setItem("user", JSON.stringify(decode_jwt.user));
+          router.push("/mypage");
         })
         .catch((err) => {
           console.log(err.message);
