@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -55,19 +56,26 @@ public class StudentController {
         Map<String, Object> response = new HashMap<>();
 
         try{
-            // 부모 이메일로 임시 비밀번호 발급 후 전송
-            String parentsPassword = "";
-            for (int i = 0; i < 8; i++) {
-                int rndVal = (int) (Math.random() * 62);
-                if (rndVal < 10) {
-                    parentsPassword += rndVal;
-                } else if (rndVal > 35) {
-                    parentsPassword += (char) (rndVal + 61);
-                } else {
-                    parentsPassword += (char) (rndVal + 55);
+            List<Student> childs = studentService.findByPemail(value.getPemail());
+            if(childs.size()>0) {
+                // 부모 계정이 이미 존재하는 경우
+                value.setPpw(childs.get(0).getPpw());
+            }else{
+                // 새로운 부모 이메일인 경우
+                String parentsPassword = "";
+                for (int i = 0; i < 8; i++) {
+                    int rndVal = (int) (Math.random() * 62);
+                    if (rndVal < 10) {
+                        parentsPassword += rndVal;
+                    } else if (rndVal > 35) {
+                        parentsPassword += (char) (rndVal + 61);
+                    } else {
+                        parentsPassword += (char) (rndVal + 55);
+                    }
                 }
+                value.setPpw(parentsPassword);
             }
-            value.setPpw(parentsPassword);
+
             StudentDto student = new StudentDto(studentService.create(value));
 
             response.put("result", "SUCCESS");
