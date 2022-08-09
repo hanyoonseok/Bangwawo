@@ -22,7 +22,7 @@
           <div class="idx-btn-wrapper prev" @click="prevClick">
             <button class="idx-btn prev"></button>
           </div>
-          <div class="user-card-wrapper">
+          <div class="user-card-wrapper" id="container-screens">
             <div class="hover-wrapper">나</div>
             <div class="user-card"><OvVideo :stream-manager="me" /></div>
           </div>

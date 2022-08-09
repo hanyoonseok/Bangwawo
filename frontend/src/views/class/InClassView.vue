@@ -118,7 +118,7 @@ export default {
           Math.min(state.dataIdx + state.dataLen, state.subscribers.length + 1),
         );
       }),
-      isHost: true,
+      isHost: false,
       dataLen: computed(() => {
         return state.isHost ? 12 : 4;
       }),
@@ -127,6 +127,7 @@ export default {
       screenShareState: false, //화면공유 여부
     });
 
+    // 화면 공유 상태 변화했는지 감지
     watch(
       () => state.screenShareState,
       (cur) => {
@@ -138,11 +139,12 @@ export default {
     const screenShare = (cur) => {
       console.log("싱태", cur);
       if (cur) {
+        // true일때는 화면공유 창 보여주기
         document.getElementById("screenShareStart").style.display = "none";
         document.getElementById("container-screens").style.display = "block";
       } else {
         document.getElementById("screenShareStart").style.display = "block";
-        document.getElementById("container-screens").style.display = "none";
+        document.getElementById("container-screens").style.display = "hidden";
       }
     };
 
@@ -185,6 +187,7 @@ export default {
       // 화면 공유
       state.sessionScreen.on("streamCreated", (event) => {
         if (event.stream.typeOfVideo == "SCREEN") {
+          state.screenShareState = true;
           // Subscribe to the Stream to receive it. HTML video will be appended to element with 'container-screens' id
           var subscriberScreen = state.sessionScreen.subscribe(
             event.stream,
@@ -375,6 +378,10 @@ export default {
 
       publisherScreen.once("accessAllowed", () => {
         console.log("화면공유시작????");
+        console.log("시작", state.session);
+
+        console.log("ovscreen", state.OVScreen);
+        console.log("sessionscreen", state.sessionScreen);
         state.screenShareState = true;
         console.log(state.screenShareState);
         publisherScreen.stream
@@ -392,6 +399,10 @@ export default {
             state.sessionScreen.unpublish(publisherScreen);
             state.screenShareState = false;
             console.log(state.screenShareState);
+            console.log("끝", state.session);
+
+            console.log("ovscreen", state.OVScreen);
+            console.log("sessionscreen", state.sessionScreen);
           });
         state.sessionScreen.publish(publisherScreen);
       });
