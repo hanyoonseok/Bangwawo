@@ -81,12 +81,15 @@ public class StudentController {
         return response;
     }
 
-    @ApiOperation(value="학생 정보 수정", notes="학생 정보를 입력받아 그대로 내용 수정")
+    @ApiOperation(value="학생 정보 수정", notes="학생 정보를 입력받아 그대로 내용 수정\nsId : 학생아이디, nickname : 수정할 별명")
     @PutMapping("")
-    public Map<String, Object> updateStudent(@RequestParam Long sid, @RequestParam String nickname){
+    public Map<String, Object> updateStudent(@RequestBody Map<String, Object> request){
+        Long sId = Long.parseLong(request.get("sId").toString());
+        String nickname = (String) request.get("nickname");
+
         Map<String, Object> response = new HashMap<>();
         try{
-            Optional<Student> oStudent = studentService.findById(sid);
+            Optional<Student> oStudent = studentService.findById(sId);
             if(oStudent.isPresent()){
                 oStudent.get().setNickname(nickname);
                 Student result = studentService.save(oStudent.get());
