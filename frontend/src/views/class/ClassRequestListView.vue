@@ -45,7 +45,12 @@
             <td>{{ item.rid }}</td>
             <td>{{ item.writer }}</td>
             <td>
-              <router-link to="/class/requestdetail">
+              <router-link
+                :to="{
+                  name: 'classrequestdetail',
+                  query: { rid: `${item.rid}` },
+                }"
+              >
                 {{ item.title }}
               </router-link>
             </td>

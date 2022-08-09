@@ -88,12 +88,15 @@
 <script>
 import { ref } from "vue";
 import HeaderNav from "@/components/HeaderNav.vue";
+// import axios from "axios";
+// import { useRouter } from "vue-router";
 export default {
   name: "ClassRequestDetail",
   components: {
     HeaderNav,
   },
   setup() {
+    // const router = useRouter();
     const post = ref({
       status: 1, // 0미해결 1해결
       link: {
@@ -103,6 +106,20 @@ export default {
           "오리 선생님이 역사 이야기를 해줄거에요sadfasdfsdㅁㄴㅇㄻㄴㅇㄹㄴㅇㄻㄴㅇㄹㄴㅇㅁ랴ㅐㅗㄴㅇㅁ래ㅕㅗㅁㄴㅇ륨아너로먄여로ㅑㅕㅗㄹㄷㅈㅁ러ㅏㅁㄴ오러ㅏㅁㅇ노러ㅏㄴ",
       },
     });
+    let userInfo = ref(null);
+    const getUserInfo = async () => {
+      userInfo.value = JSON.parse(localStorage.getItem("user"));
+      console.log("userinfo임" + userInfo.value);
+    };
+    getUserInfo();
+
+    // const getRequest = async () => {
+    //   axios
+    //     .get(`${process.env.VUE_APP_API_URL}/request/${router.query.rid}/`)
+    //     .then((response) => {
+    //       console.log(response);
+    //     });
+    // };
     const user = ref({
       status: 0, //0학생 1봉사자 2부모
     });
@@ -110,6 +127,8 @@ export default {
     return {
       user,
       post,
+      // getRequest,
+      getUserInfo,
     };
   },
 };
