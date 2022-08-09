@@ -22,9 +22,13 @@ public class ParentController {
     private final StudentService studentService;
     private final JwtService jwtService;
 
-    @ApiOperation(value="학부모 로그인", notes="학부모 정보를 입력받아 로그인 후 JWT 토큰 발급")
+    @ApiOperation(value="학부모 로그인", notes="학부모 정보를 입력받아 로그인 후 JWT 토큰 발급\n" +
+            "email : 학부모 이메일, password : 학부모 비밀번호")
     @PostMapping("")
-    public Map<String, Object> loginParent(@RequestParam String email, @RequestParam String password){
+    public Map<String, Object> loginParent(@RequestBody Map<String, Object> request){
+        String email = (String) request.get("email");
+        String password = (String) request.get("password");
+
         Map<String, Object> response = new HashMap<>();
 
         try{
@@ -75,9 +79,13 @@ public class ParentController {
         return response;
     }
 
-    @ApiOperation(value="학부모 비밀번호 수정", notes="학부모 이메일과 변경할 비밀번호를 입력받아 비밀번호 수정")
+    @ApiOperation(value="학부모 비밀번호 수정", notes="학부모 이메일과 변경할 비밀번호를 입력받아 비밀번호 수정\n" +
+            "email : 학부모 이메일, password : 변경할 비밀번호")
     @PutMapping("")
-    public Map<String, Object> updateStudent(@RequestParam String email, @RequestParam String password){
+    public Map<String, Object> updateStudent(@RequestBody Map<String, Object> request){
+        String email = (String) request.get("email");
+        String password = (String) request.get("password");
+
         Map<String, Object> response = new HashMap<>();
         try{
             if(studentService.updatePpw(email, password)==0) throw new Exception("비밀번호 변경 실패");
