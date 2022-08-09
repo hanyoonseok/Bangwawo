@@ -38,12 +38,12 @@ export default {
 
     const submitRegister = async () => {
       registObj.value.introduce = textareaValue.value;
-      registObj.value.nickname = "test";
       console.log(registObj.value);
       const response = await axios.post(
         `${process.env.VUE_APP_API_URL}/volunteer/`,
         registObj.value,
       );
+      console.log(response);
 
       const decode_jwt = jwt_decode(response.data.JWT);
       decode_jwt.user.userType = decode_jwt.userType;
