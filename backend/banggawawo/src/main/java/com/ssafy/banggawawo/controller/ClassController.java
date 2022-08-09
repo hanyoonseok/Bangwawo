@@ -59,9 +59,10 @@ public class ClassController {
     @GetMapping
     public ResponseEntity<List<ClassRoom>> findAll(@RequestParam(required = false, name = "title") String title,
                                                    @RequestParam(required = false, name = "opened") Boolean opened,
-                                                   @RequestParam(required = false, name = "state") Boolean state) throws Exception{
+                                                   @RequestParam(required = false, name = "state") Boolean state,
+                                                   @RequestParam(required = false, name = "vid") Long vid) throws Exception{
         ClassDto classDto = new ClassDto();
-        classDto.setSearchfQuery(title, opened, state);
+        classDto.setSearchfQuery(title, opened, state, vid);
         return new ResponseEntity<List<ClassRoom>>(classService.findAll(classDto), HttpStatus.OK);
     }
     @ApiOperation(value = "수업 하나 가져오기")

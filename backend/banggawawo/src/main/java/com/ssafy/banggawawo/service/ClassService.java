@@ -107,6 +107,12 @@ public class ClassService {
         }else {
             list = classRepository.findAll();
         }
+
+        //vid 있으면 해당 vid 가진 수업만 남기기
+        if(classDto.getVId().getVId() != null){
+            list = list.stream().filter(classRoom -> classRoom.getVolunteer().getVId() == classDto.getVId().getVId()).collect(Collectors.toList());
+        }
+
         //조건에 맞는 것만 남기고 나머지 자르기 (state, opened)
         if(classDto.getState() != null){
             list = list.stream().filter(classRoom -> classRoom.getState() == classDto.getState()).collect(Collectors.toList());
@@ -114,7 +120,10 @@ public class ClassService {
         if(classDto.getOpened() != null){
             list = list.stream().filter(classRoom -> classRoom.getOpened() == classDto.getOpened()).collect(Collectors.toList());
         }
+
+        //정렬
         list = list.stream().sorted((o1, o2) -> (int)(o2.getCId() - o1.getCId())).collect(Collectors.toList());
+
         return list;
     }
 }
