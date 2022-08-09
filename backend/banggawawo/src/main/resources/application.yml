@@ -31,3 +31,6 @@ logging:
 server:
   servlet:
     context-path: /api
+  encoding:
+    charset: UTF-8
+  port: 8081
