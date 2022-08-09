@@ -41,6 +41,7 @@ public class VolunteerService {
                 .nickname(volunteerDto.getNickname())
                 .ageRange(volunteerDto.getAgeRange())
                 .introduce(volunteerDto.getIntroduce())
+                .talkable(volunteerDto.isTalkable())
                 .character(volunteerDto.getCharacter()).build();
         return volunteerRepository.save(volunteer);
     }
