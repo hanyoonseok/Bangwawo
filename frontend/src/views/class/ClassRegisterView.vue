@@ -82,6 +82,15 @@
       </article>
       <button class="register-btn" @click="classRegister">등록</button>
     </div>
+    <div class="confirm" v-if="isConfirm.status">
+      <div class="container">
+        <img src="@/assets/profile.png" alt="오리" />
+        <h2>모두 입력해주세요!</h2>
+        <div class="btn-wrapper">
+          <button class="btn" @click="isConfirm.status = false">확인</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -108,7 +117,7 @@ export default {
       etime: "",
       thumbnail: "",
       classOpen: "",
-      maxcnt: "",
+      maxcnt: 0,
       introduce: "",
       classImgFile: "",
       volunteer: { nickname: user.nickname },
@@ -132,44 +141,61 @@ export default {
         vid: { vid: user.vid },
         title: state.title,
         introduce: state.introduce,
-        stime: state.classDate + "T" + state.stime,
-        etime: state.classDate + "T" + state.etime,
+        stime: state.classDate + "" + state.stime,
+        etime: state.classDate + "" + state.etime,
         maxcnt: state.maxcnt,
         opened: state.classOpen,
         thumbnail: state.classThumbnail,
       };
 
-      // 이미지 파일 등록
-      await axios
-        .post(`${process.env.VUE_APP_API_URL}/class/image`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((response) => {
-          console.log(response.data);
-          classDto.thumbnail = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      if (
+        classDto.title === "" ||
+        classDto.introduce === "" ||
+        classDto.stime === "" ||
+        classDto.etime === "" ||
+        classDto.maxcnt === 0 ||
+        classDto.opened === "" ||
+        classDto.thumbnail === undefined
+      ) {
+        isConfirm.status = true;
+      } else {
+        // 이미지 파일 등록
+        await axios
+          .post(`${process.env.VUE_APP_API_URL}/class/image`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((response) => {
+            console.log(response.data);
+            classDto.thumbnail = response.data;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
 
-      // 클래스 등록
-      await axios
-        .post(`${process.env.VUE_APP_API_URL}/class`, classDto)
-        .then((response) => {
-          console.log(response);
-          router.push("/class/list");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        // 클래스 등록
+        await axios
+          .post(`${process.env.VUE_APP_API_URL}/class`, classDto)
+          .then((response) => {
+            console.log(response);
+            router.push("/class/list");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     };
+
+    const isConfirm = reactive({
+      status: false,
+    });
 
     return {
       state,
       fileChange,
       classRegister,
+      isConfirm,
     };
   },
 };
