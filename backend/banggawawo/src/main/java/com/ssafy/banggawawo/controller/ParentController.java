@@ -26,8 +26,8 @@ public class ParentController {
             "email : 학부모 이메일, password : 학부모 비밀번호")
     @PostMapping("")
     public Map<String, Object> loginParent(@RequestBody Map<String, Object> request){
-        String email = (String) request.get("email");
-        String password = (String) request.get("password");
+        String email = request.get("email").toString();
+        String password = request.get("password").toString();
 
         Map<String, Object> response = new HashMap<>();
 
@@ -37,7 +37,7 @@ public class ParentController {
                 if(childs.get(0).getPpw().equals(password)){
                     response.put("result", "SUCCESS");
                     Student student = childs.get(0);
-                    response.put("JWT", jwtService.create("PARENT", new ParentDto(student.getPemail(), student.getPpw())));
+                    response.put("JWT", jwtService.create("PARENT", new ParentDto(student.getPemail(), "")));
                 }else{
                     throw new Exception("비밀번호가 일치하지 않습니다.");
                 }
@@ -62,10 +62,11 @@ public class ParentController {
         Map<String, Object> response = new HashMap<>();
         try{
             List<Student> childList = studentService.findByPemail(email);
-            System.out.println(childList.getClass());
             List<StudentDto> childs = new ArrayList<StudentDto>();
             for(Student s : childList){
-                childs.add(new StudentDto(s));
+                StudentDto std = new StudentDto(s);
+                std.setPpw("");
+                childs.add(std);
             }
             response.put("result", "SUCCESS");
             response.put("childs", childs);
@@ -83,8 +84,8 @@ public class ParentController {
             "email : 학부모 이메일, password : 변경할 비밀번호")
     @PutMapping("")
     public Map<String, Object> updateStudent(@RequestBody Map<String, Object> request){
-        String email = (String) request.get("email");
-        String password = (String) request.get("password");
+        String email = request.get("email").toString();
+        String password = request.get("password").toString();
 
         Map<String, Object> response = new HashMap<>();
         try{
