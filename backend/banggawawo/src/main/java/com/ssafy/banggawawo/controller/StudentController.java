@@ -70,6 +70,7 @@ public class StudentController {
             }
             StudentDto student = new StudentDto(studentService.create(value));
 
+            student.setPpw("");
             response.put("result", "SUCCESS");
             response.put("JWT", jwtService.create("STUDENT", student));
 
@@ -85,7 +86,7 @@ public class StudentController {
     @PutMapping("")
     public Map<String, Object> updateStudent(@RequestBody Map<String, Object> request){
         Long sId = Long.parseLong(request.get("sId").toString());
-        String nickname = (String) request.get("nickname");
+        String nickname = request.get("nickname").toString();
 
         Map<String, Object> response = new HashMap<>();
         try{
