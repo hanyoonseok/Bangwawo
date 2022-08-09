@@ -1,8 +1,10 @@
 package com.ssafy.banggawawo.controller;
 
+import com.ssafy.banggawawo.domain.dto.MailDto;
 import com.ssafy.banggawawo.domain.dto.StudentDto;
 import com.ssafy.banggawawo.domain.entity.Student;
 import com.ssafy.banggawawo.service.JwtService;
+import com.ssafy.banggawawo.service.MailService;
 import com.ssafy.banggawawo.service.StudentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -12,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -22,6 +25,7 @@ import java.util.Optional;
 public class StudentController {
 
     private final StudentService studentService;
+    private final MailService mailService;
     private final JwtService jwtService;
 
     @ApiOperation(value="학생 정보 조회", notes="학생 id(sId)를 입력받아 학생 정보 제공")
@@ -48,26 +52,22 @@ public class StudentController {
         return response;
     }
 
-
     @ApiOperation(value="학생 회원가입", notes="학생 정보를 입력받아 회원가입 후 JWT 토큰 발급")
     @PostMapping("")
     public Map<String, Object> saveStudent(@RequestBody StudentDto value){
         Map<String, Object> response = new HashMap<>();
-
         try{
-            // 부모 이메일로 임시 비밀번호 발급 후 전송
-            String parentsPassword = "";
-            for (int i = 0; i < 8; i++) {
-                int rndVal = (int) (Math.random() * 62);
-                if (rndVal < 10) {
-                    parentsPassword += rndVal;
-                } else if (rndVal > 35) {
-                    parentsPassword += (char) (rndVal + 61);
-                } else {
-                    parentsPassword += (char) (rndVal + 55);
-                }
+            List<Student> childs = studentService.findByPemail(value.getPemail());
+            if(childs.size()>0) {
+                // 부모 계정이 이미 존재하는 경우
+                value.setPpw(childs.get(0).getPpw());
+            }else{
+                // 새 부모 계정일 경우, 임시 비밀번호 발급 후 이메일 전송
+                MailDto mail = mailService.createMailAndChangePassword(value.getPemail(), value.getNickname());
+                value.setPpw(mail.getTmpPassword());
+
+                mailService.mailSend(mail);
             }
-            value.setPpw(parentsPassword);
             StudentDto student = new StudentDto(studentService.create(value));
 
             response.put("result", "SUCCESS");
