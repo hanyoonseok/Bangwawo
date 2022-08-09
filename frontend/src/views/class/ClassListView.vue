@@ -35,6 +35,7 @@ import HeaderNav from "@/components/HeaderNav.vue";
 import OpendClassList from "@/components/class/OpendClassList.vue";
 import MakedClassList from "@/components/class/MakedClassList.vue";
 import ForObserve from "@/components/class/ForObserve.vue";
+import axios from "axios";
 
 import { ref } from "vue";
 export default {
@@ -47,296 +48,31 @@ export default {
   },
   setup() {
     // 임시 테스트용 데이터
-    const allClasses = ref([
-      {
-        className: "dd",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: true,
-      },
-      {
-        className: "dd1",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: true,
-      },
-      {
-        className: "dd2",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: true,
-      },
-      {
-        className: "dd3",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: true,
-      },
-      {
-        className: "dd4",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: true,
-      },
-      {
-        className: "dd5",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: true,
-      },
-      {
-        className: "dd6",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd7",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd8",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd9",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd10",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd11",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd12",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd13",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd14",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd15",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd16",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd17",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd18",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd19",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd20",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd21",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-    ]);
-    const openClass = ref(allClasses.value.filter((e) => e.isOpenClass));
-    const makedClass = ref(allClasses.value.filter((e) => !e.isOpenClass));
+    let allClasses = ref([]);
+    let openClass = ref([]);
+    let makedClass = ref([]);
+    const getClass = async () => {
+      axios
+        .get(`${process.env.VUE_APP_API_URL}/class`)
+        .then((response) => {
+          allClasses = response.data;
+          console.log(allClasses);
+          for (const item of allClasses) {
+            console.log(item);
+            if (item.opened) {
+              openClass.value.push(item);
+            } else {
+              makedClass.value.push(item);
+            }
+          }
+          console.log(openClass.value);
+          console.log(makedClass.value);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    getClass();
     const filteredMakedClass = ref([]);
     const dataIdx = ref(0);
     const dataLen = 15;
@@ -346,6 +82,7 @@ export default {
     };
 
     const loadMakedClasses = () => {
+      console.log(dataIdx, " ", makedClass.value.length);
       if (dataIdx.value > makedClass.value.length) return;
 
       const prevArr = [...filteredMakedClass.value];
@@ -361,10 +98,9 @@ export default {
       console.log(filteredMakedClass.value);
     };
 
-    loadMakedClasses();
-
     return {
       top,
+      getClass,
       openClass,
       filteredMakedClass,
       loadMakedClasses,

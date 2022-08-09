@@ -1,26 +1,26 @@
 <template>
   <div class="post-card">
-    <div class="img-box" v-if="state.classImgFile.length === 0">
-      이미지를 추가해주세요.
+    <div class="img-box" v-if="state.thumbnail.length === 0">
+      <img src="@/assets/thumbnail.png" alt="썸네일이미지" />
     </div>
     <div class="img-box" v-else>
-      <img :src="state.classImgFile" alt="썸네일이미지" />
+      <img :src="state.thumbnail" alt="썸네일이미지" />
     </div>
     <div class="card-info card-view">
-      <h4>{{ state.className }}</h4>
+      <h4>{{ state.title }}</h4>
       <div class="division">
-        <label class="detail">{{ state.classContent }}</label>
+        <label class="detail">{{ state.introduce }}</label>
         <label class="participants"
-          ><i class="fa-solid fa-user"></i>&nbsp;{{ state.classPeople }}</label
+          ><i class="fa-solid fa-user"></i>&nbsp;{{ state.maxcnt }}</label
         >
       </div>
     </div>
     <div class="post-card-hover">
-      <p class="people">정원 : {{ state.classPeople }}</p>
-      <p class="teacher">강사 : {{ state.classTeacher }}</p>
+      <p class="people">정원 : {{ state.maxcnt }}</p>
+      <p class="teacher">강사 : {{ state.volunteer.nickname }}</p>
       <p class="time">
-        시간 : {{ state.classDate }} &nbsp; {{ state.classStartTime }} ~
-        {{ state.classEndTIme }}
+        시간 : {{ state.stime }} ~
+        {{ state.etime }}
       </p>
     </div>
   </div>

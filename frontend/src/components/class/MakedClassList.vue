@@ -12,7 +12,7 @@
     </div>
     <div class="contents">
       <div v-for="(item, index) in maked" :key="index">
-        <router-link to="/class/detail"
+        <router-link :to="{ name: 'classdetail', params: { cid: item.cid } }"
           ><RectPostCard :state="item"
         /></router-link>
       </div>

@@ -45,7 +45,7 @@ const routes = [
         component: () => import("@/views/class/ClassListView"),
       },
       {
-        path: "detail",
+        path: "detail/:cid",
         name: "classdetail",
         component: () => import("@/views/class/ClassDetailView"),
         beforeEnter: onlyAuthUser,

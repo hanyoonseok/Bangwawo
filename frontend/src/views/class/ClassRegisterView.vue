@@ -14,7 +14,7 @@
               name="className"
               id="className"
               placeholder="제목을 입력하세요."
-              v-model="state.classTitle"
+              v-model="state.title"
             />
           </div>
           <div class="info-box">
@@ -25,14 +25,14 @@
                 type="time"
                 name="startTime"
                 id="startTime"
-                v-model="state.classStartTime"
+                v-model="state.stime"
               />
               -
               <input
                 type="time"
                 name="endTime"
                 id="endTime"
-                v-model="state.classEndTIme"
+                v-model="state.etime"
               />
             </div>
           </div>
@@ -60,7 +60,7 @@
               name="classPeople"
               id="classPeople"
               oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-              v-model="state.classPeople"
+              v-model="state.maxcnt"
             />
           </div>
           <div class="info-box">
@@ -71,7 +71,7 @@
               cols="30"
               rows="6"
               placeholder="내용을 입력하세요."
-              v-model="state.classContent"
+              v-model="state.introduce"
             ></textarea>
           </div>
         </div>
@@ -90,6 +90,7 @@ import HeaderNav from "@/components/HeaderNav.vue";
 import RectPostCard from "@/components/common/RectPostCard.vue";
 import { reactive } from "vue";
 import axios from "axios";
+import { useRouter } from "vue-router";
 
 export default {
   components: {
@@ -97,16 +98,20 @@ export default {
     RectPostCard,
   },
   setup() {
+    const router = useRouter();
+    const user = JSON.parse(localStorage.getItem("user"));
+
     const state = reactive({
-      classTitle: "",
+      title: "",
       classDate: "",
-      classStartTime: "",
-      classEndTIme: "",
-      classThumbnail: "",
+      stime: "",
+      etime: "",
+      thumbnail: "",
       classOpen: "",
-      classPeople: "",
-      classContent: "",
+      maxcnt: "",
+      introduce: "",
       classImgFile: "",
+      volunteer: { nickname: user.nickname },
     });
 
     const formData = new FormData();
@@ -123,15 +128,13 @@ export default {
     };
 
     const classRegister = async () => {
-      const user = JSON.parse(localStorage.getItem("user"));
-
       const classDto = {
         vid: { vid: user.vid },
-        title: state.classTitle,
-        introduce: state.classContent,
-        stime: state.classDate + "T" + state.classStartTime,
-        etime: state.classDate + "T" + state.classEndTIme,
-        maxcnt: state.classPeople,
+        title: state.title,
+        introduce: state.introduce,
+        stime: state.classDate + "T" + state.stime,
+        etime: state.classDate + "T" + state.etime,
+        maxcnt: state.maxcnt,
         opened: state.classOpen,
         thumbnail: state.classThumbnail,
       };
@@ -156,6 +159,7 @@ export default {
         .post(`${process.env.VUE_APP_API_URL}/class`, classDto)
         .then((response) => {
           console.log(response);
+          router.push("/class/list");
         })
         .catch((error) => {
           console.log(error);
