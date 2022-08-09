@@ -7,6 +7,14 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  mail:
+    host: smtp.naver.com
+    port: 465
+    username: 서버 이메일 계정명
+    password: 애플리케이션 키
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.ssl.enable: true
 
   jpa:
     hibernate:
