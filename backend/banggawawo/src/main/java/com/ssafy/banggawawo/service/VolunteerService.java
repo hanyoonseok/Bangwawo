@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -49,5 +50,10 @@ public class VolunteerService {
     @Transactional
     public void delete(Volunteer value) {
         volunteerRepository.delete(value);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Volunteer> findByTalkable() {
+        return volunteerRepository.findByTalkable(true);
     }
 }
