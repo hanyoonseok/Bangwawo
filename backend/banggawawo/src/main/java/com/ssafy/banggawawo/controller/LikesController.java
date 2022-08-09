@@ -44,6 +44,7 @@ public class LikesController {
     @ApiOperation(value = "수업 개설시 opened를 true로 만들어주기")
     public ResponseEntity<?> opened(@RequestBody LikesDto likeDto) throws Exception {
         List<Likes> result = likeService.likesList(likeDto.getRId());
+
         for (int i =0; i<result.size();i++){
             //특정 수업이 개설되면 위수업을 듣고 싶어했던 모든 학생들의 opened를 (false->true)로 바꿔 준다.
             result.get(i).setLOpened(true);

@@ -2,14 +2,12 @@ package com.ssafy.banggawawo.controller;
 
 import com.ssafy.banggawawo.domain.dto.ClassDto;
 import com.ssafy.banggawawo.domain.dto.EnrolDto;
-import com.ssafy.banggawawo.domain.dto.OpenviduSessionDto;
 import com.ssafy.banggawawo.domain.entity.ClassRoom;
 import com.ssafy.banggawawo.domain.entity.Volunteer;
 import com.ssafy.banggawawo.service.ClassService;
 import com.ssafy.banggawawo.service.EnrolService;
 import com.ssafy.banggawawo.service.StudentService;
 import com.ssafy.banggawawo.service.VolunteerService;
-import io.openvidu.java.client.*;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

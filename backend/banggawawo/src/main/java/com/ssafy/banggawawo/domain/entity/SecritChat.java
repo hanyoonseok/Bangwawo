@@ -12,21 +12,17 @@ import java.util.Date;
 public class SecritChat {
     @Id
     @GeneratedValue
-    private Long scId;            //비밀친구 아이디
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="s_id")
-    private Student student;
-
-    private String scContent;     //위험 내용
-    private Date scDate;          //날짜
+    @Column(name = "sc_id")
+    private Long scid;            //비밀친구 아이디
+    private Long sId;
+    @Column(name = "sc_content")
+    private String sccontent;     //위험 내용
     private Boolean parentsCheck; // 부모님 알람 확인
 
     @Builder
-    public SecritChat(Student student, String scContent, Date scDate,boolean parentsCheck) {
-        this.student = student;
-        this.scContent = scContent;
-        this.scDate = scDate;
+    public SecritChat(Long sId, String sccontent,boolean parentsCheck) {
+        this.sId = sId;
+        this.sccontent = sccontent;
         this.parentsCheck = parentsCheck;
     }
 }
