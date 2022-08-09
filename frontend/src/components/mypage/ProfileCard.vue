@@ -58,13 +58,6 @@
       <!-- <img src="@/assets/profile.png" /> -->
       <div class="img-hover-box">캐릭터 편집</div>
     </div>
-    <div class="person-info">
-      <label>이름</label>
-      <div class="label-value volunteer-value" v-if="user.status === 2">
-        {{ user.name }}
-      </div>
-      <div class="label-value" v-else>{{ user.name }}</div>
-    </div>
 
     <div class="person-info" v-if="user.status === 2">
       <label>자기소개</label>

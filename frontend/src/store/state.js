@@ -1,5 +1,7 @@
 const user = {
-  name: "test",
+  sid: 0,
+  ageRange: 0,
+  nickname: "",
   characterColors: [
     { id: "body", color: "f1f1f1" },
     { id: "bag", color: "FFD89B" },

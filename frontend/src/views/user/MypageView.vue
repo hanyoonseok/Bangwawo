@@ -73,7 +73,7 @@ export default {
     let userInfo = ref(null);
 
     const getUserInfo = async () => {
-      userInfo.value = JSON.parse(localStorage.getItem("user"));
+      userInfo.value = { ...JSON.parse(localStorage.getItem("user")) };
       const userType = userInfo.value.userType;
 
       if (userType === "parent") {
@@ -81,11 +81,6 @@ export default {
           `${process.env.VUE_APP_API_URL}/parent/${userInfo.value.email}`,
         );
         children.value = response.data.childs;
-      } else {
-        const response = await axios.get(
-          `${process.env.VUE_APP_API_URL}/${userType}/${userInfo.vid}`,
-        );
-        console.log(response);
       }
     };
     getUserInfo();
@@ -244,11 +239,47 @@ export default {
       isModifyOpen.value = !isModifyOpen.value;
     };
 
-    const modifyInfo = (changeData) => {
-      if (userInfo.userType === "student") userInfo.nickname = changeData;
-      else if (userInfo.userType === "volunteer")
-        userInfo.description = changeData;
-      else if (userInfo.userType === "parent") userInfo.password = changeData;
+    const modifyInfo = async (changeData) => {
+      console.log(changeData);
+      if (userInfo.value.userType === "student") {
+        await axios
+          .put(`${process.env.VUE_APP_API_URL}/student`, {
+            sId: userInfo.value.sid,
+            nickname: changeData,
+          })
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
+        userInfo.value.nickname = changeData;
+      } else if (userInfo.value.userType === "volunteer") {
+        await axios
+          .put(`${process.env.VUE_APP_API_URL}/volunteer`, {
+            vId: userInfo.value.vid,
+            introduce: changeData,
+          })
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
+        userInfo.value.introduce = changeData;
+      } else if (userInfo.value.userType === "parent") {
+        await axios
+          .put(`${process.env.VUE_APP_API_URL}/parent`, {
+            email: userInfo.value.email,
+            password: changeData,
+          })
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
+      }
       isModifyOpen.value = false;
     };
 
