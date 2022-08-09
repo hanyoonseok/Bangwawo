@@ -93,10 +93,13 @@
 
 <script>
 import { ref } from "vue";
+import { useStore } from "vuex";
 
 export default {
   name: "HeaderNav",
   setup() {
+    const store = useStore();
+    console.log(store.state.root.user);
     const user = ref(JSON.parse(localStorage.getItem("user")));
 
     let isNoticeOpen = ref(false);

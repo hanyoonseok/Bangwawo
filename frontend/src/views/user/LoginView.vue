@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import jwt_decode from "jwt-decode";
 import { reactive, onMounted, ref } from "vue";
@@ -50,6 +50,7 @@ import { reactive, onMounted, ref } from "vue";
 export default {
   name: "LoginView",
   setup() {
+    const store = useStore();
     let userBtn;
     let pEmail = ref("");
     let pPassword = ref("");
@@ -86,20 +87,20 @@ export default {
       }
     };
 
-    const loginParent = async () => {
+    const loginParent = () => {
       const loginObj = {
         email: pEmail.value,
         password: pPassword.value,
       };
       console.log(loginObj);
-
-      await axios
-        .post(`${process.env.VUE_APP_API_URL}/parent`, loginObj)
+      loginObj.userType = "parent";
+      store
+        .dispatch("root/loginUser", loginObj)
         .then((res) => {
           console.log(res.data);
           const decode_jwt = jwt_decode(res.data.JWT);
           decode_jwt.user.userType = decode_jwt.userType.toLowerCase();
-          localStorage.setItem("user", JSON.stringify(decode_jwt.user));
+          store.commit("root/setUserInfo", decode_jwt.user);
           router.push("/mypage");
         })
         .catch((err) => {

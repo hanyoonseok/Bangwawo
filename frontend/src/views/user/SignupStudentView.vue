@@ -17,9 +17,8 @@
 
 <script>
 import { ref } from "vue";
-import axios from "axios";
-import jwt_decode from "jwt-decode";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 export default {
   name: "SignupUpVolunteer",
@@ -28,6 +27,7 @@ export default {
     let emailValue = ref("");
     const registObj = ref({ ...props });
     const router = useRouter();
+    const store = useStore();
 
     registObj.value.character = {
       bag: "FFD89B",
@@ -38,16 +38,16 @@ export default {
       hat: "FFD89B",
     };
 
-    const submitRegister = async () => {
+    const submitRegister = () => {
       registObj.value.pemail = emailValue.value;
-      const response = await axios.post(
-        `${process.env.VUE_APP_API_URL}/student/`,
-        registObj.value,
-      );
-      const decode_jwt = jwt_decode(response.data.JWT);
-      decode_jwt.user.userType = decode_jwt.userType.toLowerCase();
-      localStorage.setItem("user", JSON.stringify(decode_jwt.user));
-      router.push("/class/list");
+      registObj.value.userType = "student";
+      store
+        .dispatch("root/loginUser", registObj.value)
+        .then((res) => {
+          store.commit("root/setUserInfo", res.data);
+          router.push("/class/list");
+        })
+        .catch((err) => console.log(err.message));
     };
 
     return { emailValue, submitRegister };

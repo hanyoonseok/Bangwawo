@@ -35,7 +35,6 @@ import HeaderNav from "@/components/HeaderNav.vue";
 import OpendClassList from "@/components/class/OpendClassList.vue";
 import MakedClassList from "@/components/class/MakedClassList.vue";
 import ForObserve from "@/components/class/ForObserve.vue";
-
 import { ref } from "vue";
 export default {
   name: "ClassListView",

@@ -4,26 +4,21 @@
 
 <script>
 import { useRoute, useRouter } from "vue-router";
-import jwt_decode from "jwt-decode";
+import { useStore } from "vuex";
 
-import axios from "axios";
 export default {
   name: "LoginRedirectView",
   setup() {
     const route = useRoute();
     const router = useRouter();
+    const store = useStore();
     const { code } = route.query;
 
     const getLoginInfo = async () => {
-      const { data } = await axios.get(
-        `${process.env.VUE_APP_API_URL}/kakao/${code}`,
-      );
+      const { data } = await store.dispatch("root/getUserInfo", code);
       console.log(data);
       if (data.isUser) {
-        //data 복호화 하고 로컬스토리지에 담기
-        const decode_jwt = jwt_decode(data.JWT);
-        decode_jwt.user.userType = decode_jwt.userType.toLowerCase();
-        localStorage.setItem("user", JSON.stringify(decode_jwt.user));
+        store.commit("root/setUserInfo", data);
         router.push("/class/list");
       } else {
         data.ageRange = 10;

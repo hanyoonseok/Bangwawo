@@ -14,9 +14,8 @@
 </template>
 
 <script>
-import axios from "axios";
 import { ref } from "vue";
-import jwt_decode from "jwt-decode";
+import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 
 export default {
@@ -26,6 +25,7 @@ export default {
     let textareaValue = ref("");
     const registObj = ref({ ...props });
     const router = useRouter();
+    const store = useStore();
 
     registObj.value.character = {
       bag: "FFD89B",
@@ -36,20 +36,16 @@ export default {
       hat: "FFD89B",
     };
 
-    const submitRegister = async () => {
+    const submitRegister = () => {
       registObj.value.introduce = textareaValue.value;
-      console.log(registObj.value);
-      const response = await axios.post(
-        `${process.env.VUE_APP_API_URL}/volunteer/`,
-        registObj.value,
-      );
-      console.log(response);
-
-      const decode_jwt = jwt_decode(response.data.JWT);
-      console.log(decode_jwt);
-      decode_jwt.user.userType = decode_jwt.userType.toLowerCase();
-      localStorage.setItem("user", JSON.stringify(decode_jwt.user));
-      router.push("/class/list");
+      registObj.value.userType = "volunteer";
+      store
+        .dispatch("root/loginUser", registObj.value)
+        .then((res) => {
+          store.commit("root/setUserInfo", res.data);
+          router.push("/class/list");
+        })
+        .catch((err) => console.log(err.message));
     };
 
     return { textareaValue, submitRegister };
