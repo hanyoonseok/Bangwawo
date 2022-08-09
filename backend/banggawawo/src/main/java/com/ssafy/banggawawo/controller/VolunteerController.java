@@ -68,7 +68,7 @@ public class VolunteerController {
     @PutMapping("/")
     public Map<String, Object> updateVolunteer(@RequestBody Map<String, Object> request){
         Long vId = Long.parseLong(request.get("vId").toString());
-        String introduce = (String) request.get("introduce");
+        String introduce = request.get("introduce").toString();
         Map<String, Object> response = new HashMap<>();
 
         try {
