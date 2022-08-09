@@ -14,7 +14,7 @@
               name="className"
               id="className"
               placeholder="제목을 입력하세요."
-              v-model="state.className"
+              v-model="state.classTitle"
             />
           </div>
           <div class="info-box">
@@ -80,7 +80,7 @@
           <RectPostCard :state="state" />
         </div>
       </article>
-      <button class="register-btn">등록</button>
+      <button class="register-btn" @click="classRegister">등록</button>
     </div>
   </div>
 </template>
@@ -89,6 +89,8 @@
 import HeaderNav from "@/components/HeaderNav.vue";
 import RectPostCard from "@/components/common/RectPostCard.vue";
 import { reactive } from "vue";
+import axios from "axios";
+
 export default {
   components: {
     HeaderNav,
@@ -96,7 +98,7 @@ export default {
   },
   setup() {
     const state = reactive({
-      className: "",
+      classTitle: "",
       classDate: "",
       classStartTime: "",
       classEndTIme: "",
@@ -107,7 +109,8 @@ export default {
       classImgFile: "",
     });
 
-    const fileChange = (e) => {
+    const formData = new FormData();
+    const fileChange = async (e) => {
       var input = e.target;
       if (input.files && input.files[0]) {
         var reader = new FileReader();
@@ -115,12 +118,54 @@ export default {
           state.classImgFile = e.target.result;
         };
         reader.readAsDataURL(input.files[0]);
+        formData.append("thumbnail", input.files[0]);
       }
+    };
+
+    const classRegister = async () => {
+      const user = JSON.parse(localStorage.getItem("user"));
+
+      const classDto = {
+        vid: { vid: user.vid },
+        title: state.classTitle,
+        introduce: state.classContent,
+        stime: state.classDate + "T" + state.classStartTime,
+        etime: state.classDate + "T" + state.classEndTIme,
+        maxcnt: state.classPeople,
+        opened: state.classOpen,
+        thumbnail: state.classThumbnail,
+      };
+
+      // 이미지 파일 등록
+      await axios
+        .post(`${process.env.VUE_APP_API_URL}/class/image`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          classDto.thumbnail = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      // 클래스 등록
+      await axios
+        .post(`${process.env.VUE_APP_API_URL}/class`, classDto)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     };
 
     return {
       state,
       fileChange,
+      classRegister,
     };
   },
 };
