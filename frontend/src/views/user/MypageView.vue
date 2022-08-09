@@ -37,6 +37,7 @@
 
 <script>
 import moment from "moment";
+import axios from "axios";
 import CalendarArea from "@/components/mypage/CalendarArea.vue";
 import ProfileCard from "@/components/mypage/ProfileCard.vue";
 import LectureArea from "@/components/mypage/LectureArea.vue";
@@ -63,6 +64,17 @@ export default {
 
     let isModifyOpen = ref(false);
     const isCharacterModalOpen = ref(false);
+
+    const getUserInfo = async () => {
+      const userInfo = JSON.parse(localStorage.getItem("user"));
+      const userType = userInfo.userType.toLowerCase();
+      const response = await axios.get(
+        `${process.env.VUE_APP_API_URL}/${userType}/${userInfo.vid}`,
+      );
+
+      console.log(response);
+    };
+    getUserInfo();
 
     const user = reactive({
       name: "이화연바보",
