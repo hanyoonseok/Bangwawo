@@ -21,7 +21,7 @@
       <label for="">미해결 요청만 보기</label>
     </div>
     <!-- 봉사자 아닐 경우에만 요청 글 작성 가능 -->
-    <div v-if="user.status !== 2">
+    <div v-if="userType !== 'volunteer'">
       <router-link :to="{ name: 'classrequestregist' }">
         <button class="request-register">작성하기</button></router-link
       >
@@ -45,12 +45,7 @@
             <td>{{ item.rid }}</td>
             <td>{{ item.writer }}</td>
             <td>
-              <router-link
-                :to="{
-                  name: 'classrequestdetail',
-                  query: { rid: `${item.rid}` },
-                }"
-              >
+              <router-link :to="`requestdetail/${item.rid}`">
                 {{ item.title }}
               </router-link>
             </td>
@@ -91,14 +86,17 @@ export default {
     PaginationView,
   },
   setup() {
+    let userInfo = ref(null);
+    let userType;
+    const getUserInfo = async () => {
+      userInfo.value = JSON.parse(localStorage.getItem("user"));
+    };
+    getUserInfo();
+    userType = "student";
     const state = reactive({
       requestList: [],
       totalRequest: 0,
     });
-    const user = {
-      status: 1,
-      subscribe: 0,
-    };
     const pages = reactive({
       listData: [], // 6개의 페이지가 담겨질 것
       page: 1, // 현재 어느 페이지에 있는지
@@ -188,13 +186,15 @@ export default {
       }
     };
     return {
-      user,
       pages,
       unresolved,
       pagingMethod,
       getRequestList,
       pageDataSetting,
       check,
+      userType,
+      userInfo,
+      getUserInfo,
       state,
     };
   },

@@ -9,35 +9,41 @@
         <div class="content-box">
           <img src="@/assets/profile.png" class="header-img" />
           <div class="content-title">
-            애기오리는 이러이러한 수업이 듣고싶습니다. 대충 아무제목...
+            {{ state.requestPost.title }}
           </div>
           <div class="content-writer">
             애기오리 <label>&nbsp;2022.07.20</label>
           </div>
           <div class="status-wrapper">
-            <button class="status-btn no" v-if="post.status === 0">
+            <button class="status-btn no" v-if="!state.requestPost.solved">
               <i class="fa-solid fa-circle"></i>&nbsp;미해결
             </button>
-            <button class="status-btn yes" v-if="post.status === 1">
+            <button class="status-btn yes" v-else>
               <i class="fa-solid fa-circle"></i>&nbsp;해결
             </button>
           </div>
           <div class="content-text">
-            애기오리는 오리선생의 역사이야기가 너무 듣고싶습니다. <br />오리선생
-            너무 귀여워용 ~~
+            {{ state.requestPost.content }}
           </div>
-          <div class="end-btn-wrapper" v-if="user.status === 0">
-            <div class="no" v-if="post.status === 0">
+          <div class="end-btn-wrapper" v-if="userType === 'student'">
+            <div class="no" v-if="!state.requestPost.solved">
               <img src="@/assets/notice-text.png" class="notice-img" />
               <span></span>
               <button class="end-btn">
-                <i class="fa-solid fa-thumbs-up"></i> &nbsp;99
+                <i class="fa-solid fa-thumbs-up"></i> &nbsp;{{
+                  state.requestPost.likes
+                }}
               </button>
               <div>
                 <button class="end-btn">
                   <i class="fa-solid fa-trash-can"></i>&nbsp;삭제
                 </button>
-                <router-link :to="{ name: 'classrequestmodify' }">
+                <router-link
+                  :to="{
+                    name: 'classrequestmodify',
+                    params: { rid: rid },
+                  }"
+                >
                   <button class="end-btn">
                     <i class="fa-solid fa-pen"></i>&nbsp;수정
                   </button></router-link
@@ -57,12 +63,14 @@
             >
           </div>
 
-          <div class="end-btn-wrapper" v-if="user.status === 1">
-            <div class="no" v-if="post.status === 0">
+          <div class="end-btn-wrapper" v-if="userType === 'volunteer'">
+            <div class="no" v-if="!state.requestPost.solved">
               <span></span>
-              <button class="end-btn">
-                <i class="fa-solid fa-check"></i> &nbsp; 수업 생성하기
-              </button>
+              <router-link :to="{ name: 'classregister' }">
+                <button class="end-btn">
+                  <i class="fa-solid fa-check"></i> &nbsp; 수업 생성하기
+                </button></router-link
+              >
               <span> </span>
             </div>
 
@@ -76,9 +84,10 @@
                 }}</label>
               </div>
             </div>
-            >
           </div>
-          <div class="status-wrapper"><label>조회수 33</label></div>
+          <div class="status-wrapper">
+            <label>{{ state.requestPost.count }}</label>
+          </div>
         </div>
       </article>
     </section>
@@ -86,17 +95,20 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 import HeaderNav from "@/components/HeaderNav.vue";
-// import axios from "axios";
+import axios from "axios";
 // import { useRouter } from "vue-router";
+import { useRoute } from "vue-router";
+
 export default {
   name: "ClassRequestDetail",
   components: {
     HeaderNav,
   },
   setup() {
-    // const router = useRouter();
+    const route = useRoute();
+    // const router = useRouter();z
     const post = ref({
       status: 1, // 0미해결 1해결
       link: {
@@ -106,29 +118,38 @@ export default {
           "오리 선생님이 역사 이야기를 해줄거에요sadfasdfsdㅁㄴㅇㄻㄴㅇㄹㄴㅇㄻㄴㅇㄹㄴㅇㅁ랴ㅐㅗㄴㅇㅁ래ㅕㅗㅁㄴㅇ륨아너로먄여로ㅑㅕㅗㄹㄷㅈㅁ러ㅏㅁㄴ오러ㅏㅁㅇ노러ㅏㄴ",
       },
     });
+
     let userInfo = ref(null);
+    let userId;
+    let userType;
     const getUserInfo = async () => {
       userInfo.value = JSON.parse(localStorage.getItem("user"));
-      console.log("userinfo임" + userInfo.value);
+      userType = "student";
+      userId =
+        userType === "volunteer" ? userInfo.value.vid : userInfo.value.sid;
     };
-    getUserInfo();
-
-    // const getRequest = async () => {
-    //   axios
-    //     .get(`${process.env.VUE_APP_API_URL}/request/${router.query.rid}/`)
-    //     .then((response) => {
-    //       console.log(response);
-    //     });
-    // };
-    const user = ref({
-      status: 0, //0학생 1봉사자 2부모
+    let state = reactive({
+      requestPost: {},
     });
+    const rid = route.params.rid;
+    getUserInfo();
+    const getRequest = async () => {
+      axios
+        .get(`${process.env.VUE_APP_API_URL}/request/${rid}/${userId}`)
+        .then((response) => {
+          state.requestPost = response.data.requsest;
+        });
+    };
+    getRequest();
 
     return {
-      user,
-      post,
-      // getRequest,
+      getRequest,
       getUserInfo,
+      userType,
+      state,
+      post,
+      userId,
+      rid,
     };
   },
 };

@@ -74,13 +74,13 @@ const routes = [
         // beforeEnter: onlyAuthUser,
       },
       {
-        path: "requestmodify",
+        path: "requestmodify/:rid",
         name: "classrequestmodify",
         component: () => import("@/views/class/ClassRequestModify"),
         // beforeEnter: onlyAuthUser,
       },
       {
-        path: "requestdetail",
+        path: "requestdetail/:rid",
         name: "classrequestdetail",
         component: () => import("@/views/class/ClassRequestDetail"),
         // beforeEnter: onlyAuthUser,

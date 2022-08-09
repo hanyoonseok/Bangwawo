@@ -34,17 +34,22 @@
 <script>
 import axios from "axios";
 import HeaderNav from "@/components/HeaderNav.vue";
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 export default {
   name: "ClassRequestRegist",
   setup() {
     const router = useRouter();
-
+    let userInfo = ref(null);
+    const getUserInfo = async () => {
+      userInfo.value = JSON.parse(localStorage.getItem("user"));
+    };
+    getUserInfo();
     const state = reactive({ requestTitle: "", requestContent: "" });
     const submitRequestRegister = async () => {
       axios
         .post(`${process.env.VUE_APP_API_URL}/request`, {
+          student: userInfo.value,
           content: state.requestContent,
           title: state.requestTitle,
         })
@@ -52,7 +57,7 @@ export default {
 
       router.push("/class/requestlist");
     };
-    return { state, submitRequestRegister };
+    return { state, submitRequestRegister, getUserInfo };
   },
 
   components: {
