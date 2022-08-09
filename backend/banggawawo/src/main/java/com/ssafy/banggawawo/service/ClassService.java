@@ -31,7 +31,7 @@ public class ClassService {
      * @param classDto
      * @return ClassRoom
      */
-    private ClassRoom build(ClassDto classDto){
+    private ClassRoom build(ClassDto classDto) {
         ClassRoom classRoom = ClassRoom.builder()
                 .cId(classDto.getCId())
                 .volunteer(classDto.getVId())    //여기 유저(봉사자) 자리
@@ -64,21 +64,21 @@ public class ClassService {
         return classDto;
     }
     @Transactional
-    public ClassDto save(ClassDto classDto){
+    public ClassDto save(ClassDto classDto) throws Exception{
         //클래스 저장
         ClassRoom classRoom = build(classDto);
         classRoom = classRepository.save(classRoom);
         return trans(classRoom);
     }
     @Transactional
-    public ClassDto update(ClassDto classDto){
+    public ClassDto update(ClassDto classDto) throws Exception{
         classRepository.findById(classDto.getCId()).get();
         ClassRoom classRoom = build(classDto);
         classRoom = classRepository.save(classRoom);
         return trans(classRoom);
     }
     @Transactional
-    public ClassDto findByCId(Long id){
+    public ClassDto findByCId(Long id) throws Exception{
         ClassDto classDto = null;
         Optional<ClassRoom> classRoom = classRepository.findById(id);
         if(classRoom.isPresent()){
@@ -87,7 +87,7 @@ public class ClassService {
         return classDto;
     }
     @Transactional
-    public boolean deleteById(Long id){
+    public boolean deleteById(Long id) throws Exception{
         try{
             classRepository.deleteById(id);
             return true;
@@ -96,7 +96,7 @@ public class ClassService {
         }
     }
     @Transactional
-    public List<ClassRoom> findAll(ClassDto classDto){
+    public List<ClassRoom> findAll(ClassDto classDto) throws Exception{
         List<ClassRoom> list;
         if(classDto == null){
             return classRepository.findAll();
@@ -107,6 +107,12 @@ public class ClassService {
         }else {
             list = classRepository.findAll();
         }
+
+        //vid 있으면 해당 vid 가진 수업만 남기기
+        if(classDto.getVId().getVId() != null){
+            list = list.stream().filter(classRoom -> classRoom.getVolunteer().getVId() == classDto.getVId().getVId()).collect(Collectors.toList());
+        }
+
         //조건에 맞는 것만 남기고 나머지 자르기 (state, opened)
         if(classDto.getState() != null){
             list = list.stream().filter(classRoom -> classRoom.getState() == classDto.getState()).collect(Collectors.toList());
@@ -114,7 +120,10 @@ public class ClassService {
         if(classDto.getOpened() != null){
             list = list.stream().filter(classRoom -> classRoom.getOpened() == classDto.getOpened()).collect(Collectors.toList());
         }
+
+        //정렬
         list = list.stream().sorted((o1, o2) -> (int)(o2.getCId() - o1.getCId())).collect(Collectors.toList());
+
         return list;
     }
 }

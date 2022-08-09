@@ -24,10 +24,11 @@ public class ClassDto {
     private String thumbnail;     // 썸네일
     private Boolean state;        // 상태
 
-    public ClassDto setSearchfQuery(String title, Boolean opened, Boolean state){
+    public ClassDto setSearchfQuery(String title, Boolean opened, Boolean state, Long vid){
         this.title = title;
         this.opened = opened;
         this.state = state;
+        this.vId = Volunteer.builder().vId(vid).build();
         return this;
     }
 
