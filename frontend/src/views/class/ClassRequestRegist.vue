@@ -11,25 +11,50 @@
       </section>
       <section class="content-wrapper">
         <label class="input-label">제목</label>
-        <input type="text" placeholder="제목을 입력해주세요." />
+        <input
+          type="text"
+          placeholder="제목을 입력해주세요."
+          v-model="state.requestTitle"
+        />
       </section>
       <section class="content-wrapper" style="height: 100%">
         <label class="input-label">내용</label>
-        <textarea placeholder="내용을 입력해주세요."></textarea>
+        <textarea
+          placeholder="내용을 입력해주세요."
+          v-model="state.requestContent"
+        ></textarea>
       </section>
       <div class="btn-wrapper">
-        <router-link :to="{ name: 'classrequest' }">
-          <button>등록하기</button>
-        </router-link>
+        <button @click="submitRequestRegister">등록하기</button>
       </div>
     </section>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 import HeaderNav from "@/components/HeaderNav.vue";
+import { reactive } from "vue";
+import { useRouter } from "vue-router";
 export default {
   name: "ClassRequestRegist",
+  setup() {
+    const router = useRouter();
+
+    const state = reactive({ requestTitle: "", requestContent: "" });
+    const submitRequestRegister = async () => {
+      axios
+        .post(`${process.env.VUE_APP_API_URL}/request`, {
+          content: state.requestContent,
+          title: state.requestTitle,
+        })
+        .then((response) => console.log(response));
+
+      router.push("/class/requestlist");
+    };
+    return { state, submitRequestRegister };
+  },
+
   components: {
     HeaderNav,
   },
