@@ -29,6 +29,11 @@ public class StudentService {
         return studentRepository.findByKakaoId(kakaoId);
     }
 
+    @Transactional(readOnly = true) // 조회 시 데이터 변경 방지
+    public Optional<Student> findByPemail(String email){
+        return studentRepository.findByPemail(email);
+    }
+
     @Transactional
     public Student save(Student student){
         return studentRepository.save(student);

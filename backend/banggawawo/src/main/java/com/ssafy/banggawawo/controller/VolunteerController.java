@@ -2,6 +2,7 @@ package com.ssafy.banggawawo.controller;
 
 import com.ssafy.banggawawo.domain.dto.VolunteerDto;
 import com.ssafy.banggawawo.domain.entity.Volunteer;
+import com.ssafy.banggawawo.service.JwtService;
 import com.ssafy.banggawawo.service.VolunteerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,6 +21,7 @@ import java.util.Optional;
 @RestController
 public class VolunteerController {
     private final VolunteerService volunteerService;
+    private final JwtService jwtService;
 
     @ApiOperation(value="봉사자 정보 조회", notes="봉사자 id(vId)를 입력받아 봉사자 정보 제공")
     @GetMapping("/{id}")
@@ -27,14 +29,19 @@ public class VolunteerController {
             @ApiParam(value="봉사자 id", required=true, example="1")
             @PathVariable("id") Long id){
         Map<String, Object> response = new HashMap<>();
-        Optional<Volunteer> oVolunteer = volunteerService.findById(id);
-        if(oVolunteer.isPresent()){
-            response.put("result", "SUCCESS");
-            response.put("type", "VOLUNTEER");
-            response.put("user", new VolunteerDto(oVolunteer.get()));
-        }else{
+        try{
+            Optional<Volunteer> oVolunteer = volunteerService.findById(id);
+            if(oVolunteer.isPresent()){
+                response.put("result", "SUCCESS");
+                response.put("type", "VOLUNTEER");
+                response.put("user", new VolunteerDto(oVolunteer.get()));
+            }else{
+                throw new Exception("일치하는 회원정보가 존재하지 않습니다.");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
             response.put("result", "FAIL");
-            response.put("reason", "존재하지 않는 토큰");
+            response.put("reason", e.getMessage());
         }
         return response;
     }
@@ -44,14 +51,14 @@ public class VolunteerController {
     public Map<String, Object> saveVolunteer(@RequestBody VolunteerDto value){
         Map<String, Object> response = new HashMap<>();
 
-        Volunteer volunteer = volunteerService.create(value);
-
-        if(volunteer != null){
+        try{
+            VolunteerDto volunteer = new VolunteerDto(volunteerService.create(value));
             response.put("result", "SUCCESS");
-            response.put("user", new VolunteerDto(volunteer));
-        }else {
+            response.put("JWT", jwtService.create("Volunteer", volunteer));
+        }catch(Exception e){
             response.put("result", "FAIL");
             response.put("reason", "회원가입 실패");
+            e.printStackTrace();
         }
         return response;
     }
@@ -81,7 +88,7 @@ public class VolunteerController {
         return response;
     }
 
-    @ApiOperation(value="봉사자 정보 삭제", notes="봉사자 정보를 받아 삭제")
+    @ApiOperation(value="봉사자 정보 삭제", notes="봉사자 id를 받아 삭제")
     @DeleteMapping("/{id}")
     public Map<String, Object> deleteVolunteer(@PathVariable("id") Long id){
         Map<String, Object> response = new HashMap<>();
@@ -102,4 +109,5 @@ public class VolunteerController {
         }
         return response;
     }
+
 }

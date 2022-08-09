@@ -13,8 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -23,8 +21,9 @@ import java.util.Optional;
 @RequestMapping("/kakao")
 public class AuthController {
 
-    private String KAKAO_API_KEY = "301c3457789fa54edf6d5263bc80b62a";
-    private String REDIRECT_URL = "http://localhost:8081/api/kakao/callback";
+    private final String KAKAO_API_KEY = "디스코드 참고";
+
+    private final String REDIRECT_URL = "디스코드 참고";
 
     @Autowired
     private StudentService studentService;

@@ -40,10 +40,9 @@ public class StudentController {
                 throw new Exception("일치하는 회원정보가 존재하지 않습니다.");
             }
         }catch (Exception e){
-            System.out.println("에러 메세지 : " + e.getMessage());
             e.printStackTrace();
             response.put("result", "FAIL");
-            response.put("reason", "존재하지 않는 id");
+            response.put("reason", e.getMessage());
 
         }
         return response;
@@ -89,15 +88,9 @@ public class StudentController {
         try{
             Optional<Student> oStudent = studentService.findById(sid);
             if(oStudent.isPresent()){
-//                System.out.println("sId = " + oStudent.get().getSId());
-//                StudentDto student = new StudentDto(oStudent.get());
-//                student.setNickname(nickname);
-//                System.out.println("닉네임 입력 후 sId = " + student.getSId());
-//                System.out.println("닉네임 입력 후 nickname = " + student.getNickname());
                 oStudent.get().setNickname(nickname);
                 Student result = studentService.save(oStudent.get());
                 response.put("result", "SUCCESS");
-//                response.put("user", new StudentDto(result));
             }else {
                 throw new Exception("일치하는 회원정보가 존재하지 않습니다.");
             }

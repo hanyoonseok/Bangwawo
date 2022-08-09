@@ -12,6 +12,7 @@ public class VolunteerDto {
     private String nickname;      // 별명
     private int ageRange;        // 연령대
     private String introduce; // 자기소개
+    private boolean talkable;   // 대화 가능 여부
     private Character character;//개인 3d 캐릭터에 대한 정보
 
     VolunteerDto() {}
@@ -22,6 +23,7 @@ public class VolunteerDto {
         this.nickname = volunteer.getNickname();
         this.ageRange = volunteer.getAgeRange();
         this.introduce = volunteer.getIntroduce();
+        this.talkable = volunteer.isTalkable();
         this.character = volunteer.getCharacter();
     }
 }
