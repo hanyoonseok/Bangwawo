@@ -45,6 +45,8 @@ export default {
       );
 
       const decode_jwt = jwt_decode(response.data.JWT);
+      console.log(decode_jwt);
+      decode_jwt.user.userType = decode_jwt.userType.toLowerCase();
       localStorage.setItem("user", JSON.stringify(decode_jwt.user));
       router.push("/class/list");
     };
