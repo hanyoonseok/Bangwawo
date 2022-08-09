@@ -63,19 +63,22 @@ public class VolunteerController {
         return response;
     }
 
-    @ApiOperation(value="봉사자 정보 수정", notes="봉사자 id와 자기소개를 입력받아 그대로 내용 수정")
+    @ApiOperation(value="봉사자 정보 수정", notes="봉사자 id와 자기소개를 입력받아 그대로 내용 수정\n" +
+            "vId : 봉사자 id, introduce : 수정할 자기소개 내용")
     @PutMapping("/")
-    public Map<String, Object> updateVolunteer(@RequestParam Long vid, @RequestParam String introduce){
+    public Map<String, Object> updateVolunteer(@RequestBody Map<String, Object> request){
+        Long vId = Long.parseLong(request.get("vId").toString());
+        String introduce = (String) request.get("introduce");
         Map<String, Object> response = new HashMap<>();
 
         try {
-            Optional<Volunteer> oVolunteer = volunteerService.findById(vid);
+            Optional<Volunteer> oVolunteer = volunteerService.findById(vId);
             if (oVolunteer.isPresent()) {
                 Volunteer volunteer = oVolunteer.get();
                 volunteer.setIntroduce(introduce);
                 Volunteer result = volunteerService.save(volunteer);
                 response.put("result", "SUCCESS");
-                response.put("user", new VolunteerDto(volunteer));
+                response.put("user", new VolunteerDto(result));
             } else {
                 throw new Exception("일치하는 회원정보가 존재하지 않습니다.");
             }
