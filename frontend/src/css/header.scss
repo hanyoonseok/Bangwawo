@@ -59,7 +59,12 @@
       margin-left: 20px;
     }
     .consult {
-      @include StatusBtn(true);
+      &.on {
+        @include StatusBtn(true);
+      }
+      &.off {
+        @include StatusBtn(false);
+      }
       font-size: 12px;
       font-family: $appleB;
       margin-left: 20px;

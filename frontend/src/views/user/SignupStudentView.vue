@@ -40,12 +40,12 @@ export default {
 
     const submitRegister = async () => {
       registObj.value.pemail = emailValue.value;
-      console.log(registObj.value);
       const response = await axios.post(
         `${process.env.VUE_APP_API_URL}/student/`,
         registObj.value,
       );
       const decode_jwt = jwt_decode(response.data.JWT);
+      decode_jwt.user.userType = decode_jwt.userType.toLowerCase();
       localStorage.setItem("user", JSON.stringify(decode_jwt.user));
       router.push("/class/list");
     };
