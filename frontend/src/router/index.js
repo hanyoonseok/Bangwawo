@@ -1,35 +1,14 @@
 import { createWebHistory, createRouter } from "vue-router";
 
-// const onlyAuthUser = async (to, from, next) => {
-//   const checkUserInfo = store.getters["userStore/checkUserInfo"];
-//   const getUserInfo = store._actions["userStore/getUserInfo"];
-//   let token = sessionStorage.getItem("access-token");
-//   if (checkUserInfo == null && token) {
-//     await getUserInfo(token);
-//   }
-//   if (checkUserInfo === null) {
-//     alert("로그인이 필요한 페이지입니다..");
-//     next("/user/login");
-//   } else {
-//     next();
-//   }
-// };
-
-// const onlyAdmin = async (to, from, next) => {
-//   // console.log(store);
-//   const checkUserInfo = store.getters["userStore/checkUserInfo"];
-//   const getUserInfo = store._actions["userStore/getUserInfo"];
-//   let token = sessionStorage.getItem("access-token");
-//   if (checkUserInfo == null && token) {
-//     await getUserInfo(token);
-//   }
-//   if (checkUserInfo.role !== 1) {
-//     alert("관리자만 입장 가능한 페이지입니다..");
-//     next("/");
-//   } else {
-//     next();
-//   }
-// };
+const onlyAuthUser = async (to, from, next) => {
+  const isLogin = localStorage.getItem("isLogin");
+  if (!isLogin) {
+    alert("로그인이 필요한 페이지입니다..");
+    next("/user/login");
+  } else {
+    next();
+  }
+};
 
 const routes = [
   {
@@ -46,11 +25,13 @@ const routes = [
     path: "/secret",
     name: "secret",
     component: () => import("@/views/secret/SecretFriendView"),
+    beforeEnter: onlyAuthUser,
   },
   {
     path: "/secrettalk",
     name: "secrettalk",
     component: () => import("@/views/secret/SecretTalkView"),
+    beforeEnter: onlyAuthUser,
   },
   {
     path: "/class",
@@ -67,16 +48,19 @@ const routes = [
         path: "detail",
         name: "classdetail",
         component: () => import("@/views/class/ClassDetailView"),
+        beforeEnter: onlyAuthUser,
       },
       {
         path: "register",
         name: "classregister",
         component: () => import("@/views/class/ClassRegisterView"),
+        beforeEnter: onlyAuthUser,
       },
       {
         path: "modify",
         name: "classmodify",
         component: () => import("@/views/class/ClassModifyView"),
+        beforeEnter: onlyAuthUser,
       },
       {
         path: "requestlist",
@@ -87,16 +71,19 @@ const routes = [
         path: "requestregist",
         name: "classrequestregist",
         component: () => import("@/views/class/ClassRequestRegist"),
+        beforeEnter: onlyAuthUser,
       },
       {
         path: "requestmodify",
         name: "classrequestmodify",
         component: () => import("@/views/class/ClassRequestModify"),
+        beforeEnter: onlyAuthUser,
       },
       {
         path: "requestdetail",
         name: "classrequestdetail",
         component: () => import("@/views/class/ClassRequestDetail"),
+        beforeEnter: onlyAuthUser,
       },
     ],
   },
@@ -128,22 +115,25 @@ const routes = [
     path: "/mypage",
     name: "mypage",
     component: () => import("@/views/user/MypageView"),
+    beforeEnter: onlyAuthUser,
   },
   {
     path: "/inclass",
     name: "inclass",
     component: () => import("@/views/class/InClassView"),
+    beforeEnter: onlyAuthUser,
   },
   {
     path: "/feedback",
     name: "feedback",
     component: () => import("@/views/feedback/FeedBack"),
+    beforeEnter: onlyAuthUser,
   },
-
   {
     path: "/feedbackSubmit",
     name: "feedbackSubmit",
     component: () => import("@/views/feedback/FeedbackSubmit"),
+    beforeEnter: onlyAuthUser,
   },
 ];
 

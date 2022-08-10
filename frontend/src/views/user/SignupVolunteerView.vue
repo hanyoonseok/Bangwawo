@@ -1,5 +1,5 @@
 <template>
-  <div class="signup-volunteer">
+  <form class="signup-volunteer" @submit.prevent="submitRegister">
     <div class="guide-volunteer">
       <img src="@/assets/guide-volunteer.png" />
       <div class="guide">안녕하세요 OOO님. <br />자기소개를 입력해주세요.</div>
@@ -8,15 +8,15 @@
       class="introduction"
       placeholder="자기소개를 입력해주세요."
       v-model="textareaValue"
+      required
     ></textarea>
-    <button class="signup-submit" @click="submitRegister">확인</button>
-  </div>
+    <button type="submit" class="signup-submit">확인</button>
+  </form>
 </template>
 
 <script>
-import axios from "axios";
 import { ref } from "vue";
-import jwt_decode from "jwt-decode";
+import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 
 export default {
@@ -26,27 +26,27 @@ export default {
     let textareaValue = ref("");
     const registObj = ref({ ...props });
     const router = useRouter();
+    const store = useStore();
 
-    registObj.value.character = {
-      bag: "FFD89B",
-      body: "f1f1f1",
-      dress: "FFAEAE",
-      glasses: "ff9696",
-      legs: "ff9696",
-      hat: "FFD89B",
-    };
+    registObj.value.character = [
+      { part: "bag", color: "FFD89B" },
+      { part: "body", color: "f1f1f1" },
+      { part: "clothes", color: "FFAEAE" },
+      { part: "glasses", color: "ff9696" },
+      { part: "foot", color: "ff9696" },
+      { part: "hat", color: "FFD89B" },
+    ];
 
-    const submitRegister = async () => {
+    const submitRegister = () => {
       registObj.value.introduce = textareaValue.value;
-      console.log(registObj.value);
-      const response = await axios.post(
-        `${process.env.VUE_APP_API_URL}/volunteer/`,
-        registObj.value,
-      );
-
-      const decode_jwt = jwt_decode(response.data.JWT);
-      localStorage.setItem("user", JSON.stringify(decode_jwt.user));
-      router.push("/class/list");
+      registObj.value.userType = "volunteer";
+      store
+        .dispatch("root/loginUser", registObj.value)
+        .then((res) => {
+          store.commit("root/setUserInfo", res.data);
+          router.push("/class/list");
+        })
+        .catch((err) => console.log(err.message));
     };
 
     return { textareaValue, submitRegister };
