@@ -96,10 +96,10 @@ public class ClassService {
         }
     }
     @Transactional
-    public List<ClassRoom> findAll(ClassDto classDto) throws Exception{
+    public List<ClassDto> findAll(ClassDto classDto) throws Exception{
         List<ClassRoom> list;
         if(classDto == null){
-            return classRepository.findAll();
+            return classRepository.findAll().stream().map(classRoom -> trans(classRoom)).collect(Collectors.toList());
         }
         //제목검색 모두 가져옴   (없으면 전체 가져옴)
         if(classDto.getTitle() != null){
@@ -124,6 +124,9 @@ public class ClassService {
         //정렬
         list = list.stream().sorted((o1, o2) -> (int)(o2.getCId() - o1.getCId())).collect(Collectors.toList());
 
-        return list;
+        //time 바꿔주기
+        List<ClassDto> list2 = list.stream().map(classRoom -> trans(classRoom)).collect(Collectors.toList());
+
+        return list2;
     }
 }
