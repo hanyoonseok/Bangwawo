@@ -7,8 +7,11 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -37,6 +40,18 @@ public class RequestController {
     public ResponseEntity<?> list(@RequestParam(value = "scrollcnt", defaultValue = "1") int scrollcnt) {
         try {
             return new ResponseEntity<Map<String, Object>>(requestservice.list(scrollcnt), HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    // 미해결 요청 리스트
+    @GetMapping("/unfind")
+    @ApiOperation(value = "미해결요청글 전체 목록보기")
+    public ResponseEntity<?> unfindlist() {
+        try {
+            return new ResponseEntity<Map<String, Object>>(requestservice.unfindlist(), HttpStatus.ACCEPTED);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
