@@ -14,25 +14,25 @@
               name="className"
               id="className"
               placeholder="제목을 입력하세요."
-              v-model="state.className"
+              v-model="state.title"
             />
           </div>
           <div class="info-box">
             <label for="classTime" class="info-title">시간</label>
             <div class="classTime">
-              <input type="date" name="" id="" v-model="state.classDate" />
+              <input type="date" name="" id="" v-model="state.dateStr" />
               <input
                 type="time"
                 name="startTime"
                 id="startTime"
-                v-model="state.classStartTime"
+                v-model="state.stimeStr"
               />
               -
               <input
                 type="time"
                 name="endTime"
                 id="endTime"
-                v-model="state.classEndTIme"
+                v-model="state.etimeStr"
               />
             </div>
           </div>
@@ -60,7 +60,7 @@
               name="classPeople"
               id="classPeople"
               oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-              v-model="state.classPeople"
+              v-model="state.maxcnt"
             />
           </div>
           <div class="info-box">
@@ -71,7 +71,7 @@
               cols="30"
               rows="6"
               placeholder="내용을 입력하세요."
-              v-model="state.classContent"
+              v-model="state.introduce"
             ></textarea>
           </div>
         </div>
@@ -80,7 +80,16 @@
           <RectPostCard :state="state" />
         </div>
       </article>
-      <button class="register-btn">등록</button>
+      <button class="register-btn" @click="classRegister">등록</button>
+    </div>
+    <div class="confirm" v-if="isConfirm.status">
+      <div class="container">
+        <img src="@/assets/profile.png" alt="오리" />
+        <h2>모두 입력해주세요!</h2>
+        <div class="btn-wrapper">
+          <button class="btn" @click="isConfirm.status = false">확인</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -89,38 +98,108 @@
 import HeaderNav from "@/components/HeaderNav.vue";
 import RectPostCard from "@/components/common/RectPostCard.vue";
 import { reactive } from "vue";
+import axios from "axios";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+
 export default {
   components: {
     HeaderNav,
     RectPostCard,
   },
   setup() {
+    const router = useRouter();
+    const store = useStore();
+    const user = reactive(store.state.root.user);
+    console.log(user);
+
     const state = reactive({
-      className: "",
-      classDate: "",
-      classStartTime: "",
-      classEndTIme: "",
-      classThumbnail: "",
-      classOpen: "",
-      classPeople: "",
-      classContent: "",
-      classImgFile: "",
+      title: "",
+      dateStr: "",
+      stimeStr: "",
+      etimeStr: "",
+      thumbnail: "",
+      preview: null,
+      classOpen: false,
+      maxcnt: 0,
+      introduce: "",
+      vid: { nickname: user.nickname },
     });
 
-    const fileChange = (e) => {
+    const formData = new FormData();
+    const fileChange = async (e) => {
       var input = e.target;
       if (input.files && input.files[0]) {
         var reader = new FileReader();
         reader.onload = (e) => {
-          state.classImgFile = e.target.result;
+          state.preview = e.target.result;
         };
         reader.readAsDataURL(input.files[0]);
+        formData.append("thumbnail", input.files[0]);
       }
     };
+
+    const classRegister = async () => {
+      const classDto = {
+        vid: { vid: user.vid },
+        title: state.title,
+        introduce: state.introduce,
+        maxcnt: state.maxcnt,
+        opened: state.classOpen,
+        thumbnail: state.thumbnail,
+        etime: "",
+        stime: "",
+      };
+
+      if (
+        classDto.title === "" ||
+        classDto.introduce === "" ||
+        classDto.maxcnt === 0 ||
+        classDto.opened === "" ||
+        classDto.thumbnail === undefined
+      ) {
+        isConfirm.status = true;
+      } else {
+        classDto.stime = state.dateStr + "T" + state.stimeStr;
+        classDto.etime = state.dateStr + "T" + state.etimeStr;
+
+        // 이미지 파일 등록
+        await axios
+          .post(`${process.env.VUE_APP_API_URL}/class/image`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((response) => {
+            console.log(response.data);
+            classDto.thumbnail = response.data;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+
+        // 클래스 등록
+        await axios
+          .post(`${process.env.VUE_APP_API_URL}/class`, classDto)
+          .then((response) => {
+            console.log(response);
+            router.push("/class/list");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    };
+
+    const isConfirm = reactive({
+      status: false,
+    });
 
     return {
       state,
       fileChange,
+      classRegister,
+      isConfirm,
     };
   },
 };
