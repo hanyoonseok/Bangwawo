@@ -100,6 +100,7 @@ import RectPostCard from "@/components/common/RectPostCard.vue";
 import { reactive } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 export default {
   components: {
@@ -108,7 +109,9 @@ export default {
   },
   setup() {
     const router = useRouter();
-    const user = JSON.parse(localStorage.getItem("user"));
+    const store = useStore();
+    const user = reactive(store.state.root.user);
+    console.log(user);
 
     const state = reactive({
       title: "",

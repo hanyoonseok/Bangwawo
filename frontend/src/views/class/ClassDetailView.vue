@@ -190,10 +190,17 @@ export default {
 
     // 수업 신청하기
     const enrolClass = () => {
-      axios.post(`${process.env.VUE_APP_API_URL}/enrol`, {
-        cid: cid,
-        sid: userInfo.sid,
-      });
+      axios
+        .post(`${process.env.VUE_APP_API_URL}/enrol`, {
+          cid: cid,
+          sid: userInfo.sid,
+        })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          error;
+        });
     };
 
     const user = reactive({

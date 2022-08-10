@@ -9,7 +9,7 @@
           >수업목록</router-link
         >
       </div>
-      <div class="listdiv" v-if="user && user.userType === 'STUDENT'">
+      <div class="listdiv" v-if="user && user.userType === 'student'">
         <router-link :to="{ name: 'classlist' }" class="list"
           ><div><img src="@/assets/header.png" /></div
         ></router-link>
@@ -23,7 +23,7 @@
           >비밀친구</router-link
         >
       </div>
-      <div class="listdiv" v-if="user && user.userType === 'VOLUNTEER'">
+      <div class="listdiv" v-if="user && user.userType === 'volunteer'">
         <router-link :to="{ name: 'classlist' }" class="list">
           <div><img src="@/assets/header.png" /></div>
         </router-link>
