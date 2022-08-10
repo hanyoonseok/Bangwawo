@@ -19,7 +19,7 @@
       class="slide"
     >
       <swiper-slide v-for="(item, index) in opened" :key="index"
-        ><router-link to="/class/detail">
+        ><router-link :to="{ name: 'classdetail', params: { cid: item.cid } }">
           <RectPostCard :state="item" />
         </router-link>
       </swiper-slide>

@@ -34,8 +34,8 @@ export default {
     registObj.value.character = [
       { part: "bag", color: "FFD89B" },
       { part: "body", color: "f1f1f1" },
-      { part: "clothes", color: "FFAEAE" },
-      { part: "glasses", color: "ff9696" },
+      { part: "clothes", color: "ff9696" },
+      { part: "glasses", color: "FFD89B" },
       { part: "foot", color: "ff9696" },
       { part: "hat", color: "FFD89B" },
     ];
