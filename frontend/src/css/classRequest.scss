@@ -109,12 +109,11 @@
     .header-img {
       position: absolute;
       top: 0;
-      left: 0;
-      width: 150px;
-      height: 150px;
+      left: -30px;
       transform: translate(-40%, -20%);
       box-shadow: $light-shadow;
       border-radius: 75px;
+      transform: scale(1.25);
     }
 
     h4 {

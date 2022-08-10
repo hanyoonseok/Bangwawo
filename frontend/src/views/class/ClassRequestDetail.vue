@@ -7,13 +7,18 @@
       </div>
       <article class="content-section">
         <div class="content-box">
-          <img src="@/assets/profile.png" class="header-img" />
+          <!-- <img src="@/assets/profile.png" /> -->
+          <ProfileCanvas class="header-img" />
           <div class="content-title">
             {{ state.requestPost.title }}
           </div>
           <div class="content-writer">
-            {{ state.requestPost.student.nickname }}
-            <label>&nbsp;2022.07.20</label>
+            {{ state.nickname }}
+            <label
+              >&nbsp;{{ state.createDate[0] }}.{{ state.createDate[1] }}.{{
+                state.createDate[2]
+              }}</label
+            >
           </div>
           <div class="status-wrapper">
             <button class="status-btn no" v-if="!state.requestPost.solved">
@@ -34,6 +39,7 @@
                 class="end-btn"
                 @mouseover="state.isVisibleNoticeImg = true"
                 @mouseleave="state.isVisibleNoticeImg = false"
+                @click="addLikeRequest"
               >
                 <i class="fa-solid fa-thumbs-up"></i> &nbsp;{{
                   state.requestPost.likes
@@ -74,7 +80,7 @@
             >
           </div>
 
-          <div class="end-btn-wrapper" v-if="userType === 'volunteer'">
+          <div class="end-btn-wrapper" v-if="state.userType === 'volunteer'">
             <div class="no" v-if="!state.requestPost.solved">
               <span></span>
               <router-link :to="{ name: 'classregister' }">
@@ -118,6 +124,7 @@
 <script>
 import { ref, reactive, watch } from "vue";
 import HeaderNav from "@/components/HeaderNav.vue";
+import ProfileCanvas from "@/components/mypage/ProfileCanvas.vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";
@@ -127,6 +134,7 @@ export default {
   name: "ClassRequestDetail",
   components: {
     HeaderNav,
+    ProfileCanvas,
   },
   setup() {
     const route = useRoute();
@@ -147,6 +155,8 @@ export default {
 
     let state = reactive({
       requestPost: {},
+      nickname: "",
+      createDate: ["", "", ""],
       isVisibleNoticeImg: false,
       userInfo: store.state.root.user,
       userType: store.state.root.user.userType,
@@ -159,6 +169,8 @@ export default {
         .then((response) => {
           console.log(response.data.requsest);
           state.requestPost = response.data.requsest;
+          state.nickname = state.requestPost.student.nickname;
+          state.createDate = state.requestPost.createDate;
         });
     };
 
@@ -186,9 +198,12 @@ export default {
       },
     );
 
+    const addLikeRequest = () => {};
+
     return {
       getRequest,
       deleteRequest,
+      addLikeRequest,
       state,
       post,
       isConfirm,

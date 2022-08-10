@@ -16,9 +16,9 @@
         name="unresolved"
         id="unresolved"
         v-model="unresolved"
-        @change="check($event)"
+        @change="unSolvedFilter($event)"
       />
-      <label for="">미해결 요청만 보기</label>
+      <label>미해결 요청만 보기</label>
     </div>
     <!-- 봉사자 아닐 경우에만 요청 글 작성 가능 -->
     <div v-if="state.userType !== 'volunteer'">
@@ -59,7 +59,11 @@
                 <i class="fa-solid fa-circle"></i>미해결
               </button>
             </td>
-            <td>{{ item.createDate }} 이거</td>
+            <td>
+              {{ item.createDate[0] }}.{{ item.createDate[1] }}.{{
+                item.createDate[2]
+              }}
+            </td>
             <td>{{ item.count }}</td>
             <td>{{ item.likes }}</td>
           </tr>
@@ -94,8 +98,10 @@ export default {
       requestList: [],
       userInfo: store.state.root.user,
       userType: store.state.root.user.userType,
+      regDate: undefined,
       totalRequest: 0,
     });
+
     const pages = reactive({
       listData: [], // 6개의 페이지가 담겨질 것
       page: 1, // 현재 어느 페이지에 있는지
@@ -103,6 +109,7 @@ export default {
       block: 5, // 한번에 보여질 페이지 수
       total: 0, // 총 게시글 수
     });
+
     const getRequestList = async (page) => {
       axios
         .get(`${process.env.VUE_APP_API_URL}/request?scrollcnt=${page}`)
@@ -116,7 +123,6 @@ export default {
     onMounted(() => {
       pagingMethod(pages.page);
     });
-
     const pagingMethod = (page) => {
       pages.page = page;
       // 여기서 새로 데이터를 받아와야 함.
@@ -152,24 +158,33 @@ export default {
     };
 
     const unresolved = ref(false);
-
-    const check = (e) => {
+    const getUnsolvedRequests = async () => {
+      axios
+        .get(`${process.env.VUE_APP_API_URL}/request/unfind`)
+        .then((response) => {
+          console.log(response);
+        });
+    };
+    const unSolvedFilter = (e) => {
       if (e.target.checked === true) {
-        let arr = [];
-        for (const item of state.requestList) {
-          if (item.solved === false) {
-            // 미해결만 배열에 담기
-            arr.push(item);
-          }
-        }
-        state.requestList = arr;
-        pages.total = state.requestList.length;
-        pagingMethod(pages.page);
-      } else {
-        console.log("false");
-        // 나중에 다시 api에서 데이터 불러올것 지금 임시로 넣어놈
-        pages.total = state.requestList.length;
-        pagingMethod(pages.page);
+        // 미해결 필터가 되는지 확인하려면 해결된 글이 있어야하므로...
+        // 일단 미해결필터는 해결/미해결 api 연결한 후 구현해야할듯.
+        getUnsolvedRequests();
+        // let arr = [];
+        //   for (const item of state.requestList) {
+        //     if (item.solved === false) {
+        //       // 미해결만 배열에 담기
+        //       arr.push(item);
+        //     }
+        //   }
+        //   state.requestList = arr;
+        //   pages.total = state.requestList.length;
+        //   pagingMethod(pages.page);
+        // } else {
+        //   console.log("false");
+        //   // 나중에 다시 api에서 데이터 불러올것 지금 임시로 넣어놈
+        //   pages.total = state.requestList.length;
+        //   pagingMethod(pages.page);
       }
     };
     return {
@@ -177,8 +192,9 @@ export default {
       unresolved,
       pagingMethod,
       getRequestList,
+      getUnsolvedRequests,
       pageDataSetting,
-      check,
+      unSolvedFilter,
       state,
     };
   },
