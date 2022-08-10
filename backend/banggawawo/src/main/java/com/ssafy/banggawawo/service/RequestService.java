@@ -45,7 +45,7 @@ public class RequestService {
 
     //요청글 상세보기
     @Transactional // 조회
-    public Map<String, Object> read(Long rid, String userid) throws Exception {
+    public Map<String, Object> read(Long rid) throws Exception {
 
         Optional<Request> request = requestRepository.findById(rid);
         if (request.isPresent()) {
