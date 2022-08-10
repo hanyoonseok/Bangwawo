@@ -4,7 +4,7 @@
       class="img-box"
       v-if="state.thumbnail.length === 0 && state.preview === null"
     >
-      <img src="@/assets/thumbnail.png" alt="썸네일이미지" />
+      <img src="@/assets/thumbnail.png" alt="썸네일없을때이미지" />
     </div>
     <div
       class="img-box"

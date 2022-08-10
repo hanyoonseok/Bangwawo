@@ -136,7 +136,6 @@ export default {
     };
 
     const loadMakedClasses = () => {
-      console.log("load");
       if (dataIdx.value > makedClass.value.length) return;
       let prevArr = [...filteredMakedClass.value];
 

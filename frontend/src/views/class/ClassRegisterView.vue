@@ -155,8 +155,7 @@ export default {
         classDto.title === "" ||
         classDto.introduce === "" ||
         classDto.maxcnt === 0 ||
-        classDto.opened === "" ||
-        classDto.thumbnail === undefined
+        classDto.opened === ""
       ) {
         isConfirm.status = true;
       } else {
