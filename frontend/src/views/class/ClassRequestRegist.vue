@@ -34,23 +34,26 @@
 <script>
 import axios from "axios";
 import HeaderNav from "@/components/HeaderNav.vue";
-import { reactive, ref } from "vue";
+import { reactive } from "vue";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 export default {
   name: "ClassRequestRegist",
   setup() {
     const router = useRouter();
-    let userInfo = ref(null);
-    const getUserInfo = async () => {
-      userInfo.value = JSON.parse(localStorage.getItem("user"));
-    };
-    getUserInfo();
-    const state = reactive({ requestTitle: "", requestContent: "" });
+    const store = useStore();
+    const state = reactive({
+      requestTitle: "",
+      requestContent: "",
+      userInfo: store.state.root.user,
+      userType: store.state.root.user.userType,
+    });
+
     const submitRequestRegister = async () => {
       axios
         .post(`${process.env.VUE_APP_API_URL}/request`, {
           sid: {
-            sid: 1,
+            sid: state.userInfo.sid,
           },
           content: state.requestContent,
           title: state.requestTitle,
@@ -60,7 +63,7 @@ export default {
           router.push("/class/requestlist");
         });
     };
-    return { state, submitRequestRegister, getUserInfo };
+    return { state, submitRequestRegister };
   },
 
   components: {

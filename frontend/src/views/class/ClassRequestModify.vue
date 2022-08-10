@@ -36,6 +36,7 @@ import { ref, reactive } from "vue";
 import HeaderNav from "@/components/HeaderNav.vue";
 import { useRoute } from "vue-router";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 import axios from "axios";
 export default {
   name: "ClassRequestModify",
@@ -45,24 +46,20 @@ export default {
   setup() {
     const route = useRoute();
     const router = useRouter();
+    const store = useStore();
     const data = ref({
       title: "이전에 사용했던 제목",
       content: "이전에 사용했던 내용",
     });
-    let userInfo = ref(null);
-    const getUserInfo = async () => {
-      userInfo.value = JSON.parse(localStorage.getItem("user"));
-    };
     let state = reactive({
       requestPost: {},
+      userInfo: store.state.root.user,
+      userType: store.state.root.user.userType,
     });
-    getUserInfo();
     const rid = route.params.rid;
     const getRequest = async () => {
       axios
-        .get(
-          `${process.env.VUE_APP_API_URL}/request/${rid}/${userInfo.value.sid}`,
-        )
+        .get(`${process.env.VUE_APP_API_URL}/request/${rid}`)
         .then((response) => {
           state.requestPost = response.data.requsest;
         });
@@ -84,7 +81,6 @@ export default {
     return {
       data,
       modifyRequest,
-      getUserInfo,
       getRequest,
       state,
     };

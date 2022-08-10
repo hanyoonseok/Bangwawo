@@ -26,7 +26,7 @@
           <div class="content-text">
             {{ state.requestPost.content }}
           </div>
-          <div class="end-btn-wrapper" v-if="userInfo.userType === 'student'">
+          <div class="end-btn-wrapper" v-if="state.userType === 'student'">
             <div class="no" v-if="!state.requestPost.solved">
               <img src="@/assets/notice-text.png" class="notice-img" />
               <span></span>
@@ -39,7 +39,12 @@
                   state.requestPost.likes
                 }}
               </button>
-              <div v-if="userId === state.requestPost.student.sid">
+              <div
+                v-if="
+                  state.userType === 'student' &&
+                  state.userInfo.sid === state.requestPost.student.sid
+                "
+              >
                 <button class="end-btn" @click="isConfirm.status = true">
                   <i class="fa-solid fa-trash-can"></i>&nbsp;삭제
                 </button>
@@ -69,7 +74,7 @@
             >
           </div>
 
-          <div class="end-btn-wrapper" v-if="userInfo.userType === 'volunteer'">
+          <div class="end-btn-wrapper" v-if="userType === 'volunteer'">
             <div class="no" v-if="!state.requestPost.solved">
               <span></span>
               <router-link :to="{ name: 'classregister' }">
@@ -116,6 +121,7 @@ import HeaderNav from "@/components/HeaderNav.vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";
+import { useStore } from "vuex";
 
 export default {
   name: "ClassRequestDetail",
@@ -125,6 +131,7 @@ export default {
   setup() {
     const route = useRoute();
     const router = useRouter();
+    const store = useStore();
     const post = ref({
       status: 1, // 0미해결 1해결
       link: {
@@ -138,30 +145,23 @@ export default {
       status: false,
     });
 
-    let userInfo = ref(null);
-    let userId;
-    const getUserInfo = async () => {
-      userInfo = JSON.parse(localStorage.getItem("user"));
-      // userId = userInfo.userType === "volunteer" ? userInfo.vid : userInfo.sid;
-      // userId = 1;
-      // userInfo.userType = "student";
-      //지금 학생로그인이 안돼서.. 임의로 id값 1로 넣어서 확인.
-      console.log(userId);
-    };
     let state = reactive({
       requestPost: {},
       isVisibleNoticeImg: false,
+      userInfo: store.state.root.user,
+      userType: store.state.root.user.userType,
     });
+
     const rid = route.params.rid;
-    getUserInfo();
     const getRequest = async () => {
       axios
-        .get(`${process.env.VUE_APP_API_URL}/request/${rid}/${userId}`)
+        .get(`${process.env.VUE_APP_API_URL}/request/${rid}`)
         .then((response) => {
           console.log(response.data.requsest);
           state.requestPost = response.data.requsest;
         });
     };
+
     getRequest();
 
     const deleteRequest = async () => {
@@ -188,12 +188,9 @@ export default {
 
     return {
       getRequest,
-      getUserInfo,
       deleteRequest,
       state,
       post,
-      userId,
-      userInfo,
       isConfirm,
       rid,
     };

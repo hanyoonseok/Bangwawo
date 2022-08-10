@@ -21,7 +21,7 @@
       <label for="">미해결 요청만 보기</label>
     </div>
     <!-- 봉사자 아닐 경우에만 요청 글 작성 가능 -->
-    <div v-if="userInfo.userType !== 'volunteer'">
+    <div v-if="state.userType !== 'volunteer'">
       <router-link :to="{ name: 'classrequestregist' }">
         <button class="request-register">작성하기</button></router-link
       >
@@ -59,7 +59,7 @@
                 <i class="fa-solid fa-circle"></i>미해결
               </button>
             </td>
-            <td>{{ item.time }}</td>
+            <td>{{ item.createDate }} 이거</td>
             <td>{{ item.count }}</td>
             <td>{{ item.likes }}</td>
           </tr>
@@ -80,6 +80,7 @@ import HeaderNav from "@/components/HeaderNav.vue";
 import PaginationView from "@/components/class/PaginationView.vue";
 import { reactive, ref, onMounted } from "vue";
 import axios from "axios";
+import { useStore } from "vuex";
 
 export default {
   name: "ClassRequestListView",
@@ -88,14 +89,11 @@ export default {
     PaginationView,
   },
   setup() {
-    let userInfo = ref(null);
-    const getUserInfo = async () => {
-      userInfo.value = JSON.parse(localStorage.getItem("user"));
-      // userInfo.userType = "student";
-    };
-    getUserInfo();
+    const store = useStore();
     const state = reactive({
       requestList: [],
+      userInfo: store.state.root.user,
+      userType: store.state.root.user.userType,
       totalRequest: 0,
     });
     const pages = reactive({
@@ -113,7 +111,6 @@ export default {
           state.requestList = data.content;
           pages.total = data.totalElements;
           pages.listData = state.requestList;
-          console.log(data.content[1].student);
         });
     };
     onMounted(() => {
@@ -182,8 +179,6 @@ export default {
       getRequestList,
       pageDataSetting,
       check,
-      userInfo,
-      getUserInfo,
       state,
     };
   },
