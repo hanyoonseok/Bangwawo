@@ -1,8 +1,8 @@
 import { createWebHistory, createRouter } from "vue-router";
 
 const onlyAuthUser = async (to, from, next) => {
-  const userInfo = localStorage.getItem("user");
-  if (!userInfo) {
+  const isLogin = localStorage.getItem("isLogin");
+  if (!isLogin) {
     alert("로그인이 필요한 페이지입니다..");
     next("/user/login");
   } else {

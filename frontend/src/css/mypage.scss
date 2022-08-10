@@ -182,6 +182,7 @@
           background-color: $lightx2-yellow;
           height: 80px;
           overflow: auto;
+          align-items: initial;
         }
         .modify-textarea {
           padding: 10px;
@@ -236,6 +237,7 @@
         flex-wrap: wrap;
 
         .lecture-box {
+          width: 100%;
           max-width: 250px;
           min-width: 100px;
           margin: 10px 15px;

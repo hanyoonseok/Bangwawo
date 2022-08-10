@@ -4,7 +4,8 @@
     <div class="mypage-container">
       <div class="profile-info">
         <profile-card
-          :user="user"
+          :user="state.userInfo"
+          :children="children"
           :toggleModifyModal="toggleModifyModal"
           @open-character-modal="openCharacterModal"
         ></profile-card>
@@ -19,10 +20,10 @@
           <li class="nav-item" @click="doActive">종료된 수업</li>
         </ul>
         <lecture-area
-          :user="user"
+          :user="state.userInfo"
           :isEnd="state.isEnd"
           :endClass="endClass"
-          :scheduledClass="scheduledClass"
+          :comingClass="comingClass"
         ></lecture-area>
       </div>
     </div>
@@ -31,13 +32,17 @@
         v-if="isCharacterModalOpen"
         @close-character-modal="closeCharacterModal"
     /></transition>
-    <ModifyModal v-if="isModifyOpen" :user="user" @modifyInfo="modifyInfo" />
+    <ModifyModal
+      v-if="isModifyOpen"
+      :user="state.userInfo"
+      @modifyInfo="modifyInfo"
+    />
   </div>
 </template>
 
 <script>
 import moment from "moment";
-import axios from "axios";
+import { useStore } from "vuex";
 import CalendarArea from "@/components/mypage/CalendarArea.vue";
 import ProfileCard from "@/components/mypage/ProfileCard.vue";
 import LectureArea from "@/components/mypage/LectureArea.vue";
@@ -57,187 +62,76 @@ export default {
     ModifyModal,
   },
   setup() {
-    let navItem;
     onMounted(() => {
       navItem = document.querySelectorAll(".nav-item");
     });
-
-    let isModifyOpen = ref(false);
+    const store = useStore();
     const isCharacterModalOpen = ref(false);
+    const children = ref(null);
+    let state = reactive({
+      userInfo: store.state.root.user, //computed(() => store.getters["root/userInfo"]),
+      userType: store.state.root.user.userType, //computed(() => store.getters["root/getUserType"]),
+      isEnd: false,
+    });
+    let classes = ref([]);
+    let endClass = ref([]);
+    let comingClass = ref([]);
+    let navItem;
+    let isModifyOpen = ref(false);
 
-    const getUserInfo = async () => {
-      const userInfo = JSON.parse(localStorage.getItem("user"));
-      const userType = userInfo.userType;
-      const response = await axios.get(
-        `${process.env.VUE_APP_API_URL}/${userType}/${userInfo.vid}`,
-      );
-
-      console.log(response);
+    const getUserInfo = () => {
+      if (state.userType === "parent") {
+        store
+          .dispatch("root/getChildren", state.userInfo.email)
+          .then((res) => (children.value = res.data.childs));
+      }
     };
     getUserInfo();
 
-    const user = reactive({
-      name: "이화연바보",
-      nickname: "애기하연",
-      description: "자기소개입니다",
-      status: 3, //1학생 2봉사자 3부모
-      subscribe: 0,
-      password: "abcdefg",
-      children: [
-        {
-          name: "일화연",
-          nickname: "애긔화연",
-          description: "자기소개입니다",
-          status: 1,
-          subscribe: 0,
-        },
-        {
-          name: "이화연",
-          nickname: "애기화연애긔",
-          description: "자기소개입니다",
-          status: 1,
-          subscribe: 0,
-        },
-        {
-          name: "삼화연",
-          nickname: "애긩화연",
-          description: "자기소개입니다",
-          status: 1,
-          subscribe: 0,
-        },
-        {
-          name: "사화연",
-          nickname: "아긩화연",
-          description: "자기소개입니다",
-          status: 1,
-          subscribe: 0,
-        },
-      ],
-    });
-    const classes = [
-      {
-        classTeacher: "김오리",
-        classStartTime: "2022-07-20 13:00:00",
-        classEndTime: "22-07-20 15:00:00",
-        classTitle: "오리선생의 초1 수학 수업 입니당~",
-        classContent:
-          "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
-        classOpen: true,
-        classStatus: "입장가능",
-        classPeople: "12/45",
-      },
-      {
-        classTeacher: "김오리",
-        classStartTime: "2022-07-20 13:00:00",
-        classEndTime: "22-07-20 15:00:00",
-        classTitle: "오리선생의 초1 수학 수업 입니당~",
-        classContent:
-          "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
-        classOpen: true,
-        classStatus: "입장대기",
-        classPeople: "12/45",
-      },
-      {
-        classTeacher: "김오리",
-        classStartTime: "2022-07-20 13:00:00",
-        classEndTime: "22-07-20 15:00:00",
-        classTitle: "오리선생의 초1 수학 수업 입니당~",
-        classContent:
-          "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
-        classOpen: true,
-        classStatus: "입장대기",
-        classPeople: "12/45",
-      },
-      {
-        classTeacher: "김오리",
-        classStartTime: "2022-07-20 13:00:00",
-        classEndTime: "22-07-20 15:00:00",
-        classTitle: "오리선생의 초1 수학 수업 입니당~",
-        classContent:
-          "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
-        classOpen: true,
-        classStatus: "입장대기",
-        classPeople: "12/45",
-      },
-      {
-        classTeacher: "김오리",
-        classStartTime: "2022-07-20 13:00:00",
-        classEndTime: "22-07-20 15:00:00",
-        classTitle: "오리선생의 초1 수학 수업 입니당~",
-        classContent:
-          "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
-        classOpen: true,
-        classStatus: "입장대기",
-        classPeople: "12/45",
-      },
-      {
-        classTeacher: "김오리",
-        classTitle: "오리선생의 초1 수학 수업 입니당~",
-        classStartTime: "2022-08-20 13:00:00",
-        classEndTime: "22-08-20 15:00:00",
-        classContent:
-          "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
-        classOpen: true,
-        classStatus: "종료",
-        classPeople: "12/45",
-      },
-      {
-        classTeacher: "김오리",
-        classTitle: "오리선생의 초1 수학 수업 입니당~",
-        classStartTime: "2022-08-20 13:00:00",
-        classEndTime: "22-08-20 15:00:00",
-        classContent:
-          "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
-        classOpen: true,
-        classStatus: "종료",
-        classPeople: "12/45",
-      },
-      {
-        classTeacher: "김오리",
-        classTitle: "오리선생의 초1 수학 수업 입니당~",
-        classStartTime: "2022-08-20 13:00:00",
-        classEndTime: "22-08-20 15:00:00",
-        classContent:
-          "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
-        classOpen: true,
-        classStatus: "종료",
-        classPeople: "12/45",
-      },
-      {
-        classTeacher: "김오리",
-        classTitle: "오리선생의 초1 수학 수업 입니당~",
-        classStartTime: "2022-08-20 13:00:00",
-        classEndTime: "22-08-20 15:00:00",
-        classContent:
-          "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
-        classOpen: true,
-        classStatus: "종료",
-        classPeople: "12/45",
-      },
-    ];
-    let endClass = [];
-    let scheduledClass = [];
+    const getUserClasses = () => {
+      if (state.userType === "parent") {
+        console.log("hi");
+      } else if (state.userType === "student") {
+        store
+          .dispatch("root/getStudentClasses", state.userInfo.sid)
+          .then((res) => {
+            console.log(res);
+            classes.value = res.data;
+          });
+
+        classes.value.forEach((e) => {
+          if (
+            moment(e.classStartTime).isBefore(
+              moment().format("YYYY-MM-DD HH:mm:ss"),
+            )
+          ) {
+            comingClass.push(e);
+          } else {
+            endClass.push(e);
+          }
+        });
+      } else if (state.userType === "volunteer") {
+        store
+          .dispatch("root/getEndedClasses", state.userInfo.vid)
+          .then((res) => {
+            endClass.value = res.data;
+            console.log(endClass.value);
+          })
+          .catch((err) => console.log(err.message));
+        store
+          .dispatch("root/getComingClasses", state.userInfo.vid)
+          .then((res) => {
+            comingClass.value = res.data;
+          })
+          .catch((err) => console.log(err.message));
+      }
+    };
+    getUserClasses();
+
     // 나중에 수정해야할것같은데 일단 해놓음.
     // 종료된거랑 종료 전이랑 어떻게 나눌지...
     // 아마 데이터 받아오면 mutation? 어디지 암튼 거기서 나눠줘야하나?
 
-    const division = () => {
-      classes.forEach((e) => {
-        if (
-          moment(e.classStartTime).isBefore(
-            moment().format("YYYY-MM-DD HH:mm:ss"),
-          )
-        ) {
-          scheduledClass.push(e);
-        } else {
-          endClass.push(e);
-        }
-      });
-    };
-    division();
-    const state = reactive({
-      isEnd: false,
-    });
     const doActive = (e) => {
       if (!e.target.classList.contains("active")) {
         e.target.classList.add("active");
@@ -268,29 +162,67 @@ export default {
       isModifyOpen.value = !isModifyOpen.value;
     };
 
-    const modifyInfo = (changeData) => {
-      if (user.status === 1) user.nickname = changeData;
-      else if (user.status === 2) user.description = changeData;
-      else if (user.status === 3) user.password = changeData;
-      console.log(user);
+    const modifyInfo = async (changeData) => {
+      console.log(changeData);
+      if (state.userType === "student") {
+        store
+          .dispatch("root/modifyUserInfo", {
+            userType: "student",
+            sId: state.userInfo.sid,
+            nickname: changeData,
+          })
+          .then((res) => {
+            store.commit("root/setModifiedStudentInfo", changeData);
+            console.log(res);
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
+      } else if (state.userType === "volunteer") {
+        store
+          .dispatch("root/modifyUserInfo", {
+            userType: "volunteer",
+            vId: state.userInfo.vid,
+            introduce: changeData,
+          })
+          .then((res) => {
+            store.commit("root/setModifiedVolunteerInfo", changeData);
+            console.log(res);
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
+      } else if (state.userInfo.userType === "parent") {
+        store
+          .dispatch("root/modifyUserInfo", {
+            userType: "parent",
+            email: state.userInfo.email,
+            password: changeData,
+          })
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
+      }
       isModifyOpen.value = false;
     };
 
     return {
-      user,
       isCharacterModalOpen,
       state,
       navItem,
       classes,
-      division,
       endClass,
-      scheduledClass,
+      comingClass,
       doActive,
       openCharacterModal,
       closeCharacterModal,
       isModifyOpen,
       toggleModifyModal,
       modifyInfo,
+      children,
     };
   },
 };
