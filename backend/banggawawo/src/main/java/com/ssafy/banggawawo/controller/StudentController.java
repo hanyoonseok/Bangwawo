@@ -66,7 +66,7 @@ public class StudentController {
                 // 새 부모 계정일 경우, 임시 비밀번호 발급 후 이메일 전송
                 MailDto mail = mailService.createMailAndChangePassword(value.getPemail(), value.getNickname());
                 value.setPpw(mail.getTmpPassword());
-//                mailService.mailSend(mail);
+                mailService.mailSend(mail);
             }
             StudentDto student = new StudentDto(studentService.create(new StudentDto(value)));
 

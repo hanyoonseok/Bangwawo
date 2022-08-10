@@ -15,7 +15,7 @@ public class MailService {
     StudentRepository studentRepository;
 
     private JavaMailSender mailSender;
-    private final String email="yukdabin@naver.com";
+    private static final String FROM_ADDRESS="yukdabin@naver.com";
 
 
 
@@ -49,7 +49,7 @@ public class MailService {
     public void mailSend(MailDto mailDto) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(mailDto.getAddress());
-        message.setFrom(email);
+        message.setFrom(MailService.FROM_ADDRESS);
         message.setSubject(mailDto.getTitle());
         message.setText(mailDto.getMessage());
 
