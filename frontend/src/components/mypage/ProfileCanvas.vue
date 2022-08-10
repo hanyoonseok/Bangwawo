@@ -14,14 +14,14 @@ export default {
   setup() {
     // Initial material
     const store = useStore();
-    let parts = reactive(store.state.root.user.characterColors);
+    let parts = reactive(store.state.root.user.character);
     const INITIAL_MTL = new THREE.MeshPhongMaterial({
       color: 0xffcb57,
       shininess: 10,
     });
 
     let changeParts = computed(() => {
-      return store.state.root.user.characterColors;
+      return store.state.root.user.character;
     });
 
     // state에 저장되어 있는 색 변경될때마다 watch에서 감지
@@ -34,7 +34,7 @@ export default {
         for (let object of INITIAL_MAP) {
           let init_mtl = null;
           parts.forEach((item) => {
-            if (item.id === object.childID) {
+            if (item.part === object.childID) {
               init_mtl = new THREE.MeshPhongMaterial({
                 color: parseInt("0x" + item.color),
                 shininess: 10,
@@ -138,7 +138,7 @@ export default {
         for (let object of INITIAL_MAP) {
           let init_mtl = null;
           parts.forEach((item) => {
-            if (item.id === object.childID) {
+            if (item.part === object.childID) {
               init_mtl = new THREE.MeshPhongMaterial({
                 color: parseInt("0x" + item.color),
                 shininess: 10,
