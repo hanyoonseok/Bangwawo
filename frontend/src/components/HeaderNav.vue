@@ -93,11 +93,13 @@
 
 <script>
 import { ref } from "vue";
+import { useStore } from "vuex";
 
 export default {
   name: "HeaderNav",
   setup() {
-    const user = ref(JSON.parse(localStorage.getItem("user")));
+    const store = useStore();
+    const user = ref(store.state.root.user);
 
     let isNoticeOpen = ref(false);
 
@@ -137,7 +139,7 @@ export default {
     };
 
     const logout = () => {
-      localStorage.removeItem("user");
+      store.commit("root/logoutUser");
       location.href = "/";
     };
 

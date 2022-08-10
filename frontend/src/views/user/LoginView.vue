@@ -20,26 +20,42 @@
     <div class="parent" v-if="!state.isStudent">
       <div class="parent-login">
         <label><i class="fa-solid fa-user"></i></label>
-        <input class="parent-input" type="text" placeholder="이메일" />
+        <input
+          class="parent-input"
+          type="text"
+          placeholder="이메일"
+          v-model="pEmail"
+        />
       </div>
       <div class="parent-login">
         <label><i class="fa-solid fa-lock-keyhole"></i></label>
-        <input class="parent-input" type="text" placeholder="비밀번호" />
+        <input
+          class="parent-input"
+          type="password"
+          placeholder="비밀번호"
+          v-model="pPassword"
+        />
       </div>
-      <router-link :to="{ name: 'mypage' }">
-        <button class="login-submit">로그인</button></router-link
-      >
+      <button class="login-submit" @click="loginParent">로그인</button>
     </div>
   </div>
 </template>
 
 <script>
-import { reactive, onMounted } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import jwt_decode from "jwt-decode";
+import { reactive, onMounted, ref } from "vue";
 
 export default {
   name: "LoginView",
   setup() {
+    const store = useStore();
     let userBtn;
+    let pEmail = ref("");
+    let pPassword = ref("");
+    const router = useRouter();
+
     const getKakao = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.VUE_APP_KAKAO_RESTAPI_KEY}&redirect_uri=${process.env.VUE_APP_REDIRECT_URL}&response_type=code`;
     onMounted(() => {
       userBtn = document.querySelectorAll(".user-btn");
@@ -54,7 +70,6 @@ export default {
     };
 
     const doActive = (e) => {
-      console.log(state.isStudent);
       if (!e.target.classList.contains("active")) {
         e.target.classList.add("active");
       }
@@ -72,11 +87,36 @@ export default {
       }
     };
 
+    const loginParent = () => {
+      const loginObj = {
+        email: pEmail.value,
+        password: pPassword.value,
+      };
+      console.log(loginObj);
+      loginObj.userType = "parent";
+      store
+        .dispatch("root/loginUser", loginObj)
+        .then((res) => {
+          console.log(res.data);
+          const decode_jwt = jwt_decode(res.data.JWT);
+          decode_jwt.user.userType = decode_jwt.userType.toLowerCase();
+          store.commit("root/setUserInfo", decode_jwt.user);
+          router.push("/mypage");
+        })
+        .catch((err) => {
+          console.log(err.message);
+          alert("아이디 혹은 비밀번호가 일치하지 않습니다");
+        });
+    };
+
     return {
       state,
       doActive,
       userBtn,
       kakaoClick,
+      pEmail,
+      pPassword,
+      loginParent,
     };
   },
   components: {

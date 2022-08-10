@@ -49,12 +49,12 @@ export default {
   setup(props, { emit }) {
     const store = useStore();
     let change = reactive({
-      color: "#" + store.state.root.user.characterColors[0].color,
+      color: "#" + store.state.root.user.character[0].color,
       type: "body",
     });
 
     //초기 캐릭터 색 : store에서 받아온 초기 색
-    let parts = reactive(store.state.root.user.characterColors);
+    let parts = reactive(store.state.root.user.character);
 
     const updateColor = (eventData) => {
       change.color = eventData.colors.hex.slice(0, 7);
@@ -76,7 +76,7 @@ export default {
         }
       });
       for (const item of parts) {
-        if (item.id === change.type) {
+        if (item.part === change.type) {
           item.color = change.color.replaceAll("#", "");
         }
       }
