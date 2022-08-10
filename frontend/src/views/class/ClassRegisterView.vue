@@ -106,7 +106,6 @@ export default {
       classContent: "",
       classImgFile: "",
     });
-
     const fileChange = (e) => {
       var input = e.target;
       if (input.files && input.files[0]) {
