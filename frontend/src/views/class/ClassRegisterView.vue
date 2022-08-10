@@ -20,19 +20,19 @@
           <div class="info-box">
             <label for="classTime" class="info-title">시간</label>
             <div class="classTime">
-              <input type="date" name="" id="" v-model="state.classDate" />
+              <input type="date" name="" id="" v-model="state.dateStr" />
               <input
                 type="time"
                 name="startTime"
                 id="startTime"
-                v-model="state.stime"
+                v-model="state.stimeStr"
               />
               -
               <input
                 type="time"
                 name="endTime"
                 id="endTime"
-                v-model="state.etime"
+                v-model="state.etimeStr"
               />
             </div>
           </div>
@@ -112,15 +112,14 @@ export default {
 
     const state = reactive({
       title: "",
-      classDate: "",
-      stime: "",
-      etime: "",
+      dateStr: "",
+      stimeStr: "",
+      etimeStr: "",
       thumbnail: "",
-      classOpen: "",
+      classOpen: false,
       maxcnt: 0,
       introduce: "",
-      classImgFile: "",
-      volunteer: { nickname: user.nickname },
+      vid: { nickname: user.nickname },
     });
 
     const formData = new FormData();
@@ -129,7 +128,8 @@ export default {
       if (input.files && input.files[0]) {
         var reader = new FileReader();
         reader.onload = (e) => {
-          state.classImgFile = e.target.result;
+          console.log(e.target.result);
+          state.thumbnail = e.target.result;
         };
         reader.readAsDataURL(input.files[0]);
         formData.append("thumbnail", input.files[0]);
@@ -137,28 +137,35 @@ export default {
     };
 
     const classRegister = async () => {
+      console.log(state.classDate);
+
       const classDto = {
         vid: { vid: user.vid },
         title: state.title,
         introduce: state.introduce,
-        stime: state.classDate + "" + state.stime,
-        etime: state.classDate + "" + state.etime,
+        // dateStr: state.dateStr,
+        // stimeStr: state.stimeStr,
+        // etimeStr: state.etimeStr,
         maxcnt: state.maxcnt,
         opened: state.classOpen,
-        thumbnail: state.classThumbnail,
+        thumbnail: state.thumbnail,
+        etime: "",
+        stime: "",
       };
 
       if (
         classDto.title === "" ||
         classDto.introduce === "" ||
-        classDto.stime === "" ||
-        classDto.etime === "" ||
         classDto.maxcnt === 0 ||
         classDto.opened === "" ||
         classDto.thumbnail === undefined
       ) {
+        console.log(classDto);
         isConfirm.status = true;
       } else {
+        classDto.stime = state.dateStr + "T" + state.stimeStr;
+        classDto.etime = state.dateStr + "T" + state.etimeStr;
+        console.log(formData);
         // 이미지 파일 등록
         await axios
           .post(`${process.env.VUE_APP_API_URL}/class/image`, formData, {

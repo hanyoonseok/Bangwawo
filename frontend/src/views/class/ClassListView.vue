@@ -21,6 +21,17 @@
         </div>
       </section>
       <OpendClassList :opened="openClass" />
+      <div class="search-bar">
+        <input
+          type="text"
+          placeholder="찾고 싶은 수업을 입력하세요."
+          @keyup="searchClass"
+          @input="changeKeyword"
+        />
+        <button class="search-btn">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </div>
       <MakedClassList :maked="filteredMakedClass" />
       <ForObserve @triggerIntersected="loadMakedClasses" />
       <a class="up" @click="top">
@@ -47,45 +58,88 @@ export default {
     ForObserve,
   },
   setup() {
-    // 임시 테스트용 데이터
     let allClasses = ref([]);
     let openClass = ref([]);
     let makedClass = ref([]);
-    const getClass = async () => {
+    const keyword = ref();
+    const filteredMakedClass = ref([]);
+    const dataIdx = ref(0);
+    const dataLen = 15;
+
+    const getClass = async (flag) => {
       axios
         .get(`${process.env.VUE_APP_API_URL}/class`)
         .then((response) => {
           allClasses = response.data;
-          console.log(allClasses);
+          // console.log(allClasses);
+          const openArray = [];
+          const makedArray = [];
           for (const item of allClasses) {
-            console.log(item);
             if (item.opened) {
-              openClass.value.push(item);
+              openArray.push(item);
             } else {
-              makedClass.value.push(item);
+              makedArray.push(item);
             }
           }
-          console.log(openClass.value);
-          console.log(makedClass.value);
+
+          openClass.value = openArray;
+          makedClass.value = makedArray;
+          if (flag) {
+            filteredMakedClass.value = [];
+          } else {
+            filteredMakedClass.value = makedArray;
+          }
+          // loadMakedClasses();
         })
         .catch((error) => {
           console.log(error);
         });
     };
-    getClass();
-    const filteredMakedClass = ref([]);
-    const dataIdx = ref(0);
-    const dataLen = 15;
+    getClass(true);
+
+    const searchClass = async () => {
+      console.log(keyword.value);
+      if (keyword.value !== "") {
+        axios
+          .get(`${process.env.VUE_APP_API_URL}/class`, {
+            params: { title: keyword.value },
+          })
+          .then((response) => {
+            const data = response.data;
+            console.log("검색 결과 ", data);
+
+            const searchArr = [];
+            for (const item of data) {
+              if (!item.opened) {
+                searchArr.push(item);
+              }
+            }
+            makedClass.value = searchArr;
+            filteredMakedClass.value = searchArr;
+            console.log(makedClass.value);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        console.log("엥?");
+        getClass(false);
+      }
+    };
+
+    const changeKeyword = (e) => {
+      keyword.value = e.target.value;
+    };
 
     const top = () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     const loadMakedClasses = () => {
-      console.log(dataIdx, " ", makedClass.value.length);
+      console.log("load");
       if (dataIdx.value > makedClass.value.length) return;
+      let prevArr = [...filteredMakedClass.value];
 
-      const prevArr = [...filteredMakedClass.value];
       for (
         let i = dataIdx.value;
         i < Math.min(makedClass.value.length, dataIdx.value + dataLen);
@@ -104,6 +158,9 @@ export default {
       openClass,
       filteredMakedClass,
       loadMakedClasses,
+      keyword,
+      changeKeyword,
+      searchClass,
     };
   },
 };

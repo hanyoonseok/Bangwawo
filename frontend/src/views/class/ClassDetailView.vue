@@ -32,7 +32,8 @@
               <div class="info-box">
                 <p class="info-title post-card">강의 시간</p>
                 <p class="info-content">
-                  {{ state.stime }} ~ {{ state.etime }}
+                  {{ state.dateStr }} {{ state.stimeStr }} ~
+                  {{ state.etimeStr }}
                 </p>
               </div>
               <div class="info-box">
@@ -55,7 +56,12 @@
           </article>
           <div class="button-box">
             <!-- 봉사자(2), 학생(1) -->
-            <div v-if="user.status === 2 && userInfo.vid === state.vid.vid">
+            <div
+              v-if="
+                userInfo.userType === 'VOLUNTEER' &&
+                userInfo.vid === state.vid.vid
+              "
+            >
               <router-link :to="{ name: 'inclass' }">
                 <button class="class-status-btn">
                   수업 활성화
@@ -127,6 +133,7 @@ export default {
     const route = useRoute();
 
     const userInfo = JSON.parse(localStorage.getItem("user"));
+    console.log(userInfo);
     const cid = route.params.cid;
 
     const state = ref([]);
@@ -136,7 +143,7 @@ export default {
         .get(`${process.env.VUE_APP_API_URL}/class/${cid}`)
         .then((response) => {
           state.value = response.data;
-          console.log(state.value.vid.nickname);
+          console.log(state.value);
         })
         .catch((error) => {
           console.log(error);

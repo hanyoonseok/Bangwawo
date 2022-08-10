@@ -17,10 +17,10 @@
     </div>
     <div class="post-card-hover">
       <p class="people">정원 : {{ state.maxcnt }}</p>
-      <p class="teacher">강사 : {{ state.volunteer.nickname }}</p>
+      <p class="teacher">강사 : {{ state.vid.nickname }}</p>
       <p class="time">
-        시간 : {{ state.stime }} ~
-        {{ state.etime }}
+        시간 : {{ state.dateStr }} {{ state.stimeStr }} ~
+        {{ state.etimeStr }}
       </p>
     </div>
   </div>

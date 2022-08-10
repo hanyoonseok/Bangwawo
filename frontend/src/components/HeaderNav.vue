@@ -23,7 +23,7 @@
           >비밀친구</router-link
         >
       </div>
-      <div class="listdiv" v-if="user && user.userType === 'volunteer'">
+      <div class="listdiv" v-if="user && user.userType === 'VOLUNTEER'">
         <router-link :to="{ name: 'classlist' }" class="list">
           <div><img src="@/assets/header.png" /></div>
         </router-link>
