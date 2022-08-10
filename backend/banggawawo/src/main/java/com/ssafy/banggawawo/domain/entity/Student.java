@@ -1,10 +1,9 @@
 package com.ssafy.banggawawo.domain.entity;
 
+import com.ssafy.banggawawo.domain.dto.ColorDto;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Setter
@@ -14,18 +13,6 @@ public class Student {
     @Id
     @GeneratedValue
     private Long sId;          //학생 아이디
-
-//    @OneToMany(mappedBy = "student")
-//    private List<Enrol> enrols = new ArrayList<Enrol>(); //수강신청 목록 & 피드백 목록
-//
-//    @OneToMany(mappedBy = "student")
-//    private List<Request> requests = new ArrayList<Request>(); //수업요청 리스트
-//
-//    @OneToMany(mappedBy = "student")
-//    private List<SecritChat> secritChats = new ArrayList<SecritChat>();   //비밀친구 대화 리스트
-//
-//    @OneToMany(mappedBy = "student")
-//    private List<Likes> likes = new ArrayList<Likes>();   //좋아요 리스트
 
     private String kakaoId;       //카카오 회원번호
     private int ageRange;        //연령대
@@ -38,7 +25,7 @@ public class Student {
 
     @Builder
     public Student(Long sId, String kakaoId, int ageRange,
-                   String nickname, String pemail, String ppw, Character character){
+                    String nickname, String pemail, String ppw, Character character){
         this.sId = sId;
         this.kakaoId = kakaoId;
         this.ageRange = ageRange;
