@@ -116,6 +116,7 @@ export default {
       stimeStr: "",
       etimeStr: "",
       thumbnail: "",
+      preview: null,
       classOpen: false,
       maxcnt: 0,
       introduce: "",
@@ -129,7 +130,7 @@ export default {
         var reader = new FileReader();
         reader.onload = (e) => {
           console.log(e.target.result);
-          state.thumbnail = e.target.result;
+          state.preview = e.target.result;
         };
         reader.readAsDataURL(input.files[0]);
         formData.append("thumbnail", input.files[0]);

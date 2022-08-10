@@ -1,10 +1,22 @@
 <template>
   <div class="post-card">
-    <div class="img-box" v-if="state.thumbnail.length === 0">
+    <div
+      class="img-box"
+      v-if="state.thumbnail.length === 0 && state.preview === null"
+    >
       <img src="@/assets/thumbnail.png" alt="썸네일이미지" />
     </div>
-    <div class="img-box" v-else>
-      <img :src="state.thumbnail" alt="썸네일이미지" />
+    <div v-if="state.thumbnail.length === 0 && state.preview !== null">
+      <img :src="state.preview" alt="프리뷰이미지" />
+    </div>
+    <div
+      class="img-box"
+      v-if="state.thumbnail.length !== 0 && state.preview === null"
+    >
+      <img
+        :src="'http://localhost:8081/api' + state.thumbnail"
+        alt="썸네일이미지"
+      />
     </div>
     <div class="card-info card-view">
       <h4>{{ state.title }}</h4>
