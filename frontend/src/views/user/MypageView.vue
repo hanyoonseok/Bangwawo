@@ -66,8 +66,6 @@ export default {
       navItem = document.querySelectorAll(".nav-item");
     });
     const store = useStore();
-    let navItem;
-    let isModifyOpen = ref(false);
     const isCharacterModalOpen = ref(false);
     const children = ref(null);
     let state = reactive({
@@ -75,8 +73,11 @@ export default {
       userType: store.state.root.user.userType, //computed(() => store.getters["root/getUserType"]),
       isEnd: false,
     });
+    let classes = ref([]);
+    let navItem;
+    let isModifyOpen = ref(false);
 
-    const getUserInfo = async () => {
+    const getUserInfo = () => {
       if (state.userType === "parent") {
         store
           .dispatch("root/getChildren", state.userInfo.email)
@@ -85,107 +86,22 @@ export default {
     };
     getUserInfo();
 
-    const classes = [
-      {
-        classTeacher: "김오리",
-        classStartTime: "2022-07-20 13:00:00",
-        classEndTime: "22-07-20 15:00:00",
-        classTitle: "오리선생의 초1 수학 수업 입니당~",
-        classContent:
-          "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
-        classOpen: true,
-        classStatus: "입장가능",
-        classPeople: "12/45",
-      },
-      {
-        classTeacher: "김오리",
-        classStartTime: "2022-07-20 13:00:00",
-        classEndTime: "22-07-20 15:00:00",
-        classTitle: "오리선생의 초1 수학 수업 입니당~",
-        classContent:
-          "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
-        classOpen: true,
-        classStatus: "입장대기",
-        classPeople: "12/45",
-      },
-      {
-        classTeacher: "김오리",
-        classStartTime: "2022-07-20 13:00:00",
-        classEndTime: "22-07-20 15:00:00",
-        classTitle: "오리선생의 초1 수학 수업 입니당~",
-        classContent:
-          "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
-        classOpen: true,
-        classStatus: "입장대기",
-        classPeople: "12/45",
-      },
-      {
-        classTeacher: "김오리",
-        classStartTime: "2022-07-20 13:00:00",
-        classEndTime: "22-07-20 15:00:00",
-        classTitle: "오리선생의 초1 수학 수업 입니당~",
-        classContent:
-          "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
-        classOpen: true,
-        classStatus: "입장대기",
-        classPeople: "12/45",
-      },
-      {
-        classTeacher: "김오리",
-        classStartTime: "2022-07-20 13:00:00",
-        classEndTime: "22-07-20 15:00:00",
-        classTitle: "오리선생의 초1 수학 수업 입니당~",
-        classContent:
-          "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
-        classOpen: true,
-        classStatus: "입장대기",
-        classPeople: "12/45",
-      },
-      {
-        classTeacher: "김오리",
-        classTitle: "오리선생의 초1 수학 수업 입니당~",
-        classStartTime: "2022-08-20 13:00:00",
-        classEndTime: "22-08-20 15:00:00",
-        classContent:
-          "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
-        classOpen: true,
-        classStatus: "종료",
-        classPeople: "12/45",
-      },
-      {
-        classTeacher: "김오리",
-        classTitle: "오리선생의 초1 수학 수업 입니당~",
-        classStartTime: "2022-08-20 13:00:00",
-        classEndTime: "22-08-20 15:00:00",
-        classContent:
-          "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
-        classOpen: true,
-        classStatus: "종료",
-        classPeople: "12/45",
-      },
-      {
-        classTeacher: "김오리",
-        classTitle: "오리선생의 초1 수학 수업 입니당~",
-        classStartTime: "2022-08-20 13:00:00",
-        classEndTime: "22-08-20 15:00:00",
-        classContent:
-          "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
-        classOpen: true,
-        classStatus: "종료",
-        classPeople: "12/45",
-      },
-      {
-        classTeacher: "김오리",
-        classTitle: "오리선생의 초1 수학 수업 입니당~",
-        classStartTime: "2022-08-20 13:00:00",
-        classEndTime: "22-08-20 15:00:00",
-        classContent:
-          "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
-        classOpen: true,
-        classStatus: "종료",
-        classPeople: "12/45",
-      },
-    ];
+    const getUserClasses = () => {
+      if (state.userType === "parent") {
+        console.log("hi");
+      } else if (state.userType === "student") {
+        store
+          .dispatch("root/getStudentClasses", state.userInfo.sid)
+          .then((res) => {
+            console.log(res);
+            classes.value = res.data;
+          });
+      } else if (state.userType === "volunteer") {
+        console.log("hi");
+      }
+    };
+    getUserClasses();
+
     let endClass = [];
     let scheduledClass = [];
     // 나중에 수정해야할것같은데 일단 해놓음.

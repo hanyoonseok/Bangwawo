@@ -30,3 +30,9 @@ export const modifyUserInfo = ({ state }, payload) => {
   const url = `/${payload.userType}/`;
   return axios.put(url, payload);
 };
+
+export const getStudentClasses = ({ state }, sid) => {
+  console.log("getStudentClasses", state, sid);
+  const url = `/enrol/student/${sid}/`;
+  return axios.get(url);
+};
