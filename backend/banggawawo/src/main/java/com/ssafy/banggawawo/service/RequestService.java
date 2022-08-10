@@ -60,6 +60,16 @@ public class RequestService {
         return hashmap;
     }
 
+    //요청글중 미완료 목록
+    @Transactional(readOnly = true)
+    public Map<String, Object> unfindlist() throws Exception {
+        List<Request> requestsList = requestRepository.unfindlist();
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        result.put("requestsList", requestsList);
+        return result;
+    }
+
+
     @Transactional(readOnly = true) // 조회 시 데이터 변경 방지
     public Optional<Request> readonly(Long rid) throws Exception {
         Optional<Request> request = requestRepository.findById(rid);
