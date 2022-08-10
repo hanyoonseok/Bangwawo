@@ -124,22 +124,22 @@ export default {
       classPeople: "12/45",
     };
 
-    // 학생로그인이 안돼서 임시로 사용. 지워야함.
-    const stuInfo = {
-      ageRange: 10,
-      character: {
-        body: "f1f1f1",
-        legs: "ff9696",
-        glasses: "ff9696",
-        dress: "FFAEAE",
-        bag: "FFD89B",
-        hat: "FFD89B",
-      },
-      kakaoId: "2374106679",
-      nickname: "김수빈",
-      userType: "student",
-      sid: 666,
-    };
+    // // 학생로그인이 안돼서 임시로 사용. 지워야함.
+    // const stuInfo = {
+    //   ageRange: 10,
+    //   character: {
+    //     body: "f1f1f1",
+    //     legs: "ff9696",
+    //     glasses: "ff9696",
+    //     dress: "FFAEAE",
+    //     bag: "FFD89B",
+    //     hat: "FFD89B",
+    //   },
+    //   kakaoId: "2374106679",
+    //   nickname: "김수빈",
+    //   userType: "student",
+    //   sid: 666,
+    // };
 
     const showProfile = () => {
       if (document.querySelector(".profile").style.display === "block") {
@@ -161,7 +161,7 @@ export default {
 
     return {
       state,
-      stuInfo,
+      // stuInfo,
       showProfile,
       hideProfile,
       isConfirm,

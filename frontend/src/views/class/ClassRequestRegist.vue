@@ -39,25 +39,6 @@ import { useRouter } from "vue-router";
 export default {
   name: "ClassRequestRegist",
   setup() {
-    //   // 학생로그인이 안돼서 임시로 사용.
-    //   const stuInfo = {
-    //     ageRange: 10,
-    //     character: {
-    //       body: "f1f1f1",
-    //       legs: "ff9696",
-    //       glasses: "ff9696",
-    //       dress: "FFAEAE",
-    //       bag: "FFD89B",
-    //       hat: "FFD89B",
-    //     },
-    //     kakaoId: "2374106679",
-    //     userType: "student",
-    //     nickname: "김수빈",
-    //     pemail: "beasrdu0105@gmail.com",
-    //     ppw: "sksms1010",
-    //     sid: 5555,
-    //   };
-
     const router = useRouter();
     let userInfo = ref(null);
     const getUserInfo = async () => {
@@ -68,13 +49,16 @@ export default {
     const submitRequestRegister = async () => {
       axios
         .post(`${process.env.VUE_APP_API_URL}/request`, {
-          sId: 555,
+          sid: {
+            sid: 1,
+          },
           content: state.requestContent,
           title: state.requestTitle,
         })
-        .then((response) => console.log(response));
-
-      router.push("/class/requestlist");
+        .then((response) => {
+          console.log(response);
+          router.push("/class/requestlist");
+        });
     };
     return { state, submitRequestRegister, getUserInfo };
   },

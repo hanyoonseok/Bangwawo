@@ -26,8 +26,6 @@ export default {
         localStorage.setItem("user", JSON.stringify(decode_jwt.user));
         router.push("/class/list");
       } else {
-        data.ageRange = 10;
-
         data.ageRange < 20
           ? router.push({
               name: "signupStudent",

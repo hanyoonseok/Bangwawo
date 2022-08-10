@@ -12,7 +12,8 @@
             {{ state.requestPost.title }}
           </div>
           <div class="content-writer">
-            애기오리 <label>&nbsp;2022.07.20</label>
+            {{ state.requestPost.student.nickname }}
+            <label>&nbsp;2022.07.20</label>
           </div>
           <div class="status-wrapper">
             <button class="status-btn no" v-if="!state.requestPost.solved">
@@ -25,16 +26,20 @@
           <div class="content-text">
             {{ state.requestPost.content }}
           </div>
-          <div class="end-btn-wrapper" v-if="userType === 'student'">
+          <div class="end-btn-wrapper" v-if="userInfo.userType === 'student'">
             <div class="no" v-if="!state.requestPost.solved">
               <img src="@/assets/notice-text.png" class="notice-img" />
               <span></span>
-              <button class="end-btn">
+              <button
+                class="end-btn"
+                @mouseover="state.isVisibleNoticeImg = true"
+                @mouseleave="state.isVisibleNoticeImg = false"
+              >
                 <i class="fa-solid fa-thumbs-up"></i> &nbsp;{{
                   state.requestPost.likes
                 }}
               </button>
-              <div>
+              <div v-if="userId === state.requestPost.student.sid">
                 <button class="end-btn" @click="isConfirm.status = true">
                   <i class="fa-solid fa-trash-can"></i>&nbsp;삭제
                 </button>
@@ -49,6 +54,7 @@
                   </button></router-link
                 >
               </div>
+              <div v-else style="width: 100px"></div>
             </div>
             <router-link :to="{ name: 'classdetail' }" v-else>
               <div class="yes">
@@ -63,7 +69,7 @@
             >
           </div>
 
-          <div class="end-btn-wrapper" v-if="userType === 'volunteer'">
+          <div class="end-btn-wrapper" v-if="userInfo.userType === 'volunteer'">
             <div class="no" v-if="!state.requestPost.solved">
               <span></span>
               <router-link :to="{ name: 'classregister' }">
@@ -105,7 +111,7 @@
 </template>
 
 <script>
-import { ref, reactive } from "vue";
+import { ref, reactive, watch } from "vue";
 import HeaderNav from "@/components/HeaderNav.vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
@@ -134,15 +140,17 @@ export default {
 
     let userInfo = ref(null);
     let userId;
-    let userType;
     const getUserInfo = async () => {
-      userInfo.value = JSON.parse(localStorage.getItem("user"));
-      userType = "student";
-      userId =
-        userType === "volunteer" ? userInfo.value.vid : userInfo.value.sid;
+      userInfo = JSON.parse(localStorage.getItem("user"));
+      // userId = userInfo.userType === "volunteer" ? userInfo.vid : userInfo.sid;
+      // userId = 1;
+      // userInfo.userType = "student";
+      //지금 학생로그인이 안돼서.. 임의로 id값 1로 넣어서 확인.
+      console.log(userId);
     };
     let state = reactive({
       requestPost: {},
+      isVisibleNoticeImg: false,
     });
     const rid = route.params.rid;
     getUserInfo();
@@ -150,6 +158,7 @@ export default {
       axios
         .get(`${process.env.VUE_APP_API_URL}/request/${rid}/${userId}`)
         .then((response) => {
+          console.log(response.data.requsest);
           state.requestPost = response.data.requsest;
         });
     };
@@ -164,14 +173,27 @@ export default {
 
       router.push("/class/requestlist");
     };
+
+    watch(
+      () => state.isVisibleNoticeImg,
+      (cur) => {
+        const noticeImg = document.querySelector(".notice-img");
+        if (cur) {
+          noticeImg.style.opacity = "1";
+        } else {
+          noticeImg.style.opacity = "0";
+        }
+      },
+    );
+
     return {
       getRequest,
       getUserInfo,
       deleteRequest,
-      userType,
       state,
       post,
       userId,
+      userInfo,
       isConfirm,
       rid,
     };

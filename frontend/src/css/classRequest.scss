@@ -237,6 +237,8 @@
         top: 0;
         left: 50%;
         transform: translate(-150%, -100%);
+        opacity: 0;
+        transition: all 200ms ease;
       }
     }
   }

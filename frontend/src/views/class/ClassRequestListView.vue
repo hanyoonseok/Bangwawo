@@ -21,7 +21,7 @@
       <label for="">미해결 요청만 보기</label>
     </div>
     <!-- 봉사자 아닐 경우에만 요청 글 작성 가능 -->
-    <div v-if="userType !== 'volunteer'">
+    <div v-if="userInfo.userType !== 'volunteer'">
       <router-link :to="{ name: 'classrequestregist' }">
         <button class="request-register">작성하기</button></router-link
       >
@@ -43,7 +43,9 @@
         <tbody>
           <tr v-for="item in pages.listData" :key="item.num">
             <td>{{ item.rid }}</td>
-            <td>{{ item.writer }}</td>
+            <td>
+              <span v-if="item.student">{{ item.student.nickname }}</span>
+            </td>
             <td>
               <router-link :to="`requestdetail/${item.rid}`">
                 {{ item.title }}
@@ -87,12 +89,11 @@ export default {
   },
   setup() {
     let userInfo = ref(null);
-    let userType;
     const getUserInfo = async () => {
       userInfo.value = JSON.parse(localStorage.getItem("user"));
+      // userInfo.userType = "student";
     };
     getUserInfo();
-    userType = "student";
     const state = reactive({
       requestList: [],
       totalRequest: 0,
@@ -112,6 +113,7 @@ export default {
           state.requestList = data.content;
           pages.total = data.totalElements;
           pages.listData = state.requestList;
+          console.log(data.content[1].student);
         });
     };
     onMounted(() => {
@@ -120,7 +122,6 @@ export default {
 
     const pagingMethod = (page) => {
       pages.page = page;
-      console.log("한번말해보오");
       // 여기서 새로 데이터를 받아와야 함.
       getRequestList(pages.page);
       pageDataSetting(pages.total, pages.limit, pages.block, page);
@@ -148,18 +149,7 @@ export default {
       }
 
       let startPage = 1;
-      // console.log(
-      //   "first",
-      //   first,
-      //   "end",
-      //   end,
-      //   "currentPage",
-      //   currentPage,
-      //   "totalPage",
-      //   totalPage,
-      //   "startPage",
-      //   startPage,
-      // );
+
       console.log(list);
       return { first, end, list, currentPage, totalPage, startPage };
     };
@@ -192,7 +182,6 @@ export default {
       getRequestList,
       pageDataSetting,
       check,
-      userType,
       userInfo,
       getUserInfo,
       state,
