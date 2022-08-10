@@ -4,6 +4,12 @@ import jwt_decode from "jwt-decode";
 export const setUserInfo = (state, payload) => {
   const decode_jwt = jwt_decode(payload.JWT);
   decode_jwt.user.userType = decode_jwt.userType.toLowerCase();
+  if (decode_jwt.user.character) {
+    const keySet = Object.keys(decode_jwt.user.character);
+    const valueSet = Object.values(decode_jwt.user.character);
+    decode_jwt.user.cKey = keySet;
+    decode_jwt.user.cValue = valueSet;
+  }
   state.user = decode_jwt.user;
   localStorage.setItem("isLogin", true);
 };

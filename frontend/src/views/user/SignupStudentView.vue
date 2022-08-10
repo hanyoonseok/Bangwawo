@@ -1,18 +1,20 @@
 <template>
-  <div class="signup-container">
+  <form class="signup-container" @submit.prevent="submitRegister">
     <div class="input-box">
       <input
         class="sign-input"
+        type="email"
         placeholder="학부모 이메일을 입력해주세요."
         v-model="emailValue"
+        required
       />
-      <button class="signup-submit" @click="submitRegister">로그인</button>
+      <button type="submit" class="signup-submit">로그인</button>
     </div>
     <div class="duck-img">
       <div class="guide">별명, 부모님 이메일을 알려줘~</div>
       <img src="@/assets/signupDuck.png" />
     </div>
-  </div>
+  </form>
 </template>
 
 <script>
@@ -29,14 +31,14 @@ export default {
     const router = useRouter();
     const store = useStore();
 
-    registObj.value.character = [
-      { part: "bag", color: "FFD89B" },
-      { part: "body", color: "f1f1f1" },
-      { part: "dress", color: "FFAEAE" },
-      { part: "glasses", color: "ff9696" },
-      { part: "legs", color: "ff9696" },
-      { part: "hat", color: "FFD89B" },
-    ];
+    registObj.value.character = {
+      bag: "FFD89B",
+      body: "f1f1f1",
+      dress: "FFAEAE",
+      glasses: "ff9696",
+      legs: "ff9696",
+      hat: "FFD89B",
+    };
 
     const submitRegister = () => {
       registObj.value.pemail = emailValue.value;

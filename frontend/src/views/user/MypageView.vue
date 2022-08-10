@@ -23,7 +23,7 @@
           :user="state.userInfo"
           :isEnd="state.isEnd"
           :endClass="endClass"
-          :scheduledClass="scheduledClass"
+          :comingClass="comingClass"
         ></lecture-area>
       </div>
     </div>
@@ -74,6 +74,8 @@ export default {
       isEnd: false,
     });
     let classes = ref([]);
+    let endClass = ref([]);
+    let comingClass = ref([]);
     let navItem;
     let isModifyOpen = ref(false);
 
@@ -96,32 +98,39 @@ export default {
             console.log(res);
             classes.value = res.data;
           });
+
+        classes.value.forEach((e) => {
+          if (
+            moment(e.classStartTime).isBefore(
+              moment().format("YYYY-MM-DD HH:mm:ss"),
+            )
+          ) {
+            comingClass.push(e);
+          } else {
+            endClass.push(e);
+          }
+        });
       } else if (state.userType === "volunteer") {
-        console.log("hi");
+        store
+          .dispatch("root/getEndedClasses", state.userInfo.vid)
+          .then((res) => {
+            endClass.value = res.data;
+            console.log(endClass.value);
+          })
+          .catch((err) => console.log(err.message));
+        store
+          .dispatch("root/getComingClasses", state.userInfo.vid)
+          .then((res) => {
+            comingClass.value = res.data;
+          })
+          .catch((err) => console.log(err.message));
       }
     };
     getUserClasses();
 
-    let endClass = [];
-    let scheduledClass = [];
     // 나중에 수정해야할것같은데 일단 해놓음.
     // 종료된거랑 종료 전이랑 어떻게 나눌지...
     // 아마 데이터 받아오면 mutation? 어디지 암튼 거기서 나눠줘야하나?
-
-    const division = () => {
-      classes.forEach((e) => {
-        if (
-          moment(e.classStartTime).isBefore(
-            moment().format("YYYY-MM-DD HH:mm:ss"),
-          )
-        ) {
-          scheduledClass.push(e);
-        } else {
-          endClass.push(e);
-        }
-      });
-    };
-    division();
 
     const doActive = (e) => {
       if (!e.target.classList.contains("active")) {
@@ -205,9 +214,8 @@ export default {
       state,
       navItem,
       classes,
-      division,
       endClass,
-      scheduledClass,
+      comingClass,
       doActive,
       openCharacterModal,
       closeCharacterModal,

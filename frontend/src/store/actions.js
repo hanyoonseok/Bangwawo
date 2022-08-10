@@ -36,3 +36,15 @@ export const getStudentClasses = ({ state }, sid) => {
   const url = `/enrol/student/${sid}/`;
   return axios.get(url);
 };
+
+export const getEndedClasses = ({ state }, vid) => {
+  console.log("getEndedClasses", state, vid);
+  const url = `/class?state=2&vid=${vid}`;
+  return axios.get(url);
+};
+
+export const getComingClasses = ({ state }, vid) => {
+  console.log("getComingClasses", state, vid);
+  const url = `/class?state=0&vid=${vid}`;
+  return axios.get(url);
+};

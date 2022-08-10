@@ -1,5 +1,5 @@
 <template>
-  <div class="signup-volunteer">
+  <form class="signup-volunteer" @submit.prevent="submitRegister">
     <div class="guide-volunteer">
       <img src="@/assets/guide-volunteer.png" />
       <div class="guide">안녕하세요 OOO님. <br />자기소개를 입력해주세요.</div>
@@ -8,9 +8,10 @@
       class="introduction"
       placeholder="자기소개를 입력해주세요."
       v-model="textareaValue"
+      required
     ></textarea>
-    <button class="signup-submit" @click="submitRegister">확인</button>
-  </div>
+    <button type="submit" class="signup-submit">확인</button>
+  </form>
 </template>
 
 <script>
@@ -27,14 +28,14 @@ export default {
     const router = useRouter();
     const store = useStore();
 
-    registObj.value.character = [
-      { part: "bag", color: "FFD89B" },
-      { part: "body", color: "f1f1f1" },
-      { part: "dress", color: "FFAEAE" },
-      { part: "glasses", color: "ff9696" },
-      { part: "legs", color: "ff9696" },
-      { part: "hat", color: "FFD89B" },
-    ];
+    registObj.value.character = {
+      bag: "FFD89B",
+      body: "f1f1f1",
+      dress: "FFAEAE",
+      glasses: "ff9696",
+      legs: "ff9696",
+      hat: "FFD89B",
+    };
 
     const submitRegister = () => {
       registObj.value.introduce = textareaValue.value;
