@@ -169,7 +169,7 @@ export default {
         store
           .dispatch("root/modifyUserInfo", {
             userType: "student",
-            sId: state.userInfo.sid,
+            id: state.userInfo.sid,
             nickname: changeData,
           })
           .then((res) => {
@@ -183,7 +183,7 @@ export default {
         store
           .dispatch("root/modifyUserInfo", {
             userType: "volunteer",
-            vId: state.userInfo.vid,
+            id: state.userInfo.vid,
             introduce: changeData,
           })
           .then((res) => {

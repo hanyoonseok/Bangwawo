@@ -129,8 +129,8 @@ export default {
         character: parts,
         userType: props.user.userType,
       };
-      if (props.user.userType === "volunteer") modifyInfo.vid = props.user.vid;
-      else modifyInfo.sid = props.user.sid;
+      if (props.user.userType === "volunteer") modifyInfo.id = props.user.vid;
+      else modifyInfo.id = props.user.sid;
 
       //store.dispatch("root/setCharacterInfo", modifyInfo);
       store.commit("root/setCharacterInfo", parts);

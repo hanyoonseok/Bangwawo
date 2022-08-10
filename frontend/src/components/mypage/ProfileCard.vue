@@ -47,7 +47,7 @@
           &nbsp;<span>정보수정</span>
         </li>
 
-        <li>
+        <li @click="deleteUser">
           <i class="fa-solid fa-arrow-right-from-bracket"></i>
           &nbsp;<span>회원탈퇴</span>
         </li>
@@ -79,9 +79,11 @@
 </template>
 
 <script>
-import { reactive } from "vue";
 import ProfileCanvas from "@/components/mypage/ProfileCanvas.vue";
-import { ref, watch } from "vue";
+import { ref, watch, reactive } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+
 export default {
   props: ["user", "toggleModifyModal", "children"],
   emits: ["open-character-modal"],
@@ -90,6 +92,8 @@ export default {
     let isModalOpen = ref(false);
     let isModifyOpen = ref(false);
     let selectedChild = ref(null);
+    const store = useStore();
+    const router = useRouter();
 
     watch(
       () => props.children,
@@ -114,6 +118,16 @@ export default {
       emit("open-character-modal");
     };
 
+    const deleteUser = () => {
+      store
+        .dispatch("root/deleteUser", props.user)
+        .then(() => {
+          store.commit("root/logoutUser");
+          router.push("/");
+        })
+        .catch((err) => alert(err.message));
+    };
+
     return {
       toggleModal,
       isModalOpen,
@@ -122,6 +136,7 @@ export default {
       isModifyOpen,
       selectedChild,
       selectChild,
+      deleteUser,
     };
   },
 };

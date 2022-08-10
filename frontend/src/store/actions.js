@@ -56,3 +56,9 @@ export const setCharacterInfo = ({ state }, modifyInfo) => {
   }`;
   return axios.put(url, modifyInfo);
 };
+
+export const deleteUser = ({ state }, payload) => {
+  console.log("deleteUser", state, payload);
+  const url = `/${payload.userType}/${payload.vid || payload.sid}`;
+  return axios.delete(url);
+};
