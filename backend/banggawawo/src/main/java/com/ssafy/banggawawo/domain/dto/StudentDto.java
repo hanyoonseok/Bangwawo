@@ -4,7 +4,6 @@ import com.ssafy.banggawawo.domain.entity.Character;
 import com.ssafy.banggawawo.domain.entity.Student;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter @Setter
@@ -18,8 +17,6 @@ public class StudentDto {
     private String ppw;        //부모 비밀번호
     private Character character; //개인 3d 캐릭터에 대한 정보
 
-    StudentDto () {}
-
     public StudentDto (Student student){
         this.sId = student.getSId();
         this.kakaoId = student.getKakaoId();
@@ -30,4 +27,23 @@ public class StudentDto {
         this.character = student.getCharacter();
     }
 
+    public StudentDto (StudentFrontDto student){
+        this.sId = student.getSId();
+        this.kakaoId = student.getKakaoId();
+        this.ageRange = student.getAgeRange();
+        this.nickname = student.getNickname();
+        this.pemail = student.getPemail();
+        this.ppw = student.getPpw();
+        this.character = student.toClass(student.getCharacter());
+    }
+    ColorDto[] toArray(Character chr){
+        ColorDto[] list = new ColorDto[6];
+        list[0] = new ColorDto("body", chr.getBody());
+        list[1] = new ColorDto("legs", chr.getLegs());
+        list[2] = new ColorDto("glasses", chr.getGlasses());
+        list[3] = new ColorDto("dress", chr.getDress());
+        list[4] = new ColorDto("bag", chr.getBag());
+        list[5] = new ColorDto("hat", chr.getHat());
+        return list;
+    }
 }
