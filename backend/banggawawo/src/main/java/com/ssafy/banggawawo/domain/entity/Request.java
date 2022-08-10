@@ -1,8 +1,10 @@
 package com.ssafy.banggawawo.domain.entity;
 
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +29,8 @@ public class Request {
     private String title;     // 제목
     private String content;   // 내용
     private boolean solved;   // 해결여부
-
+    @CreatedDate
+    private LocalDate CreateDate;  // 글작성일
     private int count;        // 조회수
     private int likes;
     @Builder
