@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -26,6 +27,7 @@ public class RequestService {
                 .classRoom(requestDto.getCId())
                 .content(requestDto.getContent())
                 .title(requestDto.getTitle())
+                .createDate(LocalDate.now())
                 .solved(false)
                 .count(0)
                 .likes(1)

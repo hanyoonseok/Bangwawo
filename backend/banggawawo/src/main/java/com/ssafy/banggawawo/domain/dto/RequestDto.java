@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,4 +22,5 @@ public class RequestDto {
     private String Content;         // 내용
     private Boolean Solved;         // 해결여부
     private int Count;              // 조회수
+    private LocalDate createDate;   // 생성 날짜
 }
