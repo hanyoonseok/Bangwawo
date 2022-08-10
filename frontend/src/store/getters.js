@@ -4,3 +4,7 @@ import state from "./state";
 export const getUserType = () => {
   return state.user.userType;
 };
+
+export const userInfo = () => {
+  return state.user;
+};

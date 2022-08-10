@@ -4,7 +4,7 @@
     <div class="mypage-container">
       <div class="profile-info">
         <profile-card
-          :user="userInfo"
+          :user="state.userInfo"
           :children="children"
           :toggleModifyModal="toggleModifyModal"
           @open-character-modal="openCharacterModal"
@@ -20,7 +20,7 @@
           <li class="nav-item" @click="doActive">종료된 수업</li>
         </ul>
         <lecture-area
-          :user="userInfo"
+          :user="state.userInfo"
           :isEnd="state.isEnd"
           :endClass="endClass"
           :scheduledClass="scheduledClass"
@@ -34,7 +34,7 @@
     /></transition>
     <ModifyModal
       v-if="isModifyOpen"
-      :user="userInfo"
+      :user="state.userInfo"
       @modifyInfo="modifyInfo"
     />
   </div>
@@ -42,7 +42,7 @@
 
 <script>
 import moment from "moment";
-import axios from "axios";
+import { useStore } from "vuex";
 import CalendarArea from "@/components/mypage/CalendarArea.vue";
 import ProfileCard from "@/components/mypage/ProfileCard.vue";
 import LectureArea from "@/components/mypage/LectureArea.vue";
@@ -65,22 +65,22 @@ export default {
     onMounted(() => {
       navItem = document.querySelectorAll(".nav-item");
     });
-
+    const store = useStore();
     let navItem;
     let isModifyOpen = ref(false);
     const isCharacterModalOpen = ref(false);
     const children = ref(null);
-    let userInfo = ref(null);
+    let state = reactive({
+      userInfo: store.state.root.user, //computed(() => store.getters["root/userInfo"]),
+      userType: store.state.root.user.userType, //computed(() => store.getters["root/getUserType"]),
+      isEnd: false,
+    });
 
     const getUserInfo = async () => {
-      userInfo.value = { ...JSON.parse(localStorage.getItem("user")) };
-      const userType = userInfo.value.userType;
-
-      if (userType === "parent") {
-        const response = await axios.get(
-          `${process.env.VUE_APP_API_URL}/parent/${userInfo.value.email}`,
-        );
-        children.value = response.data.childs;
+      if (state.userType === "parent") {
+        store
+          .dispatch("root/getChildren", state.userInfo.email)
+          .then((res) => (children.value = res.data.childs));
       }
     };
     getUserInfo();
@@ -206,9 +206,7 @@ export default {
       });
     };
     division();
-    const state = reactive({
-      isEnd: false,
-    });
+
     const doActive = (e) => {
       if (!e.target.classList.contains("active")) {
         e.target.classList.add("active");
@@ -241,36 +239,39 @@ export default {
 
     const modifyInfo = async (changeData) => {
       console.log(changeData);
-      if (userInfo.value.userType === "student") {
-        await axios
-          .put(`${process.env.VUE_APP_API_URL}/student`, {
-            sId: userInfo.value.sid,
+      if (state.userType === "student") {
+        store
+          .dispatch("root/modifyUserInfo", {
+            userType: "student",
+            sId: state.userInfo.sid,
             nickname: changeData,
           })
           .then((res) => {
+            store.commit("root/setModifiedStudentInfo", changeData);
             console.log(res);
           })
           .catch((err) => {
             console.log(err.message);
           });
-        userInfo.value.nickname = changeData;
-      } else if (userInfo.value.userType === "volunteer") {
-        await axios
-          .put(`${process.env.VUE_APP_API_URL}/volunteer`, {
-            vId: userInfo.value.vid,
+      } else if (state.userType === "volunteer") {
+        store
+          .dispatch("root/modifyUserInfo", {
+            userType: "volunteer",
+            vId: state.userInfo.vid,
             introduce: changeData,
           })
           .then((res) => {
+            store.commit("root/setModifiedVolunteerInfo", changeData);
             console.log(res);
           })
           .catch((err) => {
             console.log(err.message);
           });
-        userInfo.value.introduce = changeData;
-      } else if (userInfo.value.userType === "parent") {
-        await axios
-          .put(`${process.env.VUE_APP_API_URL}/parent`, {
-            email: userInfo.value.email,
+      } else if (state.userInfo.userType === "parent") {
+        store
+          .dispatch("root/modifyUserInfo", {
+            userType: "parent",
+            email: state.userInfo.email,
             password: changeData,
           })
           .then((res) => {
@@ -298,7 +299,6 @@ export default {
       toggleModifyModal,
       modifyInfo,
       children,
-      userInfo,
     };
   },
 };

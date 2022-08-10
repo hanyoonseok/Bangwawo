@@ -99,8 +99,7 @@ export default {
   name: "HeaderNav",
   setup() {
     const store = useStore();
-    console.log(store.state.root.user);
-    const user = ref(JSON.parse(localStorage.getItem("user")));
+    const user = ref(store.state.root.user);
 
     let isNoticeOpen = ref(false);
 
@@ -140,7 +139,7 @@ export default {
     };
 
     const logout = () => {
-      localStorage.removeItem("user");
+      store.commit("root/logoutUser");
       location.href = "/";
     };
 

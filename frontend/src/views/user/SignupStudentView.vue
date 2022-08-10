@@ -29,14 +29,14 @@ export default {
     const router = useRouter();
     const store = useStore();
 
-    registObj.value.character = {
-      bag: "FFD89B",
-      body: "f1f1f1",
-      dress: "FFAEAE",
-      glasses: "ff9696",
-      legs: "ff9696",
-      hat: "FFD89B",
-    };
+    registObj.value.character = [
+      { part: "bag", color: "FFD89B" },
+      { part: "body", color: "f1f1f1" },
+      { part: "dress", color: "FFAEAE" },
+      { part: "glasses", color: "ff9696" },
+      { part: "legs", color: "ff9696" },
+      { part: "hat", color: "FFD89B" },
+    ];
 
     const submitRegister = () => {
       registObj.value.pemail = emailValue.value;

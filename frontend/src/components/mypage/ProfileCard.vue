@@ -59,10 +59,10 @@
       <div class="img-hover-box">캐릭터 편집</div>
     </div>
 
-    <div class="person-info" v-if="user.status === 2">
+    <div class="person-info" v-if="user.userType === 'volunteer'">
       <label>자기소개</label>
       <div class="label-value introduce">
-        {{ user.description }}
+        {{ user.introduce }}
       </div>
       <textarea
         v-if="isModifyOpen"

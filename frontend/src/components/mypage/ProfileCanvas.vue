@@ -28,6 +28,7 @@ export default {
     watch(
       () => changeParts,
       (cur) => {
+        console.log(cur);
         // 지역변수 parts 값 변경 후 프로필 사진에 색 적용
         parts = cur.value;
         for (let object of INITIAL_MAP) {
