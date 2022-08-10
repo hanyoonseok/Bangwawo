@@ -1,11 +1,13 @@
 package com.ssafy.banggawawo.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,12 +38,13 @@ public class ClassRoom {
     private String title;        //제목
     private String introduce;   //소개글
     private Integer maxcnt;     //최대인원수
-    private Date stime;          //시작시간
-    private Date etime;          //종료시간
+
+    private LocalDateTime stime;          //시작시간
+    private LocalDateTime etime;          //종료시간
     private Boolean opened;      //공개여부
     private String thumbnail;       //썸네일
 
-    private Boolean state;       //상태  (대기, 끝)
+    private Integer state;       //상태  (0 : 대기, 1 : 수업중, 2 : 종료)
 
     //classroom 생성시 필요한 builder
     @Builder
@@ -50,8 +53,8 @@ public class ClassRoom {
                      //List<Enrol> enrols,
                      Request request,
                      String title, String introduce,
-                     Integer maxcnt, Date stime, Date etime,
-                     Boolean opened, String thumbnail, Boolean state) {
+                     Integer maxcnt, LocalDateTime stime, LocalDateTime etime,
+                     Boolean opened, String thumbnail, Integer state) {
         this.cId = cId;
         this.volunteer = volunteer;
         //this.enrols = enrols;

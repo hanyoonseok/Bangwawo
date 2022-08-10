@@ -2,23 +2,14 @@ package com.ssafy.banggawawo.controller;
 
 import com.ssafy.banggawawo.domain.dto.ClassDto;
 import com.ssafy.banggawawo.domain.dto.EnrolDto;
-import com.ssafy.banggawawo.domain.entity.ClassRoom;
-import com.ssafy.banggawawo.domain.entity.Volunteer;
 import com.ssafy.banggawawo.service.ClassService;
 import com.ssafy.banggawawo.service.EnrolService;
-import com.ssafy.banggawawo.service.StudentService;
-import com.ssafy.banggawawo.service.VolunteerService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
-import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -79,11 +70,15 @@ public class OpenviduController {
 
         //해당 봉사자가 해당 클래스 만든 경우에만 세션 작성
         // + 아직 만든적 없는 세션일 경우에만 세션 작성
-        if(classDto.getVId().getVId() == vid && !classDto.getState()){
+        if(classDto.getVId().getVId() == vid && classDto.getState() == 0){
             try {
                 this.mapSessions.put(cidStr, cid+cidStr);
                 this.mapSessionNamesTokens.put(cidStr, new ConcurrentHashMap<>());
                 this.mapSessionNamesTokens.get(cidStr).put(vid+"", "volunteer");
+
+                //class상태를 수업중으로 변경
+                classDto.setState(1);
+                classService.update(classDto);
 
                 return new ResponseEntity<>(mapSessions.get(cidStr), HttpStatus.OK);
             } catch (Exception e) {
@@ -105,8 +100,8 @@ public class OpenviduController {
             mapSessionNamesTokens.remove(cidStr);
             mapSessions.remove(cidStr);
 
-            //사용된 클래스 처리
-            classDto.setState(true);
+            //사용된 클래스 처리 (종료)
+            classDto.setState(2);
             classService.update(classDto);
             return new ResponseEntity<>(HttpStatus.OK);
         }
