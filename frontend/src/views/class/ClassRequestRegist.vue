@@ -49,7 +49,6 @@ export default {
     const submitRequestRegister = async () => {
       axios
         .post(`${process.env.VUE_APP_API_URL}/request`, {
-          student: userInfo.value,
           content: state.requestContent,
           title: state.requestTitle,
         })

@@ -35,7 +35,7 @@
                 }}
               </button>
               <div>
-                <button class="end-btn">
+                <button class="end-btn" @click="isConfirm.status = true">
                   <i class="fa-solid fa-trash-can"></i>&nbsp;삭제
                 </button>
                 <router-link
@@ -91,6 +91,16 @@
         </div>
       </article>
     </section>
+    <div class="confirm" v-if="isConfirm.status">
+      <div class="container">
+        <img src="@/assets/profile.png" alt="오리" />
+        <h4>정말로 삭제하시겠습니까?</h4>
+        <div class="btn-wrapper">
+          <button class="btn" @click="deleteRequest">네</button>
+          <button class="btn" @click="isConfirm.status = false">아니요</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -98,7 +108,7 @@
 import { ref, reactive } from "vue";
 import HeaderNav from "@/components/HeaderNav.vue";
 import axios from "axios";
-// import { useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";
 
 export default {
@@ -108,7 +118,7 @@ export default {
   },
   setup() {
     const route = useRoute();
-    // const router = useRouter();z
+    const router = useRouter();
     const post = ref({
       status: 1, // 0미해결 1해결
       link: {
@@ -117,6 +127,9 @@ export default {
         description:
           "오리 선생님이 역사 이야기를 해줄거에요sadfasdfsdㅁㄴㅇㄻㄴㅇㄹㄴㅇㄻㄴㅇㄹㄴㅇㅁ랴ㅐㅗㄴㅇㅁ래ㅕㅗㅁㄴㅇ륨아너로먄여로ㅑㅕㅗㄹㄷㅈㅁ러ㅏㅁㄴ오러ㅏㅁㅇ노러ㅏㄴ",
       },
+    });
+    const isConfirm = reactive({
+      status: false,
     });
 
     let userInfo = ref(null);
@@ -142,13 +155,24 @@ export default {
     };
     getRequest();
 
+    const deleteRequest = async () => {
+      axios
+        .delete(`${process.env.VUE_APP_API_URL}/request/${rid}`)
+        .then((response) => {
+          console.log(response);
+        });
+
+      router.push("/class/requestlist");
+    };
     return {
       getRequest,
       getUserInfo,
+      deleteRequest,
       userType,
       state,
       post,
       userId,
+      isConfirm,
       rid,
     };
   },

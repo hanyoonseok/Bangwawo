@@ -9,7 +9,7 @@
       <button class="signup-submit" @click="submitRegister">로그인</button>
     </div>
     <div class="duck-img">
-      <div class="guide">별명, 부모님 이메일을 알려줘~</div>
+      <div class="guide">부모님 이메일을 알려줘~</div>
       <img src="@/assets/signupDuck.png" />
     </div>
   </div>
