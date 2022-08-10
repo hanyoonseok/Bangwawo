@@ -81,8 +81,8 @@ export default {
     // const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
     // const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 
-    const OPENVIDU_SERVER_URL = "https://i7b201.p.ssafy.io";
-    const OPENVIDU_SERVER_SECRET = "BANGGWAWO_SECRET";
+    const OPENVIDU_SERVER_URL = process.env.VUE_APP_OV_DOMAIN;
+    const OPENVIDU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
     const OV = new OpenVidu();
 
     const state = reactive({
