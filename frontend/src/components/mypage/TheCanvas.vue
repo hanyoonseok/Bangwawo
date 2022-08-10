@@ -124,7 +124,7 @@ export default {
         for (let object of INITIAL_MAP) {
           let init_mtl = null;
           props.parts.forEach((item) => {
-            if (item.id === object.childID) {
+            if (item.part === object.childID) {
               init_mtl = new THREE.MeshPhongMaterial({
                 color: parseInt("0x" + item.color),
                 shininess: 10,
@@ -218,7 +218,7 @@ export default {
           shininess: 10,
         });
 
-        setMaterial(theModel, part.id, new_mtl);
+        setMaterial(theModel, part.part, new_mtl);
       }
     };
 

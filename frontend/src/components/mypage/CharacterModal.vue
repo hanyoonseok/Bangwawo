@@ -42,6 +42,7 @@ import TheCanvas from "@/components/mypage/TheCanvas.vue";
 export default {
   name: "CharacterModal",
   emits: ["close-character-modal"],
+  props: ["user"],
   components: {
     ColorPicker,
     TheCanvas,
@@ -112,7 +113,7 @@ export default {
     // 탭 눌렀을때 parts에 있는 id값에 맞춰 컬러 피커 색 변경
     const setPickerColor = (set) => {
       for (const item of parts) {
-        if (item.id === set) {
+        if (item.part === set) {
           change.color = "#" + item.color;
         }
       }
@@ -124,7 +125,15 @@ export default {
 
     // DB로 캐릭터 부위별 색상 값 보내기
     const saveCharacter = () => {
-      store.state.root.user.characterColors = parts;
+      const modifyInfo = {
+        character: parts,
+        userType: props.user.userType,
+      };
+      if (props.user.userType === "volunteer") modifyInfo.vid = props.user.vid;
+      else modifyInfo.sid = props.user.sid;
+
+      //store.dispatch("root/setCharacterInfo", modifyInfo);
+      store.commit("root/setCharacterInfo", parts);
       emit("close-character-modal");
     };
 

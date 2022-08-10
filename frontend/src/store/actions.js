@@ -48,3 +48,11 @@ export const getComingClasses = ({ state }, vid) => {
   const url = `/class?state=0&vid=${vid}`;
   return axios.get(url);
 };
+
+export const setCharacterInfo = ({ state }, modifyInfo) => {
+  console.log("setCharacterInfo", state, modifyInfo);
+  const url = `/${modifyInfo.userType}/${
+    modifyInfo.userType === "student" ? modifyInfo.sid : modifyInfo.vid
+  }`;
+  return axios.put(url, modifyInfo);
+};

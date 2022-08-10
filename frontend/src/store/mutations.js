@@ -20,3 +20,7 @@ export const setModifiedStudentInfo = (state, payload) => {
 export const setModifiedVolunteerInfo = (state, payload) => {
   state.user.introduce = payload;
 };
+
+export const setCharacterInfo = (state, payload) => {
+  state.user.character = payload;
+};

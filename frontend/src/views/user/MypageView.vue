@@ -31,6 +31,7 @@
       <CharacterModal
         v-if="isCharacterModalOpen"
         @close-character-modal="closeCharacterModal"
+        :user="state.userInfo"
     /></transition>
     <ModifyModal
       v-if="isModifyOpen"
