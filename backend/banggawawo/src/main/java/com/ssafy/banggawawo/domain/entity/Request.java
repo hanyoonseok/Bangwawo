@@ -30,11 +30,11 @@ public class Request {
     private String content;   // 내용
     private boolean solved;   // 해결여부
     @CreatedDate
-    private LocalDate CreateDate;  // 글작성일
+    private LocalDate createDate;  // 글작성일
     private int count;        // 조회수
     private int likes;
     @Builder
-    public Request(Student student, ClassRoom classRoom, String title, String content, Boolean solved, int count,int likes) {
+    public Request(Student student, ClassRoom classRoom, String title, String content, Boolean solved, int count,int likes,LocalDate createDate) {
         this.student = student;
         this.classRoom = classRoom;
         this.title = title;
@@ -42,6 +42,7 @@ public class Request {
         this.solved = solved;
         this.count = count;
         this.likes = likes;
+        this.createDate=createDate;
     }
 
 }
