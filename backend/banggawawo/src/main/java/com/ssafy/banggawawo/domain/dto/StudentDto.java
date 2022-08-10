@@ -39,9 +39,9 @@ public class StudentDto {
     ColorDto[] toArray(Character chr){
         ColorDto[] list = new ColorDto[6];
         list[0] = new ColorDto("body", chr.getBody());
-        list[1] = new ColorDto("legs", chr.getLegs());
+        list[1] = new ColorDto("foot", chr.getFoot());
         list[2] = new ColorDto("glasses", chr.getGlasses());
-        list[3] = new ColorDto("dress", chr.getDress());
+        list[3] = new ColorDto("clothes", chr.getClothes());
         list[4] = new ColorDto("bag", chr.getBag());
         list[5] = new ColorDto("hat", chr.getHat());
         return list;
