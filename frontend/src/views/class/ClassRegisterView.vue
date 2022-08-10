@@ -132,7 +132,6 @@ export default {
       if (input.files && input.files[0]) {
         var reader = new FileReader();
         reader.onload = (e) => {
-          console.log(e.target.result);
           state.preview = e.target.result;
         };
         reader.readAsDataURL(input.files[0]);
@@ -141,15 +140,10 @@ export default {
     };
 
     const classRegister = async () => {
-      console.log(state.classDate);
-
       const classDto = {
         vid: { vid: user.vid },
         title: state.title,
         introduce: state.introduce,
-        // dateStr: state.dateStr,
-        // stimeStr: state.stimeStr,
-        // etimeStr: state.etimeStr,
         maxcnt: state.maxcnt,
         opened: state.classOpen,
         thumbnail: state.thumbnail,
@@ -164,12 +158,11 @@ export default {
         classDto.opened === "" ||
         classDto.thumbnail === undefined
       ) {
-        console.log(classDto);
         isConfirm.status = true;
       } else {
         classDto.stime = state.dateStr + "T" + state.stimeStr;
         classDto.etime = state.dateStr + "T" + state.etimeStr;
-        console.log(formData);
+
         // 이미지 파일 등록
         await axios
           .post(`${process.env.VUE_APP_API_URL}/class/image`, formData, {
