@@ -9,18 +9,33 @@
         <div class="empty" @click="hideProfile"></div>
         <div class="img-box">
           <img src="@/assets/backhead.png" alt="오리 뒷모습" />
+          <!-- <img :src="state.thumbnail" alt="오리 뒷모습" /> -->
         </div>
-        <div class="title"><h3>오리 선생님의 수학수업</h3></div>
+        <div class="title">
+          <h3>{{ state.title }}</h3>
+        </div>
         <div class="content">
           <article>
             <div class="left-box round-post-card">
-              <img src="@/assets/banner-illust.png" class="left-box-img" />
+              <img
+                src="@/assets/thumbnail.png"
+                alt="썸네일이미지"
+                v-if="state.thumbnail.length === 0"
+                class="left-box-img"
+              />
+
+              <img
+                v-else
+                :src="'http://localhost:8081/api' + state.thumbnail"
+                alt="썸네일이미지"
+                class="left-box-img"
+              />
             </div>
             <div class="right-box">
               <div class="info-box">
                 <p class="info-title post-card">강사</p>
                 <p class="info-content">
-                  <span>김오리</span>
+                  <span>{{ state.vid.nickname }}</span>
                   <button @click="showProfile">
                     <i class="fa-solid fa-circle-info"></i>
                   </button>
@@ -28,27 +43,37 @@
               </div>
               <div class="info-box">
                 <p class="info-title post-card">강의 시간</p>
-                <p class="info-content">김오리</p>
+                <p class="info-content">
+                  {{ state.dateStr }} {{ state.stimeStr }} ~
+                  {{ state.etimeStr }}
+                </p>
               </div>
               <div class="info-box">
                 <p class="info-title post-card">수업 소개</p>
                 <p class="info-content">
-                  sdadsdassssssssssssssssssssssss라라라ㅏ라라랄라sssssssssssssssssssssssss
+                  {{ state.introduce }}
                 </p>
               </div>
               <div class="info-box">
                 <p class="info-title post-card">공개</p>
-                <p class="info-content">김오리</p>
+                <p class="info-content">
+                  {{ state.opened ? "공개" : "비공개" }}
+                </p>
               </div>
               <div class="info-box">
-                <p class="info-title post-card">인원</p>
-                <p class="info-content">김오리</p>
+                <p class="info-title post-card">정원</p>
+                <p class="info-content">{{ state.maxcnt }}</p>
               </div>
             </div>
           </article>
           <div class="button-box">
             <!-- 봉사자(2), 학생(1) -->
-            <div v-if="user.status === 2">
+            <div
+              v-if="
+                userInfo.userType === 'VOLUNTEER' &&
+                userInfo.vid === state.vid.vid
+              "
+            >
               <router-link :to="{ name: 'inclass' }">
                 <button class="class-status-btn">
                   수업 활성화
@@ -67,7 +92,9 @@
               <button v-if="user.subscribe === 1" class="class-entrance-btn">
                 수업 입장
               </button>
-              <button v-else class="class-subscribe-btn">수업 신청</button>
+              <button v-else class="class-subscribe-btn" @click="enrolClass">
+                수업 신청
+              </button>
             </div>
           </div>
         </div>
@@ -80,12 +107,12 @@
         <div class="profile-info">
           <div class="info-box">
             <p class="info-title post-card">이름</p>
-            <p class="info-content">김오리</p>
+            <p class="info-content">{{ state.vid.nickname }}</p>
           </div>
           <div class="info-box">
             <p class="info-title post-card">자기소개</p>
             <p class="info-content bg">
-              나는 아주 착한 봉사자 선한 봉사자 다정한 봉사자 내가 최고다
+              {{ state.vid.introduce }}
             </p>
           </div>
         </div>
@@ -106,7 +133,9 @@
 
 <script>
 import HeaderNav from "@/components/HeaderNav.vue";
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
+import { useRoute } from "vue-router";
+import axios from "axios";
 
 export default {
   name: "ClassDetailView",
@@ -115,19 +144,69 @@ export default {
     // RoundPostCard,
   },
   setup() {
-    const state = {
-      classTeacher: "김오리",
-      classTime: "22.07.20 13:00 ~ 15:00",
-      classContent:
-        "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
-      classOpen: true,
-      classPeople: "12/45",
+    const route = useRoute();
+
+    const userInfo = JSON.parse(localStorage.getItem("user"));
+    console.log(userInfo);
+    const cid = route.params.cid;
+
+    const state = ref([]);
+
+    // 수업 상세정보 가져오기
+    const getClassDetail = async () => {
+      axios
+        .get(`${process.env.VUE_APP_API_URL}/class/${cid}`)
+        .then((response) => {
+          state.value = response.data;
+          console.log(state.value);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     };
 
-    const user = {
+    getClassDetail();
+
+    // 해당 수업 신청한 학생중에 현재 사용자가 있는지 확인하기 위함
+    const getEnrolStudent = async () => {
+      axios
+        .get(`${process.env.VUE_APP_API_URL}/enrol/class/${cid}`)
+        .then((response) => {
+          console.log(response);
+          let flag = false;
+          for (const item of response.data) {
+            if (item.student.sid === userInfo.sid) {
+              flag = true;
+            }
+          }
+          user.subscribe = flag ? 1 : 0;
+        })
+        .catch((error) => {
+          error;
+        });
+    };
+
+    getEnrolStudent();
+
+    // 수업 신청하기
+    const enrolClass = () => {
+      axios
+        .post(`${process.env.VUE_APP_API_URL}/enrol`, {
+          cid: cid,
+          sid: userInfo.sid,
+        })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          error;
+        });
+    };
+
+    const user = reactive({
       status: 2,
       subscribe: 0,
-    };
+    });
 
     const showProfile = () => {
       if (document.querySelector(".profile").style.display === "block") {
@@ -150,8 +229,10 @@ export default {
     return {
       state,
       user,
+      userInfo,
       showProfile,
       hideProfile,
+      enrolClass,
       isConfirm,
     };
   },
