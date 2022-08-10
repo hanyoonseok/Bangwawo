@@ -4,9 +4,11 @@ package com.ssafy.banggawawo.domain.dto;
 import com.ssafy.banggawawo.domain.entity.Request;
 import com.ssafy.banggawawo.domain.entity.Volunteer;
 import lombok.*;
+import org.springframework.boot.autoconfigure.web.format.DateTimeFormatters;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter @Setter
@@ -17,14 +19,18 @@ public class ClassDto {
     private Request rId;          // 신청
     private String title;         // 제목
     private String introduce;     // 내용
-    private Date stime;           // 시작시간
-    private Date etime;           // 종료시간
+    private LocalDateTime stime;           // 시작시간
+    private LocalDateTime etime;           // 종료시간
     private Integer maxcnt;       // 최대 인원
     private Boolean opened;       // 공개여부
     private String thumbnail;     // 썸네일
-    private Boolean state;        // 상태
+    private Integer state;        // 상태 ( 0 : 대기중, 1 : 수업중 , 2 : 종료 )
 
-    public ClassDto setSearchfQuery(String title, Boolean opened, Boolean state, Long vid){
+    private String dateStr;     //수업 날짜
+    private String stimeStr;    //수업 시작 시간
+    private String etimeStr;    //수업 종료 시간
+
+    public ClassDto setSearchfQuery(String title, Boolean opened, Integer state, Long vid){
         this.title = title;
         this.opened = opened;
         this.state = state;
@@ -37,9 +43,9 @@ public class ClassDto {
                     Volunteer vId,
                     Request rId,
                     String title, String introduce,
-                    Date stime, Date etime,
+                    LocalDateTime stime, LocalDateTime etime,
                     Integer maxcnt, Boolean opened,
-                    String thumbnail, Boolean state) {
+                    String thumbnail, Integer state) {
         this.cId = cId;
         this.vId = vId;
         this.rId = rId;
@@ -51,5 +57,12 @@ public class ClassDto {
         this.opened = opened;
         this.thumbnail = thumbnail;
         this.state = state;
+        if(stime != null){
+            this.dateStr = stime.toLocalDate().toString();
+            this.stimeStr = stime.toLocalTime().toString();
+        }
+        if(etime != null){
+            this.etimeStr = etime.toLocalTime().toString();
+        }
     }
 }
