@@ -1,13 +1,14 @@
 <template>
-  <div v-if="user.status === 3" class="parent-profile">
+  <div v-if="user.userType === 'parent'" class="parent-profile">
     <div class="bookmark-area" @click="changeChildTab">
       <!--부모일경우 북마크 추가-->
       <div
         class="children-bookmark"
-        v-for="(children, index) in user.children"
+        v-for="(child, index) in children"
         :key="index"
+        @click="selectChild(child.nickname)"
       >
-        <div class="children-name">{{ children.name }}</div>
+        <div class="children-name">{{ child.nickname }}</div>
         <img src="@/assets/profile.png" />
       </div>
     </div>
@@ -21,28 +22,15 @@
             <i class="fa-solid fa-pen-to-square"></i>
             &nbsp;<span>비밀번호 변경</span>
           </li>
-
-          <li>
-            <i class="fa-solid fa-arrow-right-from-bracket"></i>
-            &nbsp;<span>회원탈퇴</span>
-          </li>
         </ul></i
       >
       <div>
         <img src="@/assets/profile.png" />
       </div>
-      <div class="person-info">
-        <label>이름</label>
-        <div class="label-value">
-          {{ user.children[state.childrenNo].name }}
-        </div>
-      </div>
 
       <div class="person-info">
         <label>별명</label>
-        <div class="label-value">
-          {{ user.children[state.childrenNo].nickname }}
-        </div>
+        <div class="label-value" v-text="selectedChild"></div>
       </div>
     </div>
   </div>
@@ -70,18 +58,11 @@
       <!-- <img src="@/assets/profile.png" /> -->
       <div class="img-hover-box">캐릭터 편집</div>
     </div>
-    <div class="person-info">
-      <label>이름</label>
-      <div class="label-value volunteer-value" v-if="user.status === 2">
-        {{ user.name }}
-      </div>
-      <div class="label-value" v-else>{{ user.name }}</div>
-    </div>
 
-    <div class="person-info" v-if="user.status === 2">
+    <div class="person-info" v-if="user.userType === 'volunteer'">
       <label>자기소개</label>
       <div class="label-value introduce">
-        {{ user.description }}
+        {{ user.introduce }}
       </div>
       <textarea
         v-if="isModifyOpen"
@@ -98,17 +79,25 @@
 </template>
 
 <script>
-import { reactive, onMounted } from "vue";
+import { reactive } from "vue";
 import ProfileCanvas from "@/components/mypage/ProfileCanvas.vue";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 export default {
-  props: ["user", "toggleModifyModal"],
+  props: ["user", "toggleModifyModal", "children"],
   emits: ["open-character-modal"],
   components: { ProfileCanvas },
   setup(props, { emit }) {
-    let bookmark;
     let isModalOpen = ref(false);
     let isModifyOpen = ref(false);
+    let selectedChild = ref(null);
+
+    watch(
+      () => props.children,
+      (cur) => {
+        selectedChild.value = props.children ? cur[0].nickname : "";
+      },
+      { deep: true },
+    );
 
     const toggleModal = () => {
       isModalOpen.value = !isModalOpen.value;
@@ -116,32 +105,9 @@ export default {
     const state = reactive({
       childrenNo: 0,
     });
-    onMounted(() => {
-      if (props.user.status === 3) {
-        bookmark = document.querySelectorAll(".children-name");
-        bookmark[0].parentNode.classList.add("active");
-      }
-    });
-    const changeChildTab = (e) => {
-      const parentBox = e.target.parentNode;
-      if (!parentBox.classList.contains("active")) {
-        parentBox.classList.add("active");
-        for (var i = 0; i < bookmark.length; ++i) {
-          if (e.target.innerText === bookmark[i].innerText) {
-            state.childrenNo = i;
-            break;
-          }
-        }
-      }
 
-      bookmark.forEach((item) => {
-        if (item.innerText !== e.target.innerText) {
-          const parent = item.parentNode;
-          if (parent.classList.contains("active")) {
-            parent.classList.remove("active");
-          }
-        }
-      });
+    const selectChild = (childName) => {
+      selectedChild.value = childName;
     };
 
     const openCharacterModal = () => {
@@ -149,13 +115,13 @@ export default {
     };
 
     return {
-      changeChildTab,
       toggleModal,
       isModalOpen,
-      bookmark,
       state,
       openCharacterModal,
       isModifyOpen,
+      selectedChild,
+      selectChild,
     };
   },
 };
