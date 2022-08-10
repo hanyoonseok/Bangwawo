@@ -72,10 +72,12 @@ section {
           height: 316px;
           margin-right: 80px;
           background-color: $white;
+          border-radius: 0 75px 75px 75px;
+
           .left-box-img {
             width: 100%;
             height: 100%;
-            border-radius: 40px;
+            border-radius: 0 75px 75px 75px;
           }
         }
 

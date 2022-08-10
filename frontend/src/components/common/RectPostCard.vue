@@ -17,7 +17,7 @@
       v-if="state.thumbnail.length !== 0 && state.preview === null"
     >
       <img
-        :src="'http://localhost:8081/api' + state.thumbnail"
+        :src="'http://localhost:8081/api/' + state.thumbnail"
         alt="썸네일이미지"
       />
     </div>

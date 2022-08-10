@@ -29,14 +29,14 @@ export default {
     const registObj = ref({ ...props });
     const router = useRouter();
 
-    registObj.value.character = {
-      bag: "FFD89B",
-      body: "f1f1f1",
-      dress: "FFAEAE",
-      glasses: "ff9696",
-      legs: "ff9696",
-      hat: "FFD89B",
-    };
+    registObj.value.character = [
+      { part: "bag", color: "FFD89B" },
+      { part: "body", color: "f1f1f1" },
+      { part: "dress", color: "ff9696" },
+      { part: "glasses", color: "FFD89B" },
+      { part: "legs", color: "ff9696" },
+      { part: "hat", color: "FFD89B" },
+    ];
 
     const submitRegister = async () => {
       registObj.value.pemail = emailValue.value;

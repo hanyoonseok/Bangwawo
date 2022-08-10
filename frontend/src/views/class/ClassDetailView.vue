@@ -18,6 +18,14 @@
           <article>
             <div class="left-box round-post-card">
               <img
+                src="@/assets/thumbnail.png"
+                alt="썸네일이미지"
+                v-if="state.thumbnail.length === 0"
+                class="left-box-img"
+              />
+
+              <img
+                v-else
                 :src="'http://localhost:8081/api' + state.thumbnail"
                 alt="썸네일이미지"
                 class="left-box-img"
@@ -84,7 +92,9 @@
               <button v-if="user.subscribe === 1" class="class-entrance-btn">
                 수업 입장
               </button>
-              <button v-else class="class-subscribe-btn">수업 신청</button>
+              <button v-else class="class-subscribe-btn" @click="enrolClass">
+                수업 신청
+              </button>
             </div>
           </div>
         </div>
@@ -142,6 +152,7 @@ export default {
 
     const state = ref([]);
 
+    // 수업 상세정보 가져오기
     const getClassDetail = async () => {
       axios
         .get(`${process.env.VUE_APP_API_URL}/class/${cid}`)
@@ -156,10 +167,39 @@ export default {
 
     getClassDetail();
 
-    const user = {
+    // 해당 수업 신청한 학생중에 현재 사용자가 있는지 확인하기 위함
+    const getEnrolStudent = async () => {
+      axios
+        .get(`${process.env.VUE_APP_API_URL}/enrol/class/${cid}`)
+        .then((response) => {
+          console.log(response);
+          let flag = false;
+          for (const item of response.data) {
+            if (item.student.sid === userInfo.sid) {
+              flag = true;
+            }
+          }
+          user.subscribe = flag ? 1 : 0;
+        })
+        .catch((error) => {
+          error;
+        });
+    };
+
+    getEnrolStudent();
+
+    // 수업 신청하기
+    const enrolClass = () => {
+      axios.post(`${process.env.VUE_APP_API_URL}/enrol`, {
+        cid: cid,
+        sid: userInfo.sid,
+      });
+    };
+
+    const user = reactive({
       status: 2,
       subscribe: 0,
-    };
+    });
 
     const showProfile = () => {
       if (document.querySelector(".profile").style.display === "block") {
@@ -185,6 +225,7 @@ export default {
       userInfo,
       showProfile,
       hideProfile,
+      enrolClass,
       isConfirm,
     };
   },
