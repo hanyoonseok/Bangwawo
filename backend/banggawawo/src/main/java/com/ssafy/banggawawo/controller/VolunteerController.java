@@ -1,6 +1,7 @@
 package com.ssafy.banggawawo.controller;
 
 import com.ssafy.banggawawo.domain.dto.VolunteerDto;
+import com.ssafy.banggawawo.domain.dto.VolunteerFrontDto;
 import com.ssafy.banggawawo.domain.entity.Volunteer;
 import com.ssafy.banggawawo.service.JwtService;
 import com.ssafy.banggawawo.service.VolunteerService;
@@ -11,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Api(value = "봉사자 관련 정보 처리")
 @RequiredArgsConstructor
@@ -35,7 +33,7 @@ public class VolunteerController {
             if(oVolunteer.isPresent()){
                 response.put("result", "SUCCESS");
                 response.put("type", "VOLUNTEER");
-                response.put("user", new VolunteerDto(oVolunteer.get()));
+                response.put("user", new VolunteerFrontDto(new VolunteerDto(oVolunteer.get())));
             }else{
                 throw new Exception("일치하는 회원정보가 존재하지 않습니다.");
             }
@@ -49,13 +47,13 @@ public class VolunteerController {
 
     @ApiOperation(value="봉사자 회원가입", notes="봉사자 정보를 입력받아 회원가입 후 JWT토큰 발급")
     @PostMapping("/")
-    public Map<String, Object> saveVolunteer(@RequestBody VolunteerDto value){
+    public Map<String, Object> saveVolunteer(@RequestBody VolunteerFrontDto value){
         Map<String, Object> response = new HashMap<>();
 
         try{
-            VolunteerDto volunteer = new VolunteerDto(volunteerService.create(value));
+            VolunteerDto volunteer = new VolunteerDto(volunteerService.create(new VolunteerDto(value)));
             response.put("result", "SUCCESS");
-            response.put("JWT", jwtService.create("Volunteer", volunteer));
+            response.put("JWT", jwtService.create("Volunteer", new VolunteerFrontDto(volunteer)));
         }catch(Exception e){
             response.put("result", "FAIL");
             response.put("reason", "회원가입 실패");
@@ -79,7 +77,7 @@ public class VolunteerController {
                 volunteer.setIntroduce(introduce);
                 Volunteer result = volunteerService.save(volunteer);
                 response.put("result", "SUCCESS");
-                response.put("user", new VolunteerDto(result));
+                response.put("user", new VolunteerFrontDto(new VolunteerDto(result)));
             } else {
                 throw new Exception("일치하는 회원정보가 존재하지 않습니다.");
             }
@@ -119,7 +117,11 @@ public class VolunteerController {
     public Map<String, Object> findByVolunteerTalkable(){
         Map<String, Object> response = new HashMap<>();
         try{
-            List<Volunteer> volunteers = volunteerService.findByTalkable();
+            List<Volunteer> vls = volunteerService.findByTalkable();
+            List<VolunteerFrontDto> volunteers = new ArrayList<VolunteerFrontDto>();
+            for(Volunteer v : vls){
+                volunteers.add(new VolunteerFrontDto(new VolunteerDto(v)));
+            }
             response.put("result", "SUCCESS");
             response.put("volunteers", volunteers);
         }catch (Exception e){

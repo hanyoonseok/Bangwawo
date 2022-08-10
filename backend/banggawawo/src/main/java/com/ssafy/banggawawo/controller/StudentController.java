@@ -2,6 +2,7 @@ package com.ssafy.banggawawo.controller;
 
 import com.ssafy.banggawawo.domain.dto.MailDto;
 import com.ssafy.banggawawo.domain.dto.StudentDto;
+import com.ssafy.banggawawo.domain.dto.StudentFrontDto;
 import com.ssafy.banggawawo.domain.entity.Student;
 import com.ssafy.banggawawo.service.JwtService;
 import com.ssafy.banggawawo.service.MailService;
@@ -39,7 +40,7 @@ public class StudentController {
             if(oStudent.isPresent()){
                 response.put("result", "SUCCESS");
                 response.put("type", "STUDENT");
-                response.put("user", new StudentDto(oStudent.get()));
+                response.put("user", new StudentFrontDto(new StudentDto(oStudent.get())));
             }else{
                 throw new Exception("일치하는 회원정보가 존재하지 않습니다.");
             }
@@ -54,7 +55,7 @@ public class StudentController {
 
     @ApiOperation(value="학생 회원가입", notes="학생 정보를 입력받아 회원가입 후 JWT 토큰 발급")
     @PostMapping("")
-    public Map<String, Object> saveStudent(@RequestBody StudentDto value){
+    public Map<String, Object> saveStudent(@RequestBody StudentFrontDto value){
         Map<String, Object> response = new HashMap<>();
         try{
             List<Student> childs = studentService.findByPemail(value.getPemail());
@@ -65,14 +66,13 @@ public class StudentController {
                 // 새 부모 계정일 경우, 임시 비밀번호 발급 후 이메일 전송
                 MailDto mail = mailService.createMailAndChangePassword(value.getPemail(), value.getNickname());
                 value.setPpw(mail.getTmpPassword());
-
-                mailService.mailSend(mail);
+//                mailService.mailSend(mail);
             }
-            StudentDto student = new StudentDto(studentService.create(value));
+            StudentDto student = new StudentDto(studentService.create(new StudentDto(value)));
 
             student.setPpw("");
             response.put("result", "SUCCESS");
-            response.put("JWT", jwtService.create("STUDENT", student));
+            response.put("JWT", jwtService.create("STUDENT", new StudentFrontDto(student)));
 
         }catch(Exception e){
             response.put("result", "FAIL");
