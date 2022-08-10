@@ -1,7 +1,11 @@
 package com.ssafy.banggawawo.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.banggawawo.domain.dto.ColorDto;
 import com.ssafy.banggawawo.domain.dto.VolunteerDto;
 import com.ssafy.banggawawo.domain.dto.VolunteerFrontDto;
+import com.ssafy.banggawawo.domain.entity.Character;
 import com.ssafy.banggawawo.domain.entity.Volunteer;
 import com.ssafy.banggawawo.service.JwtService;
 import com.ssafy.banggawawo.service.VolunteerService;
@@ -9,6 +13,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +28,7 @@ public class VolunteerController {
     private final VolunteerService volunteerService;
     private final JwtService jwtService;
 
-    @ApiOperation(value="봉사자 정보 조회", notes="봉사자 id(vId)를 입력받아 봉사자 정보 제공")
+    @ApiOperation(value="봉사자 정보 조회", notes="봉사자 id를 입력받아 봉사자 정보 제공")
     @GetMapping("/{id}")
     public Map<String, Object> findByVolunteerId(
             @ApiParam(value="봉사자 id", required=true, example="1")
@@ -62,19 +68,49 @@ public class VolunteerController {
         return response;
     }
 
-    @ApiOperation(value="봉사자 정보 수정", notes="봉사자 id와 자기소개를 입력받아 그대로 내용 수정\n" +
-            "vId : 봉사자 id, introduce : 수정할 자기소개 내용")
-    @PutMapping("/")
+    @ApiOperation(value="봉사자 자기소개 수정", notes="봉사자 id와 자기소개를 입력받아 그대로 내용 수정\n" +
+            "id : 봉사자 id, introduce : 수정할 자기소개 내용")
+    @PutMapping("/introduce")
     public Map<String, Object> updateIntroduce(@RequestBody Map<String, Object> request){
-        Long vId = Long.parseLong(request.get("vId").toString());
+        Long id = Long.parseLong(request.get("id").toString());
         String introduce = request.get("introduce").toString();
         Map<String, Object> response = new HashMap<>();
 
         try {
-            Optional<Volunteer> oVolunteer = volunteerService.findById(vId);
+            Optional<Volunteer> oVolunteer = volunteerService.findById(id);
             if (oVolunteer.isPresent()) {
                 Volunteer volunteer = oVolunteer.get();
                 volunteer.setIntroduce(introduce);
+                Volunteer result = volunteerService.save(volunteer);
+                response.put("result", "SUCCESS");
+                response.put("user", new VolunteerFrontDto(new VolunteerDto(result)));
+            } else {
+                throw new Exception("일치하는 회원정보가 존재하지 않습니다.");
+            }
+        }catch (Exception e){
+            System.out.println("에러 메세지 : " + e.getMessage());
+            e.printStackTrace();
+            response.put("result", "FAIL");
+            response.put("reason", e.getMessage());
+        }
+        return response;
+    }
+
+    @ApiOperation(value="봉사자 캐릭터 수정", notes="봉사자 id와 캐릭터 정보를 입력받아 그대로 내용 수정\n" +
+            "id : 봉사자 id, character : 수정할 캐릭터 정보")
+        @PutMapping("/character")
+    public Map<String, Object> updateCharacter(@RequestBody Map<String, Object> request){
+        Long id = Long.parseLong(request.get("id").toString());
+        ObjectMapper mapper = new ObjectMapper();
+        ColorDto[] character = mapper.convertValue(request.get("character"), new TypeReference<List<ColorDto>>() {}).toArray(new ColorDto[0]);
+
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            Optional<Volunteer> oVolunteer = volunteerService.findById(id);
+            if (oVolunteer.isPresent()) {
+                Volunteer volunteer = oVolunteer.get();
+                volunteer.setCharacter(volunteerService.toClass(character));
                 Volunteer result = volunteerService.save(volunteer);
                 response.put("result", "SUCCESS");
                 response.put("user", new VolunteerFrontDto(new VolunteerDto(result)));
@@ -155,5 +191,7 @@ public class VolunteerController {
         }
         return response;
     }
+
+
 
 }

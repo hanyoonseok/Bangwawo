@@ -1,6 +1,8 @@
 package com.ssafy.banggawawo.service;
 
+import com.ssafy.banggawawo.domain.dto.ColorDto;
 import com.ssafy.banggawawo.domain.dto.StudentDto;
+import com.ssafy.banggawawo.domain.entity.Character;
 import com.ssafy.banggawawo.domain.entity.Student;
 import com.ssafy.banggawawo.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,5 +60,10 @@ public class StudentService {
 
     public int updatePpw(String email, String password) {
         return studentRepository.updatePpw(email, password);
+    }
+
+    public Character toClass(ColorDto[] arr){
+        return new Character(arr[0].getColor(), arr[1].getColor(), arr[2].getColor(),
+                arr[3].getColor(), arr[4].getColor(), arr[5].getColor());
     }
 }

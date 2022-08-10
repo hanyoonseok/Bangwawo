@@ -1,6 +1,8 @@
 package com.ssafy.banggawawo.service;
 
+import com.ssafy.banggawawo.domain.dto.ColorDto;
 import com.ssafy.banggawawo.domain.dto.VolunteerDto;
+import com.ssafy.banggawawo.domain.entity.Character;
 import com.ssafy.banggawawo.domain.entity.Student;
 import com.ssafy.banggawawo.domain.entity.Volunteer;
 import com.ssafy.banggawawo.repository.VolunteerRepository;
@@ -55,5 +57,10 @@ public class VolunteerService {
     @Transactional(readOnly = true)
     public List<Volunteer> findByTalkable() {
         return volunteerRepository.findByTalkable(true);
+    }
+
+    public Character toClass(ColorDto[] arr){
+        return new Character(arr[0].getColor(), arr[1].getColor(), arr[2].getColor(),
+                arr[3].getColor(), arr[4].getColor(), arr[5].getColor());
     }
 }
