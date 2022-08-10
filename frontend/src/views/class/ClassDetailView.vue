@@ -17,7 +17,11 @@
         <div class="content">
           <article>
             <div class="left-box round-post-card">
-              <img src="@/assets/banner-illust.png" class="left-box-img" />
+              <img
+                :src="'http://localhost:8081/api' + state.thumbnail"
+                alt="썸네일이미지"
+                class="left-box-img"
+              />
             </div>
             <div class="right-box">
               <div class="info-box">
