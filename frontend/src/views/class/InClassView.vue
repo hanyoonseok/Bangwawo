@@ -26,44 +26,6 @@
       @activeMute="activeMute"
       @publishScreenShare="publishScreenShare"
     />
-    <!-- <div id="session" v-if="state.session">
-      <div id="session-header">
-        <h1 id="session-title">{{ state.mySessionId }}</h1>
-        <input
-          class="btn btn-large btn-danger"
-          type="button"
-          id="buttonLeaveSession"
-          @click="leaveSession"
-          value="Leave session"
-        />
-      </div>
-      <div id="main-video" class="col-md-6">
-        <user-video
-          :stream-manager="state.mainStreamManager"
-          v-if="state.isHost && state.session"
-          :dataLen="dataLen"
-          :currentUsers="currentUsers"
-          :leaveSession="leaveSession"
-          :me="state.publisher"
-          :subs="state.subscribers"
-          @activeVideo="activeVideo"
-          @activeMute="activeMute"
-          @click="updateMainVideoStreamManager(state.publisher)"
-        />
-      </div>
-      <div id="video-container" class="col-md-6">
-        <user-video
-          :stream-manager="state.publisher"
-          @click="updateMainVideoStreamManager(state.publisher)"
-        />
-        <user-video
-          v-for="sub in state.subscribers"
-          :key="sub.stream.connection.connectionId"
-          :stream-manager="sub"
-          @click="updateMainVideoStreamManager(sub)"
-        />
-      </div>
-    </div> -->
   </section>
 </template>
 
@@ -101,7 +63,7 @@ export default {
         videoSource: undefined, // The source of video. If undefined default webcam
         publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
         publishVideo: true, // Whether you want to start publishing with your video enabled or not
-        resolution: "600x320", // The resolution of your video
+        resolution: "1280x720", // The resolution of your video
         frameRate: 30, // The frame rate of your video
         insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
         mirror: false, // Whether to mirror your local video or not
