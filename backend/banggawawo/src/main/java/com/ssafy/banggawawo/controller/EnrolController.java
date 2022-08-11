@@ -23,9 +23,9 @@ public class EnrolController {
         this.enrolService = enrolService;
     }
 
-    @ApiOperation("수강신청 등록하기")
+    @ApiOperation(value = "수강신청 등록하기", notes = "필수 : sid, cid")
     @PostMapping()
-    public ResponseEntity<EnrolDto> save(@ApiParam("필수 : sid, cid") @RequestBody EnrolDto enrolDto) throws Exception{
+    public ResponseEntity<EnrolDto> save(@RequestBody EnrolDto enrolDto) throws Exception{
         try{    //이미 수강신청 했는지 확인 
             enrolService.findByClassAndStudent(enrolDto.getCId().getCId(), enrolDto.getSId().getSId());
         }catch(Exception e){    //수강신청 안했으면 저장해줌

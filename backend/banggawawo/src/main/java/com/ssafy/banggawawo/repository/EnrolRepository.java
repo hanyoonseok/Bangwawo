@@ -11,4 +11,7 @@ public interface EnrolRepository  extends JpaRepository<Enrol, Long>, JpaSpecifi
     List<Enrol> findEnrolsByStudent_sId(Long sid) throws Exception;
     List<Enrol> findEnrolsByClasses_cId(Long cid) throws Exception;
     Enrol findEnrolByClasses_cIdAndStudent_sId(Long cid, Long sid) throws Exception;
+    Long countEnrolsByClasses_cId(Long cid) throws Exception;
+
+    void deleteAllByClasses_cId(Long cid) throws Exception;
 }
