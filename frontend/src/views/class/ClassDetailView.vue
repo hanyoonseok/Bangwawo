@@ -19,7 +19,7 @@
               <img
                 src="@/assets/thumbnail.png"
                 alt="썸네일이미지"
-                v-if="classInfo.thumbnail.length === 0"
+                v-if="classInfo.thumbnail"
                 class="left-box-img"
               />
 
@@ -61,7 +61,6 @@
               </div>
               <div class="info-box">
                 <p class="info-title post-card">정원</p>
-
                 <p class="info-content">
                   {{ classInfo.enrolcnt }} / {{ classInfo.maxcnt }}
                 </p>
@@ -108,22 +107,23 @@
             <div v-else>
               <!-- 수업 신청을 했고(1) 수업 시작한 경우(1) -->
               <button
-                v-if="user.subscribe === 1 && classInfo.state === 1"
+                v-if="user.subscribe && classInfo.state === 1"
                 class="class-entrance-btn"
                 id="ing"
+                @click="entranceClass"
               >
                 수업 입장
               </button>
-              <!-- 수업 신청을 했고(1) 수업 시작한 경우(0) -->
+              <!-- 수업 신청을 했고(1) 수업 시작 안 한 경우(0) -->
               <button
-                v-else-if="user.subscribe === 1 && classInfo.state === 0"
+                v-else-if="user.subscribe && classInfo.state === 0"
                 class="class-entrance-btn"
               >
                 수업 대기
               </button>
-              <!-- 수업 신청을 안했고(0) 수업 시작 안한 경우(0) -->
+              <!-- 수업 신청을 안했고(0) 수업 시작 안 한 경우(0) -->
               <button
-                v-else-if="user.subscribe === 0 && classInfo.state === 0"
+                v-else-if="!user.subscribe && classInfo.state === 0"
                 class="class-subscribe-btn"
                 @click="enrolClass"
               >
@@ -132,7 +132,7 @@
               <!-- 수업 신청을 안했고(0) 수업 시작 한 경우(1) -->
               <button
                 v-else-if="
-                  (user.subscribe === 0 && classInfo.state === 1) ||
+                  (!user.subscribe && classInfo.state === 1) ||
                   classInfo.enrolcnt >= classInfo.maxcnt
                 "
                 class="class-subscribe-btn"
@@ -180,7 +180,6 @@
 <script>
 import HeaderNav from "@/components/HeaderNav.vue";
 import { reactive, ref } from "vue";
-
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 
@@ -191,7 +190,6 @@ export default {
   },
   setup() {
     const route = useRoute();
-
     const router = useRouter();
     const store = useStore();
     const userInfo = reactive(store.state.root.user);
@@ -205,7 +203,6 @@ export default {
         .dispatch("root/getClassDetail", cid)
         .then((response) => {
           classInfo.value = response.data;
-          console.log(classInfo.value);
         })
         .catch((error) => {
           console.log(error);
@@ -289,13 +286,40 @@ export default {
         });
     };
 
+    let mySessionId = "";
+    // 봉사자가 수업 활성화
     const startClass = () => {
       classInfo.value.state = 1;
+      console.log(userInfo.vid, cid);
+
+      store
+        .dispatch("root/startVolunteerClass", { vid: userInfo.vid, cid })
+        .then((response) => {
+          console.log(response.data);
+          mySessionId = response.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
       store
         .dispatch("root/modifyClass", classInfo.value)
         .then((response) => {
           console.log(response);
-          router.push({ name: "inclass" });
+          router.push({ name: "inclass", params: { mySessionId } });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    //학생이 수업 입장
+    const entranceClass = () => {
+      store
+        .dispatch("root/entranceClass", { sid: userInfo.sid, cid })
+        .then((response) => {
+          console.log(response);
+          router.push({ name: "inclass", params: { mySessionId } });
         })
         .catch((err) => {
           console.log(err);
@@ -312,6 +336,8 @@ export default {
       isConfirm,
       deleteClass,
       startClass,
+      mySessionId,
+      entranceClass,
     };
   },
 };

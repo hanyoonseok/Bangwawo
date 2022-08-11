@@ -11,7 +11,8 @@
         >
           <div class="lecture-thumb">
             <div class="state-btn">
-              <i class="fa-solid fa-circle"></i> &nbsp; 예정
+              <i class="fa-solid fa-circle"></i> &nbsp;
+              {{ statusText(lecture.state) }}
             </div>
           </div>
           <div class="lecture-info">
@@ -42,7 +43,8 @@
         >
           <div class="lecture-thumb">
             <div class="end-btn">
-              <i class="fa-solid fa-circle"></i> &nbsp; 종료
+              <i class="fa-solid fa-circle"></i> &nbsp;
+              {{ statusText(lecture.state) }}
             </div>
           </div>
           <div class="lecture-info">
@@ -64,6 +66,23 @@
 <script>
 export default {
   props: ["isEndTab", "user", "comingClass", "endClass"],
+  setup(props) {
+    const statusText = (state) => {
+      if (props.user.userType === "volunteer") {
+        if (state === 0) return "예정";
+        else if (state === 1) return "수업중";
+        else return "종료";
+      } else {
+        if (state === 0) return "예정";
+        else if (state === 1) return "수업중";
+        else return "종료";
+      }
+    };
+
+    return {
+      statusText,
+    };
+  },
 };
 </script>
 

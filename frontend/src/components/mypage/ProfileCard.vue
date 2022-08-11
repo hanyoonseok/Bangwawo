@@ -119,17 +119,13 @@ export default {
     };
 
     const deleteUser = () => {
+      store.dispatch("root/deleteUser", props.user);
       store
-        .dispatch("root/deleteUser", props.user)
+        .dispatch("root/deleteKakaoInfo", props.user.accessToken)
         .then(() => {
-          store
-            .dispatch("root/deleteKakaoInfo", props.user.accessToken)
-            .then(() => {
-              store.commit("root/logoutUser");
-              router.push("/");
-            });
-        })
-        .catch((err) => alert(err.message));
+          store.commit("root/logoutUser");
+          router.push("/");
+        });
     };
 
     return {

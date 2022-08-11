@@ -111,7 +111,7 @@ export default {
             classes.value = res.data;
 
             classes.value.forEach((e) => {
-              if (e.classes.state === 0) {
+              if (e.classes.state === 0 || e.classes.state === 1) {
                 console.log("예정");
                 comingClass.value.push(e.classes);
               } else if (e.classes.state === 2) {
