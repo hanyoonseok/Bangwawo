@@ -139,8 +139,10 @@ export default {
     };
 
     const logout = () => {
-      store.commit("root/logoutUser");
-      location.href = "/";
+      store.dispatch("root/inactiveKakaoToken", user.accessToken).then(() => {
+        store.commit("root/logoutUser");
+        location.href = "/";
+      });
     };
 
     return {

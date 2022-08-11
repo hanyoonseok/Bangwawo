@@ -17,13 +17,13 @@
       <div class="lecture-container">
         <ul class="lecture-nav">
           <li
-            :class="{ 'nav-item': true, active: !state.isEndedMenuActive }"
+            :class="{ 'nav-item': true, active: !state.isEndTab }"
             @click="doMenuActive"
           >
             예정된 수업
           </li>
           <li
-            :class="{ 'nav-item': true, active: state.isEndedMenuActive }"
+            :class="{ 'nav-item': true, active: state.isEndTab }"
             @click="doMenuActive"
           >
             종료된 수업
@@ -31,7 +31,7 @@
         </ul>
         <lecture-area
           :user="state.userInfo"
-          :isEnd="state.isEnd"
+          :isEndTab="state.isEndTab"
           :endClass="endClass"
           :comingClass="comingClass"
         ></lecture-area>
@@ -41,6 +41,7 @@
       <CharacterModal
         v-if="isCharacterModalOpen"
         @close-character-modal="closeCharacterModal"
+        :user="state.userInfo"
     /></transition>
     <ModifyModal
       v-if="isModifyOpen"
@@ -51,7 +52,7 @@
 </template>
 
 <script>
-import moment from "moment";
+// import moment from "moment";
 import { useStore } from "vuex";
 import CalendarArea from "@/components/mypage/CalendarArea.vue";
 import ProfileCard from "@/components/mypage/ProfileCard.vue";
@@ -82,7 +83,7 @@ export default {
     let state = reactive({
       userInfo: store.state.root.user, //computed(() => store.getters["root/userInfo"]),
       userType: store.state.root.user.userType, //computed(() => store.getters["root/getUserType"]),
-      isEnd: false,
+      isEndTab: false,
     });
     let classes = ref([]);
     let endClass = ref([]);
@@ -99,28 +100,26 @@ export default {
     };
     getUserInfo();
 
-    const getUserClasses = () => {
+    const getUserClasses = async () => {
       if (state.userType === "parent") {
         console.log("hi");
       } else if (state.userType === "student") {
-        store
+        await store
           .dispatch("root/getStudentClasses", state.userInfo.sid)
           .then((res) => {
             console.log(res);
             classes.value = res.data;
-          });
 
-        classes.value.forEach((e) => {
-          if (
-            moment(e.classStartTime).isBefore(
-              moment().format("YYYY-MM-DD HH:mm:ss"),
-            )
-          ) {
-            comingClass.push(e);
-          } else {
-            endClass.push(e);
-          }
-        });
+            classes.value.forEach((e) => {
+              if (e.classes.state === 0) {
+                console.log("예정");
+                comingClass.value.push(e.classes);
+              } else if (e.classes.state === 2) {
+                console.log("완료");
+                endClass.value.push(e.classes);
+              }
+            });
+          });
       } else if (state.userType === "volunteer") {
         store
           .dispatch("root/getEndedClasses", state.userInfo.vid)
@@ -139,18 +138,21 @@ export default {
     };
     getUserClasses();
 
-    // 나중에 수정해야할것같은데 일단 해놓음.
-    // 종료된거랑 종료 전이랑 어떻게 나눌지...
-    // 아마 데이터 받아오면 mutation? 어디지 암튼 거기서 나눠줘야하나?
-
-    const doActive = (e) => {
+    const doMenuActive = (e) => {
       if (!e.target.classList.contains("active")) {
         e.target.classList.add("active");
       }
       if (e.target.innerText === "예정된 수업") {
-        state.isEndedMenuActive = false;
+        if (state.isEndTab) {
+          state.isEndTab = !state.isEndTab;
+        }
+        navItem[1].classList.remove("active");
       } else {
-        state.isEndedMenuActive = true;
+        //만약 종료된수업을 눌렀다면!
+        if (!state.isEndTab) {
+          state.isEndTab = !state.isEndTab;
+        }
+        navItem[0].classList.remove("active");
       }
     };
 
@@ -172,12 +174,11 @@ export default {
         store
           .dispatch("root/modifyUserInfo", {
             userType: "student",
-            sId: state.userInfo.sid,
+            id: state.userInfo.sid,
             nickname: changeData,
           })
-          .then((res) => {
+          .then(() => {
             store.commit("root/setModifiedStudentInfo", changeData);
-            console.log(res);
           })
           .catch((err) => {
             console.log(err.message);
@@ -186,12 +187,11 @@ export default {
         store
           .dispatch("root/modifyUserInfo", {
             userType: "volunteer",
-            vId: state.userInfo.vid,
+            id: state.userInfo.vid,
             introduce: changeData,
           })
-          .then((res) => {
+          .then(() => {
             store.commit("root/setModifiedVolunteerInfo", changeData);
-            console.log(res);
           })
           .catch((err) => {
             console.log(err.message);
@@ -220,7 +220,7 @@ export default {
       classes,
       endClass,
       comingClass,
-      doActive,
+      doMenuActive,
       openCharacterModal,
       closeCharacterModal,
       isModifyOpen,

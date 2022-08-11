@@ -61,6 +61,7 @@
               </div>
               <div class="info-box">
                 <p class="info-title post-card">정원</p>
+
                 <p class="info-content">
                   {{ classInfo.enrolcnt }} / {{ classInfo.maxcnt }}
                 </p>
@@ -179,6 +180,7 @@
 <script>
 import HeaderNav from "@/components/HeaderNav.vue";
 import { reactive, ref } from "vue";
+
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 
@@ -189,6 +191,7 @@ export default {
   },
   setup() {
     const route = useRoute();
+
     const router = useRouter();
     const store = useStore();
     const userInfo = reactive(store.state.root.user);
@@ -202,6 +205,7 @@ export default {
         .dispatch("root/getClassDetail", cid)
         .then((response) => {
           classInfo.value = response.data;
+          console.log(classInfo.value);
         })
         .catch((error) => {
           console.log(error);
@@ -220,9 +224,10 @@ export default {
           for (const item of response.data) {
             if (item.student.sid === userInfo.sid) {
               flag = true;
+              break;
             }
           }
-          user.subscribe = flag ? 1 : 0;
+          user.subscribe = flag;
         })
         .catch((error) => {
           error;
@@ -240,6 +245,7 @@ export default {
         })
         .then((response) => {
           console.log(response);
+          user.subscribe = true;
         })
         .catch((error) => {
           error;
