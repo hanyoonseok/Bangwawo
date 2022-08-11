@@ -1,7 +1,11 @@
 package com.ssafy.banggawawo.controller;
 
 import com.ssafy.banggawawo.domain.dto.ClassDto;
+import com.ssafy.banggawawo.domain.entity.Likes;
+import com.ssafy.banggawawo.domain.entity.Request;
 import com.ssafy.banggawawo.service.ClassService;
+import com.ssafy.banggawawo.service.LikesService;
+import com.ssafy.banggawawo.service.RequestService;
 import com.ssafy.banggawawo.util.FileUploadUtil;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -19,6 +23,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/class")
@@ -28,17 +33,36 @@ public class ClassController {
     public ClassController(ClassService classService){
         this.classService = classService;
     }
+
+    @Autowired
+    private RequestService requestservice;
+
+    @Autowired
+    private LikesService likeService;
+
+
     @ApiOperation(value = "수업 생성")
     @PostMapping
     public ResponseEntity<?> save(@RequestBody ClassDto classDto) throws Exception{
         return new ResponseEntity<>(classService.save(classDto), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "수업 생성")
+    @ApiOperation(value = "개설 요청에 대한 수업 생성")
     @PostMapping("/{rid}")
-    public ResponseEntity<?> save(@RequestBody ClassDto classDto,@RequestParam(value = "rid") int rid) throws Exception{
-        return new ResponseEntity<>(classService.save(classDto), HttpStatus.OK);
+    public ResponseEntity<?> save(@RequestBody ClassDto classDto,@PathVariable("rid") Long rid) throws Exception{
+        Optional<Request> orequest = requestservice.readonly(rid);
+        if (orequest.isPresent()) {
+            orequest.get().setSolved(true);
+            requestservice.update(orequest.get());
+        }
 
+        List<Likes> result = likeService.likesList(rid);
+        for (int i =0; i<result.size();i++){
+            //특정 수업이 개설되면 위수업을 듣고 싶어했던 모든 학생들의 opened를 (false->true)로 바꿔 준다.
+            result.get(i).setLOpened(true);
+            likeService.updateboolean(result.get(i));
+        }
+        return new ResponseEntity<>(classService.save(classDto), HttpStatus.OK);
     }
 
     @ApiOperation(value = "이미지 등록")
