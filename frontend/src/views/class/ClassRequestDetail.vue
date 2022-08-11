@@ -162,13 +162,14 @@ export default {
       isVisibleNoticeImg: false,
     });
     const requestInfo = ref("");
+    const classInfo = ref("");
 
     const rid = route.params.rid;
     const getRequest = async () => {
-      axios
+      await axios
         .get(`${process.env.VUE_APP_API_URL}/request/${rid}`)
         .then((response) => {
-          console.log(response.data.requsest);
+          console.log(response.data);
           requestInfo.value = response.data.requsest;
           state.createDate = requestInfo.value.createDate;
           state.nickname = requestInfo.value.student.nickname;
@@ -220,6 +221,7 @@ export default {
       post,
       userInfo,
       isConfirm,
+      classInfo,
       requestInfo,
       rid,
     };

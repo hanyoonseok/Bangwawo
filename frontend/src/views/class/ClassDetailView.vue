@@ -1,7 +1,7 @@
 <template>
   <div class="background">
     <HeaderNav />
-    <section>
+    <section v-if="classInfo">
       <div class="back-btn-wrapper" @click="$router.go(-1)">
         <button class="back-btn"></button>
       </div>
@@ -9,18 +9,33 @@
         <div class="empty" @click="hideProfile"></div>
         <div class="img-box">
           <img src="@/assets/backhead.png" alt="오리 뒷모습" />
+          <!-- <img :src="state.thumbnail" alt="오리 뒷모습" /> -->
         </div>
-        <div class="title"><h3>오리 선생님의 수학수업</h3></div>
+        <div class="title">
+          <h3>{{ classInfo.title }}</h3>
+        </div>
         <div class="content">
           <article>
             <div class="left-box round-post-card">
-              <img src="@/assets/banner-illust.png" class="left-box-img" />
+              <img
+                src="@/assets/thumbnail.png"
+                alt="썸네일이미지"
+                v-if="classInfo.thumbnail"
+                class="left-box-img"
+              />
+
+              <img
+                v-else
+                :src="'http://localhost:8081/api' + classInfo.thumbnail"
+                alt="썸네일이미지"
+                class="left-box-img"
+              />
             </div>
             <div class="right-box">
               <div class="info-box">
                 <p class="info-title post-card">강사</p>
                 <p class="info-content">
-                  <span>김오리</span>
+                  <span>{{ classInfo.vid.nickname }}</span>
                   <button @click="showProfile">
                     <i class="fa-solid fa-circle-info"></i>
                   </button>
@@ -28,27 +43,37 @@
               </div>
               <div class="info-box">
                 <p class="info-title post-card">강의 시간</p>
-                <p class="info-content">김오리</p>
+                <p class="info-content">
+                  {{ classInfo.dateStr }} {{ classInfo.stimeStr }} ~
+                  {{ classInfo.etimeStr }}
+                </p>
               </div>
               <div class="info-box">
                 <p class="info-title post-card">수업 소개</p>
                 <p class="info-content">
-                  sdadsdassssssssssssssssssssssss라라라ㅏ라라랄라sssssssssssssssssssssssss
+                  {{ classInfo.introduce }}
                 </p>
               </div>
               <div class="info-box">
                 <p class="info-title post-card">공개</p>
-                <p class="info-content">김오리</p>
+                <p class="info-content">
+                  {{ classInfo.opened ? "공개" : "비공개" }}
+                </p>
               </div>
               <div class="info-box">
-                <p class="info-title post-card">인원</p>
-                <p class="info-content">김오리</p>
+                <p class="info-title post-card">정원</p>
+                <p class="info-content">{{ classInfo.maxcnt }}</p>
               </div>
             </div>
           </article>
           <div class="button-box">
             <!-- 봉사자(2), 학생(1) -->
-            <div v-if="user.status === 2">
+            <div
+              v-if="
+                userInfo.userType === 'VOLUNTEER' &&
+                userInfo.vid === classInfo.vid.vid
+              "
+            >
               <router-link :to="{ name: 'inclass' }">
                 <button class="class-status-btn">
                   수업 활성화
@@ -67,7 +92,9 @@
               <button v-if="user.subscribe === 1" class="class-entrance-btn">
                 수업 입장
               </button>
-              <button v-else class="class-subscribe-btn">수업 신청</button>
+              <button v-else class="class-subscribe-btn" @click="enrolClass">
+                수업 신청
+              </button>
             </div>
           </div>
         </div>
@@ -80,12 +107,12 @@
         <div class="profile-info">
           <div class="info-box">
             <p class="info-title post-card">이름</p>
-            <p class="info-content">김오리</p>
+            <p class="info-content">{{ classInfo.vid.nickname }}</p>
           </div>
           <div class="info-box">
             <p class="info-title post-card">자기소개</p>
             <p class="info-content bg">
-              나는 아주 착한 봉사자 선한 봉사자 다정한 봉사자 내가 최고다
+              {{ classInfo.vid.introduce }}
             </p>
           </div>
         </div>
@@ -106,7 +133,10 @@
 
 <script>
 import HeaderNav from "@/components/HeaderNav.vue";
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
+import { useStore } from "vuex";
+import { useRoute } from "vue-router";
+import axios from "axios";
 
 export default {
   name: "ClassDetailView",
@@ -115,31 +145,69 @@ export default {
     // RoundPostCard,
   },
   setup() {
-    const state = {
-      classTeacher: "김오리",
-      classTime: "22.07.20 13:00 ~ 15:00",
-      classContent:
-        "김오리의 수학수업이다. 김오리의 수학쉅이다. 김오리 수학 수업 김올",
-      classOpen: true,
-      classPeople: "12/45",
+    const route = useRoute();
+    const store = useStore();
+    const userInfo = store.state.root.user;
+    const cid = route.params.cid;
+    const classInfo = ref(null);
+
+    // 수업 상세정보 가져오기
+    const getClassDetail = async () => {
+      axios
+        .get(`${process.env.VUE_APP_API_URL}/class/${cid}`)
+        .then((response) => {
+          classInfo.value = response.data;
+          console.log(classInfo.value);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     };
 
-    // // 학생로그인이 안돼서 임시로 사용. 지워야함.
-    // const stuInfo = {
-    //   ageRange: 10,
-    //   character: {
-    //     body: "f1f1f1",
-    //     legs: "ff9696",
-    //     glasses: "ff9696",
-    //     dress: "FFAEAE",
-    //     bag: "FFD89B",
-    //     hat: "FFD89B",
-    //   },
-    //   kakaoId: "2374106679",
-    //   nickname: "김수빈",
-    //   userType: "student",
-    //   sid: 666,
-    // };
+    getClassDetail();
+
+    // 해당 수업 신청한 학생중에 현재 사용자가 있는지 확인하기 위함
+    const getEnrolStudent = async () => {
+      axios
+        .get(`${process.env.VUE_APP_API_URL}/enrol/class/${cid}`)
+        .then((response) => {
+          console.log(response);
+          let flag = false;
+          for (const item of response.data) {
+            if (item.student.sid === userInfo.sid) {
+              flag = true;
+              break;
+            }
+          }
+          user.subscribe = flag;
+        })
+        .catch((error) => {
+          error;
+        });
+    };
+
+    getEnrolStudent();
+
+    // 수업 신청하기
+    const enrolClass = () => {
+      axios
+        .post(`${process.env.VUE_APP_API_URL}/enrol`, {
+          cid: { cid },
+          sid: { sid: userInfo.sid },
+        })
+        .then((response) => {
+          console.log(response);
+          user.subscribe = true;
+        })
+        .catch((error) => {
+          error;
+        });
+    };
+
+    const user = reactive({
+      status: 2,
+      subscribe: 0,
+    });
 
     const showProfile = () => {
       if (document.querySelector(".profile").style.display === "block") {
@@ -160,10 +228,12 @@ export default {
     });
 
     return {
-      state,
-      // stuInfo,
+      classInfo,
+      user,
+      userInfo,
       showProfile,
       hideProfile,
+      enrolClass,
       isConfirm,
     };
   },

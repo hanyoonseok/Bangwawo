@@ -73,27 +73,25 @@ html {
     font-size: 33px;
   }
 }
+.search-bar {
+  @include flexCenter;
+  margin-bottom: 120px;
 
-.maked {
-  .search-bar {
-    @include flexCenter;
-    margin-bottom: 120px;
-
-    input {
-      width: 832px;
-      @include Input;
-    }
-    .search-btn {
-      width: 44px;
-      height: 44px;
-      background-color: $yellow;
-      border-radius: 50%;
-      font-size: 20px;
-      color: $white;
-      margin-left: 28px;
-    }
+  input {
+    width: 832px;
+    @include Input;
   }
-
+  .search-btn {
+    width: 44px;
+    height: 44px;
+    background-color: $yellow;
+    border-radius: 50%;
+    font-size: 20px;
+    color: $white;
+    margin-left: 28px;
+  }
+}
+.maked {
   .contents {
     height: auto;
     margin: 0 148px;

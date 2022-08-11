@@ -24,19 +24,21 @@ import { useStore } from "vuex";
 
 export default {
   name: "SignupUpVolunteer",
-  props: ["isUser", "ageRange", "kakaoId", "nickname"],
+  props: ["isUser", "ageRange", "kakaoId", "nickname", "accessToken"],
   setup(props) {
     let emailValue = ref("");
     const registObj = ref({ ...props });
     const router = useRouter();
     const store = useStore();
 
+    console.log(props);
+
     registObj.value.character = [
-      { part: "bag", color: "FFD89B" },
-      { part: "body", color: "f1f1f1" },
-      { part: "clothes", color: "FFAEAE" },
-      { part: "glasses", color: "ff9696" },
+      { part: "body", color: "fffffb" },
       { part: "foot", color: "ff9696" },
+      { part: "glasses", color: "ff9696" },
+      { part: "clothes", color: "FFAEAE" },
+      { part: "bag", color: "FFD89B" },
       { part: "hat", color: "FFD89B" },
     ];
 
@@ -46,6 +48,7 @@ export default {
       store
         .dispatch("root/loginUser", registObj.value)
         .then((res) => {
+          res.data.accessToken = props.accessToken;
           store.commit("root/setUserInfo", res.data);
           router.push("/class/list");
         })

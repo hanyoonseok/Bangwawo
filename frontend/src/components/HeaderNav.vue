@@ -152,8 +152,10 @@ export default {
     };
 
     const logout = () => {
-      store.commit("root/logoutUser");
-      location.href = "/";
+      store.dispatch("root/inactiveKakaoToken", user.accessToken).then(() => {
+        store.commit("root/logoutUser");
+        location.href = "/";
+      });
     };
 
     //클래스 오픈 알람

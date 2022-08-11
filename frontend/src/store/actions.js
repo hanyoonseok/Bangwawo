@@ -15,7 +15,7 @@ export const loginUser = ({ state }, payload) => {
 
 export const getUserInfo = ({ state }, code) => {
   console.log("getUserInfo", state, code);
-  const url = `/kakao/${code}`;
+  const url = `/kakao/login/${code}`;
   return axios.get(url);
 };
 
@@ -27,7 +27,13 @@ export const getChildren = ({ state }, email) => {
 
 export const modifyUserInfo = ({ state }, payload) => {
   console.log("modifyStudentInfo", state, payload);
-  const url = `/${payload.userType}/`;
+  const field =
+    payload.userType === "student"
+      ? "/nickname"
+      : payload.userType === "volunteer"
+      ? "/introduce"
+      : "";
+  const url = `/${payload.userType}${field}`;
   return axios.put(url, payload);
 };
 
@@ -46,5 +52,43 @@ export const getEndedClasses = ({ state }, vid) => {
 export const getComingClasses = ({ state }, vid) => {
   console.log("getComingClasses", state, vid);
   const url = `/class?state=0&vid=${vid}`;
+  return axios.get(url);
+};
+
+export const setCharacterInfo = ({ state }, modifyInfo) => {
+  console.log("setCharacterInfo", state, modifyInfo);
+  const url = `/${modifyInfo.userType}/character`;
+  return axios.put(url, modifyInfo);
+};
+
+export const deleteUser = ({ state }, payload) => {
+  console.log("deleteUser", state, payload);
+  const url = `/${payload.userType}/${payload.vid || payload.sid}`;
+  return axios.delete(url);
+};
+
+export const deleteKakaoInfo = ({ state }, accessToken) => {
+  console.log("deleteKakaoInfo", state, accessToken);
+  const url = `/kakao/delete/${accessToken}`;
+  return axios.get(url);
+};
+
+export const inactiveKakaoToken = ({ state }, accessToken) => {
+  console.log("inactiveKakaoToken", state, accessToken);
+  const url = `/kakao/logout/${accessToken}`;
+  return axios.get(url);
+};
+
+// 봉사자가 세션 만들기
+export const startVolunteerClass = ({ state }, payload) => {
+  console.log("startClass", state, payload);
+  const url = `/session/class/start/${payload.cid}/${payload.vid}`;
+  return axios.get(url);
+};
+
+//학생이 수업 입장하기
+export const entranceClass = ({ state }, payload) => {
+  console.log("entranceClass", state, payload);
+  const url = `/session/class/join/${payload.cid}/${payload.sid}`;
   return axios.get(url);
 };
