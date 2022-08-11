@@ -80,12 +80,14 @@
           <RectPostCard :state="state" />
         </div>
       </article>
-      <button class="register-btn">등록</button>
+      <button class="register-btn" @click="resolveRequest">등록</button>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+import { useRoute } from "vue-router";
 import HeaderNav from "@/components/HeaderNav.vue";
 import RectPostCard from "@/components/common/RectPostCard.vue";
 import { reactive } from "vue";
@@ -95,6 +97,7 @@ export default {
     RectPostCard,
   },
   setup() {
+    const route = useRoute();
     const state = reactive({
       className: "",
       classDate: "",
@@ -106,6 +109,8 @@ export default {
       classContent: "",
       classImgFile: "",
     });
+    const rid = route.params.rid;
+
     const fileChange = (e) => {
       var input = e.target;
       if (input.files && input.files[0]) {
@@ -117,9 +122,22 @@ export default {
       }
     };
 
+    // 수업 생성시 요청 해결
+    const resolveRequest = () => {
+      axios
+        .post(`${process.env.VUE_APP_API_URL}/likes/opened`, {
+          rid: rid,
+        })
+        .then((response) => {
+          console.log(response);
+        });
+    };
+
     return {
       state,
       fileChange,
+      resolveRequest,
+      rid,
     };
   },
 };

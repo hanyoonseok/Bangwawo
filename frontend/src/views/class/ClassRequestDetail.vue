@@ -48,7 +48,7 @@
               <div
                 v-if="
                   state.userType === 'student' &&
-                  state.userInfo.sid === state.requestPost.student.sid
+                  state.userInfo.sid === state.postSid
                 "
               >
                 <button class="end-btn" @click="isConfirm.status = true">
@@ -155,6 +155,7 @@ export default {
 
     let state = reactive({
       requestPost: {},
+      postSid: null,
       nickname: "",
       createDate: ["", "", ""],
       isVisibleNoticeImg: false,
@@ -171,6 +172,7 @@ export default {
           state.requestPost = response.data.requsest;
           state.nickname = state.requestPost.student.nickname;
           state.createDate = state.requestPost.createDate;
+          state.postSid = state.requestPost.student.sid;
         });
     };
 
@@ -197,8 +199,18 @@ export default {
         }
       },
     );
-
-    const addLikeRequest = () => {};
+    const addLikeRequest = () => {
+      axios
+        .post(`${process.env.VUE_APP_API_URL}/likes`, {
+          rid: rid,
+          sid: state.postSid,
+        })
+        .then((response) => {
+          console.log(response);
+          // 좋아요 누르면 다시 정보 받아오기.
+          getRequest();
+        });
+    };
 
     return {
       getRequest,

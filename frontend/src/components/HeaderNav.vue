@@ -30,7 +30,9 @@
         <router-link :to="{ name: 'classlist' }" class="list"
           >수업목록</router-link
         >
-        <router-link :to="{ name: 'classregister' }" class="list"
+        <router-link
+          :to="{ name: 'classregister', params: { rid: -1 } }"
+          class="list"
           >수업등록</router-link
         >
         <router-link :to="{ name: 'classrequest' }" class="list"
