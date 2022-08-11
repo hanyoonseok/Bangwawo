@@ -124,7 +124,6 @@ public class ClassService {
 
         //정렬
         list = list.stream().sorted((o1, o2) -> (int)(o2.getCId() - o1.getCId())).collect(Collectors.toList());
-
         //time 바꿔주기
         List<ClassDto> list2 = list.stream().map(classRoom -> trans(classRoom)).collect(Collectors.toList());
 

@@ -91,4 +91,20 @@ public class EnrolService {
     public EnrolDto findByClassAndStudent(Long cid, Long sid) throws Exception {
         return trans(enrolRepository.findEnrolByClasses_cIdAndStudent_sId(cid,sid));
     }
+
+    @Transactional
+    public boolean deleteByClassId(Long cid) throws Exception {
+        try{
+            enrolRepository.deleteAllByClasses_cId(cid);
+            return true;
+        }catch(Exception e){
+            return false;
+        }
+    }
+
+    @Transactional
+    public Long countEnrolsByClassId(Long cid) throws Exception {
+        Long tmp = enrolRepository.countEnrolsByClasses_cId(cid);
+        return tmp;
+    }
 }
