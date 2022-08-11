@@ -74,7 +74,7 @@ export default {
         .then((res) => {
           // console.log(res);
           allClasses = res.data;
-          // console.log(allClasses);
+          console.log(allClasses);
           const openArray = [];
           const makedArray = [];
           for (const item of allClasses) {
