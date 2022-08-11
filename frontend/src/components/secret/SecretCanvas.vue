@@ -7,17 +7,26 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { onMounted } from "vue";
+import { reactive, onMounted, watch } from "vue";
 
 export default {
   name: "SecretCanvas",
-  props: ["parts", "user"],
+  props: [
+    "parts",
+    "user",
+    "isSubscribeTalking",
+    "isPublisherTalking",
+    "isPublisher",
+  ],
   setup(props) {
     // Initial material
     // const store = useStore();
     const INITIAL_MTL = new THREE.MeshPhongMaterial({
       color: 0xffcb57,
       shininess: 10,
+    });
+    const state = reactive({
+      actionStanding: undefined,
     });
 
     const INITIAL_MAP = [
@@ -76,16 +85,7 @@ export default {
     dirLight.position.set(50, 50, 50);
     dirLight.castShadow = false; //광원이 그림자 생성
 
-    // const dirLight2 = new THREE.DirectionalLight(0xffffff, 0.1);
-    // dirLight2.position.set(0, 0, 1000);
-    // dirLight2.castShadow = false; //광원이 그림자 생성
-    // dirLight2.shadow.mapSize = new THREE.Vector2(1024, 1024);
-    // // Add directional Light to scene
-
     scene.add(dirLight);
-    // // scene.add(light);
-    // scene.add(dirLight2);
-    // scene.add(dirLight2);
     renderer.shadowMap.enabled = true;
 
     // Add controls
@@ -93,7 +93,7 @@ export default {
     controls.maxPolarAngle = Math.PI / 2;
     controls.minPolarAngle = Math.PI / 3;
     controls.enableDamping = true;
-    controls.enableZoom = true;
+    controls.enableZoom = false;
     controls.enablePan = false;
     controls.dampingFactor = 0.1;
     controls.autoRotate = false; // Toggle this if you'd like the chair to automatically rotate
@@ -148,11 +148,10 @@ export default {
         console.error(error);
       },
     );
-
     const standing = () => {
       let clip = THREE.AnimationClip.findByName(clips, "stand");
-      let action = mixer.clipAction(clip);
-      action.play();
+      state.actionStanding = mixer.clipAction(clip);
+      state.actionStanding.play();
     };
     const clock = new THREE.Clock();
 
@@ -197,12 +196,48 @@ export default {
         }
       });
     };
-
     onMounted(() => {
       document.getElementById(props.user).appendChild(renderer.domElement);
       animate();
     });
 
+    watch(
+      () => {
+        props.isPublisherTalking;
+      },
+      () => {
+        playTalkingAnimation("publisher", props.isPublisherTalking);
+      },
+      { deep: true },
+    );
+    watch(
+      () => {
+        props.isSubscribeTalking;
+      },
+      () => {
+        playTalkingAnimation("subscriber", props.isSubscribeTalking);
+      },
+      { deep: true },
+    );
+
+    const playTalkingAnimation = (talkingUser, isTalking) => {
+      console.log("안올거냐 ㅠㅠㅠㅠ 너무하다", talkingUser);
+      let clip = THREE.AnimationClip.findByName(clips, "talking");
+      let actionTalking = mixer.clipAction(clip);
+      if (props.user === talkingUser && isTalking) {
+        console.log("이제좀돼라");
+        actionTalking.timeScale = 1;
+        actionTalking.clampWhenFinished = true;
+        state.actionStanding.stop();
+        actionTalking.setLoop(0, 1);
+        actionTalking.stop();
+        actionTalking.play();
+        setTimeout(() => {
+          actionTalking.stop();
+          state.actionStanding.play();
+        }, 3500);
+      }
+    };
     return {
       scene,
       renderer,
@@ -211,6 +246,8 @@ export default {
       animate,
       initColor,
       standing,
+      playTalkingAnimation,
+      state,
     };
   },
 };

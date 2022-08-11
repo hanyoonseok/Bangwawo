@@ -1,5 +1,8 @@
 <template>
-  <div v-if="streamManager" style="position: relative">
+  <div
+    v-if="streamManager"
+    style="position: relative; height: 100%; object-fit: cover"
+  >
     <ov-video :stream-manager="streamManager" />
     <div class="nameTag">
       <!-- <p>{{ state.clientData }}</p> -->
@@ -25,6 +28,7 @@ export default {
         return clientData;
       }),
     });
+
     const getConnectionData = () => {
       console.log(props.streamManager.stream);
       const { connection } = props.streamManager.stream;

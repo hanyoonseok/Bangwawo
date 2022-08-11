@@ -32,7 +32,8 @@ export default {
 
     video.addEventListener("play", () => {
       const canvas = faceapi.createCanvasFromMedia(video);
-      //document.body.append(canvas);
+      console.log(canvas, video.width);
+      document.body.append(canvas);
       // const displaySize = { width: video.width, height: video.height };
       const displaySize = { width: 300, height: 200 };
       faceapi.matchDimensions(canvas, displaySize);
@@ -46,7 +47,7 @@ export default {
           displaySize,
         );
         if (resizedDetections.length > 0) {
-          console.log(resizedDetections[0].expressions);
+          // console.log(resizedDetections[0].expressions);
         }
         //canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
         faceapi.draw.drawFaceExpressions(canvas, resizedDetections); // 감정 상태
@@ -57,8 +58,14 @@ export default {
 </script>
 <style scoped>
 video {
+  object-fit: cover;
   width: 100%;
   height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  border-radius: 20px;
 }
 canvas {
   position: absolute;

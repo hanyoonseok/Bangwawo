@@ -4,7 +4,10 @@
       <article
         :class="{
           'top-left': true,
-          host: true,
+          'host-2orless': subs.length < 2,
+          'host-4orless': subs.length < 4 && subs.length >= 2,
+          'host-6orless': subs.length < 6 && subs.length >= 4,
+          'host-12orless': subs.length >= 6,
           expand: !state.isTopOpen && !state.isChatOpen,
         }"
       >
@@ -14,13 +17,16 @@
         <div class="idx-btn-wrapper prev" @click="prevClick">
           <button class="idx-btn prev"></button>
         </div>
-        <div class="user-card-wrapper">
+        <div id="container-screens">
+          <h4>화면 공유</h4>
+        </div>
+        <div class="user-card-wrapper" id="myVideo">
           <div class="hover-wrapper">나</div>
-          <div class="user-card"><OvVideo :stream-manager="me" /></div>
+          <div class="user-card"><user-video :stream-manager="me" /></div>
         </div>
         <div class="user-card-wrapper" v-for="(user, i) in subs" :key="user.id">
           <div class="hover-wrapper">이름{{ i }}</div>
-          <div class="user-card"><OvVideo :stream-manager="user" /></div>
+          <div class="user-card"><user-video :stream-manager="user" /></div>
         </div>
       </article>
 
@@ -42,17 +48,29 @@
 
     <section class="bot-section">
       <article class="bot-left">
-        <button class="option-btn red">
+        <button class="option-btn" @click="activeMute" v-if="state.audioState">
+          <i class="fa-solid fa-microphone-slash"></i>
+          &nbsp;음소거
+        </button>
+        <button class="option-btn" @click="activeMute" v-else>
           <i class="fa-solid fa-microphone-slash"></i>
           &nbsp;음소거 해제
         </button>
-        <button class="option-btn">
+        <button class="option-btn" @click="activeVideo" v-if="state.videoState">
+          <i class="fa-solid fa-video"></i>
+          &nbsp;비디오 중지
+        </button>
+        <button class="option-btn" @click="activeVideo" v-else>
           <i class="fa-solid fa-video"></i>
           &nbsp;비디오 시작
         </button>
-        <button class="option-btn">
+        <button
+          class="option-btn"
+          @click="publishScreenShare"
+          id="screenShareStart"
+        >
           <i class="fa-solid fa-arrow-up-from-square"></i>
-          &nbsp;화면 공유
+          &nbsp;화면 공유 시작
         </button>
         <button class="option-btn" @click="toggleOX()">&nbsp;OX 퀴즈</button>
 
@@ -81,7 +99,7 @@ import ParticipantsList from "@/components/class/ParticipantsList.vue";
 import ChatForm from "@/components/class/ChatForm.vue";
 import OXForm from "@/components/class/OXForm.vue";
 import OXResult from "@/components/class/OXResult.vue";
-import OvVideo from "./OvVideo";
+import UserVideo from "@/components/class/UserVideo.vue";
 
 export default {
   name: "HostView",
@@ -95,14 +113,17 @@ export default {
     "subs",
     "session",
     "chats",
+    "screen",
   ],
-  setup(props) {
+  setup(props, { emit }) {
     const state = reactive({
       isParticipantsOpen: false,
       isChatOpen: false,
       isOXOpen: false,
       isTopOpen: false,
       isOXResult: false,
+      videoState: true, // 비디오 on,off
+      audioState: true, // 소리 on,off
 
       clientData: computed(() => {
         const { clientData } = getConnectionData();
@@ -136,11 +157,38 @@ export default {
       state.isChatOpen = !state.isChatOpen;
     };
 
+    const activeVideo = () => {
+      state.videoState = !state.videoState;
+      const myVideo = document.getElementById("myVideo");
+      const userCard = myVideo.querySelector(".user-card");
+      const video = userCard.querySelector("video");
+      if (state.videoState === false) {
+        userCard.style.backgroundColor = "#000";
+        video.style.display = "none";
+      } else {
+        userCard.style.backgroundColor = "transparent";
+        video.style.display = "block";
+      }
+      emit("activeVideo", state.videoState);
+    };
+
+    const activeMute = () => {
+      state.audioState = !state.audioState;
+      emit("activeMute", state.audioState);
+    };
+
+    const publishScreenShare = () => {
+      emit("publishScreenShare");
+    };
+
     return {
       state,
       toggleParticipants,
       toggleChat,
       toggleOX,
+      activeVideo,
+      activeMute,
+      publishScreenShare,
     };
   },
   components: {
@@ -148,9 +196,20 @@ export default {
     ChatForm,
     OXForm,
     OXResult,
-    OvVideo,
+    UserVideo,
   },
 };
 </script>
 
-<style scoped src="@/css/class.scss" lang="scss"></style>
+<style scoped src="@/css/class.scss" lang="scss">
+/* .top-section ::v-deep(#container-screens video) {
+  width: 100px;
+  height: 100px;
+} */
+
+#container-screens video {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+</style>
