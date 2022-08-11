@@ -25,6 +25,7 @@ public class LikesService {
         Likes likes = Likes.builder()
                 .sId(likesDto.getSId())
                 .rId(likesDto.getRId())
+                .rTitle(likesDto.getRTitle())
                 .lOpened(false)
                 .lRead(false)
                 .build();
