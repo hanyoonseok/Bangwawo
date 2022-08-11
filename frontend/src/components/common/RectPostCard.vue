@@ -26,7 +26,7 @@
       <div class="division">
         <label class="detail">{{ state.introduce }}</label>
         <label class="participants"
-          ><i class="fa-solid fa-user"></i>&nbsp;{{ state.currentCnt }}</label
+          ><i class="fa-solid fa-user"></i>&nbsp;{{ state.enrolcnt }}</label
         >
       </div>
     </div>

@@ -61,7 +61,9 @@
               </div>
               <div class="info-box">
                 <p class="info-title post-card">정원</p>
-                <p class="info-content">{{ classInfo.maxcnt }}</p>
+                <p class="info-content">
+                  {{ classInfo.enrolcnt }} / {{ classInfo.maxcnt }}
+                </p>
               </div>
             </div>
           </article>
@@ -73,11 +75,30 @@
                 userInfo.vid === classInfo.vid.vid
               "
             >
-              <router-link :to="{ name: 'inclass' }">
-                <button class="class-status-btn">
-                  수업 활성화
-                </button></router-link
+              <button
+                class="class-status-btn"
+                @click="startClass"
+                v-if="classInfo.state === 0"
+                id="start"
               >
+                수업 활성화
+              </button>
+              <button
+                class="class-status-btn"
+                @click="startClass"
+                id="ing"
+                v-else-if="classInfo.state === 1"
+              >
+                수업 진행중
+              </button>
+              <button
+                class="class-status-btn"
+                id="end"
+                @click="startClass"
+                v-else
+              >
+                수업 종료
+              </button>
 
               <router-link
                 :to="{ name: 'classmodify', params: { cid: classInfo.cid } }"
@@ -90,12 +111,40 @@
               </button>
             </div>
             <div v-else>
-              <!-- 수업 신청한 경우(1), 수업 신청 안한 경우(0) -->
-              <button v-if="user.subscribe === 1" class="class-entrance-btn">
+              <!-- 수업 신청을 했고(1) 수업 시작한 경우(1) -->
+              <button
+                v-if="user.subscribe === 1 && classInfo.state === 1"
+                class="class-entrance-btn"
+                id="ing"
+              >
                 수업 입장
               </button>
-              <button v-else class="class-subscribe-btn" @click="enrolClass">
+              <!-- 수업 신청을 했고(1) 수업 시작한 경우(0) -->
+              <button
+                v-else-if="user.subscribe === 1 && classInfo.state === 0"
+                class="class-entrance-btn"
+              >
+                수업 대기
+              </button>
+              <!-- 수업 신청을 안했고(0) 수업 시작 안한 경우(0) -->
+              <button
+                v-else-if="user.subscribe === 0 && classInfo.state === 0"
+                class="class-subscribe-btn"
+                @click="enrolClass"
+              >
                 수업 신청
+              </button>
+              <!-- 수업 신청을 안했고(0) 수업 시작 한 경우(1) -->
+              <button
+                v-else-if="
+                  (user.subscribe === 0 && classInfo.state === 1) ||
+                  classInfo.enrolcnt >= classInfo.maxcnt
+                "
+                class="class-subscribe-btn"
+                id="end"
+                @click="enrolClass"
+              >
+                수업 신청 불가
               </button>
             </div>
           </div>
@@ -240,6 +289,18 @@ export default {
         });
     };
 
+    const startClass = () => {
+      classInfo.value.state = 1;
+      store
+        .dispatch("root/modifyClass", classInfo.value)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
     return {
       classInfo,
       user,
@@ -249,6 +310,7 @@ export default {
       enrolClass,
       isConfirm,
       deleteClass,
+      startClass,
     };
   },
 };

@@ -102,3 +102,9 @@ export const registerClass = ({ state }, payload) => {
   const url = `/class`;
   return axios.post(url, payload);
 };
+
+export const startClass = ({ state }, payload) => {
+  console.log("startClass", state, payload);
+  const url = `/class`;
+  return axios.put(url, payload);
+};
