@@ -180,7 +180,7 @@ export default {
         });
     };
     console.log(user);
-    if (user.value.userType === "student") {
+    if (user.value && user.value.userType === "student") {
       getClassOpenAlarm();
     }
 

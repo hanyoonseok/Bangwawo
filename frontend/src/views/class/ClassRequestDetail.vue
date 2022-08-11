@@ -8,7 +8,11 @@
       <article class="content-section">
         <div class="content-box">
           <!-- <img src="@/assets/profile.png" /> -->
-          <ProfileCanvas class="header-img" />
+          <RequestPostCanvas
+            v-if="state.characterColor"
+            :characterColor="state.characterColor"
+            class="header-img"
+          />
           <div class="content-title">
             {{ requestInfo.title }}
           </div>
@@ -131,7 +135,7 @@
 <script>
 import { ref, reactive, watch } from "vue";
 import HeaderNav from "@/components/HeaderNav.vue";
-import ProfileCanvas from "@/components/mypage/ProfileCanvas.vue";
+import RequestPostCanvas from "@/components/class/RequestPostCanvas.vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";
@@ -141,7 +145,7 @@ export default {
   name: "ClassRequestDetail",
   components: {
     HeaderNav,
-    ProfileCanvas,
+    RequestPostCanvas,
   },
   setup() {
     const route = useRoute();
@@ -154,6 +158,7 @@ export default {
     const userInfo = reactive(store.state.root.user);
 
     let state = reactive({
+      characterColor: null,
       postSid: null,
       nickname: "",
       createDate: ["", "", ""],
@@ -173,6 +178,8 @@ export default {
           state.createDate = requestInfo.value.createDate;
           state.nickname = requestInfo.value.student.nickname;
           state.postSid = requestInfo.value.student.sid;
+          state.characterColor = requestInfo.value.student.character;
+          console.log("캐릭터컬러", state.characterColor);
         });
     };
 
@@ -199,9 +206,11 @@ export default {
         }
       },
     );
+
+    // 좋아요 추가
     const addLikeRequest = () => {
-      axios
-        .post(`${process.env.VUE_APP_API_URL}/likes`, {
+      store
+        .dispatch("root/addLikeRequest", {
           rid: rid,
           sid: state.postSid,
         })
@@ -209,6 +218,9 @@ export default {
           console.log(response);
           // 좋아요 누르면 다시 정보
           getRequest();
+        })
+        .catch((error) => {
+          console.log(error);
         });
     };
 

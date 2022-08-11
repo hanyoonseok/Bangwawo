@@ -62,6 +62,8 @@ export default {
           console.log(response);
           router.push("/class/requestlist");
         });
+
+      // 처음 글을 쓴 사람또한 좋아요 리스트에 추가
     };
     return { state, submitRequestRegister };
   },

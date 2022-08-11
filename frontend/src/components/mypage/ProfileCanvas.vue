@@ -15,6 +15,7 @@ export default {
     // Initial material
     const store = useStore();
     let parts = reactive(store.state.root.user.character);
+    console.log("parts임", parts);
     const INITIAL_MTL = new THREE.MeshPhongMaterial({
       color: 0xffcb57,
       shininess: 10,

@@ -15,6 +15,7 @@
               id="className"
               placeholder="제목을 입력하세요."
               v-model="state.title"
+              @input="inputChange"
             />
           </div>
           <div class="info-box">
@@ -72,6 +73,7 @@
               rows="6"
               placeholder="내용을 입력하세요."
               v-model="state.introduce"
+              @input="inputChange"
             ></textarea>
           </div>
         </div>
@@ -101,7 +103,7 @@ import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";
 import HeaderNav from "@/components/HeaderNav.vue";
 import RectPostCard from "@/components/common/RectPostCard.vue";
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import { useStore } from "vuex";
 
 export default {
@@ -116,8 +118,11 @@ export default {
     const user = reactive(store.state.root.user);
     console.log(user);
 
+    const inputTitle = ref();
+    const inputIntroduce = ref();
+
     const state = reactive({
-      title: "",
+      title: inputTitle,
       dateStr: "",
       stimeStr: "",
       etimeStr: "",
@@ -125,7 +130,7 @@ export default {
       preview: null,
       classOpen: false,
       maxcnt: 0,
-      introduce: "",
+      introduce: inputIntroduce,
       vid: { nickname: user.nickname },
     });
     // 요청글에서 들어온 경우는 room id, 헤더에서 들어온 경우 -1임.
@@ -160,8 +165,7 @@ export default {
         classDto.title === "" ||
         classDto.introduce === "" ||
         classDto.maxcnt === 0 ||
-        classDto.opened === "" ||
-        classDto.thumbnail === undefined
+        classDto.opened === ""
       ) {
         isConfirm.status = true;
       } else {
@@ -184,8 +188,8 @@ export default {
           });
         if (rid == -1) {
           // 클래스 등록. (만약 요청을 통해 들어온것이 아니라면)
-          await axios
-            .post(`${process.env.VUE_APP_API_URL}/class`, classDto)
+          store
+            .dispatch("root/registerClass", classDto)
             .then((response) => {
               console.log(response);
               router.push("/class/list");
@@ -199,9 +203,6 @@ export default {
             .then((response) => {
               console.log(response);
               router.push(`/class/requestdetail/${rid}`);
-            })
-            .catch((error) => {
-              console.log(error);
             });
         }
       }
@@ -211,9 +212,18 @@ export default {
       status: false,
     });
 
+    const inputChange = (e) => {
+      if (e.target.id === "className") {
+        inputTitle.value = e.target.value;
+      } else {
+        inputIntroduce.value = e.target.value;
+      }
+    };
+
     return {
       state,
       fileChange,
+      inputChange,
       classRegister,
       rid,
       isConfirm,
