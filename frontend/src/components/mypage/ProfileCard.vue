@@ -122,8 +122,12 @@ export default {
       store
         .dispatch("root/deleteUser", props.user)
         .then(() => {
-          store.commit("root/logoutUser");
-          router.push("/");
+          store
+            .dispatch("root/deleteKakaoInfo", props.user.accessToken)
+            .then(() => {
+              store.commit("root/logoutUser");
+              router.push("/");
+            });
         })
         .catch((err) => alert(err.message));
     };

@@ -15,7 +15,7 @@ export const loginUser = ({ state }, payload) => {
 
 export const getUserInfo = ({ state }, code) => {
   console.log("getUserInfo", state, code);
-  const url = `/kakao/${code}`;
+  const url = `/kakao/login/${code}`;
   return axios.get(url);
 };
 
@@ -65,4 +65,16 @@ export const deleteUser = ({ state }, payload) => {
   console.log("deleteUser", state, payload);
   const url = `/${payload.userType}/${payload.vid || payload.sid}`;
   return axios.delete(url);
+};
+
+export const deleteKakaoInfo = ({ state }, accessToken) => {
+  console.log("deleteKakaoInfo", state, accessToken);
+  const url = `/kakao/delete/${accessToken}`;
+  return axios.get(url);
+};
+
+export const inactiveKakaoToken = ({ state }, accessToken) => {
+  console.log("inactiveKakaoToken", state, accessToken);
+  const url = `/kakao/logout/${accessToken}`;
+  return axios.get(url);
 };

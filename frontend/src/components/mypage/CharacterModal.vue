@@ -59,6 +59,7 @@ export default {
 
     const updateColor = (eventData) => {
       change.color = eventData.colors.hex.slice(0, 7);
+      console.log("update color", change.color);
       document.querySelectorAll(".select-btn").forEach((item) => {
         if (item.classList.contains("active")) {
           if (item.classList.contains("body")) {
