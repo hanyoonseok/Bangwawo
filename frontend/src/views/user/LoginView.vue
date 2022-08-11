@@ -44,7 +44,6 @@
 <script>
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import jwt_decode from "jwt-decode";
 import { reactive, onMounted, ref } from "vue";
 
 export default {
@@ -97,10 +96,7 @@ export default {
       store
         .dispatch("root/loginUser", loginObj)
         .then((res) => {
-          console.log(res.data);
-          const decode_jwt = jwt_decode(res.data.JWT);
-          decode_jwt.user.userType = decode_jwt.userType.toLowerCase();
-          store.commit("root/setUserInfo", decode_jwt.user);
+          store.commit("root/setUserInfo", res.data);
           router.push("/mypage");
         })
         .catch((err) => {
