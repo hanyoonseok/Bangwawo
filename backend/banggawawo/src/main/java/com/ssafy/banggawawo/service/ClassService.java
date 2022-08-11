@@ -35,7 +35,7 @@ public class ClassService {
         ClassRoom classRoom = ClassRoom.builder()
                 .cId(classDto.getCId())
                 .volunteer(classDto.getVId())    //여기 유저(봉사자) 자리
-                .request(classDto.getRId())
+                .rId(classDto.getRId())
                 .thumbnail(classDto.getThumbnail())
                 .etime(classDto.getEtime())
                 .stime(classDto.getStime())
@@ -51,7 +51,7 @@ public class ClassService {
         ClassDto classDto = ClassDto.builder()
                 .cId(classRoom.getCId())
                 .vId(classRoom.getVolunteer())
-                .rId(classRoom.getRequest())
+                .rId(classRoom.getRId())
                 .thumbnail(classRoom.getThumbnail())
                 .etime(classRoom.getEtime())
                 .stime(classRoom.getStime())
@@ -86,6 +86,7 @@ public class ClassService {
         }
         return classDto;
     }
+
     @Transactional
     public boolean deleteById(Long id) throws Exception{
         try{

@@ -32,9 +32,7 @@ public class ClassRoom {
     //@OneToMany(mappedBy="classes")
     //private List<Enrol> enrols = new ArrayList<Enrol>(); //수강신청목록
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "rId")
-    private Request request;
+    private Long rId;
 
     private String title;        //제목
     private String introduce;   //소개글
@@ -53,14 +51,14 @@ public class ClassRoom {
     public ClassRoom(Long cId,
                      Volunteer volunteer,
                      //List<Enrol> enrols,
-                     Request request,
+                     Long rId,
                      String title, String introduce,
                      Integer maxcnt, LocalDateTime stime, LocalDateTime etime,
                      Boolean opened, String thumbnail, Integer state) {
         this.cId = cId;
         this.volunteer = volunteer;
         //this.enrols = enrols;
-        this.request = request;
+        this.rId = rId;
         this.title = title;
         this.introduce = introduce;
         this.maxcnt = maxcnt;
