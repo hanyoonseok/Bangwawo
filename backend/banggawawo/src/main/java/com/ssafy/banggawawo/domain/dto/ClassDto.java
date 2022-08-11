@@ -22,6 +22,7 @@ public class ClassDto {
     private LocalDateTime stime;           // 시작시간
     private LocalDateTime etime;           // 종료시간
     private Integer maxcnt;       // 최대 인원
+    private Integer enrolcnt;     // 현재 신청한 인원
     private Boolean opened;       // 공개여부
     private String thumbnail;     // 썸네일
     private Integer state;        // 상태 ( 0 : 대기중, 1 : 수업중 , 2 : 종료 )
@@ -44,7 +45,7 @@ public class ClassDto {
                     Request rId,
                     String title, String introduce,
                     LocalDateTime stime, LocalDateTime etime,
-                    Integer maxcnt, Boolean opened,
+                    Integer maxcnt, Integer enrolcnt, Boolean opened,
                     String thumbnail, Integer state) {
         this.cId = cId;
         this.vId = vId;
@@ -54,6 +55,7 @@ public class ClassDto {
         this.stime = stime;
         this.etime = etime;
         this.maxcnt = maxcnt;
+        this.enrolcnt = enrolcnt;
         this.opened = opened;
         this.thumbnail = thumbnail;
         this.state = state;
@@ -61,14 +63,9 @@ public class ClassDto {
             this.dateStr = stime.toLocalDate().toString();
             this.stimeStr = stime.toLocalTime().toString();
         }
-        if(etime != null){
-            this.etimeStr = etime.toLocalTime().toString();
-        }
-        if(state == null){
-            this.state = 0;
-        }
-        if(opened == null){
-            this.opened = false;
-        }
+        if(etime != null) this.etimeStr = etime.toLocalTime().toString();
+        if(state == null) this.state = 0;
+        if(opened == null) this.opened = false;
+        if(enrolcnt == null) this.enrolcnt = 0;
     }
 }
