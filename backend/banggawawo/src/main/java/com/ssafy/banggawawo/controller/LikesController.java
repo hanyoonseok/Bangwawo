@@ -2,7 +2,9 @@ package com.ssafy.banggawawo.controller;
 
 import com.ssafy.banggawawo.domain.dto.LikesDto;
 import com.ssafy.banggawawo.domain.entity.Likes;
+import com.ssafy.banggawawo.domain.entity.Request;
 import com.ssafy.banggawawo.service.LikesService;
+import com.ssafy.banggawawo.service.RequestService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/likes")
@@ -21,6 +24,9 @@ public class LikesController {
     @Autowired
     private LikesService likeService;
 
+    @Autowired
+    private RequestService requestservice;
+
     // 요청글에 대한 공감(rid와 sid입력받기)
     @PostMapping()
     @ApiOperation(value = "요청글에 대한 공감")
@@ -30,10 +36,18 @@ public class LikesController {
         if (result.size() == 0) {
             //이전에 공감을 누른적이 없는경우  like db에 추가해준다
             likeService.sympathy(likeDto);
+            //공감이 추가되면 request의 공감수 증가
+            Optional<Request> orequest = requestservice.readonly(likeDto.getRId());
+            orequest.get().setLikes(orequest.get().getLikes()+1);
+            requestservice.update(orequest.get());
             return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
         } else {
             //이전에 공감을 누른적이 있는경우 db에서 삭제해준다.
             likeService.delete(result.get(0));
+            //공감이 삭제되면 request의 공감수 감소
+            Optional<Request> orequest = requestservice.readonly(likeDto.getRId());
+            orequest.get().setLikes(orequest.get().getLikes()-1);
+            requestservice.update(orequest.get());
             return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
         }
     }
