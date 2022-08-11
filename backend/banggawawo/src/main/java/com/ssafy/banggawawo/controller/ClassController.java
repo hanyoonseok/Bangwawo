@@ -1,9 +1,12 @@
 package com.ssafy.banggawawo.controller;
 
 import com.ssafy.banggawawo.domain.dto.ClassDto;
+import com.ssafy.banggawawo.domain.dto.EnrolDto;
+import com.ssafy.banggawawo.domain.entity.Enrol;
 import com.ssafy.banggawawo.domain.entity.Likes;
 import com.ssafy.banggawawo.domain.entity.Request;
 import com.ssafy.banggawawo.service.ClassService;
+import com.ssafy.banggawawo.service.EnrolService;
 import com.ssafy.banggawawo.service.LikesService;
 import com.ssafy.banggawawo.service.RequestService;
 import com.ssafy.banggawawo.util.FileUploadUtil;
@@ -24,6 +27,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/class")
@@ -39,6 +43,9 @@ public class ClassController {
 
     @Autowired
     private LikesService likeService;
+
+    @Autowired
+    private EnrolService enrolService;
 
 
     @ApiOperation(value = "수업 생성")
@@ -92,27 +99,38 @@ public class ClassController {
     public ResponseEntity<?> update(@RequestBody ClassDto classDto) throws Exception{
         return new ResponseEntity<>(classService.update(classDto), HttpStatus.OK);
     }
-    @ApiOperation(value = "수업 리스트 가져오기 (검색가능)")
+    @ApiOperation(value = "수업 리스트 가져오기 (검색가능)", notes = "title : 제목검색, opened : 공개수업여부, state : 수업상태 [0:진행전, 1:진행중, 2:종료], vid : 봉사자 ID로 검색 ")
     @GetMapping
-    public ResponseEntity<List<ClassDto>> findAll(@ApiParam("제목 검색") @RequestParam(required = false, name = "title") String title,
-                                                  @ApiParam("공개수업 여부")@RequestParam(required = false, name = "opened") Boolean opened,
-                                                  @ApiParam("수업 상태 0:진행전, 1:진행중 2:종료") @RequestParam(required = false, name = "state") Integer state,
-                                                  @ApiParam("봉사자ID로 검색") @RequestParam(required = false, name = "vid") Long vid) throws Exception{
+    public ResponseEntity<List<ClassDto>> findAll(@RequestParam(required = false, name = "title") String title,
+                                                  @RequestParam(required = false, name = "opened") Boolean opened,
+                                                  @RequestParam(required = false, name = "state") Integer state,
+                                                  @RequestParam(required = false, name = "vid") Long vid) throws Exception{
         ClassDto classDto = new ClassDto();
         classDto.setSearchfQuery(title, opened, state, vid);
-        return new ResponseEntity<List<ClassDto>>(classService.findAll(classDto), HttpStatus.OK);
+        List<ClassDto> list = classService.findAll(classDto);
+        list = list.stream().map(dto -> {
+            Long tmp = null;
+            try{
+                tmp = enrolService.countEnrolsByClassId(dto.getCId());
+            }catch(Exception e){
+                tmp = 0L;
+            }
+            dto.setEnrolcnt(Integer.parseInt(Long.toString(tmp)));
+            return dto;
+        }).collect(Collectors.toList());
+        return new ResponseEntity<List<ClassDto>>(list, HttpStatus.OK);
     }
     @ApiOperation(value = "수업 하나 가져오기")
     @GetMapping("/{id}")
     public ResponseEntity<?> findByCId(@PathVariable("id") Long id) throws Exception{
         ClassDto classDto = classService.findByCId(id);
-        System.out.println(classDto.toString());
+        classDto.setEnrolcnt(Integer.parseInt(enrolService.countEnrolsByClassId(classDto.getCId())+""));
         return new ResponseEntity<>(classDto, HttpStatus.OK);
     }
     @ApiOperation(value = "수업 삭제")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) throws Exception{
-        if(classService.deleteById(id)){
+        if(enrolService.deleteByClassId(id) && classService.deleteById(id)){
             return new ResponseEntity<>(HttpStatus.OK);
         }else{
             return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
