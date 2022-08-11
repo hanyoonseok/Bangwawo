@@ -13,6 +13,7 @@
       :session="state.session"
       :chats="state.chats"
       :screen="state.screenShareState"
+      :cid="cid"
     />
     <UserView
       v-if="!state.isHost && state.session"
@@ -48,15 +49,20 @@ export default {
   },
   setup() {
     // 테스트용
-    const OPENVIDU_SERVER_URL = process.env.VUE_APP_OV_DOMAIN;
-    const OPENVIDU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
+    const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
+    const OPENVIDU_SERVER_SECRET = "MY_SECRET";
+
+    // const OPENVIDU_SERVER_URL = process.env.VUE_APP_OV_DOMAIN;
+    // const OPENVIDU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
     const OV = new OpenVidu();
     const OVScreen = new OpenVidu(); // 화면 공유
 
     const route = useRoute();
 
-    const mySessionId = route.params.mySessionId;
-    console.log("mySessionId", mySessionId);
+    const sessionId = route.params.mySessionId;
+    console.log("mySessionId", sessionId);
+    const userType = route.params.userType === "volunteer" ? true : false;
+    const cid = route.params.cid;
 
     const state = reactive({
       OV: OV,
@@ -75,7 +81,7 @@ export default {
         mirror: false, // Whether to mirror your local video or not
       }),
       subscribers: [],
-      mySessionId: mySessionId,
+      mySessionId: sessionId,
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       joinedPlayerNumbers: 0,
       chats: [],
@@ -86,7 +92,7 @@ export default {
           Math.min(state.dataIdx + state.dataLen, state.subscribers.length + 1),
         );
       }),
-      isHost: false,
+      isHost: userType,
       dataLen: computed(() => {
         return state.isHost ? 12 : 4;
       }),
@@ -296,7 +302,6 @@ export default {
                   `No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}\n\nClick OK to navigate and accept it. If no certificate warning is shown, then check that your OpenVidu Server is up and running at "${OPENVIDU_SERVER_URL}"`,
                 )
               ) {
-                // location.assign(`https://i7b201.p.ssafy.io`);
                 location.assign(`${OPENVIDU_SERVER_URL}/accept-certificate`);
               }
               reject(error.response);
@@ -440,6 +445,7 @@ export default {
 
     return {
       state,
+      cid,
       // dataLen,
       // currentUsers,
       // initCurrentUsers,

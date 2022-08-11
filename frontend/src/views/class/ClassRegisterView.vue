@@ -151,6 +151,7 @@ export default {
         maxcnt: state.maxcnt,
         opened: state.classOpen,
         thumbnail: state.thumbnail,
+        enrolcnt: 0,
         etime: "",
         stime: "",
       };

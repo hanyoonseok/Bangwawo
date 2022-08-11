@@ -99,6 +99,13 @@ export const entranceClass = ({ state }, payload) => {
   const url = `/session/class/join/${payload.cid}/${payload.sid}`;
   return axios.get(url);
 };
+
+//봉사자가 수업 종료하기
+export const endClass = ({ state }, payload) => {
+  console.log("endClass", state, payload);
+  const url = `/session/class/close/${payload.cid}/${payload.vid}`;
+  return axios.get(url);
+};
 ///////////////////////////////////////////////
 
 export const registerImage = ({ state }, payload) => {

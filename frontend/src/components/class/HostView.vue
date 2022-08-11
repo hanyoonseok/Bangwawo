@@ -74,9 +74,9 @@
         </button>
         <button class="option-btn" @click="toggleOX()">&nbsp;OX 퀴즈</button>
 
-        <router-link :to="{ name: 'feedbackSubmit' }">
-          <i class="fa-solid fa-xmark xmark"></i
-        ></router-link>
+        <a @click="endClass">
+          <i class="fa-solid fa-xmark xmark"></i>
+        </a>
       </article>
 
       <article class="bot-right">
@@ -100,6 +100,8 @@ import ChatForm from "@/components/class/ChatForm.vue";
 import OXForm from "@/components/class/OXForm.vue";
 import OXResult from "@/components/class/OXResult.vue";
 import UserVideo from "@/components/class/UserVideo.vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 export default {
   name: "HostView",
@@ -114,8 +116,13 @@ export default {
     "session",
     "chats",
     "screen",
+    "cid",
   ],
   setup(props, { emit }) {
+    const store = useStore();
+    const router = useRouter();
+    const userInfo = store.state.root.user;
+
     const state = reactive({
       isParticipantsOpen: false,
       isChatOpen: false,
@@ -181,6 +188,19 @@ export default {
       emit("publishScreenShare");
     };
 
+    // 수업 종료
+    const endClass = () => {
+      store
+        .dispatch("root/endClass", { cid: props.cid, vid: userInfo.vid })
+        .then((response) => {
+          console.log(response);
+          router.push({ name: "feedbackSubmit", params: { cid: props.cid } });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+
     return {
       state,
       toggleParticipants,
@@ -189,6 +209,7 @@ export default {
       activeVideo,
       activeMute,
       publishScreenShare,
+      endClass,
     };
   },
   components: {
