@@ -4,7 +4,7 @@
       class="img-box"
       v-if="state.thumbnail.length === 0 && state.preview === null"
     >
-      <img src="@/assets/thumbnail.png" alt="썸네일이미지" />
+      <img src="@/assets/thumbnail.png" alt="썸네일없을때이미지" />
     </div>
     <div
       class="img-box"
@@ -26,7 +26,7 @@
       <div class="division">
         <label class="detail">{{ state.introduce }}</label>
         <label class="participants"
-          ><i class="fa-solid fa-user"></i>&nbsp;{{ state.maxcnt }}</label
+          ><i class="fa-solid fa-user"></i>&nbsp;{{ state.enrolcnt }}</label
         >
       </div>
     </div>
