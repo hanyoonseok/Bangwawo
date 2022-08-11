@@ -27,7 +27,13 @@ export const getChildren = ({ state }, email) => {
 
 export const modifyUserInfo = ({ state }, payload) => {
   console.log("modifyStudentInfo", state, payload);
-  const url = `/${payload.userType}/`;
+  const field =
+    payload.userType === "student"
+      ? "/nickname"
+      : payload.userType === "volunteer"
+      ? "/introduce"
+      : "";
+  const url = `/${payload.userType}${field}`;
   return axios.put(url, payload);
 };
 
@@ -51,9 +57,7 @@ export const getComingClasses = ({ state }, vid) => {
 
 export const setCharacterInfo = ({ state }, modifyInfo) => {
   console.log("setCharacterInfo", state, modifyInfo);
-  const url = `/${modifyInfo.userType}/${
-    modifyInfo.userType === "student" ? modifyInfo.sid : modifyInfo.vid
-  }`;
+  const url = `/${modifyInfo.userType}/character`;
   return axios.put(url, modifyInfo);
 };
 

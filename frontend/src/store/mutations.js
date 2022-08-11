@@ -22,5 +22,5 @@ export const setModifiedVolunteerInfo = (state, payload) => {
 };
 
 export const setCharacterInfo = (state, payload) => {
-  state.user.character = payload;
+  state.user.character = payload.character;
 };

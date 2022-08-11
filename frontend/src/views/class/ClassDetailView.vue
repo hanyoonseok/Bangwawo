@@ -1,7 +1,7 @@
 <template>
   <div class="background">
     <HeaderNav />
-    <section>
+    <section v-if="classInfo">
       <div class="back-btn-wrapper" @click="$router.go(-1)">
         <button class="back-btn"></button>
       </div>
@@ -12,7 +12,7 @@
           <!-- <img :src="state.thumbnail" alt="오리 뒷모습" /> -->
         </div>
         <div class="title">
-          <h3>{{ state.title }}</h3>
+          <h3>{{ classInfo.title }}</h3>
         </div>
         <div class="content">
           <article>
@@ -20,13 +20,13 @@
               <img
                 src="@/assets/thumbnail.png"
                 alt="썸네일이미지"
-                v-if="state.thumbnail.length === 0"
+                v-if="classInfo.thumbnail"
                 class="left-box-img"
               />
 
               <img
                 v-else
-                :src="'http://localhost:8081/api' + state.thumbnail"
+                :src="'http://localhost:8081/api' + classInfo.thumbnail"
                 alt="썸네일이미지"
                 class="left-box-img"
               />
@@ -35,7 +35,7 @@
               <div class="info-box">
                 <p class="info-title post-card">강사</p>
                 <p class="info-content">
-                  <span>{{ state.vid.nickname }}</span>
+                  <span>{{ classInfo.vid.nickname }}</span>
                   <button @click="showProfile">
                     <i class="fa-solid fa-circle-info"></i>
                   </button>
@@ -44,25 +44,25 @@
               <div class="info-box">
                 <p class="info-title post-card">강의 시간</p>
                 <p class="info-content">
-                  {{ state.dateStr }} {{ state.stimeStr }} ~
-                  {{ state.etimeStr }}
+                  {{ classInfo.dateStr }} {{ classInfo.stimeStr }} ~
+                  {{ classInfo.etimeStr }}
                 </p>
               </div>
               <div class="info-box">
                 <p class="info-title post-card">수업 소개</p>
                 <p class="info-content">
-                  {{ state.introduce }}
+                  {{ classInfo.introduce }}
                 </p>
               </div>
               <div class="info-box">
                 <p class="info-title post-card">공개</p>
                 <p class="info-content">
-                  {{ state.opened ? "공개" : "비공개" }}
+                  {{ classInfo.opened ? "공개" : "비공개" }}
                 </p>
               </div>
               <div class="info-box">
                 <p class="info-title post-card">정원</p>
-                <p class="info-content">{{ state.maxcnt }}</p>
+                <p class="info-content">{{ classInfo.maxcnt }}</p>
               </div>
             </div>
           </article>
@@ -71,7 +71,7 @@
             <div
               v-if="
                 userInfo.userType === 'VOLUNTEER' &&
-                userInfo.vid === state.vid.vid
+                userInfo.vid === classInfo.vid.vid
               "
             >
               <router-link :to="{ name: 'inclass' }">
@@ -107,12 +107,12 @@
         <div class="profile-info">
           <div class="info-box">
             <p class="info-title post-card">이름</p>
-            <p class="info-content">{{ state.vid.nickname }}</p>
+            <p class="info-content">{{ classInfo.vid.nickname }}</p>
           </div>
           <div class="info-box">
             <p class="info-title post-card">자기소개</p>
             <p class="info-content bg">
-              {{ state.vid.introduce }}
+              {{ classInfo.vid.introduce }}
             </p>
           </div>
         </div>
@@ -134,6 +134,7 @@
 <script>
 import HeaderNav from "@/components/HeaderNav.vue";
 import { reactive, ref } from "vue";
+import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import axios from "axios";
 
@@ -145,20 +146,18 @@ export default {
   },
   setup() {
     const route = useRoute();
-
-    const userInfo = JSON.parse(localStorage.getItem("user"));
-    console.log(userInfo);
+    const store = useStore();
+    const userInfo = store.state.root.user;
     const cid = route.params.cid;
-
-    const state = ref([]);
+    const classInfo = ref(null);
 
     // 수업 상세정보 가져오기
     const getClassDetail = async () => {
       axios
         .get(`${process.env.VUE_APP_API_URL}/class/${cid}`)
         .then((response) => {
-          state.value = response.data;
-          console.log(state.value);
+          classInfo.value = response.data;
+          console.log(classInfo.value);
         })
         .catch((error) => {
           console.log(error);
@@ -177,9 +176,10 @@ export default {
           for (const item of response.data) {
             if (item.student.sid === userInfo.sid) {
               flag = true;
+              break;
             }
           }
-          user.subscribe = flag ? 1 : 0;
+          user.subscribe = flag;
         })
         .catch((error) => {
           error;
@@ -192,11 +192,12 @@ export default {
     const enrolClass = () => {
       axios
         .post(`${process.env.VUE_APP_API_URL}/enrol`, {
-          cid: cid,
-          sid: userInfo.sid,
+          cid: { cid },
+          sid: { sid: userInfo.sid },
         })
         .then((response) => {
           console.log(response);
+          user.subscribe = true;
         })
         .catch((error) => {
           error;
@@ -227,7 +228,7 @@ export default {
     });
 
     return {
-      state,
+      classInfo,
       user,
       userInfo,
       showProfile,

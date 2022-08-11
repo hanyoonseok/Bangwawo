@@ -132,9 +132,13 @@ export default {
       if (props.user.userType === "volunteer") modifyInfo.id = props.user.vid;
       else modifyInfo.id = props.user.sid;
 
-      //store.dispatch("root/setCharacterInfo", modifyInfo);
-      store.commit("root/setCharacterInfo", parts);
-      emit("close-character-modal");
+      store
+        .dispatch("root/setCharacterInfo", modifyInfo)
+        .then(() => {
+          store.commit("root/setCharacterInfo", modifyInfo);
+          emit("close-character-modal");
+        })
+        .catch((err) => console.log(err.message));
     };
 
     return {
