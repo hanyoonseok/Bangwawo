@@ -1,6 +1,6 @@
 <template>
   <div class="right-box">
-    <div class="lecture-area" v-if="!isEndTab">
+    <div class="lecture-area" v-if="!isEndTab && comingClass">
       <div
         v-for="(lecture, index) in comingClass"
         :key="index"
@@ -31,7 +31,7 @@
       </div>
     </div>
 
-    <div class="lecture-area" v-else>
+    <div class="lecture-area" v-if="isEndTab && endClass">
       <div
         v-for="(lecture, index) in endClass"
         :key="index"
