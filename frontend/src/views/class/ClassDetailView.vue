@@ -85,18 +85,12 @@
               </button>
               <button
                 class="class-status-btn"
-                @click="startClass"
                 id="ing"
                 v-else-if="classInfo.state === 1"
               >
                 수업 진행중
               </button>
-              <button
-                class="class-status-btn"
-                id="end"
-                @click="startClass"
-                v-else
-              >
+              <button class="class-status-btn" id="end" v-else>
                 수업 종료
               </button>
 
@@ -295,6 +289,7 @@ export default {
         .dispatch("root/modifyClass", classInfo.value)
         .then((response) => {
           console.log(response);
+          router.push({ name: "inclass" });
         })
         .catch((err) => {
           console.log(err);
