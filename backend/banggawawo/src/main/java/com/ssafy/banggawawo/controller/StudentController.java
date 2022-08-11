@@ -1,9 +1,10 @@
 package com.ssafy.banggawawo.controller;
 
-import com.ssafy.banggawawo.domain.dto.MailDto;
-import com.ssafy.banggawawo.domain.dto.StudentDto;
-import com.ssafy.banggawawo.domain.dto.StudentFrontDto;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.banggawawo.domain.dto.*;
 import com.ssafy.banggawawo.domain.entity.Student;
+import com.ssafy.banggawawo.domain.entity.Volunteer;
 import com.ssafy.banggawawo.service.JwtService;
 import com.ssafy.banggawawo.service.MailService;
 import com.ssafy.banggawawo.service.StudentService;
@@ -29,7 +30,7 @@ public class StudentController {
     private final MailService mailService;
     private final JwtService jwtService;
 
-    @ApiOperation(value="학생 정보 조회", notes="학생 id(sId)를 입력받아 학생 정보 제공")
+    @ApiOperation(value="학생 정보 조회", notes="학생 id(id)를 입력받아 학생 정보 제공")
     @GetMapping("/{id}")
     public Map<String, Object> findByStudentId(
             @ApiParam(value="학생 id", required=true, example="1")
@@ -82,19 +83,47 @@ public class StudentController {
         return response;
     }
 
-    @ApiOperation(value="학생 정보 수정", notes="학생 정보를 입력받아 그대로 내용 수정\nsId : 학생아이디, nickname : 수정할 별명")
-    @PutMapping("")
-    public Map<String, Object> updateStudent(@RequestBody Map<String, Object> request){
-        Long sId = Long.parseLong(request.get("sId").toString());
+    @ApiOperation(value="학생 별명 수정", notes="학생 id와 별명을 입력받아 그대로 내용 수정\nid : 학생아이디, nickname : 수정할 별명")
+    @PutMapping("/nickname")
+    public Map<String, Object> updateNickname(@RequestBody Map<String, Object> request){
+        Long id = Long.parseLong(request.get("id").toString());
         String nickname = request.get("nickname").toString();
 
         Map<String, Object> response = new HashMap<>();
         try{
-            Optional<Student> oStudent = studentService.findById(sId);
+            Optional<Student> oStudent = studentService.findById(id);
             if(oStudent.isPresent()){
                 oStudent.get().setNickname(nickname);
                 Student result = studentService.save(oStudent.get());
                 response.put("result", "SUCCESS");
+            }else {
+                throw new Exception("일치하는 회원정보가 존재하지 않습니다.");
+            }
+        }catch(Exception e){
+            System.out.println("에러 메세지 : " + e.getMessage());
+            e.printStackTrace();
+            response.put("result", "FAIL");
+            response.put("reason", e.getMessage());
+        }
+        return response;
+    }
+
+    @ApiOperation(value="학생 캐릭터 수정", notes="학생 정보를 입력받아 그대로 내용 수정\nid : 학생아이디, character : 수정할 캐릭터 정보")
+    @PutMapping("/character")
+    public Map<String, Object> updateCharacter(@RequestBody Map<String, Object> request){
+        Long id = Long.parseLong(request.get("id").toString());
+        ObjectMapper mapper = new ObjectMapper();
+        ColorDto[] character = mapper.convertValue(request.get("character"), new TypeReference<List<ColorDto>>() {}).toArray(new ColorDto[0]);
+
+        Map<String, Object> response = new HashMap<>();
+        try{
+            Optional<Student> oStudent = studentService.findById(id);
+            if(oStudent.isPresent()){
+                Student student = oStudent.get();
+                student.setCharacter(studentService.toClass(character));
+                Student result = studentService.save(student);
+                response.put("result", "SUCCESS");
+                response.put("user", new StudentFrontDto(new StudentDto(result)));
             }else {
                 throw new Exception("일치하는 회원정보가 존재하지 않습니다.");
             }
