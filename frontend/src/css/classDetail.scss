@@ -109,42 +109,42 @@ section {
 
       .button-box {
         z-index: 100;
-      }
-      .button-box > div {
-        margin-top: 63px;
-        display: flex;
-        justify-content: flex-end;
+        > div {
+          margin-top: 63px;
+          display: flex;
+          justify-content: flex-end;
 
-        button,
-        a {
-          margin-left: 22px;
-          line-height: 30px;
-          cursor: pointer;
-          z-index: 30;
-        }
-
-        .class-status-btn,
-        .class-entrance-btn,
-        .class-subscribe-btn {
-          @include SubmitBtn;
-          background-color: #e2e2e2;
-        }
-        .class-status-btn {
-          background-color: $soft-yellow;
-        }
-        .class-modify-btn,
-        .class-delete-btn {
-          background-color: transparent;
-          color: $grey;
-          font-size: 20px;
-          &:hover {
-            color: $yellow;
+          button,
+          a {
+            margin-left: 22px;
+            line-height: 30px;
+            cursor: pointer;
+            z-index: 30;
           }
-        }
-        .class-delete-btn,
-        .class-entrance-btn,
-        .class-subscribe-btn {
-          margin-right: 45px;
+
+          .class-status-btn,
+          .class-entrance-btn,
+          .class-subscribe-btn {
+            @include SubmitBtn;
+            background-color: #e2e2e2;
+          }
+          .class-status-btn {
+            background-color: $soft-yellow;
+          }
+          .class-modify-btn,
+          .class-delete-btn {
+            background-color: transparent;
+            color: $grey;
+            font-size: 20px;
+            &:hover {
+              color: $yellow;
+            }
+          }
+          .class-delete-btn,
+          .class-entrance-btn,
+          .class-subscribe-btn {
+            margin-right: 45px;
+          }
         }
       }
     }
@@ -274,4 +274,12 @@ section {
       margin-left: 20px;
     }
   }
+}
+
+#end {
+  background-color: $soft-pink;
+}
+
+#ing {
+  background-color: #d4ffc5;
 }

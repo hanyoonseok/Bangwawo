@@ -57,7 +57,7 @@ const routes = [
         beforeEnter: onlyAuthUser,
       },
       {
-        path: "modify",
+        path: "modify/:cid",
         name: "classmodify",
         component: () => import("@/views/class/ClassModifyView"),
         beforeEnter: onlyAuthUser,
