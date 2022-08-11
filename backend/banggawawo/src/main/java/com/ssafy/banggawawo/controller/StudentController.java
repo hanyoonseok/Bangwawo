@@ -153,7 +153,7 @@ public class StudentController {
             System.out.println("에러 메세지 : " + e.getMessage());
             e.printStackTrace();
             response.put("result", "FAIL");
-            response.put("reason", "해당 학생이 존재하지 않습니다.");
+            response.put("reason", e.getMessage());
         }
         return response;
     }
