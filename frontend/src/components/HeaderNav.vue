@@ -73,11 +73,21 @@
             <i class="fa-solid fa-bell"></i>
             알림창
           </div>
-          <div class="row-wrapper">
+          <div class="row-wrapper" v-if="user.userType === 'parent'">
             <div class="row" v-for="notice in notices" :key="notice.id">
               <img src="@/assets/profile.png" />
               <label
                 ><p>자녀의 상담중 위험 용어가 발생했습니다.</p>
+                <p class="date">2022-07-25</p></label
+              >
+              <i class="fa-solid fa-xmark close"></i>
+            </div>
+          </div>
+          <div class="row-wrapper" v-else>
+            <div class="row">
+              <img src="@/assets/profile.png" />
+              <label
+                ><p>수업이 개설되었습니다.</p>
                 <p class="date">2022-07-25</p></label
               >
               <i class="fa-solid fa-xmark close"></i>
@@ -96,6 +106,7 @@
 <script>
 import { ref } from "vue";
 import { useStore } from "vuex";
+import axios from "axios";
 
 export default {
   name: "HeaderNav",
@@ -107,29 +118,29 @@ export default {
 
     let isProfileOpen = ref(false);
 
-    const notices = ref([
-      {
-        id: "1",
-        content: "자녀의 상담중 위험 단어를 감지했습니다.",
-        date: "07-22",
-      },
-      {
-        id: "2",
-        content: "자녀의 상담중 위험 단어를 감지했습니다.",
-        date: "07-22",
-      },
-      {
-        id: "3",
-        content: "자녀의 상담중 위험 단어를 감지했습니다.",
-        date: "07-22",
-      },
-      {
-        id: "4",
-        content: "자녀의 상담중 위험 단어를 감지했습니다.",
-        date: "07-22",
-      },
-    ]);
-
+    // const notices = ref([
+    //   {
+    //     id: "1",
+    //     content: "자녀의 상담중 위험 단어를 감지했습니다.",
+    //     date: "07-22",
+    //   },
+    //   {
+    //     id: "2",
+    //     content: "자녀의 상담중 위험 단어를 감지했습니다.",
+    //     date: "07-22",
+    //   },
+    //   {
+    //     id: "3",
+    //     content: "자녀의 상담중 위험 단어를 감지했습니다.",
+    //     date: "07-22",
+    //   },
+    //   {
+    //     id: "4",
+    //     content: "자녀의 상담중 위험 단어를 감지했습니다.",
+    //     date: "07-22",
+    //   },
+    // ]);
+    const notices = ref("");
     const toggleProfileModal = () => {
       isNoticeOpen.value = false;
       isProfileOpen.value = !isProfileOpen.value;
@@ -145,11 +156,25 @@ export default {
       location.href = "/";
     };
 
+    //클래스 오픈 알람
+    const getClassOpenAlarm = () => {
+      axios
+        .get(`${process.env.VUE_APP_API_URL}/likes/${user.sid}`)
+        .then((response) => {
+          console.log(response);
+        });
+    };
+
+    if (user.userType === "student") {
+      getClassOpenAlarm();
+    }
+
     return {
       user,
       isNoticeOpen,
       isProfileOpen,
       toggleProfileModal,
+      getClassOpenAlarm,
       toggleNoticeModal,
       notices,
       logout,

@@ -87,17 +87,23 @@
 
 <script>
 import axios from "axios";
+import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";
 import HeaderNav from "@/components/HeaderNav.vue";
 import RectPostCard from "@/components/common/RectPostCard.vue";
 import { reactive } from "vue";
+import { useStore } from "vuex";
+
 export default {
   components: {
     HeaderNav,
     RectPostCard,
   },
   setup() {
+    const router = useRouter();
     const route = useRoute();
+    const store = useStore();
+
     const state = reactive({
       className: "",
       classDate: "",
@@ -108,7 +114,10 @@ export default {
       classPeople: "",
       classContent: "",
       classImgFile: "",
+      userInfo: store.state.root.user,
+      userType: store.state.root.user.userType,
     });
+    // 요청글에서 들어온 경우는 room id, 헤더에서 들어온 경우 -1임.
     const rid = route.params.rid;
 
     const fileChange = (e) => {
@@ -123,14 +132,25 @@ export default {
     };
 
     // 수업 생성시 요청 해결
+    // 일단 나중에 합치면 제대로된 데이터 전달해야할듯... 임시로 넣어둔 데이터
     const resolveRequest = () => {
-      axios
-        .post(`${process.env.VUE_APP_API_URL}/likes/opened`, {
-          rid: rid,
-        })
-        .then((response) => {
-          console.log(response);
-        });
+      if (rid !== -1) {
+        axios
+          .post(`${process.env.VUE_APP_API_URL}/class/${rid}`, {
+            vid: { vid: state.userInfo.vid },
+            title: "호그와트 지망생을 위한 마법수업",
+            introduce: "소개글인데용?",
+            maxcnt: 23,
+            opened: 0,
+            thumbnail: "/class/image/2022AUGUST101660116601.png",
+            etime: "",
+            stime: "",
+          })
+          .then((response) => {
+            console.log(response);
+            router.push(`/class/requestdetail/${rid}`);
+          });
+      }
     };
 
     return {

@@ -10,7 +10,7 @@
           <!-- <img src="@/assets/profile.png" /> -->
           <ProfileCanvas class="header-img" />
           <div class="content-title">
-            {{ state.requestPost.title }}
+            {{ requestInfo.title }}
           </div>
           <div class="content-writer">
             {{ state.nickname }}
@@ -21,7 +21,7 @@
             >
           </div>
           <div class="status-wrapper">
-            <button class="status-btn no" v-if="!state.requestPost.solved">
+            <button class="status-btn no" v-if="!requestInfo.solved">
               <i class="fa-solid fa-circle"></i>&nbsp;미해결
             </button>
             <button class="status-btn yes" v-else>
@@ -29,10 +29,10 @@
             </button>
           </div>
           <div class="content-text">
-            {{ state.requestPost.content }}
+            {{ requestInfo.content }}
           </div>
-          <div class="end-btn-wrapper" v-if="state.userType === 'student'">
-            <div class="no" v-if="!state.requestPost.solved">
+          <div class="end-btn-wrapper" v-if="userInfo.userType === 'student'">
+            <div class="no" v-if="!requestInfo.solved">
               <img src="@/assets/notice-text.png" class="notice-img" />
               <span></span>
               <button
@@ -42,13 +42,13 @@
                 @click="addLikeRequest"
               >
                 <i class="fa-solid fa-thumbs-up"></i> &nbsp;{{
-                  state.requestPost.likes
+                  requestInfo.likes
                 }}
               </button>
               <div
                 v-if="
-                  state.userType === 'student' &&
-                  state.userInfo.sid === state.postSid
+                  userInfo.userType === 'student' &&
+                  userInfo.sid === state.postSid
                 "
               >
                 <button class="end-btn" @click="isConfirm.status = true">
@@ -80,8 +80,8 @@
             >
           </div>
 
-          <div class="end-btn-wrapper" v-if="state.userType === 'volunteer'">
-            <div class="no" v-if="!state.requestPost.solved">
+          <div class="end-btn-wrapper" v-if="userInfo.userType === 'volunteer'">
+            <div class="no" v-if="!requestInfo.solved">
               <span></span>
               <router-link :to="{ name: 'classregister' }">
                 <button class="end-btn">
@@ -103,7 +103,7 @@
             </div>
           </div>
           <div class="status-wrapper">
-            <label>{{ state.requestPost.count }}</label>
+            <label>{{ requestInfo.count }}</label>
           </div>
         </div>
       </article>
@@ -153,15 +153,15 @@ export default {
       status: false,
     });
 
+    const userInfo = reactive(store.state.root.user);
+
     let state = reactive({
-      requestPost: {},
       postSid: null,
       nickname: "",
       createDate: ["", "", ""],
       isVisibleNoticeImg: false,
-      userInfo: store.state.root.user,
-      userType: store.state.root.user.userType,
     });
+    const requestInfo = ref("");
 
     const rid = route.params.rid;
     const getRequest = async () => {
@@ -169,10 +169,10 @@ export default {
         .get(`${process.env.VUE_APP_API_URL}/request/${rid}`)
         .then((response) => {
           console.log(response.data.requsest);
-          state.requestPost = response.data.requsest;
-          state.nickname = state.requestPost.student.nickname;
-          state.createDate = state.requestPost.createDate;
-          state.postSid = state.requestPost.student.sid;
+          requestInfo.value = response.data.requsest;
+          state.createDate = requestInfo.value.createDate;
+          state.nickname = requestInfo.value.student.nickname;
+          state.postSid = requestInfo.value.student.sid;
         });
     };
 
@@ -207,7 +207,7 @@ export default {
         })
         .then((response) => {
           console.log(response);
-          // 좋아요 누르면 다시 정보 받아오기.
+          // 좋아요 누르면 다시 정보
           getRequest();
         });
     };
@@ -218,7 +218,9 @@ export default {
       addLikeRequest,
       state,
       post,
+      userInfo,
       isConfirm,
+      requestInfo,
       rid,
     };
   },
