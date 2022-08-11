@@ -39,9 +39,6 @@ public class JwtService {
                 .claim("userType", userType)
                 .claim("user", user)
                 .signWith(SignatureAlgorithm.HS256, secretKey.getBytes())
-//                .signWith(SignatureAlgorithm.HS256, this.generateKey())
-//                .signWith(SignatureAlgorithm.HS512, this.generateKey())
-//                .signWith(SignatureAlgorithm.HS512, tmp)
                 .compact();
         return jwt;
     }
