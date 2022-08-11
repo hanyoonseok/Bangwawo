@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
@@ -44,6 +45,7 @@ public class ClassRoom {
     private Boolean opened;      //공개여부
     private String thumbnail;       //썸네일
 
+    @ColumnDefault("0")
     private Integer state;       //상태  (0 : 대기, 1 : 수업중, 2 : 종료)
 
     //classroom 생성시 필요한 builder
