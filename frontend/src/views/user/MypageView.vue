@@ -98,6 +98,7 @@ export default {
           if (children.value.length > 0) {
             getStudentClasses(children.value[0].sid);
           }
+          console.log(children.value);
         });
       }
     };
@@ -134,10 +135,8 @@ export default {
 
         classes.value.forEach((e) => {
           if (e.classes.state === 0 || e.classes.state === 1) {
-            console.log("예정");
             tempComingClass.push(e.classes);
           } else if (e.classes.state === 2) {
-            console.log("완료");
             tempEndClass.push(e.classes);
           }
         });

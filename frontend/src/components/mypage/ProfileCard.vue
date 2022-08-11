@@ -24,8 +24,8 @@
           </li>
         </ul></i
       >
-      <div>
-        <img src="@/assets/profile.png" />
+      <div class="img-box">
+        <ProfileCanvas v-if="childColor" :childColor="childColor" />
       </div>
 
       <div class="person-info">
@@ -92,6 +92,7 @@ export default {
     let isModalOpen = ref(false);
     let isModifyOpen = ref(false);
     let selectedChild = ref(null);
+    let childColor = ref(null);
     const store = useStore();
     const router = useRouter();
 
@@ -99,6 +100,7 @@ export default {
       () => props.children,
       (cur) => {
         selectedChild.value = props.children ? cur[0].nickname : "";
+        childColor.value = props.children ? cur[0].character : null;
       },
       { deep: true },
     );
@@ -109,6 +111,7 @@ export default {
 
     const selectChild = (child) => {
       selectedChild.value = child.nickname;
+      childColor.value = child.character;
       emit("selectChild", child);
     };
 
@@ -134,6 +137,7 @@ export default {
       selectedChild,
       selectChild,
       deleteUser,
+      childColor,
     };
   },
 };

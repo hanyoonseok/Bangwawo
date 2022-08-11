@@ -11,17 +11,21 @@ import { onMounted, watch, computed, reactive } from "vue";
 
 export default {
   name: "ProfileCanvas",
-  setup() {
+  props: ["childColor"],
+  setup(props) {
     // Initial material
     const store = useStore();
-    let parts = reactive(store.state.root.user.character);
+    let parts = reactive(
+      props.childColor ? props.childColor : store.state.root.user.character,
+    );
     const INITIAL_MTL = new THREE.MeshPhongMaterial({
       color: 0xffcb57,
       shininess: 10,
     });
 
     let changeParts = computed(() => {
-      return store.state.root.user.character;
+      if (props.childColor) return props.childColor;
+      else return store.state.root.user.character;
     });
 
     // state에 저장되어 있는 색 변경될때마다 watch에서 감지
