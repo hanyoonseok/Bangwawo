@@ -15,6 +15,7 @@
               id="className"
               placeholder="제목을 입력하세요."
               v-model="state.title"
+              @input="inputChange"
             />
           </div>
           <div class="info-box">
@@ -72,6 +73,7 @@
               rows="6"
               placeholder="내용을 입력하세요."
               v-model="state.introduce"
+              @input="change"
             ></textarea>
           </div>
         </div>
@@ -97,7 +99,7 @@
 <script>
 import HeaderNav from "@/components/HeaderNav.vue";
 import RectPostCard from "@/components/common/RectPostCard.vue";
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -113,8 +115,11 @@ export default {
     const user = reactive(store.state.root.user);
     console.log(user);
 
+    const inputTitle = ref();
+    const inputIntroduce = ref();
+
     const state = reactive({
-      title: "",
+      title: inputTitle,
       dateStr: "",
       stimeStr: "",
       etimeStr: "",
@@ -122,7 +127,7 @@ export default {
       preview: null,
       classOpen: false,
       maxcnt: 0,
-      introduce: "",
+      introduce: inputIntroduce,
       vid: { nickname: user.nickname },
     });
 
@@ -194,9 +199,20 @@ export default {
       status: false,
     });
 
+    const inputChange = (e) => {
+      console.log(e.target.value);
+      console.log(e.target.id);
+      if (e.target.id === "className") {
+        inputTitle.value = e.target.value;
+      } else {
+        inputIntroduce.value = e.target.value;
+      }
+    };
+
     return {
       state,
       fileChange,
+      inputChange,
       classRegister,
       isConfirm,
     };

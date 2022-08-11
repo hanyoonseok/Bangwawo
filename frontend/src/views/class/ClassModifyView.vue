@@ -7,7 +7,7 @@
     <div class="title">
       <h2>수업 수정</h2>
     </div>
-    <div class="contents" v-if="state">
+    <div class="contents" v-if="classInfo">
       <article>
         <div class="left-box">
           <div class="info-box">
@@ -16,25 +16,26 @@
               type="text"
               name="className"
               id="className"
-              v-model="state.title"
+              v-model="classInfo.title"
+              @input="inputChange"
             />
           </div>
           <div class="info-box">
             <label for="classTime" class="info-title">시간</label>
             <div class="classTime">
-              <input type="date" name="" id="" v-model="state.dateStr" />
+              <input type="date" name="" id="" v-model="classInfo.dateStr" />
               <input
                 type="time"
                 name="startTime"
                 id="startTime"
-                v-model="state.stimeStr"
+                v-model="classInfo.stimeStr"
               />
               -
               <input
                 type="time"
                 name="endTime"
                 id="endTime"
-                v-model="state.etimeStr"
+                v-model="classInfo.etimeStr"
               />
             </div>
           </div>
@@ -50,7 +51,7 @@
           <div class="info-box">
             <label for="classOpen" class="info-title">공개 여부</label>
             <label class="switch">
-              <input type="checkbox" v-model="state.opened" />
+              <input type="checkbox" v-model="classInfo.opened" />
               <span class="slider round"></span>
             </label>
           </div>
@@ -62,7 +63,7 @@
               min="0"
               id="classPeople"
               oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-              v-model="state.maxcnt"
+              v-model="classInfo.maxcnt"
             />
           </div>
           <div class="info-box">
@@ -73,13 +74,14 @@
               cols="30"
               rows="6"
               placeholder="내용을 입력하세요."
-              v-model="state.introduce"
+              v-model="classInfo.introduce"
+              @input="inputChange"
             ></textarea>
           </div>
         </div>
         <div class="right-box">
           <h4>미리보기</h4>
-          <RectPostCard :state="state" />
+          <RectPostCard :state="classInfo" />
         </div>
       </article>
       <button class="modify-btn" @click="classModify">수정</button>
@@ -118,7 +120,7 @@ export default {
 
     console.log(user);
 
-    const state = reactive({
+    const classInfo = reactive({
       title: "",
       dateStr: "",
       stimeStr: "",
@@ -129,6 +131,7 @@ export default {
       maxcnt: 0,
       introduce: "",
       vid: { nickname: user.nickname },
+      state: 0,
     });
 
     // 수업 상세정보 가져오기
@@ -138,14 +141,15 @@ export default {
         .then((response) => {
           const data = response.data;
           console.log(data);
-          state.title = data.title;
-          state.dateStr = data.dateStr;
-          state.stimeStr = data.stimeStr;
-          state.etimeStr = data.etimeStr;
-          state.thumbnail = data.thumbnail;
-          state.classOpen = data.classOpen;
-          state.maxcnt = data.maxcnt;
-          state.introduce = data.introduce;
+          classInfo.title = data.title;
+          classInfo.dateStr = data.dateStr;
+          classInfo.stimeStr = data.stimeStr;
+          classInfo.etimeStr = data.etimeStr;
+          classInfo.thumbnail = data.thumbnail;
+          classInfo.classOpen = data.opened;
+          classInfo.maxcnt = data.maxcnt;
+          classInfo.introduce = data.introduce;
+          classInfo.state = data.state;
         })
         .catch((error) => {
           console.log(error);
@@ -162,7 +166,7 @@ export default {
         var reader = new FileReader();
         reader.onload = (e) => {
           console.log("??");
-          state.preview = e.target.result;
+          classInfo.preview = e.target.result;
         };
         reader.readAsDataURL(input.files[0]);
         formData.append("thumbnail", input.files[0]);
@@ -171,14 +175,16 @@ export default {
 
     const classModify = async () => {
       const classDto = {
+        cid: cid,
         vid: { vid: user.vid },
-        title: state.title,
-        introduce: state.introduce,
-        maxcnt: state.maxcnt,
-        opened: state.classOpen,
-        thumbnail: state.thumbnail,
+        title: classInfo.title,
+        introduce: classInfo.introduce,
+        maxcnt: classInfo.maxcnt,
+        opened: classInfo.classOpen,
+        thumbnail: classInfo.thumbnail,
         etime: "",
         stime: "",
+        state: classInfo.state,
       };
 
       if (
@@ -189,8 +195,8 @@ export default {
       ) {
         isConfirm.status = true;
       } else {
-        classDto.stime = state.dateStr + "T" + state.stimeStr;
-        classDto.etime = state.dateStr + "T" + state.etimeStr;
+        classDto.stime = classInfo.dateStr + "T" + classInfo.stimeStr;
+        classDto.etime = classInfo.dateStr + "T" + classInfo.etimeStr;
 
         if (classDto.thumbnail !== "") {
           // 이미지 파일 등록
@@ -226,11 +232,20 @@ export default {
       status: false,
     });
 
+    const inputChange = (e) => {
+      if (e.target.id === "className") {
+        classInfo.title = e.target.value;
+      } else {
+        classInfo.introduce = e.target.value;
+      }
+    };
+
     return {
-      state,
+      classInfo,
       isConfirm,
       fileChange,
       classModify,
+      inputChange,
     };
   },
 };
