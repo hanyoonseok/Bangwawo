@@ -155,5 +155,5 @@ export const startClass = ({ state }, payload) => {
 export const addLikeRequest = ({ state }, payload) => {
   console.log("addLikeRequest", state, payload);
   const url = `/likes`;
-  return axios.put(url, payload);
+  return axios.post(url, payload);
 };
