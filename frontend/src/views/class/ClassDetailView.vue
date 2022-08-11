@@ -125,7 +125,7 @@
         <img src="@/assets/profile.png" alt="오리" />
         <h2>정말로 삭제하시겠습니까?</h2>
         <div class="btn-wrapper">
-          <button class="btn" @click="classDelete">네</button>
+          <button class="btn" @click="deleteClass">네</button>
           <button class="btn" @click="isConfirm.status = false">아니요</button>
         </div>
       </div>
@@ -137,32 +137,28 @@
 import HeaderNav from "@/components/HeaderNav.vue";
 import { reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import axios from "axios";
 import { useStore } from "vuex";
 
 export default {
   name: "ClassDetailView",
   components: {
     HeaderNav,
-    // RoundPostCard,
   },
   setup() {
     const route = useRoute();
     const router = useRouter();
     const store = useStore();
     const userInfo = reactive(store.state.root.user);
-    console.log(userInfo);
     const cid = route.params.cid;
 
     const classInfo = ref(null);
 
     // 수업 상세정보 가져오기
-    const getClassDetail = async () => {
-      axios
-        .get(`${process.env.VUE_APP_API_URL}/class/${cid}`)
+    const getClassDetail = () => {
+      store
+        .dispatch("root/getClassDetail", cid)
         .then((response) => {
           classInfo.value = response.data;
-          // console.log(classInfo.value);
         })
         .catch((error) => {
           console.log(error);
@@ -173,8 +169,8 @@ export default {
 
     // 해당 수업 신청한 학생중에 현재 사용자가 있는지 확인하기 위함
     const getEnrolStudent = async () => {
-      axios
-        .get(`${process.env.VUE_APP_API_URL}/enrol/class/${cid}`)
+      store
+        .dispatch("root/getEnrolStudent", cid)
         .then((response) => {
           console.log(response);
           let flag = false;
@@ -194,8 +190,8 @@ export default {
 
     // 수업 신청하기
     const enrolClass = () => {
-      axios
-        .post(`${process.env.VUE_APP_API_URL}/enrol`, {
+      store
+        .dispatch("root/enrolClass", {
           cid: { cid },
           sid: { sid: userInfo.sid },
         })
@@ -207,9 +203,8 @@ export default {
         });
     };
 
-    // 학생일 경우 수업 신청했는지 안했는지 여부
+    // 학생일 경우 수업 신청했는지(1) 안했는지(0) 여부
     const user = reactive({
-      status: 2,
       subscribe: 0,
     });
 
@@ -233,9 +228,9 @@ export default {
     });
 
     // 수업 삭제
-    const classDelete = async () => {
-      axios
-        .delete(`${process.env.VUE_APP_API_URL}/class/${cid}`)
+    const deleteClass = async () => {
+      store
+        .dispatch("root/deleteClass", cid)
         .then((response) => {
           console.log(response);
           router.push({ name: "classlist" });
@@ -253,7 +248,7 @@ export default {
       hideProfile,
       enrolClass,
       isConfirm,
-      classDelete,
+      deleteClass,
     };
   },
 };

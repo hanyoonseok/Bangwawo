@@ -104,7 +104,6 @@ import RectPostCard from "@/components/common/RectPostCard.vue";
 import { reactive } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useStore } from "vuex";
-import axios from "axios";
 
 export default {
   components: {
@@ -136,8 +135,8 @@ export default {
 
     // 수업 상세정보 가져오기
     const getClassDetail = async () => {
-      axios
-        .get(`${process.env.VUE_APP_API_URL}/class/${cid}`)
+      store
+        .dispatch("root/getClassDetail", cid)
         .then((response) => {
           const data = response.data;
           console.log(data);
@@ -200,12 +199,8 @@ export default {
 
         if (classDto.thumbnail !== "") {
           // 이미지 파일 등록
-          await axios
-            .post(`${process.env.VUE_APP_API_URL}/class/image`, formData, {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            })
+          store
+            .dispatch("root/registerImage", formData)
             .then((response) => {
               console.log(response.data);
               classDto.thumbnail = response.data;
@@ -216,8 +211,8 @@ export default {
         }
 
         // 클래스 수정
-        await axios
-          .put(`${process.env.VUE_APP_API_URL}/class`, classDto)
+        store
+          .dispatch("root/modifyClass", classDto)
           .then((response) => {
             console.log(response);
             router.push({ name: "classdetail", params: { cid: cid } });

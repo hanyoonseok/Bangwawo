@@ -73,7 +73,7 @@
               rows="6"
               placeholder="내용을 입력하세요."
               v-model="state.introduce"
-              @input="change"
+              @input="inputChange"
             ></textarea>
           </div>
         </div>
@@ -100,7 +100,6 @@
 import HeaderNav from "@/components/HeaderNav.vue";
 import RectPostCard from "@/components/common/RectPostCard.vue";
 import { reactive, ref } from "vue";
-import axios from "axios";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
@@ -167,24 +166,22 @@ export default {
         classDto.stime = state.dateStr + "T" + state.stimeStr;
         classDto.etime = state.dateStr + "T" + state.etimeStr;
 
-        // 이미지 파일 등록
-        await axios
-          .post(`${process.env.VUE_APP_API_URL}/class/image`, formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((response) => {
-            console.log(response.data);
-            classDto.thumbnail = response.data;
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        if (classDto.thumbnail !== "") {
+          // 이미지 파일 등록
+          store
+            .dispatch("root/registerImage", formData)
+            .then((response) => {
+              console.log(response.data);
+              classDto.thumbnail = response.data;
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
 
         // 클래스 등록
-        await axios
-          .post(`${process.env.VUE_APP_API_URL}/class`, classDto)
+        store
+          .dispatch("root/registerClass", classDto)
           .then((response) => {
             console.log(response);
             router.push("/class/list");
@@ -200,8 +197,6 @@ export default {
     });
 
     const inputChange = (e) => {
-      console.log(e.target.value);
-      console.log(e.target.id);
       if (e.target.id === "className") {
         inputTitle.value = e.target.value;
       } else {

@@ -47,8 +47,9 @@ import OpendClassList from "@/components/class/OpendClassList.vue";
 import MakedClassList from "@/components/class/MakedClassList.vue";
 import ForObserve from "@/components/class/ForObserve.vue";
 import axios from "axios";
-
+import { useStore } from "vuex";
 import { ref } from "vue";
+
 export default {
   name: "ClassListView",
   components: {
@@ -58,6 +59,7 @@ export default {
     ForObserve,
   },
   setup() {
+    const store = useStore();
     let allClasses = ref([]);
     let openClass = ref([]);
     let makedClass = ref([]);
@@ -66,11 +68,12 @@ export default {
     const dataIdx = ref(0);
     const dataLen = 15;
 
-    const getClass = async (flag) => {
-      axios
-        .get(`${process.env.VUE_APP_API_URL}/class`)
-        .then((response) => {
-          allClasses = response.data;
+    const getClassList = (flag) => {
+      store
+        .dispatch("root/getClassList")
+        .then((res) => {
+          // console.log(res);
+          allClasses = res.data;
           // console.log(allClasses);
           const openArray = [];
           const makedArray = [];
@@ -89,13 +92,12 @@ export default {
           } else {
             filteredMakedClass.value = makedArray;
           }
-          // loadMakedClasses();
         })
         .catch((error) => {
           console.log(error);
         });
     };
-    getClass(true);
+    getClassList(true);
 
     const searchClass = async () => {
       console.log(keyword.value);
@@ -123,7 +125,7 @@ export default {
           });
       } else {
         console.log("엥?");
-        getClass(false);
+        getClassList(false);
       }
     };
 
@@ -148,12 +150,12 @@ export default {
       }
       dataIdx.value += dataLen;
       filteredMakedClass.value = prevArr;
-      console.log(filteredMakedClass.value);
+      // console.log(filteredMakedClass.value);
     };
 
     return {
       top,
-      getClass,
+      getClassList,
       openClass,
       filteredMakedClass,
       loadMakedClasses,
