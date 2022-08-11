@@ -84,13 +84,25 @@
             </div>
           </div>
           <div class="row-wrapper" v-else>
-            <div class="row">
-              <img src="@/assets/profile.png" />
-              <label
-                ><p>수업이 개설되었습니다.</p>
-                <p class="date">2022-07-25</p></label
-              >
-              <i class="fa-solid fa-xmark close"></i>
+            <div class="row" v-for="(notice, index) in notices" :key="index">
+              <label>
+                <p>
+                  요청글
+                  <span class="notice-title">{{ notice.rtitle }}</span> 의
+                  수업이 개설되었습니다.
+                </p>
+              </label>
+              <router-link
+                :to="{
+                  name: 'classrequestdetail',
+                  params: { rid: notice.rid },
+                }"
+                @click="checkAlarm(notice.rid)"
+                ><i
+                  class="fa-solid fa-circle-arrow-right"
+                  style="font-size: 24px"
+                ></i
+              ></router-link>
             </div>
           </div>
         </article>
@@ -159,17 +171,30 @@ export default {
     };
 
     //클래스 오픈 알람
-    const getClassOpenAlarm = () => {
-      axios
-        .get(`${process.env.VUE_APP_API_URL}/likes/${user.sid}`)
+    const getClassOpenAlarm = async () => {
+      await axios
+        .get(`${process.env.VUE_APP_API_URL}/likes/${user.value.sid}`)
+        .then((response) => {
+          console.log("좋아요버튼", response.data.requsest);
+          notices.value = response.data.requsest;
+        });
+    };
+    console.log(user);
+    if (user.value.userType === "student") {
+      getClassOpenAlarm();
+    }
+
+    // 학생별 알람에 대한 읽기 완료
+    const checkAlarm = async (rid) => {
+      await axios
+        .post(`${process.env.VUE_APP_API_URL}/likes/read`, {
+          rid: rid,
+          sid: user.value.sid,
+        })
         .then((response) => {
           console.log(response);
         });
     };
-
-    if (user.userType === "student") {
-      getClassOpenAlarm();
-    }
 
     return {
       user,
@@ -179,6 +204,7 @@ export default {
       getClassOpenAlarm,
       toggleNoticeModal,
       notices,
+      checkAlarm,
       logout,
     };
   },

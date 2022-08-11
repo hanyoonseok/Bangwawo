@@ -182,7 +182,7 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-        if (rid === -1) {
+        if (rid == -1) {
           // 클래스 등록. (만약 요청을 통해 들어온것이 아니라면)
           await axios
             .post(`${process.env.VUE_APP_API_URL}/class`, classDto)

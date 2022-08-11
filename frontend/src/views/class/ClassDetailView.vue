@@ -222,7 +222,6 @@ export default {
         document.querySelector(".profile").style.display = "none";
       }
     };
-
     const isConfirm = reactive({
       status: false,
     });

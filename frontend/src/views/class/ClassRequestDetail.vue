@@ -67,13 +67,16 @@
               </div>
               <div v-else style="width: 100px"></div>
             </div>
-            <router-link :to="{ name: 'classdetail' }" v-else>
+            <router-link
+              :to="{ name: 'classdetail', params: { cid: classInfo.cid } }"
+              v-else
+            >
               <div class="yes">
-                <img :src="post.link.thumbnail" />
+                <img :src="classInfo.thumbnail" />
                 <div class="column">
-                  <label class="link-title">{{ post.link.title }}</label>
+                  <label class="link-title">{{ classInfo.title }}</label>
                   <label class="link-description">{{
-                    post.link.description
+                    classInfo.introduce
                   }}</label>
                 </div>
               </div></router-link
@@ -90,17 +93,21 @@
               >
               <span> </span>
             </div>
+            <router-link
+              :to="{ name: 'classdetail', params: { cid: classInfo.cid } }"
+              v-else
+            >
+              <div class="yes">
+                <img :src="classInfo.thumbnail" />
 
-            <div class="yes" v-else>
-              <img :src="post.link.thumbnail" />
-
-              <div class="column">
-                <label class="link-title">{{ post.link.title }}</label>
-                <label class="link-description">{{
-                  post.link.description
-                }}</label>
+                <div class="column">
+                  <label class="link-title">{{ classInfo.title }}</label>
+                  <label class="link-description">{{
+                    classInfo.introduce
+                  }}</label>
+                </div>
               </div>
-            </div>
+            </router-link>
           </div>
           <div class="status-wrapper">
             <label>{{ requestInfo.count }}</label>
@@ -140,15 +147,6 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const store = useStore();
-    const post = ref({
-      status: 1, // 0미해결 1해결
-      link: {
-        thumbnail: require("@/assets/banner-illust.png"),
-        title: "오리선생님의 역사 이야기",
-        description:
-          "오리 선생님이 역사 이야기를 해줄거에요sadfasdfsdㅁㄴㅇㄻㄴㅇㄹㄴㅇㄻㄴㅇㄹㄴㅇㅁ랴ㅐㅗㄴㅇㅁ래ㅕㅗㅁㄴㅇ륨아너로먄여로ㅑㅕㅗㄹㄷㅈㅁ러ㅏㅁㄴ오러ㅏㅁㅇ노러ㅏㄴ",
-      },
-    });
     const isConfirm = reactive({
       status: false,
     });
@@ -171,6 +169,7 @@ export default {
         .then((response) => {
           console.log(response.data);
           requestInfo.value = response.data.requsest;
+          classInfo.value = response.data.classinfo;
           state.createDate = requestInfo.value.createDate;
           state.nickname = requestInfo.value.student.nickname;
           state.postSid = requestInfo.value.student.sid;
@@ -218,7 +217,6 @@ export default {
       deleteRequest,
       addLikeRequest,
       state,
-      post,
       userInfo,
       isConfirm,
       classInfo,

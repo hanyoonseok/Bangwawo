@@ -194,6 +194,7 @@
         }
         .column {
           @include flexColumn;
+          margin-left: 30px;
         }
         .link-title {
           cursor: pointer;
