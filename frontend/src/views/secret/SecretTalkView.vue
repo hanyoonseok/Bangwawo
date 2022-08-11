@@ -4,9 +4,26 @@
       <h2>비밀친구 대화중</h2>
     </article>
     <article class="user-wrapper" v-if="state.session">
-      <SecretCanvas :parts="student" class="user-card" :user="stu" id="stu" />
-      <SecretCanvas :parts="volunteer" class="user-card" :user="vol" id="vol" />
+      <SecretCanvas
+        :parts="volunteer"
+        class="user-card"
+        user="publisher"
+        id="publisher"
+        :isPublisherTalking="state.isPublisherTalking"
+        :isSubscribeTalking="state.isSubscribeTalking"
+        :isPublisher="true"
+      />
+      <SecretCanvas
+        :parts="student"
+        class="user-card"
+        user="subscriber"
+        id="subscriber"
+        :isPublisherTalking="state.isPublisherTalking"
+        :isSubscribeTalking="state.isSubscribeTalking"
+        :isPublisher="false"
+      />
     </article>
+
     <div id="session" v-if="state.session">
       <div id="session-header">
         <h1 id="session-title">{{ state.mySessionId }}</h1>
@@ -73,10 +90,6 @@ export default {
     //초기 캐릭터 색 : 백엔드에 저장한 db에서 받아올것임
     let student = reactive(store.state.root.user.characterColors);
     let volunteer = reactive(store.state.root.user.characterColors);
-
-    let stu = "stu";
-    let vol = "vol";
-
     // 테스트용
     // const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
     // const OPENVIDU_SERVER_SECRET = "MY_SECRET";
@@ -97,6 +110,8 @@ export default {
       audioState: true,
       isHost: true,
       danger: 0,
+      isSubscribeTalking: false,
+      isPublisherTalking: false,
     });
 
     //위험 단어 리스트
@@ -144,12 +159,31 @@ export default {
         console.log(
           "User " + event.connection.connectionId + " start speaking",
         );
+        console.log(state.publisher.stream.connection.connectionId);
         voiceDetection();
+        if (
+          state.publisher.stream.connection.connectionId ===
+          event.connection.connectionId
+        ) {
+          state.isPublisherTalking = true;
+          console.log("이건내목소리다.", state.isPublisherTalking);
+        } else {
+          state.isSubscribeTalking = true;
+          console.log("내목소리아니얌!!", state.isPublisherTalking);
+        }
       });
 
       //음성 감지 종료
       state.session.on("publisherStopSpeaking", (event) => {
         console.log("User " + event.connection.connectionId + " stop speaking");
+        if (
+          state.publisher.stream.connection.connectionId ===
+          event.connection.connectionId
+        ) {
+          state.isPublisherTalking = false;
+        } else {
+          state.isSubscribeTalking = false;
+        }
         recognition.stop();
       });
 
@@ -173,6 +207,12 @@ export default {
               frameRate: 30, // The frame rate of your video
               insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
               mirror: false, // Whether to mirror your local video or not
+              filter: {
+                type: "GStreamerFilter",
+                options: {
+                  command: "pitch pitch=1.4",
+                },
+              },
             });
             console.log("p", publisher);
             // publisher.publishVideo(false); // true to enable the video track, false to disable it
@@ -348,9 +388,8 @@ export default {
       state,
       student,
       volunteer,
-      stu,
-      vol,
       model,
+      // applyVoiceFilter,
       leaveSession,
       clickMute,
     };

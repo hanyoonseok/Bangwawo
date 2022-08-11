@@ -4,7 +4,10 @@
       <article
         :class="{
           'top-left': true,
-          host: true,
+          'host-2orless': subs.length < 2,
+          'host-4orless': subs.length < 4 && subs.length >= 2,
+          'host-6orless': subs.length < 6 && subs.length >= 4,
+          'host-12orless': subs.length >= 6,
           expand: !state.isTopOpen && !state.isChatOpen,
         }"
       >
@@ -19,11 +22,11 @@
         </div>
         <div class="user-card-wrapper" id="myVideo">
           <div class="hover-wrapper">나</div>
-          <div class="user-card"><OvVideo :stream-manager="me" /></div>
+          <div class="user-card"><user-video :stream-manager="me" /></div>
         </div>
         <div class="user-card-wrapper" v-for="(user, i) in subs" :key="user.id">
           <div class="hover-wrapper">이름{{ i }}</div>
-          <div class="user-card"><OvVideo :stream-manager="user" /></div>
+          <div class="user-card"><user-video :stream-manager="user" /></div>
         </div>
       </article>
 
@@ -96,7 +99,7 @@ import ParticipantsList from "@/components/class/ParticipantsList.vue";
 import ChatForm from "@/components/class/ChatForm.vue";
 import OXForm from "@/components/class/OXForm.vue";
 import OXResult from "@/components/class/OXResult.vue";
-import OvVideo from "./OvVideo";
+import UserVideo from "@/components/class/UserVideo.vue";
 
 export default {
   name: "HostView",
@@ -193,7 +196,7 @@ export default {
     ChatForm,
     OXForm,
     OXResult,
-    OvVideo,
+    UserVideo,
   },
 };
 </script>

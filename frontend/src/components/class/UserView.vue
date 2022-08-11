@@ -37,7 +37,7 @@
         </article>
         <article class="top-article-left bot">
           <StudentOX v-if="state.isOXOpen" />
-          <StudentInclass v-else />
+          <StudentInclass :publisher="me" :joinSession="joinSession" v-else />
         </article>
       </article>
 
@@ -58,8 +58,9 @@
         </button>
         <button class="option-btn" @click="activeMute" v-else>
           <i class="fa-solid fa-microphone-slash"></i>
-          &nbsp;음소거 해제
+          &nbsp;음소거
         </button>
+
         <button class="option-btn" @click="activeVideo" v-if="state.videoState">
           <i class="fa-solid fa-video"></i>
           &nbsp;비디오 중지
@@ -164,6 +165,7 @@ export default {
       activeMute,
     };
   },
+
   components: {
     ParticipantsList,
     ChatForm,

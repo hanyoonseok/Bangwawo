@@ -89,6 +89,7 @@
             </div>
             <div v-else>
               <!-- 수업 신청한 경우(1), 수업 신청 안한 경우(0) -->
+
               <button v-if="user.subscribe === 1" class="class-entrance-btn">
                 수업 입장
               </button>

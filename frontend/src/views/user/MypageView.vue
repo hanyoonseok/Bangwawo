@@ -16,8 +16,18 @@
       </div>
       <div class="lecture-container">
         <ul class="lecture-nav">
-          <li class="nav-item active" @click="doActive">예정된 수업</li>
-          <li class="nav-item" @click="doActive">종료된 수업</li>
+          <li
+            :class="{ 'nav-item': true, active: !state.isEndedMenuActive }"
+            @click="doMenuActive"
+          >
+            예정된 수업
+          </li>
+          <li
+            :class="{ 'nav-item': true, active: state.isEndedMenuActive }"
+            @click="doMenuActive"
+          >
+            종료된 수업
+          </li>
         </ul>
         <lecture-area
           :user="state.userInfo"
@@ -67,6 +77,7 @@ export default {
     });
     const store = useStore();
     const isCharacterModalOpen = ref(false);
+
     const children = ref(null);
     let state = reactive({
       userInfo: store.state.root.user, //computed(() => store.getters["root/userInfo"]),
@@ -137,16 +148,9 @@ export default {
         e.target.classList.add("active");
       }
       if (e.target.innerText === "예정된 수업") {
-        if (state.isEnd) {
-          state.isEnd = !state.isEnd;
-        }
-        navItem[1].classList.remove("active");
+        state.isEndedMenuActive = false;
       } else {
-        //만약 종료된수업을 눌렀다면!
-        if (!state.isEnd) {
-          state.isEnd = !state.isEnd;
-        }
-        navItem[0].classList.remove("active");
+        state.isEndedMenuActive = true;
       }
     };
 
