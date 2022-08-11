@@ -2,24 +2,24 @@
   <div class="right-box">
     <div class="lecture-area" v-if="!isEnd">
       <div
-        v-for="(lecture, index) in scheduledClass"
+        v-for="(lecture, index) in comingClass"
         :key="index"
         class="lecture-box"
       >
         <router-link :to="{ name: 'classdetail' }">
           <div class="lecture-thumb">
             <div class="state-btn">
-              <i class="fa-solid fa-circle"></i>&nbsp;{{ lecture.classStatus }}
+              <i class="fa-solid fa-circle"></i>&nbsp;예정
             </div>
           </div>
           <div class="lecture-info">
-            <div class="teacher-photo" v-if="!(user.status === 2)">
-              <img src="@/assets/profile.png" />
-            </div>
-            <div class="lecture-teacher">{{ lecture.classTeacher }} 강사</div>
-            <div class="lecture-title">{{ lecture.classTitle }}</div>
-            <div class="lecture-date">{{ lecture.classStartTime }}</div>
-            <button class="lecture-cancel" v-if="!user.status === 2">
+            <div class="lecture-teacher">{{ lecture.vid.nickname }} 강사</div>
+            <div class="lecture-title">{{ lecture.title }}</div>
+            <div class="lecture-date">{{ lecture.stimeStr }}</div>
+            <button
+              class="lecture-cancel"
+              v-if="!user.userType === 'volunteer'"
+            >
               취소
             </button>
           </div></router-link
@@ -35,15 +35,12 @@
       >
         <router-link :to="{ name: 'classdetail' }">
           <div class="lecture-thumb">
-            <div class="end-btn">{{ lecture.classStatus }}</div>
+            <div class="end-btn">종료</div>
           </div>
           <div class="lecture-info">
-            <div class="teacher-photo" v-if="!(user.status === 2)">
-              <img src="@/assets/profile.png" />
-            </div>
-            <div class="lecture-teacher">{{ lecture.classTeacher }} 강사</div>
-            <div class="lecture-title">{{ lecture.classTitle }}</div>
-            <div class="lecture-date">{{ lecture.classEndTime }} 종료</div>
+            <div class="lecture-teacher">{{ lecture.vid.nickname }} 강사</div>
+            <div class="lecture-title">{{ lecture.title }}</div>
+            <div class="lecture-date">{{ lecture.etimeStr }}종료</div>
           </div>
         </router-link>
       </div>
@@ -52,36 +49,9 @@
 </template>
 
 <script>
-import { computed, reactive } from "vue";
-
 export default {
-  setup() {
-    const page = reactive({
-      outerWidth: window.outerWidth,
-      startPage: 2, //화면에 보이는 페이지 시작 번호
-      currentPage: 3, // 현재 페이지 번호
-      totalCount: 6, // 총 콘텐츠
-      pageRange: computed(() => {
-        let array = [];
-        for (
-          let index = page.currentPage - 2;
-          index <= page.currentPage + 2;
-          index++
-        ) {
-          array.push(index);
-        }
-        return array;
-      }),
-      endPage: 7, // 화면에 보이는 페이지 끝 번호
-      totalPage: computed(() => {
-        return page.totalCount / 5;
-      }), // 총 페이지 수
-    });
-    return {
-      page,
-    };
-  },
-  props: ["isEnd", "user", "scheduledClass", "endClass"],
+  props: ["isEnd", "user", "comingClass", "endClass"],
+  setup() {},
   components: {
     // Carousel,
     // Slide,

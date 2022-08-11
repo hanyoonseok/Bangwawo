@@ -1,25 +1,26 @@
 <template>
-  <div class="signup-container">
+  <form class="signup-container" @submit.prevent="submitRegister">
     <div class="input-box">
       <input
         class="sign-input"
+        type="email"
         placeholder="학부모 이메일을 입력해주세요."
         v-model="emailValue"
+        required
       />
-      <button class="signup-submit" @click="submitRegister">로그인</button>
+      <button type="submit" class="signup-submit">로그인</button>
     </div>
     <div class="duck-img">
       <div class="guide">별명, 부모님 이메일을 알려줘~</div>
       <img src="@/assets/signupDuck.png" />
     </div>
-  </div>
+  </form>
 </template>
 
 <script>
 import { ref } from "vue";
-import axios from "axios";
-import jwt_decode from "jwt-decode";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 export default {
   name: "SignupUpVolunteer",
@@ -28,26 +29,27 @@ export default {
     let emailValue = ref("");
     const registObj = ref({ ...props });
     const router = useRouter();
+    const store = useStore();
 
-    registObj.value.character = {
-      bag: "FFD89B",
-      body: "f1f1f1",
-      dress: "FFAEAE",
-      glasses: "ff9696",
-      legs: "ff9696",
-      hat: "FFD89B",
-    };
+    registObj.value.character = [
+      { part: "bag", color: "FFD89B" },
+      { part: "body", color: "f1f1f1" },
+      { part: "clothes", color: "ff9696" },
+      { part: "glasses", color: "FFD89B" },
+      { part: "foot", color: "ff9696" },
+      { part: "hat", color: "FFD89B" },
+    ];
 
-    const submitRegister = async () => {
+    const submitRegister = () => {
       registObj.value.pemail = emailValue.value;
-      console.log(registObj.value);
-      const response = await axios.post(
-        `${process.env.VUE_APP_API_URL}/student/`,
-        registObj.value,
-      );
-      const decode_jwt = jwt_decode(response.data.JWT);
-      localStorage.setItem("user", JSON.stringify(decode_jwt.user));
-      router.push("/class/list");
+      registObj.value.userType = "student";
+      store
+        .dispatch("root/loginUser", registObj.value)
+        .then((res) => {
+          store.commit("root/setUserInfo", res.data);
+          router.push("/class/list");
+        })
+        .catch((err) => console.log(err.message));
     };
 
     return { emailValue, submitRegister };

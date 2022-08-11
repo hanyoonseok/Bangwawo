@@ -7,8 +7,12 @@
       :leaveSession="leaveSession"
       :me="state.publisher"
       :subs="state.subscribers"
+      @activeVideo="activeVideo"
+      @activeMute="activeMute"
+      @publishScreenShare="publishScreenShare"
       :session="state.session"
       :chats="state.chats"
+      :screen="state.screenShareState"
     />
     <UserView
       v-if="!state.isHost && state.session"
@@ -18,12 +22,15 @@
       :state="state"
       :me="state.publisher"
       :subs="state.subscribers"
+      @activeVideo="activeVideo"
+      @activeMute="activeMute"
+      @publishScreenShare="publishScreenShare"
     />
   </section>
 </template>
 
 <script>
-import { reactive, onBeforeUnmount, computed } from "vue";
+import { reactive, onBeforeUnmount, computed, onMounted, watch } from "vue";
 import axios from "axios";
 import moment from "moment";
 import { OpenVidu } from "openvidu-browser";
@@ -37,16 +44,18 @@ export default {
   components: {
     HostView,
     UserView,
-    // UserVideo,
   },
   setup() {
     // 테스트용
     const OPENVIDU_SERVER_URL = process.env.VUE_APP_OV_DOMAIN;
     const OPENVIDU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
     const OV = new OpenVidu();
+    const OVScreen = new OpenVidu(); // 화면 공유
 
     const state = reactive({
       OV: OV,
+      OVScreen: OVScreen,
+      sessionScreen: undefined,
       session: undefined,
       mainStreamManager: undefined,
       publisher: OV.initPublisher(undefined, {
@@ -60,7 +69,7 @@ export default {
         mirror: false, // Whether to mirror your local video or not
       }),
       subscribers: [],
-      mySessionId: "SessionC",
+      mySessionId: "SessionAAA",
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       joinedPlayerNumbers: 0,
       chats: [],
@@ -71,12 +80,35 @@ export default {
           Math.min(state.dataIdx + state.dataLen, state.subscribers.length + 1),
         );
       }),
-      isHost: true,
+      isHost: false,
       dataLen: computed(() => {
         return state.isHost ? 12 : 4;
       }),
       dataIdx: 0,
+
+      screenShareState: false, //화면공유 여부
     });
+
+    // 화면 공유 상태 변화했는지 감지
+    watch(
+      () => state.screenShareState,
+      (cur) => {
+        screenShare(cur);
+      },
+      { deep: true },
+    );
+
+    const screenShare = (cur) => {
+      console.log("싱태", cur);
+      if (cur) {
+        // true일때는 화면공유 창 보여주기
+        document.getElementById("screenShareStart").style.display = "none";
+        document.getElementById("container-screens").style.display = "block";
+      } else {
+        document.getElementById("screenShareStart").style.display = "block";
+        document.getElementById("container-screens").style.display = "hidden";
+      }
+    };
 
     /*
   닉네임:사용자
@@ -88,15 +120,17 @@ export default {
     // 사용자가 방에 참여하겠다는 버튼 누를때마다 호출
     const joinSession = () => {
       console.log("join session");
-      // Opnevidu 객체 가져오기
-      state.OV = new OpenVidu();
       // 초기화
       state.session = state.OV.initSession();
+      state.sessionScreen = state.OVScreen.initSession();
+
       // 새로운 Stream을 구독하고 subscribers배열에 저장
       state.session.on("streamCreated", ({ stream }) => {
-        const subscriber = state.session.subscribe(stream);
-        state.subscribers.push(subscriber);
-        if (subscriber.videos !== []) state.joinedPlayerNumbers++;
+        if (stream.typeOfVideo == "CAMERA") {
+          const subscriber = state.session.subscribe(stream);
+          state.subscribers.push(subscriber);
+          if (subscriber.videos !== []) state.joinedPlayerNumbers++;
+        }
       });
       // 사용자가 화상 회의에서 나갔을때 나간 사용자 제거
       state.session.on("streamDestroyed", ({ stream }) => {
@@ -110,6 +144,23 @@ export default {
       // On every asynchronous exception...
       state.session.on("exception", ({ exception }) => {
         console.warn(exception);
+      });
+
+      // 화면 공유
+      state.sessionScreen.on("streamCreated", (event) => {
+        if (event.stream.typeOfVideo == "SCREEN") {
+          state.screenShareState = true;
+          // Subscribe to the Stream to receive it. HTML video will be appended to element with 'container-screens' id
+          var subscriberScreen = state.sessionScreen.subscribe(
+            event.stream,
+            "container-screens",
+          );
+          // When the HTML video has been appended to DOM...
+          subscriberScreen.on("videoElementCreated", () => {
+            // Add a new <p> element for the user's nickname just below its video
+            // appendUserData(event.element, subscriberScreen.stream.connection);
+          });
+        }
       });
 
       state.session.on("signal:my-chat", (e) => {
@@ -149,7 +200,6 @@ export default {
             });
             state.mainStreamManager = publisher;
             state.publisher = publisher;
-
             state.joinedPlayerNumbers++;
             state.session.publish(publisher);
           })
@@ -161,8 +211,24 @@ export default {
             );
           });
       });
+
+      getToken(state.mySessionId).then((tokenScreen) => {
+        // Create a token for screen share
+        state.sessionScreen
+          .connect(tokenScreen, { clientData: state.myUserName })
+          .then(() => {
+            console.log("Session screen connected");
+          })
+          .catch((error) => {
+            console.warn(
+              "There was an error connecting to the session for screen share:",
+              error.code,
+              error.message,
+            );
+          });
+      });
+
       window.addEventListener("beforeunload", leaveSession);
-      console.log("@@@@subscribers@@@@", state.subscribers);
     };
 
     const leaveSession = () => {
@@ -170,7 +236,12 @@ export default {
       if (state.session) {
         state.session.disconnect();
       }
+
+      if (state.sessionScreen) {
+        state.sessionScreen.disconnect();
+      }
       state.session = undefined;
+      state.sessionScreen = undefined;
       state.mainStreamManager = undefined;
       state.publisher = undefined;
       state.subscribers = [];
@@ -260,6 +331,57 @@ export default {
       });
     };
 
+    // 화면공유 활성화 함수
+    const publishScreenShare = () => {
+      var publisherScreen = state.OVScreen.initPublisher("container-screens", {
+        audioSource: false,
+        videoSource: "screen",
+      });
+
+      publisherScreen.once("accessAllowed", () => {
+        console.log("화면공유시작????");
+        console.log("시작", state.session);
+
+        console.log("ovscreen", state.OVScreen);
+        console.log("sessionscreen", state.sessionScreen);
+        state.screenShareState = true;
+        console.log(state.screenShareState);
+        publisherScreen.stream
+          .getMediaStream({
+            video: true,
+            audio: false,
+          })
+          .getVideoTracks()[0]
+          .addEventListener("ended", () => {
+            // document.getElementById("screenShareStart").style.display = "block";
+            // document.getElementById("container-screens").style.display = "none";
+            console.log(
+              "화면 공유를 멈췄ㄸ따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ",
+            );
+            state.sessionScreen.unpublish(publisherScreen);
+            state.screenShareState = false;
+            console.log(state.screenShareState);
+            console.log("끝", state.session);
+
+            console.log("ovscreen", state.OVScreen);
+            console.log("sessionscreen", state.sessionScreen);
+          });
+        state.sessionScreen.publish(publisherScreen);
+      });
+
+      publisherScreen.on("videoElementCreated", function (event) {
+        console.log(event.element);
+        event.element.className += "screen-share";
+        console.log(event.element);
+        event.element["muted"] = true;
+        console.log(event.element["muted"]);
+      });
+
+      publisherScreen.once("accessDenied", () => {
+        console.error("Screen Share: Access Denied");
+      });
+    };
+
     joinSession();
     onBeforeUnmount(() => {
       state.joinedPlayerNumbers = 0;
@@ -298,6 +420,18 @@ export default {
     //   dataLen.value = param;
     // };
 
+    const activeVideo = (videoState) => {
+      state.publisher.publishVideo(videoState); // true to enable the video track, false to disable it
+    };
+    const activeMute = (audioState) => {
+      state.publisher.publishAudio(audioState);
+    };
+
+    onMounted(() => {
+      document.getElementById("screenShareStart").style.display = "block";
+      document.getElementById("container-screens").style.display = "none";
+    });
+
     return {
       state,
       // dataLen,
@@ -306,6 +440,9 @@ export default {
       // prevClick,
       // nextClick,
       // changeDataLen,
+      activeVideo,
+      activeMute,
+      publishScreenShare,
     };
   },
 };

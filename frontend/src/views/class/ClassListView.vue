@@ -21,6 +21,17 @@
         </div>
       </section>
       <OpendClassList :opened="openClass" />
+      <div class="search-bar">
+        <input
+          type="text"
+          placeholder="찾고 싶은 수업을 입력하세요."
+          @keyup="searchClass"
+          @input="changeKeyword"
+        />
+        <button class="search-btn">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </div>
       <MakedClassList :maked="filteredMakedClass" />
       <ForObserve @triggerIntersected="loadMakedClasses" />
       <a class="up" @click="top">
@@ -35,6 +46,7 @@ import HeaderNav from "@/components/HeaderNav.vue";
 import OpendClassList from "@/components/class/OpendClassList.vue";
 import MakedClassList from "@/components/class/MakedClassList.vue";
 import ForObserve from "@/components/class/ForObserve.vue";
+import axios from "axios";
 
 import { ref } from "vue";
 export default {
@@ -46,309 +58,88 @@ export default {
     ForObserve,
   },
   setup() {
-    // 임시 테스트용 데이터
-    const allClasses = ref([
-      {
-        className: "dd",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: true,
-      },
-      {
-        className: "dd1",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: true,
-      },
-      {
-        className: "dd2",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: true,
-      },
-      {
-        className: "dd3",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: true,
-      },
-      {
-        className: "dd4",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: true,
-      },
-      {
-        className: "dd5",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: true,
-      },
-      {
-        className: "dd6",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd7",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd8",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd9",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd10",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd11",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd12",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd13",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd14",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd15",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd16",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd17",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd18",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd19",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd20",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-      {
-        className: "dd21",
-        classDate: "dd",
-        classStartTime: "dd",
-        classEndTIme: "dd",
-        classThumbnail: "dd",
-        classOpen: "dd",
-        classPeople: "dd",
-        classContent: "dd",
-        classImgFile:
-          "https://user-images.githubusercontent.com/33210124/181405552-fbd61f43-08e2-419c-a03e-a7bcf4983218.png",
-        isOpenClass: false,
-      },
-    ]);
-    const openClass = ref(allClasses.value.filter((e) => e.isOpenClass));
-    const makedClass = ref(allClasses.value.filter((e) => !e.isOpenClass));
+    let allClasses = ref([]);
+    let openClass = ref([]);
+    let makedClass = ref([]);
+    const keyword = ref();
     const filteredMakedClass = ref([]);
     const dataIdx = ref(0);
     const dataLen = 15;
+
+    const getClass = async (flag) => {
+      axios
+        .get(`${process.env.VUE_APP_API_URL}/class`)
+        .then((response) => {
+          allClasses = response.data;
+          // console.log(allClasses);
+          const openArray = [];
+          const makedArray = [];
+          for (const item of allClasses) {
+            if (item.opened) {
+              openArray.push(item);
+            } else {
+              makedArray.push(item);
+            }
+          }
+
+          openClass.value = openArray;
+          makedClass.value = makedArray;
+          if (flag) {
+            filteredMakedClass.value = [];
+          } else {
+            filteredMakedClass.value = makedArray;
+          }
+          // loadMakedClasses();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    getClass(true);
+
+    const searchClass = async () => {
+      console.log(keyword.value);
+      if (keyword.value !== "") {
+        axios
+          .get(`${process.env.VUE_APP_API_URL}/class`, {
+            params: { title: keyword.value },
+          })
+          .then((response) => {
+            const data = response.data;
+            console.log("검색 결과 ", data);
+
+            const searchArr = [];
+            for (const item of data) {
+              if (!item.opened) {
+                searchArr.push(item);
+              }
+            }
+            makedClass.value = searchArr;
+            filteredMakedClass.value = searchArr;
+            console.log(makedClass.value);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        console.log("엥?");
+        getClass(false);
+      }
+    };
+
+    const changeKeyword = (e) => {
+      keyword.value = e.target.value;
+    };
 
     const top = () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     const loadMakedClasses = () => {
+      console.log("load");
       if (dataIdx.value > makedClass.value.length) return;
+      let prevArr = [...filteredMakedClass.value];
 
-      const prevArr = [...filteredMakedClass.value];
       for (
         let i = dataIdx.value;
         i < Math.min(makedClass.value.length, dataIdx.value + dataLen);
@@ -361,13 +152,15 @@ export default {
       console.log(filteredMakedClass.value);
     };
 
-    loadMakedClasses();
-
     return {
       top,
+      getClass,
       openClass,
       filteredMakedClass,
       loadMakedClasses,
+      keyword,
+      changeKeyword,
+      searchClass,
     };
   },
 };
