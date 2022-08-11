@@ -33,6 +33,14 @@ public class ClassController {
     public ResponseEntity<?> save(@RequestBody ClassDto classDto) throws Exception{
         return new ResponseEntity<>(classService.save(classDto), HttpStatus.OK);
     }
+
+    @ApiOperation(value = "수업 생성")
+    @PostMapping("/{rid}")
+    public ResponseEntity<?> save(@RequestBody ClassDto classDto,@RequestParam(value = "rid") int rid) throws Exception{
+        return new ResponseEntity<>(classService.save(classDto), HttpStatus.OK);
+
+    }
+
     @ApiOperation(value = "이미지 등록")
     @PostMapping("/image")
     public ResponseEntity<String> fileImage(@RequestParam(name = "thumbnail") MultipartFile multipartFile) throws Exception{
