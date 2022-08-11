@@ -42,6 +42,7 @@ import TheCanvas from "@/components/mypage/TheCanvas.vue";
 export default {
   name: "CharacterModal",
   emits: ["close-character-modal"],
+  props: ["user"],
   components: {
     ColorPicker,
     TheCanvas,
@@ -58,6 +59,7 @@ export default {
 
     const updateColor = (eventData) => {
       change.color = eventData.colors.hex.slice(0, 7);
+      console.log("update color", change.color);
       document.querySelectorAll(".select-btn").forEach((item) => {
         if (item.classList.contains("active")) {
           if (item.classList.contains("body")) {
@@ -112,7 +114,7 @@ export default {
     // 탭 눌렀을때 parts에 있는 id값에 맞춰 컬러 피커 색 변경
     const setPickerColor = (set) => {
       for (const item of parts) {
-        if (item.id === set) {
+        if (item.part === set) {
           change.color = "#" + item.color;
         }
       }
@@ -124,8 +126,20 @@ export default {
 
     // DB로 캐릭터 부위별 색상 값 보내기
     const saveCharacter = () => {
-      store.state.root.user.characterColors = parts;
-      emit("close-character-modal");
+      const modifyInfo = {
+        character: parts,
+        userType: props.user.userType,
+      };
+      if (props.user.userType === "volunteer") modifyInfo.id = props.user.vid;
+      else modifyInfo.id = props.user.sid;
+
+      store
+        .dispatch("root/setCharacterInfo", modifyInfo)
+        .then(() => {
+          store.commit("root/setCharacterInfo", modifyInfo);
+          emit("close-character-modal");
+        })
+        .catch((err) => console.log(err.message));
     };
 
     return {

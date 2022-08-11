@@ -259,7 +259,6 @@
               @include StatusBtn(true);
               width: 60px;
               font-size: 10px;
-              padding: 3px;
               height: 25px;
               font-family: $appleB;
               i {
@@ -267,15 +266,20 @@
               }
             }
             .end-btn {
+              @include StatusBtn(false);
               position: absolute;
               top: 10px;
               right: 13px;
-              font-size: 8px;
+              width: 60px;
+              font-size: 10px;
+              height: 25px;
               font-family: $appleB;
-              padding: 4px;
-              border-radius: 5px;
               color: $white;
               background-color: $grey;
+              i {
+                color: $white;
+                font-size: 6px;
+              }
             }
           }
 

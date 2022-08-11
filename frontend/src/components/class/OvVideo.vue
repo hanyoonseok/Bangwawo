@@ -14,6 +14,7 @@ export default {
     this.streamManager.addVideoElement(this.$el);
 
     const video = document.getElementById("video");
+    console.log(video);
 
     Promise.all([
       faceapi.nets.tinyFaceDetector.loadFromUri("./models"),

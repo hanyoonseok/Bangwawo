@@ -36,6 +36,7 @@ import moment from "moment";
 import { OpenVidu } from "openvidu-browser";
 import HostView from "@/components/class/HostView.vue";
 import UserView from "@/components/class/UserView.vue";
+import { useRoute } from "vue-router";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
@@ -51,6 +52,11 @@ export default {
     const OPENVIDU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
     const OV = new OpenVidu();
     const OVScreen = new OpenVidu(); // 화면 공유
+
+    const route = useRoute();
+
+    const mySessionId = route.params.mySessionId;
+    console.log("mySessionId", mySessionId);
 
     const state = reactive({
       OV: OV,
@@ -69,7 +75,7 @@ export default {
         mirror: false, // Whether to mirror your local video or not
       }),
       subscribers: [],
-      mySessionId: "SessionAAA",
+      mySessionId: mySessionId,
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       joinedPlayerNumbers: 0,
       chats: [],
