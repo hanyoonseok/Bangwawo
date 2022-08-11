@@ -78,3 +78,62 @@ export const inactiveKakaoToken = ({ state }, accessToken) => {
   const url = `/kakao/logout/${accessToken}`;
   return axios.get(url);
 };
+// 수업
+export const getClassList = ({ state }) => {
+  console.log("getClassList", state);
+  const url = `/class`;
+  return axios.get(url);
+};
+
+export const getClassDetail = ({ state }, cid) => {
+  console.log("getClassDetail", state, cid);
+  const url = `/class/${cid}`;
+  return axios.get(url);
+};
+
+export const getEnrolStudent = ({ state }, cid) => {
+  console.log("getEnrolStudent", state, cid);
+  const url = `/enrol/class/${cid}`;
+  return axios.get(url);
+};
+
+export const enrolClass = ({ state }, payload) => {
+  console.log("enrolClass", state, payload);
+  const url = `/enrol`;
+  return axios.post(url, payload);
+};
+
+export const deleteClass = ({ state }, cid) => {
+  console.log("deleteClass", state, cid);
+  const url = `/class/${cid}`;
+  return axios.delete(url);
+};
+
+export const registerImage = ({ state }, payload) => {
+  console.log("registerImage", state, payload);
+  const url = `/class/image`;
+  const formData = payload;
+  return axios.post(url, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
+export const modifyClass = ({ state }, payload) => {
+  console.log("modifyClass", state, payload);
+  const url = `/class`;
+  return axios.put(url, payload);
+};
+
+export const registerClass = ({ state }, payload) => {
+  console.log("registerClass", state, payload);
+  const url = `/class`;
+  return axios.post(url, payload);
+};
+
+export const startClass = ({ state }, payload) => {
+  console.log("startClass", state, payload);
+  const url = `/class`;
+  return axios.put(url, payload);
+};

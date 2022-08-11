@@ -22,7 +22,7 @@
           <div class="idx-btn-wrapper prev" @click="prevClick">
             <button class="idx-btn prev"></button>
           </div>
-          <div class="user-card-wrapper">
+          <div class="user-card-wrapper" id="container-screens">
             <div class="hover-wrapper">나</div>
             <div class="user-card"><OvVideo :stream-manager="me" /></div>
           </div>
@@ -37,7 +37,7 @@
         </article>
         <article class="top-article-left bot">
           <StudentOX v-if="state.isOXOpen" />
-          <StudentInclass v-else />
+          <StudentInclass :publisher="me" :joinSession="joinSession" v-else />
         </article>
       </article>
 
@@ -52,11 +52,20 @@
 
     <section class="bot-section">
       <article class="bot-left">
-        <button class="option-btn red">
+        <button class="option-btn" @click="activeMute" v-if="state.audioState">
           <i class="fa-solid fa-microphone-slash"></i>
-          &nbsp;음소거 해제
+          &nbsp;음소거
         </button>
-        <button class="option-btn">
+        <button class="option-btn" @click="activeMute" v-else>
+          <i class="fa-solid fa-microphone-slash"></i>
+          &nbsp;음소거
+        </button>
+
+        <button class="option-btn" @click="activeVideo" v-if="state.videoState">
+          <i class="fa-solid fa-video"></i>
+          &nbsp;비디오 중지
+        </button>
+        <button class="option-btn" @click="activeVideo" v-else>
           <i class="fa-solid fa-video"></i>
           &nbsp;비디오 시작
         </button>
@@ -98,12 +107,14 @@ export default {
     "me",
     "subs",
   ],
-  setup() {
+  setup(props, { emit }) {
     const state = reactive({
       isParticipantsOpen: false,
       isChatOpen: false,
       isTopOpen: false,
       isOXOpen: false,
+      videoState: true, // 비디오 on,off
+      audioState: true, // 소리 on,off
     });
 
     const toggleParticipants = () => {
@@ -125,13 +136,36 @@ export default {
       // }
     };
 
+    const activeVideo = () => {
+      state.videoState = !state.videoState;
+      const myVideo = document.getElementById("myVideo");
+      const userCard = myVideo.querySelector(".user-card");
+      const video = userCard.querySelector("video");
+      if (state.videoState === false) {
+        userCard.style.backgroundColor = "#000";
+        video.style.display = "none";
+      } else {
+        userCard.style.backgroundColor = "transparent";
+        video.style.display = "block";
+      }
+      emit("activeVideo", state.videoState);
+    };
+
+    const activeMute = () => {
+      state.audioState = !state.audioState;
+      emit("activeMute", state.audioState);
+    };
+
     //props.initCurrentStudents();
     return {
       state,
       toggleParticipants,
       toggleChat,
+      activeVideo,
+      activeMute,
     };
   },
+
   components: {
     ParticipantsList,
     ChatForm,

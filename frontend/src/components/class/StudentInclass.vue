@@ -1,12 +1,21 @@
 <template>
-  <div class="stu-inclass-container"></div>
+  <div class="stu-inclass-container">
+    <user-video
+      :stream-manager="publisher"
+      @click="updateMainVideoStreamManager(publisher)"
+    />
+  </div>
 </template>
 
 <script>
+import UserVideo from "@/components/class/UserVideo.vue";
 export default {
   name: "StudentOX",
-  setup() {},
-  components: {},
+  props: ["publisher", "joinSession"],
+  setup(props) {
+    props.joinSession();
+  },
+  components: { UserVideo },
 };
 </script>
 
