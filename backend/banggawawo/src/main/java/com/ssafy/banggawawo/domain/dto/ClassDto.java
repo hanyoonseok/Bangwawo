@@ -16,7 +16,7 @@ import java.util.Date;
 public class ClassDto {
     private Long cId;             // 수업id
     private Volunteer vId;        // 봉사자
-    private Request rId;          // 신청
+    private Long rId;          // 신청
     private String title;         // 제목
     private String introduce;     // 내용
     private LocalDateTime stime;           // 시작시간
@@ -42,7 +42,7 @@ public class ClassDto {
     @Builder
     public ClassDto(Long cId,
                     Volunteer vId,
-                    Request rId,
+                    Long rId,
                     String title, String introduce,
                     LocalDateTime stime, LocalDateTime etime,
                     Integer maxcnt, Integer enrolcnt, Boolean opened,
