@@ -2,6 +2,7 @@ package com.ssafy.banggawawo.controller;
 
 import com.ssafy.banggawawo.domain.dto.ParentDto;
 import com.ssafy.banggawawo.domain.dto.StudentDto;
+import com.ssafy.banggawawo.domain.dto.StudentFrontDto;
 import com.ssafy.banggawawo.domain.entity.Student;
 import com.ssafy.banggawawo.service.JwtService;
 import com.ssafy.banggawawo.service.StudentService;
@@ -62,9 +63,9 @@ public class ParentController {
         Map<String, Object> response = new HashMap<>();
         try{
             List<Student> childList = studentService.findByPemail(email);
-            List<StudentDto> childs = new ArrayList<StudentDto>();
+            List<StudentFrontDto> childs = new ArrayList<StudentFrontDto>();
             for(Student s : childList){
-                StudentDto std = new StudentDto(s);
+                StudentFrontDto std = new StudentFrontDto(new StudentDto(s));
                 std.setPpw("");
                 childs.add(std);
             }

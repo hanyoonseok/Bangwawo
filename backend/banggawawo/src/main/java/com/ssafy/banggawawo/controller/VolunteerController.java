@@ -143,7 +143,7 @@ public class VolunteerController {
             System.out.println("에러 메세지 : " + e.getMessage());
             e.printStackTrace();
             response.put("result", "FAIL");
-            response.put("reason", "해당 봉사자가 존재하지 않습니다.");
+            response.put("reason", e.getMessage());
         }
         return response;
     }
