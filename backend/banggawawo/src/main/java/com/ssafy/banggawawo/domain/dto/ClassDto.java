@@ -64,5 +64,11 @@ public class ClassDto {
         if(etime != null){
             this.etimeStr = etime.toLocalTime().toString();
         }
+        if(state == null){
+            this.state = 0;
+        }
+        if(opened == null){
+            this.opened = false;
+        }
     }
 }
