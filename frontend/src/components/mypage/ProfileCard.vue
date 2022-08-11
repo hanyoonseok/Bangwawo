@@ -1,12 +1,12 @@
 <template>
   <div v-if="user.userType === 'parent'" class="parent-profile">
-    <div class="bookmark-area" @click="changeChildTab">
+    <div class="bookmark-area">
       <!--부모일경우 북마크 추가-->
       <div
         class="children-bookmark"
         v-for="(child, index) in children"
         :key="index"
-        @click="selectChild(child.nickname)"
+        @click="selectChild(child)"
       >
         <div class="children-name">{{ child.nickname }}</div>
         <img src="@/assets/profile.png" />
@@ -80,7 +80,7 @@
 
 <script>
 import ProfileCanvas from "@/components/mypage/ProfileCanvas.vue";
-import { ref, watch, reactive } from "vue";
+import { ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 
@@ -106,12 +106,10 @@ export default {
     const toggleModal = () => {
       isModalOpen.value = !isModalOpen.value;
     };
-    const state = reactive({
-      childrenNo: 0,
-    });
 
-    const selectChild = (childName) => {
-      selectedChild.value = childName;
+    const selectChild = (child) => {
+      selectedChild.value = child.nickname;
+      emit("selectChild", child);
     };
 
     const openCharacterModal = () => {
@@ -131,7 +129,6 @@ export default {
     return {
       toggleModal,
       isModalOpen,
-      state,
       openCharacterModal,
       isModifyOpen,
       selectedChild,

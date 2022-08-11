@@ -79,6 +79,7 @@ export const inactiveKakaoToken = ({ state }, accessToken) => {
   return axios.get(url);
 };
 // 수업
+
 export const getClassList = ({ state }) => {
   console.log("getClassList", state);
   const url = `/class`;
@@ -149,5 +150,11 @@ export const startVolunteerClass = ({ state }, payload) => {
 export const entranceClass = ({ state }, payload) => {
   console.log("entranceClass", state, payload);
   const url = `/session/class/join/${payload.cid}/${payload.sid}`;
+  return axios.get(url);
+};
+
+export const getOneUser = ({ state }, payload) => {
+  console.log("getOneUser", state, payload);
+  const url = `/${payload.userType}/${payload.sid || payload.vid}`;
   return axios.get(url);
 };

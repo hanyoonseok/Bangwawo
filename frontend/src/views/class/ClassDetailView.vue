@@ -87,6 +87,7 @@
                 class="class-status-btn"
                 id="ing"
                 v-else-if="classInfo.state === 1"
+                @click="startClass"
               >
                 수업 진행중
               </button>
@@ -104,7 +105,7 @@
                 <i class="fa-solid fa-trash-can"></i>
               </button>
             </div>
-            <div v-else>
+            <div v-else-if="userInfo.userType === 'student'">
               <!-- 수업 신청을 했고(1) 수업 시작한 경우(1) -->
               <button
                 v-if="user.subscribe && classInfo.state === 1"
@@ -193,6 +194,7 @@ export default {
     const router = useRouter();
     const store = useStore();
     const userInfo = reactive(store.state.root.user);
+    console.log("userInfo", userInfo);
     const cid = route.params.cid;
 
     const classInfo = ref(null);
@@ -202,6 +204,7 @@ export default {
       store
         .dispatch("root/getClassDetail", cid)
         .then((response) => {
+          console.log(response.data);
           classInfo.value = response.data;
         })
         .catch((error) => {
@@ -233,6 +236,8 @@ export default {
 
     getEnrolStudent();
 
+    console.log("classInfo", classInfo.value);
+
     // 수업 신청하기
     const enrolClass = () => {
       store
@@ -251,7 +256,7 @@ export default {
 
     // 학생일 경우 수업 신청했는지(1) 안했는지(0) 여부
     const user = reactive({
-      subscribe: 0,
+      subscribe: false,
     });
 
     const showProfile = () => {
@@ -286,27 +291,36 @@ export default {
         });
     };
 
-    let mySessionId = "";
+    let sessionId = "";
     // 봉사자가 수업 활성화
-    const startClass = () => {
+    const startClass = async () => {
       classInfo.value.state = 1;
       console.log(userInfo.vid, cid);
 
-      store
-        .dispatch("root/startVolunteerClass", { vid: userInfo.vid, cid })
+      await store
+        .dispatch("root/startVolunteerClass", { vid: userInfo.vid, cid: cid })
         .then((response) => {
           console.log(response.data);
-          mySessionId = response.data;
+          sessionId = response.data;
+          console.log(sessionId);
         })
         .catch((err) => {
           console.log(err);
         });
+      console.log(sessionId);
 
-      store
+      await store
         .dispatch("root/modifyClass", classInfo.value)
         .then((response) => {
           console.log(response);
-          router.push({ name: "inclass", params: { mySessionId } });
+          router.push({
+            name: "inclass",
+            params: {
+              mySessionId: sessionId,
+              userType: userInfo.userType,
+              cid: cid,
+            },
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -316,10 +330,13 @@ export default {
     //학생이 수업 입장
     const entranceClass = () => {
       store
-        .dispatch("root/entranceClass", { sid: userInfo.sid, cid })
+        .dispatch("root/entranceClass", { sid: userInfo.sid, cid: cid })
         .then((response) => {
           console.log(response);
-          router.push({ name: "inclass", params: { mySessionId } });
+          router.push({
+            name: "inclass",
+            params: { mySessionId: sessionId, userType: userInfo.userType },
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -336,7 +353,7 @@ export default {
       isConfirm,
       deleteClass,
       startClass,
-      mySessionId,
+      sessionId,
       entranceClass,
     };
   },

@@ -14,6 +14,7 @@ export default {
     this.streamManager.addVideoElement(this.$el);
 
     const video = document.getElementById("video");
+    console.log(video);
 
     Promise.all([
       faceapi.nets.tinyFaceDetector.loadFromUri("./models"),
@@ -33,7 +34,7 @@ export default {
     video.addEventListener("play", () => {
       const canvas = faceapi.createCanvasFromMedia(video);
       console.log(canvas, video.width);
-      document.body.append(canvas);
+      //document.body.append(canvas);
       // const displaySize = { width: video.width, height: video.height };
       const displaySize = { width: 300, height: 200 };
       faceapi.matchDimensions(canvas, displaySize);

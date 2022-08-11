@@ -8,6 +8,7 @@
           :children="children"
           :toggleModifyModal="toggleModifyModal"
           @open-character-modal="openCharacterModal"
+          @selectChild="selectChild"
         ></profile-card>
         <div class="left-box calendar">
           <h4>수업 일정</h4>
@@ -78,7 +79,6 @@ export default {
     });
     const store = useStore();
     const isCharacterModalOpen = ref(false);
-
     const children = ref(null);
     let state = reactive({
       userInfo: store.state.root.user, //computed(() => store.getters["root/userInfo"]),
@@ -93,33 +93,19 @@ export default {
 
     const getUserInfo = () => {
       if (state.userType === "parent") {
-        store
-          .dispatch("root/getChildren", state.userInfo.email)
-          .then((res) => (children.value = res.data.childs));
+        store.dispatch("root/getChildren", state.userInfo.email).then((res) => {
+          children.value = res.data.childs;
+          if (children.value.length > 0) {
+            getStudentClasses(children.value[0].sid);
+          }
+        });
       }
     };
     getUserInfo();
 
-    const getUserClasses = async () => {
-      if (state.userType === "parent") {
-        console.log("hi");
-      } else if (state.userType === "student") {
-        await store
-          .dispatch("root/getStudentClasses", state.userInfo.sid)
-          .then((res) => {
-            console.log(res);
-            classes.value = res.data;
-
-            classes.value.forEach((e) => {
-              if (e.classes.state === 0 || e.classes.state === 1) {
-                console.log("예정");
-                comingClass.value.push(e.classes);
-              } else if (e.classes.state === 2) {
-                console.log("완료");
-                endClass.value.push(e.classes);
-              }
-            });
-          });
+    const getUserClasses = () => {
+      if (state.userType === "student") {
+        getStudentClasses(state.userInfo.sid);
       } else if (state.userType === "volunteer") {
         store
           .dispatch("root/getEndedClasses", state.userInfo.vid)
@@ -137,6 +123,28 @@ export default {
       }
     };
     getUserClasses();
+
+    const getStudentClasses = async (sid) => {
+      await store.dispatch("root/getStudentClasses", sid).then((res) => {
+        console.log(res);
+        classes.value = res.data;
+
+        const tempComingClass = [];
+        const tempEndClass = [];
+
+        classes.value.forEach((e) => {
+          if (e.classes.state === 0 || e.classes.state === 1) {
+            console.log("예정");
+            tempComingClass.push(e.classes);
+          } else if (e.classes.state === 2) {
+            console.log("완료");
+            tempEndClass.push(e.classes);
+          }
+        });
+        comingClass.value = tempComingClass;
+        endClass.value = tempEndClass;
+      });
+    };
 
     const doMenuActive = (e) => {
       if (!e.target.classList.contains("active")) {
@@ -213,6 +221,10 @@ export default {
       isModifyOpen.value = false;
     };
 
+    const selectChild = (child) => {
+      getStudentClasses(child.sid);
+    };
+
     return {
       isCharacterModalOpen,
       state,
@@ -227,6 +239,7 @@ export default {
       toggleModifyModal,
       modifyInfo,
       children,
+      selectChild,
     };
   },
 };

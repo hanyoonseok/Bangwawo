@@ -37,7 +37,7 @@
         </article>
         <article class="top-article-left bot">
           <StudentOX v-if="state.isOXOpen" />
-          <StudentInclass :publisher="me" :joinSession="joinSession" v-else />
+          <StudentInclass :publisher="me" v-else />
         </article>
       </article>
 
