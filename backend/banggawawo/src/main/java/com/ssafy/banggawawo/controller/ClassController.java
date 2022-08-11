@@ -1,6 +1,7 @@
 package com.ssafy.banggawawo.controller;
 
 import com.ssafy.banggawawo.domain.dto.ClassDto;
+import com.ssafy.banggawawo.domain.entity.ClassRoom;
 import com.ssafy.banggawawo.domain.dto.EnrolDto;
 import com.ssafy.banggawawo.domain.entity.Enrol;
 import com.ssafy.banggawawo.domain.entity.Likes;
@@ -33,8 +34,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/class")
 public class ClassController {
     private final ClassService classService;
+
     @Autowired
-    public ClassController(ClassService classService){
+    public ClassController(ClassService classService) {
         this.classService = classService;
     }
 
@@ -50,55 +52,62 @@ public class ClassController {
 
     @ApiOperation(value = "수업 생성")
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody ClassDto classDto) throws Exception{
+    public ResponseEntity<?> save(@RequestBody ClassDto classDto) throws Exception {
         return new ResponseEntity<>(classService.save(classDto), HttpStatus.OK);
     }
 
     @ApiOperation(value = "개설 요청에 대한 수업 생성")
     @PostMapping("/{rid}")
-    public ResponseEntity<?> save(@RequestBody ClassDto classDto,@PathVariable("rid") Long rid) throws Exception{
+    public ResponseEntity<?> save(@RequestBody ClassDto classDto, @PathVariable("rid") Long rid) throws Exception {
         Optional<Request> orequest = requestservice.readonly(rid);
+        classDto.setRId(rid);
+        ClassDto cresult = classService.save(classDto);
+
         if (orequest.isPresent()) {
             orequest.get().setSolved(true);
             requestservice.update(orequest.get());
         }
-
         List<Likes> result = likeService.likesList(rid);
-        for (int i =0; i<result.size();i++){
+
+        for (int i = 0; i < result.size(); i++) {
             //특정 수업이 개설되면 위수업을 듣고 싶어했던 모든 학생들의 opened를 (false->true)로 바꿔 준다.
             result.get(i).setLOpened(true);
             likeService.updateboolean(result.get(i));
         }
-        return new ResponseEntity<>(classService.save(classDto), HttpStatus.OK);
+
+        return new ResponseEntity<>(cresult, HttpStatus.OK);
     }
 
     @ApiOperation(value = "이미지 등록")
     @PostMapping("/image")
-    public ResponseEntity<String> fileImage(@RequestParam(name = "thumbnail") MultipartFile multipartFile) throws Exception{
+    public ResponseEntity<String> fileImage(@RequestParam(name = "thumbnail") MultipartFile multipartFile) throws Exception {
         LocalDateTime now = LocalDateTime.now();
         String dir1 = "src/main/resources/static/";
         String dir2 = "class_thumbnail/";
         String ext = multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf(".") + 1);
-        String fileName = ""+now.getYear()+now.getMonth()+now.getDayOfMonth()+Long.toString(now.toEpochSecond(ZoneOffset.UTC))+"."+ext;
-        try{
-            FileUploadUtil.saveFile(dir1+dir2,fileName,multipartFile);
-        }catch (IOException e) {
+        String fileName = "" + now.getYear() + now.getMonth() + now.getDayOfMonth() + Long.toString(now.toEpochSecond(ZoneOffset.UTC)) + "." + ext;
+        try {
+            FileUploadUtil.saveFile(dir1 + dir2, fileName, multipartFile);
+        } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
         }
-        return new ResponseEntity<>("/class/image/"+fileName, HttpStatus.OK);
+        return new ResponseEntity<>("/class/image/" + fileName, HttpStatus.OK);
     }
+
     @ApiOperation("이미지 받아오기")
     @GetMapping("/image/{fileName}")
     public ResponseEntity<Resource> showImage(@PathVariable String fileName) throws Exception {
-        String dir0 = new File("").getAbsolutePath()+"\\";
+        String dir0 = new File("").getAbsolutePath() + "\\";
         String dir1 = "src\\main\\resources\\static\\class_thumbnail\\";
-        return new ResponseEntity<Resource>(new UrlResource("file:"+dir0+dir1+fileName), HttpStatus.OK);
+        return new ResponseEntity<Resource>(new UrlResource("file:" + dir0 + dir1 + fileName), HttpStatus.OK);
     }
+
     @ApiOperation(value = "수업 수정")
     @PutMapping
-    public ResponseEntity<?> update(@RequestBody ClassDto classDto) throws Exception{
+    public ResponseEntity<?> update(@RequestBody ClassDto classDto) throws Exception {
         return new ResponseEntity<>(classService.update(classDto), HttpStatus.OK);
     }
+
     @ApiOperation(value = "수업 리스트 가져오기 (검색가능)", notes = "title : 제목검색, opened : 공개수업여부, state : 수업상태 [0:진행전, 1:진행중, 2:종료], vid : 봉사자 ID로 검색 ")
     @GetMapping
     public ResponseEntity<List<ClassDto>> findAll(@RequestParam(required = false, name = "title") String title,
@@ -120,19 +129,21 @@ public class ClassController {
         }).collect(Collectors.toList());
         return new ResponseEntity<List<ClassDto>>(list, HttpStatus.OK);
     }
+
     @ApiOperation(value = "수업 하나 가져오기")
     @GetMapping("/{id}")
-    public ResponseEntity<?> findByCId(@PathVariable("id") Long id) throws Exception{
+    public ResponseEntity<?> findByCId(@PathVariable("id") Long id) throws Exception {
         ClassDto classDto = classService.findByCId(id);
         classDto.setEnrolcnt(Integer.parseInt(enrolService.countEnrolsByClassId(classDto.getCId())+""));
         return new ResponseEntity<>(classDto, HttpStatus.OK);
     }
+
     @ApiOperation(value = "수업 삭제")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) throws Exception{
         if(enrolService.deleteByClassId(id) && classService.deleteById(id)){
             return new ResponseEntity<>(HttpStatus.OK);
-        }else{
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
         }
     }
