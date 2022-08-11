@@ -35,6 +35,8 @@ public class LikesController {
 
         if (result.size() == 0) {
             //이전에 공감을 누른적이 없는경우  like db에 추가해준다
+            Optional<Request> rrequest = requestservice.readonly(likeDto.getRId());
+            likeDto.setRTitle(rrequest.get().getTitle());
             likeService.sympathy(likeDto);
             //공감이 추가되면 request의 공감수 증가
             Optional<Request> orequest = requestservice.readonly(likeDto.getRId());
