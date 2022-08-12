@@ -75,7 +75,6 @@
           &nbsp;화면 공유 시작
         </button>
         <button class="option-btn" @click="toggleOX()">&nbsp;OX 퀴즈</button>
-
         <a @click="endClass">
           <i class="fa-solid fa-xmark xmark"></i>
         </a>
@@ -124,7 +123,8 @@ export default {
     const store = useStore();
     const router = useRouter();
     const userInfo = store.state.root.user;
-    console.log(props.subs);
+    console.log("@@@@@@@@@@@@me", props.me);
+    console.log("=============subs", props.subs);
 
     const state = reactive({
       isParticipantsOpen: false,

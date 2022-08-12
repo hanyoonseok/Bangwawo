@@ -340,7 +340,7 @@ export default {
           router.push({
             name: "inclass",
             params: {
-              mySessionId: sessionId,
+              mySessionId: response.data,
               nickname: userInfo.nickname,
               userType: userInfo.userType,
             },

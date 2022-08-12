@@ -15,7 +15,6 @@
       :screen="state.screenShareState"
       :cid="cid"
     />
-    <div id="recording" @click="recording">녹화 시작</div>
     <UserView
       v-if="!state.isHost && state.session"
       :dataLen="dataLen"
@@ -32,11 +31,18 @@
 </template>
 
 <script>
-import { reactive, onBeforeUnmount, computed, onMounted, watch } from "vue";
+import {
+  reactive,
+  onBeforeUnmount,
+  computed,
+  onMounted,
+  watch,
+  ref,
+} from "vue";
 import axios from "axios";
 import moment from "moment";
 // import { OpenVidu } from "openvidu-browser";
-import { OpenVidu, RecordingMode, Recording } from "openvidu-browser";
+import { OpenVidu } from "openvidu-browser";
 import HostView from "@/components/class/HostView.vue";
 import UserView from "@/components/class/UserView.vue";
 import { useRoute } from "vue-router";
@@ -64,6 +70,7 @@ export default {
     const sessionId = route.params.mySessionId;
     console.log("mySessionId", sessionId);
     const userType = route.params.userType === "volunteer" ? true : false;
+    console.log("userType", userType);
     const nickname = route.params.nickname;
     console.log("nickname", nickname);
     const cid = route.params.cid;
@@ -138,6 +145,7 @@ export default {
 
       // 새로운 Stream을 구독하고 subscribers배열에 저장
       state.session.on("streamCreated", ({ stream }) => {
+        // 웹 캠 사용하면서 사용자가 학생일때만 sub에 들어감
         if (stream.typeOfVideo == "CAMERA") {
           const subscriber = state.session.subscribe(stream);
           state.subscribers.push(subscriber);
@@ -210,10 +218,12 @@ export default {
               insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
               mirror: false, // Whether to mirror your local video or not
             });
+
             state.mainStreamManager = publisher;
             state.publisher = publisher;
             state.joinedPlayerNumbers++;
             state.session.publish(publisher);
+            startRecording(); // 녹화 시작
           })
           .catch((error) => {
             console.log(
@@ -243,15 +253,24 @@ export default {
       window.addEventListener("beforeunload", leaveSession);
     };
 
-    const recording = () => {
-      const sessionProperties = {
-        session: state.session,
-        recordingMode: RecordingMode.MANUAL, // RecordingMode.ALWAYS for automatic recording
-        defaultRecordingProperties: {
-          outputMode: Recording.OutputMode.COMPOSED,
-          resolution: "640x480",
-          frameRate: 24,
-        },
+    const recordId = ref(null);
+
+    // axios
+    //   .get(OPENVIDU_SERVER_URL + "/openvidu/api/recordings/55Class55", {
+    //     headers: {
+    //       Authorization:
+    //         "Basic " + btoa("OPENVIDUAPP:" + OPENVIDU_SERVER_SECRET),
+    //       "Content-Type": "application/json",
+    //     },
+    //   })
+    //   .then((res) => {
+    //     console.log(res);
+    //   });
+
+    const startRecording = () => {
+      const recordings = {
+        session: state.mySessionId,
+        name: "dk",
         hasAudio: true,
         hasVideo: true,
         outputMode: "COMPOSED",
@@ -259,8 +278,51 @@ export default {
         frameRate: 25,
         shmSize: 536870912,
         ignoreFailedStreams: false,
+        mediaNode: {
+          id: "media_i-0c58bcdd26l11d0sd",
+        },
       };
-      console.log(sessionProperties);
+      console.log(recordings);
+
+      axios
+        .post(
+          OPENVIDU_SERVER_URL + "/openvidu/api/recordings/start",
+          recordings,
+          {
+            headers: {
+              Authorization:
+                "Basic " + btoa("OPENVIDUAPP:" + OPENVIDU_SERVER_SECRET),
+              "Content-Type": "application/json",
+            },
+          },
+        )
+        .then((response) => {
+          console.log("===== 녹화 시작 =====", response.data);
+          recordId.value = response.data.id;
+        })
+        .catch((error) => console.error(error));
+    };
+
+    const stopRecording = () => {
+      console.log("stop");
+      console.log(recordId.value);
+      axios
+        .post(
+          OPENVIDU_SERVER_URL +
+            "/openvidu/api/recordings/stop/" +
+            recordId.value,
+          null,
+          {
+            headers: {
+              Authorization:
+                "Basic " + btoa("OPENVIDUAPP:" + OPENVIDU_SERVER_SECRET),
+            },
+          },
+        )
+        .then((response) => {
+          console.log("===== 녹화 끝 =====", response);
+        })
+        .catch((error) => console.error(error));
     };
 
     const leaveSession = () => {
@@ -272,6 +334,9 @@ export default {
       if (state.sessionScreen) {
         state.sessionScreen.disconnect();
       }
+
+      // 녹화 끝
+      stopRecording();
       state.session = undefined;
       state.sessionScreen = undefined;
       state.mainStreamManager = undefined;
@@ -475,7 +540,8 @@ export default {
       activeVideo,
       activeMute,
       publishScreenShare,
-      recording,
+      startRecording,
+      stopRecording,
     };
   },
 };
