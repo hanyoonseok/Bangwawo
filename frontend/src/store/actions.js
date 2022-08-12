@@ -55,12 +55,6 @@ export const getComingClasses = ({ state }, vid) => {
   return axios.get(url);
 };
 
-export const setCharacterInfo = ({ state }, modifyInfo) => {
-  console.log("setCharacterInfo", state, modifyInfo);
-  const url = `/${modifyInfo.userType}/character`;
-  return axios.put(url, modifyInfo);
-};
-
 export const deleteUser = ({ state }, payload) => {
   console.log("deleteUser", state, payload);
   const url = `/${payload.userType}/${payload.vid || payload.sid}`;
@@ -122,6 +116,14 @@ export const deleteClass = ({ state }, cid) => {
   return axios.delete(url);
 };
 
+//봉사자가 수업 종료하기
+export const endClass = ({ state }, payload) => {
+  console.log("endClass", state, payload);
+  const url = `/session/class/close/${payload.cid}/${payload.vid}`;
+  return axios.get(url);
+};
+///////////////////////////////////////////////
+
 export const registerImage = ({ state }, payload) => {
   console.log("registerImage", state, payload);
   const url = `/class/image`;
@@ -150,10 +152,20 @@ export const startClass = ({ state }, payload) => {
   const url = `/class`;
   return axios.put(url, payload);
 };
-
 // 좋아요 추가
 export const addLikeRequest = ({ state }, payload) => {
   console.log("addLikeRequest", state, payload);
   const url = `/likes`;
   return axios.post(url, payload);
+};
+export const setCharacterInfo = ({ state }, modifyInfo) => {
+  console.log("setCharacterInfo", state, modifyInfo);
+  const url = `/${modifyInfo.userType}/character`;
+  return axios.put(url, modifyInfo);
+};
+
+export const getStudentInfo = ({ state }, id) => {
+  console.log("getStudentInfo", state, id);
+  const url = `/student/${id}`;
+  return axios.get(url);
 };

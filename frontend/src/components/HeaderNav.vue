@@ -61,7 +61,7 @@
           <a href="" @click.prevent="logout">로그아웃</a>
         </ul>
       </div>
-      <div class="bell-wrapper" v-if="user">
+      <div class="bell-wrapper" v-if="user && user.userType != 'volunteer'">
         <i class="fa-solid fa-bell" @click="toggleNoticeModal"
           ><div class="count">{{ notices.length }}</div></i
         >
@@ -117,20 +117,46 @@
         </button>
       </div>
     </section>
+
+    <div v-if="state.isMatchingModal" class="matching-modal">
+      <div class="modal-wrapper">
+        <RequestPostCanvas
+          v-if="state.characterColor"
+          :characterColor="state.characterColor"
+          :isMatchingProfile="true"
+        ></RequestPostCanvas>
+        <div class="matching-title">비밀친구 매칭이 되었습니다!</div>
+        <div>
+          <button class="accept-matching" @click="acceptMatching">수락</button>
+          <button class="reject-matching" @click="rejectMatching">거절</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, getCurrentInstance, reactive } from "vue";
 import { useStore } from "vuex";
 import axios from "axios";
+import RequestPostCanvas from "@/components/class/RequestPostCanvas.vue";
+// import { io } from "socket.io-client";
 
 export default {
+  components: {
+    RequestPostCanvas,
+  },
   name: "HeaderNav",
   setup() {
+    const app = getCurrentInstance();
+    const $soketio = app.appContext.config.globalProperties.$soketio;
     const store = useStore();
     const user = ref(store.state.root.user);
-
+    const state = reactive({
+      isMatchingModal: false,
+      characterColor: null,
+      studentName: "",
+    });
     let isNoticeOpen = ref(false);
 
     let isProfileOpen = ref(false);
@@ -201,6 +227,39 @@ export default {
         });
     };
 
+    const rejectMatching = () => {
+      state.isMatchingModal = false;
+    };
+    console.log(user.value);
+
+    // 봉사자일 경우 socket 알람을 받는다.
+    if (
+      user.value &&
+      user.value.userType === "volunteer" &&
+      user.value.talkable
+    ) {
+      $soketio.on("newMessage", (data) => {
+        state.isMatchingModal = true;
+        store.dispatch("root/getStudentInfo", data).then((res) => {
+          state.characterColor = res.data.user.character;
+          state.studentName = res.data.user.nickname;
+          console.log("여기옴?", state.characterColor);
+        });
+      });
+
+      // 한명이라도 수락을 누르면 모달창이 다 닫혀야 하니깐~
+      // 동시에누를수도있나? 그건모름..
+      $soketio.on("closeModalMatching", () => {
+        state.isMatchingModal = false;
+      });
+    }
+
+    const acceptMatching = () => {
+      //봉사자가 요청을 받아들였을 때
+      // 한명이 수락을 하면 다른사람들의 모달을 다 지워줘야 함.
+      $soketio.emit("matchingComplete");
+    };
+
     return {
       user,
       isNoticeOpen,
@@ -209,9 +268,12 @@ export default {
       getClassOpenAlarm,
       toggleNoticeModal,
       changeTalkableState,
+      acceptMatching,
+      rejectMatching,
       notices,
       checkAlarm,
       logout,
+      state,
     };
   },
 };

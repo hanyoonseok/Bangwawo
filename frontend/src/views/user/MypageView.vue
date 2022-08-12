@@ -78,7 +78,6 @@ export default {
     });
     const store = useStore();
     const isCharacterModalOpen = ref(false);
-
     const children = ref(null);
     let state = reactive({
       userInfo: store.state.root.user, //computed(() => store.getters["root/userInfo"]),

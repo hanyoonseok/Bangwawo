@@ -19,7 +19,7 @@
               <img
                 src="@/assets/thumbnail.png"
                 alt="썸네일이미지"
-                v-if="classInfo.thumbnail.length === 0"
+                v-if="classInfo.thumbnail"
                 class="left-box-img"
               />
 
@@ -61,7 +61,6 @@
               </div>
               <div class="info-box">
                 <p class="info-title post-card">정원</p>
-
                 <p class="info-content">
                   {{ classInfo.enrolcnt }} / {{ classInfo.maxcnt }}
                 </p>
@@ -88,6 +87,7 @@
                 class="class-status-btn"
                 id="ing"
                 v-else-if="classInfo.state === 1"
+                @click="startClass"
               >
                 수업 진행중
               </button>
@@ -105,25 +105,26 @@
                 <i class="fa-solid fa-trash-can"></i>
               </button>
             </div>
-            <div v-else>
+            <div v-else-if="userInfo.userType === 'student'">
               <!-- 수업 신청을 했고(1) 수업 시작한 경우(1) -->
               <button
-                v-if="user.subscribe === 1 && classInfo.state === 1"
+                v-if="user.subscribe && classInfo.state === 1"
                 class="class-entrance-btn"
                 id="ing"
+                @click="entranceClass"
               >
                 수업 입장
               </button>
-              <!-- 수업 신청을 했고(1) 수업 시작한 경우(0) -->
+              <!-- 수업 신청을 했고(1) 수업 시작 안 한 경우(0) -->
               <button
-                v-else-if="user.subscribe === 1 && classInfo.state === 0"
+                v-else-if="user.subscribe && classInfo.state === 0"
                 class="class-entrance-btn"
               >
                 수업 대기
               </button>
-              <!-- 수업 신청을 안했고(0) 수업 시작 안한 경우(0) -->
+              <!-- 수업 신청을 안했고(0) 수업 시작 안 한 경우(0) -->
               <button
-                v-else-if="user.subscribe === 0 && classInfo.state === 0"
+                v-else-if="!user.subscribe && classInfo.state === 0"
                 class="class-subscribe-btn"
                 @click="enrolClass"
               >
@@ -132,7 +133,7 @@
               <!-- 수업 신청을 안했고(0) 수업 시작 한 경우(1) -->
               <button
                 v-else-if="
-                  (user.subscribe === 0 && classInfo.state === 1) ||
+                  (!user.subscribe && classInfo.state === 1) ||
                   classInfo.enrolcnt >= classInfo.maxcnt
                 "
                 class="class-subscribe-btn"
@@ -167,7 +168,7 @@
     <div class="confirm" v-if="isConfirm.status">
       <div class="container">
         <img src="@/assets/profile.png" alt="오리" />
-        <h4>정말로 삭제하시겠습니까?</h4>
+        <h2>정말로 삭제하시겠습니까?</h2>
         <div class="btn-wrapper">
           <button class="btn" @click="deleteClass">네</button>
           <button class="btn" @click="isConfirm.status = false">아니요</button>
@@ -180,7 +181,6 @@
 <script>
 import HeaderNav from "@/components/HeaderNav.vue";
 import { reactive, ref } from "vue";
-
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 
@@ -191,10 +191,10 @@ export default {
   },
   setup() {
     const route = useRoute();
-
     const router = useRouter();
     const store = useStore();
     const userInfo = reactive(store.state.root.user);
+    console.log("userInfo", userInfo);
     const cid = route.params.cid;
 
     const classInfo = ref(null);
@@ -204,8 +204,8 @@ export default {
       store
         .dispatch("root/getClassDetail", cid)
         .then((response) => {
+          console.log(response.data);
           classInfo.value = response.data;
-          console.log(classInfo.value);
         })
         .catch((error) => {
           console.log(error);
@@ -236,6 +236,8 @@ export default {
 
     getEnrolStudent();
 
+    console.log("classInfo", classInfo.value);
+
     // 수업 신청하기
     const enrolClass = () => {
       store
@@ -254,7 +256,7 @@ export default {
 
     // 학생일 경우 수업 신청했는지(1) 안했는지(0) 여부
     const user = reactive({
-      subscribe: 0,
+      subscribe: false,
     });
 
     const showProfile = () => {
@@ -270,6 +272,8 @@ export default {
         document.querySelector(".profile").style.display = "none";
       }
     };
+
+    // alert 창
     const isConfirm = reactive({
       status: false,
     });
@@ -287,13 +291,52 @@ export default {
         });
     };
 
-    const startClass = () => {
+    let sessionId = "";
+    // 봉사자가 수업 활성화
+    const startClass = async () => {
       classInfo.value.state = 1;
-      store
+      console.log(userInfo.vid, cid);
+
+      await store
+        .dispatch("root/startVolunteerClass", { vid: userInfo.vid, cid: cid })
+        .then((response) => {
+          console.log(response.data);
+          sessionId = response.data;
+          console.log(sessionId);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      console.log(sessionId);
+
+      await store
         .dispatch("root/modifyClass", classInfo.value)
         .then((response) => {
           console.log(response);
-          router.push({ name: "inclass" });
+          router.push({
+            name: "inclass",
+            params: {
+              mySessionId: sessionId,
+              userType: userInfo.userType,
+              cid: cid,
+            },
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    //학생이 수업 입장
+    const entranceClass = () => {
+      store
+        .dispatch("root/entranceClass", { sid: userInfo.sid, cid: cid })
+        .then((response) => {
+          console.log(response);
+          router.push({
+            name: "inclass",
+            params: { mySessionId: sessionId, userType: userInfo.userType },
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -310,6 +353,8 @@ export default {
       isConfirm,
       deleteClass,
       startClass,
+      sessionId,
+      entranceClass,
     };
   },
 };

@@ -15,9 +15,7 @@
             </div>
           </div>
           <div class="lecture-info">
-            <div class="lecture-teacher">
-              {{ lecture.volunteer.nickname }} 강사
-            </div>
+            <div class="lecture-teacher">{{ lecture.vid.nickname }} 강사</div>
             <div class="lecture-title">{{ lecture.title }}</div>
             <div class="lecture-date">
               {{ lecture.stime[1] }}/{{ lecture.stime[2] }}
@@ -46,9 +44,7 @@
             </div>
           </div>
           <div class="lecture-info">
-            <div class="lecture-teacher">
-              {{ lecture.volunteer.nickname }} 강사
-            </div>
+            <div class="lecture-teacher">{{ lecture.vid.nickname }} 강사</div>
             <div class="lecture-title">{{ lecture.title }}</div>
             <div class="lecture-date">
               {{ lecture.stime[1] }}/{{ lecture.stime[2] }}

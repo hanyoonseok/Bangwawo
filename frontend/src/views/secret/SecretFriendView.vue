@@ -4,9 +4,7 @@
     <section class="main-section">
       <section classs="sub-section" v-if="!state.isMatching">
         <img src="@/assets/secret_landing.png" class="landing-img" />
-        <button class="start-btn" @click="startMatch()">
-          비밀친구 대화하기
-        </button>
+        <button class="start-btn" @click="startMatch">비밀친구 대화하기</button>
       </section>
       <section class="sub-section" v-else>
         <!-- <img src="@/assets/secret_matching.png" /> -->
@@ -17,22 +15,28 @@
 </template>
 
 <script>
-import { reactive } from "vue";
+import { reactive, ref, getCurrentInstance } from "vue";
 import HeaderNav from "@/components/HeaderNav.vue";
+import { useStore } from "vuex";
+
 export default {
   name: "SecretFriendView",
   components: {
     HeaderNav,
   },
   setup() {
+    const store = useStore();
+    const app = getCurrentInstance();
+    const $soketio = app.appContext.config.globalProperties.$soketio;
     const state = reactive({
       isMatching: false,
     });
+    const user = ref(store.state.root.user);
 
     const startMatch = () => {
       state.isMatching = true;
-
       // 봉사자에게 알림 뿌려주기
+      $soketio.emit("matchingStart", user.value.sid);
     };
 
     return {

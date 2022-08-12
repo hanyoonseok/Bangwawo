@@ -87,6 +87,8 @@ export default {
 
           openClass.value = openArray;
           makedClass.value = makedArray;
+          console.log(openClass.value);
+          console.log(makedClass.value);
           if (flag) {
             filteredMakedClass.value = [];
           } else {

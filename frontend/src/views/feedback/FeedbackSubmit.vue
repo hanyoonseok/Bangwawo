@@ -48,6 +48,7 @@
 import { ref } from "vue";
 import HeaderNav from "@/components/HeaderNav.vue";
 import FeedbackModal from "@/components/feedback/FeedbackModal.vue";
+import { useRoute } from "vue-router";
 
 export default {
   name: "FeedBack",
@@ -56,6 +57,9 @@ export default {
     FeedbackModal,
   },
   setup() {
+    const route = useRoute();
+    console.log(route.params.cid);
+
     const students = ref([
       {
         id: 1,
