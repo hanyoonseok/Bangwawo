@@ -136,7 +136,7 @@ public class StudentController {
         return response;
     }
 
-    @ApiOperation(value="학생 정보 삭제", notes="학생 정보를 받아 삭제")
+    @ApiOperation(value="학생 회원 탈퇴", notes="학생 id를 받아 데이터를 유효하지 않은 값으로 갱신")
     @DeleteMapping("/{id}")
     public Map<String, Object> deleteStudent(@PathVariable("id") Long id){
         Map<String, Object> response = new HashMap<>();

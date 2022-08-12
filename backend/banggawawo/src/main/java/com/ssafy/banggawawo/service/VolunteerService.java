@@ -50,8 +50,13 @@ public class VolunteerService {
     }
 
     @Transactional
-    public void delete(Volunteer value) {
-        volunteerRepository.delete(value);
+    public Volunteer delete(Volunteer volunteer) {
+        volunteer.setNickname("탈퇴 회원");
+        volunteer.setKakaoId("-");
+        volunteer.setAgeRange(-1);
+        volunteer.setIntroduce("-");
+        volunteer.setCharacter(null);
+        return volunteerRepository.save(volunteer);
     }
 
     @Transactional(readOnly = true)
