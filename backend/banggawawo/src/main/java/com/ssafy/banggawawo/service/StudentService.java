@@ -54,10 +54,16 @@ public class StudentService {
     }
 
     @Transactional
-    public void delete(Student value) {
-        studentRepository.delete(value);
+    public Student delete(Student student) {
+        student.setNickname("탈퇴 회원");
+        student.setKakaoId("-");
+        student.setPemail("-");
+        student.setPpw("-");
+        student.setAgeRange(-1);
+        student.setCharacter(null);
+        return studentRepository.save(student);
     }
-
+    @Transactional
     public int updatePpw(String email, String password) {
         return studentRepository.updatePpw(email, password);
     }
@@ -66,4 +72,5 @@ public class StudentService {
         return new Character(arr[0].getColor(), arr[1].getColor(), arr[2].getColor(),
                 arr[3].getColor(), arr[4].getColor(), arr[5].getColor());
     }
+
 }

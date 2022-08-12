@@ -126,7 +126,7 @@ public class VolunteerController {
         return response;
     }
 
-    @ApiOperation(value="봉사자 정보 삭제", notes="봉사자 id를 받아 삭제")
+    @ApiOperation(value="봉사자 회원 탈퇴", notes="봉사자 id를 받아 유효하지 않은 값으로 갱신")
     @DeleteMapping("/{id}")
     public Map<String, Object> deleteVolunteer(@PathVariable("id") Long id){
         Map<String, Object> response = new HashMap<>();
