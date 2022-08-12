@@ -13,7 +13,9 @@
       :session="state.session"
       :chats="state.chats"
       :screen="state.screenShareState"
+      :cid="cid"
     />
+    <div id="recording" @click="recording">녹화 시작</div>
     <UserView
       v-if="user && user.userType === 'student' && state.session"
       :dataLen="dataLen"
@@ -40,7 +42,8 @@ import {
 } from "vue";
 import axios from "axios";
 import moment from "moment";
-import { OpenVidu } from "openvidu-browser";
+// import { OpenVidu } from "openvidu-browser";
+import { OpenVidu, RecordingMode, Recording } from "openvidu-browser";
 import HostView from "@/components/class/HostView.vue";
 import UserView from "@/components/class/UserView.vue";
 import { useRoute } from "vue-router";
@@ -56,6 +59,9 @@ export default {
   },
   setup() {
     // 테스트용
+    // const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
+    // const OPENVIDU_SERVER_SECRET = "MY_SECRET";
+
     const OPENVIDU_SERVER_URL = process.env.VUE_APP_OV_DOMAIN;
     const OPENVIDU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
     const OV = new OpenVidu();
@@ -66,8 +72,12 @@ export default {
 
     const user = ref(store.state.root.user);
 
-    const mySessionId = route.params.mySessionId;
-    console.log("mySessionId", mySessionId);
+    const sessionId = route.params.mySessionId;
+    console.log("mySessionId", sessionId);
+    const userType = route.params.userType === "volunteer" ? true : false;
+    const nickname = route.params.nickname;
+    console.log("nickname", nickname);
+    const cid = route.params.cid;
 
     const state = reactive({
       OV: OV,
@@ -86,8 +96,10 @@ export default {
         mirror: false, // Whether to mirror your local video or not
       }),
       subscribers: [],
-      mySessionId: mySessionId,
-      myUserName: user.value.nickname,
+      mySessionId: sessionId,
+      // mySessionId: "sessionId",
+      // myUserName: "Participant" + Math.floor(Math.random() * 100),
+      myUserName: nickname,
       joinedPlayerNumbers: 0,
       chats: [],
 
@@ -97,6 +109,8 @@ export default {
           Math.min(state.dataIdx + state.dataLen, state.subscribers.length + 1),
         );
       }),
+
+      isHost: userType,
       dataLen: computed(() => {
         return user.value.userType === "volunteer" ? 12 : 4;
       }),
@@ -125,13 +139,6 @@ export default {
         document.getElementById("container-screens").style.display = "hidden";
       }
     };
-
-    /*
-  닉네임:사용자
-  sessionName : 방 이름?
-  token : 토큰 들어오는데 이건 입장 할때마다 바뀌는 값
-  userName : 아이디인데 아마 로그인할대 아이디로 쓸듯?
-*/
 
     // 사용자가 방에 참여하겠다는 버튼 누를때마다 호출
     const joinSession = () => {
@@ -233,7 +240,7 @@ export default {
         state.sessionScreen
           .connect(tokenScreen, { clientData: state.myUserName })
           .then(() => {
-            console.log("Session screen connected");
+            // console.log("Session screen connected");
           })
           .catch((error) => {
             console.warn(
@@ -245,6 +252,26 @@ export default {
       });
 
       window.addEventListener("beforeunload", leaveSession);
+    };
+
+    const recording = () => {
+      const sessionProperties = {
+        session: state.session,
+        recordingMode: RecordingMode.MANUAL, // RecordingMode.ALWAYS for automatic recording
+        defaultRecordingProperties: {
+          outputMode: Recording.OutputMode.COMPOSED,
+          resolution: "640x480",
+          frameRate: 24,
+        },
+        hasAudio: true,
+        hasVideo: true,
+        outputMode: "COMPOSED",
+        resolution: "1280x720",
+        frameRate: 25,
+        shmSize: 536870912,
+        ignoreFailedStreams: false,
+      };
+      console.log(sessionProperties);
     };
 
     const leaveSession = () => {
@@ -289,7 +316,7 @@ export default {
             },
           )
           .then((response) => {
-            console.log(response);
+            // console.log(response);
             response.data;
             return response.data;
           })
@@ -306,7 +333,6 @@ export default {
                   `No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}\n\nClick OK to navigate and accept it. If no certificate warning is shown, then check that your OpenVidu Server is up and running at "${OPENVIDU_SERVER_URL}"`,
                 )
               ) {
-                // location.assign(`https://i7b201.p.ssafy.io`);
                 location.assign(`${OPENVIDU_SERVER_URL}/accept-certificate`);
               }
               reject(error.response);
@@ -339,7 +365,7 @@ export default {
             },
           )
           .then((response) => {
-            console.log(response.data);
+            // console.log(response.data);
             return response.data;
           })
           .then((data) => resolve(data.token))
@@ -456,6 +482,7 @@ export default {
 
     return {
       state,
+      cid,
       // dataLen,
       // currentUsers,
       // initCurrentUsers,
@@ -466,6 +493,7 @@ export default {
       activeMute,
       publishScreenShare,
       user,
+      recording,
     };
   },
 };

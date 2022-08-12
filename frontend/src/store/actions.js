@@ -110,6 +110,14 @@ export const deleteClass = ({ state }, cid) => {
   return axios.delete(url);
 };
 
+//봉사자가 수업 종료하기
+export const endClass = ({ state }, payload) => {
+  console.log("endClass", state, payload);
+  const url = `/session/class/close/${payload.cid}/${payload.vid}`;
+  return axios.get(url);
+};
+///////////////////////////////////////////////
+
 export const registerImage = ({ state }, payload) => {
   console.log("registerImage", state, payload);
   const url = `/class/image`;
