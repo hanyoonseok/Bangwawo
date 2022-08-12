@@ -41,8 +41,6 @@ public class ClassRoom {
     private LocalDateTime stime;          //시작시간
     private LocalDateTime etime;          //종료시간
     private Boolean opened;      //공개여부
-
-    @Column(columnDefinition = "LONGTEXT")
     private String thumbnail;       //썸네일
 
     @ColumnDefault("0")
