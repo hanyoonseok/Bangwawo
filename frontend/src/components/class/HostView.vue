@@ -34,6 +34,8 @@
         <ParticipantsList
           :state="state"
           :toggleParticipants="toggleParticipants"
+          :me="state.clientData"
+          :subs="state.subs"
         />
         <OXForm :state="state" :toggleOX="toggleOX" />
         <OXResult :state="state" :toggleOX="toggleOX" />
@@ -122,6 +124,7 @@ export default {
     const store = useStore();
     const router = useRouter();
     const userInfo = store.state.root.user;
+    console.log(props.subs);
 
     const state = reactive({
       isParticipantsOpen: false,
@@ -136,12 +139,30 @@ export default {
         const { clientData } = getConnectionData();
         return clientData;
       }),
+
+      subs: computed(() => {
+        return getConnectionSubs();
+      }),
     });
 
     const getConnectionData = () => {
       console.log(props.me.stream);
       const { connection } = props.me.stream;
       return JSON.parse(connection.data);
+    };
+
+    const getConnectionSubs = () => {
+      console.log(props.subs);
+      const arr = [];
+      for (const item of props.subs) {
+        console.log("item", item);
+        let { connection } = item.stream;
+        let { clientData } = JSON.parse(connection.data);
+        arr.push(clientData);
+      }
+      console.log("arr", arr);
+
+      return arr;
     };
 
     const toggleParticipants = () => {

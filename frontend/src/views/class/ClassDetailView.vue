@@ -298,7 +298,10 @@ export default {
       console.log(userInfo.vid, cid);
 
       await store
-        .dispatch("root/startVolunteerClass", { vid: userInfo.vid, cid: cid })
+        .dispatch("root/startVolunteerClass", {
+          vid: userInfo.vid,
+          cid: cid,
+        })
         .then((response) => {
           console.log(response.data);
           sessionId = response.data;
@@ -318,6 +321,7 @@ export default {
             params: {
               mySessionId: sessionId,
               userType: userInfo.userType,
+              nickname: userInfo.nickname,
               cid: cid,
             },
           });
@@ -335,7 +339,11 @@ export default {
           console.log(response);
           router.push({
             name: "inclass",
-            params: { mySessionId: sessionId, userType: userInfo.userType },
+            params: {
+              mySessionId: sessionId,
+              nickname: userInfo.nickname,
+              userType: userInfo.userType,
+            },
           });
         })
         .catch((err) => {

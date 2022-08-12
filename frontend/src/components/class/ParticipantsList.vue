@@ -8,79 +8,15 @@
       <div class="list-item">
         <img src="@/assets/profile.png" />
         <div class="list-item-center">
-          <label class="list-item-nickname">닉네임임임임</label>
+          <label class="list-item-nickname">{{ me }} (나)</label>
         </div>
       </div>
-      <div class="list-item">
-        <img src="@/assets/profile.png" />
-        <div class="list-item-center">
-          <label class="list-item-nickname">닉네임임임임</label>
-        </div>
-      </div>
-      <div class="list-item">
-        <img src="@/assets/profile.png" />
-        <div class="list-item-center">
-          <label class="list-item-nickname">닉네임임임임</label>
-        </div>
-      </div>
-      <div class="list-item">
-        <img src="@/assets/profile.png" />
-        <div class="list-item-center">
-          <label class="list-item-nickname">닉네임임임임</label>
-        </div>
-      </div>
-      <div class="list-item">
-        <img src="@/assets/profile.png" />
-        <div class="list-item-center">
-          <label class="list-item-nickname">닉네임임임임</label>
-        </div>
-      </div>
-      <div class="list-item">
-        <img src="@/assets/profile.png" />
-        <div class="list-item-center">
-          <label class="list-item-nickname">닉네임임임임</label>
-        </div>
-      </div>
-      <div class="list-item">
-        <img src="@/assets/profile.png" />
-        <div class="list-item-center">
-          <label class="list-item-nickname">닉네임임임임</label>
-        </div>
-      </div>
-      <div class="list-item">
-        <img src="@/assets/profile.png" />
-        <div class="list-item-center">
-          <label class="list-item-nickname">닉네임임임임</label>
-        </div>
-      </div>
-      <div class="list-item">
-        <img src="@/assets/profile.png" />
-        <div class="list-item-center">
-          <label class="list-item-nickname">닉네임임임임</label>
-        </div>
-      </div>
-      <div class="list-item">
-        <img src="@/assets/profile.png" />
-        <div class="list-item-center">
-          <label class="list-item-nickname">닉네임임임임</label>
-        </div>
-      </div>
-      <div class="list-item">
-        <img src="@/assets/profile.png" />
-        <div class="list-item-center">
-          <label class="list-item-nickname">닉네임임임임</label>
-        </div>
-      </div>
-      <div class="list-item">
-        <img src="@/assets/profile.png" />
-        <div class="list-item-center">
-          <label class="list-item-nickname">닉네임임임임</label>
-        </div>
-      </div>
-      <div class="list-item">
-        <img src="@/assets/profile.png" />
-        <div class="list-item-center">
-          <label class="list-item-nickname">닉네임임임임</label>
+      <div v-for="(item, index) in subs" :key="index">
+        <div class="list-item">
+          <img src="@/assets/profile.png" />
+          <div class="list-item-center">
+            <label class="list-item-nickname">{{ item }}</label>
+          </div>
         </div>
       </div>
     </div>
@@ -90,8 +26,11 @@
 <script>
 export default {
   name: "ParticipantsList",
-  props: ["state", "toggleParticipants"],
-  setup() {},
+  props: ["state", "toggleParticipants", "me", "subs"],
+  setup(props) {
+    console.log("me", props.me);
+    console.log("subs", props.subs);
+  },
 };
 </script>
 

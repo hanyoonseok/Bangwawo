@@ -1,5 +1,5 @@
 <template>
-  <div class="post-card" v-if="state">
+  <div class="post-card">
     <div
       class="img-box"
       v-if="state.thumbnail.length === 0 && state.preview === null"
