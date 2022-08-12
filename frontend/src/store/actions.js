@@ -78,6 +78,19 @@ export const inactiveKakaoToken = ({ state }, accessToken) => {
   const url = `/kakao/logout/${accessToken}`;
   return axios.get(url);
 };
+// 봉사자가 세션 만들기
+export const startVolunteerClass = ({ state }, payload) => {
+  console.log("startClass", state, payload);
+  const url = `/session/class/start/${payload.cid}/${payload.vid}`;
+  return axios.get(url);
+};
+
+//학생이 수업 입장하기
+export const entranceClass = ({ state }, payload) => {
+  console.log("entranceClass", state, payload);
+  const url = `/session/class/join/${payload.cid}/${payload.sid}`;
+  return axios.get(url);
+};
 // 수업
 export const getClassList = ({ state }) => {
   console.log("getClassList", state);
@@ -136,4 +149,11 @@ export const startClass = ({ state }, payload) => {
   console.log("startClass", state, payload);
   const url = `/class`;
   return axios.put(url, payload);
+};
+
+// 좋아요 추가
+export const addLikeRequest = ({ state }, payload) => {
+  console.log("addLikeRequest", state, payload);
+  const url = `/likes`;
+  return axios.post(url, payload);
 };

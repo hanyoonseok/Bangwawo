@@ -31,6 +31,8 @@ export default {
 
     const startMatch = () => {
       state.isMatching = true;
+
+      // 봉사자에게 알림 뿌려주기
     };
 
     return {
