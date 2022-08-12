@@ -35,6 +35,7 @@
           :isEndTab="state.isEndTab"
           :endClass="endClass"
           :comingClass="comingClass"
+          :selectedChild="selectedChild"
         ></lecture-area>
       </div>
     </div>
@@ -90,6 +91,7 @@ export default {
     let comingClass = ref([]);
     let navItem;
     let isModifyOpen = ref(false);
+    let selectedChild = ref(null);
 
     const getUserInfo = () => {
       if (state.userType === "parent") {
@@ -97,6 +99,7 @@ export default {
           children.value = res.data.childs;
           if (children.value.length > 0) {
             getStudentClasses(children.value[0].sid);
+            selectedChild.value = children.value[0];
           }
           console.log(children.value);
         });
@@ -222,6 +225,7 @@ export default {
 
     const selectChild = (child) => {
       getStudentClasses(child.sid);
+      selectedChild.value = child;
     };
 
     return {
@@ -239,6 +243,7 @@ export default {
       modifyInfo,
       children,
       selectChild,
+      selectedChild,
     };
   },
 };

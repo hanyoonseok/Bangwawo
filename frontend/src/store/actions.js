@@ -190,3 +190,17 @@ export const getStudentFeedback = ({ state }, payload) => {
   const url = `/enrol/${payload.cid}/${payload.sid}`;
   return axios.get(url);
 };
+
+export const getRecordVideo = ({ state }, recordId) => {
+  console.log("getRecordVideo", state, recordId);
+  axios.defaults.baseURL = "";
+  const url = `${process.env.VUE_APP_OV_DOMAIN}/openvidu/api/recordings/${recordId}`;
+  const headers = {
+    headers: {
+      Authorization:
+        "Basic " + btoa("OPENVIDUAPP:" + process.env.VUE_APP_OV_SECRET),
+      "Content-Type": "application/json",
+    },
+  };
+  return axios.get(url, headers);
+};

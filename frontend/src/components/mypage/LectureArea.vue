@@ -17,7 +17,12 @@
           </div>
           <div class="lecture-info">
             <div class="lecture-teacher">
-              {{ lecture.volunteer.nickname }} 강사
+              {{
+                user.userType === "parent"
+                  ? lecture.volunteer.nickname
+                  : lecture.vid.nickname
+              }}
+              강사
             </div>
             <div class="lecture-title">{{ lecture.title }}</div>
             <div class="lecture-date">
@@ -39,7 +44,10 @@
         class="lecture-box"
       >
         <router-link
-          :to="{ name: 'classdetail', params: { cid: lecture.cid } }"
+          :to="{
+            name: user.userType === 'parent' ? 'feedback' : 'classdetail',
+            params: { cid: lecture.cid, sid: childSID },
+          }"
         >
           <div class="lecture-thumb">
             <div class="end-btn">
@@ -48,7 +56,14 @@
             </div>
           </div>
           <div class="lecture-info">
-            <div class="lecture-teacher">{{ lecture.vid.nickname }} 강사</div>
+            <div class="lecture-teacher">
+              {{
+                user.userType === "parent"
+                  ? lecture.volunteer.nickname
+                  : lecture.vid.nickname
+              }}
+              강사
+            </div>
             <div class="lecture-title">{{ lecture.title }}</div>
             <div class="lecture-date">
               {{ lecture.stime[1] }}/{{ lecture.stime[2] }}
@@ -62,8 +77,9 @@
 </template>
 
 <script>
+import { watch, ref } from "vue";
 export default {
-  props: ["isEndTab", "user", "comingClass", "endClass"],
+  props: ["isEndTab", "user", "comingClass", "endClass", "selectedChild"],
   setup(props) {
     const statusText = (state) => {
       if (props.user.userType === "volunteer") {
@@ -76,9 +92,20 @@ export default {
         else return "종료";
       }
     };
+    let childSID = ref(null);
+
+    watch(
+      () => props.selectedChild,
+      (cur) => {
+        childSID.value = cur.sid;
+        console.log(childSID.value);
+      },
+      { deep: true },
+    );
 
     return {
       statusText,
+      childSID,
     };
   },
 };
