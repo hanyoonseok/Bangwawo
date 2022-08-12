@@ -3,6 +3,7 @@ package com.ssafy.banggawawo.service;
 import com.ssafy.banggawawo.domain.dto.ClassDto;
 import com.ssafy.banggawawo.domain.dto.EnrolDto;
 import com.ssafy.banggawawo.domain.entity.ClassRoom;
+import com.ssafy.banggawawo.domain.entity.Emotion;
 import com.ssafy.banggawawo.domain.entity.Enrol;
 import com.ssafy.banggawawo.repository.ClassRepository;
 import com.ssafy.banggawawo.repository.EnrolRepository;
@@ -52,13 +53,17 @@ public class EnrolService {
 
     @Transactional
     public EnrolDto save(EnrolDto enrolDto) throws Exception{
+        System.out.println("수강신청 저장 시작");
         Enrol enrol = build(enrolDto);
         //제한인원 확인
         Long cid = enrolDto.getCId().getCId();
         ClassRoom classRoom = classRepository.findById(cid).get();
+
         if(classRoom != null) {
+            System.out.println("클래스 존재함");
             int maxCnt = classRoom.getMaxcnt();
             int size = enrolRepository.findEnrolsByClasses_cId(cid).size();
+            System.out.println("size = " + size);
             if(maxCnt <= size) return null;
         }
         enrol = enrolRepository.save(enrol);
@@ -79,11 +84,16 @@ public class EnrolService {
     }
 
     @Transactional
-    public EnrolDto update(EnrolDto enrolDto) throws Exception{
-        Enrol enrol = enrolRepository.findEnrolByClasses_cIdAndStudent_sId(enrolDto.getCId().getCId(), enrolDto.getSId().getSId());
-        enrol.setFeedback(enrolDto.getFeedback());
-        enrol.setEmotion(enrolDto.getEmotion());
-        enrol.setRecording(enrolDto.getRecording());
+    public EnrolDto updateFeedback(Long cid, Long sid, String feedback) throws Exception{
+        Enrol enrol = enrolRepository.findEnrolByClasses_cIdAndStudent_sId(cid, sid);
+        enrol.setFeedback(feedback);
+        return trans(enrolRepository.save(enrol));
+    }
+
+    @Transactional
+    public EnrolDto updateEmotion(Long cid, Long sid, Emotion emotion) throws Exception{
+        Enrol enrol = enrolRepository.findEnrolByClasses_cIdAndStudent_sId(cid, sid);
+        enrol.setEmotion(emotion);
         return trans(enrolRepository.save(enrol));
     }
 

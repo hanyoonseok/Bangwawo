@@ -1,6 +1,7 @@
 package com.ssafy.banggawawo.domain.dto;
 
 import com.ssafy.banggawawo.domain.entity.ClassRoom;
+import com.ssafy.banggawawo.domain.entity.Emotion;
 import com.ssafy.banggawawo.domain.entity.Student;
 import lombok.*;
 
@@ -12,13 +13,13 @@ public class EnrolDto {
     private ClassRoom cId;       //수업
 
     private String feedback;            //봉사자 피드백
-    private String emotion;             //감정 피드백
+    private Emotion emotion;             //감정 피드백
     private String recording;           //녹화영상
 
     @Builder
     public EnrolDto(Long eId,
                     Student sId, ClassRoom cId,
-                    String feedback, String emotion, String recording) {
+                    String feedback, Emotion emotion, String recording) {
         this.eId = eId;
         this.sId = sId;
         this.cId = cId;

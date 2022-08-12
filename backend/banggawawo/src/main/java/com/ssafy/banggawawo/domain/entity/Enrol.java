@@ -26,14 +26,15 @@ public class Enrol {
     private ClassRoom classes;            //수업
 
     private String feedback;    //봉사자 피드백
-    private String emotion;     //감정 피드백(아직 자료형 미정)
+    @Embedded
+    private Emotion emotion;     //감정 피드백
     private String recording;   //녹화영상
 
     @Builder
     public Enrol(Long eId,
                  Student student,
                  ClassRoom classes,
-                 String feedback, String emotion,
+                 String feedback, Emotion emotion,
                  String recording) {
         this.eId = eId;
         this.student = student;
