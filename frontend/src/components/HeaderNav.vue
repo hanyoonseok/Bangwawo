@@ -84,8 +84,13 @@
         </article>
       </div>
 
-      <button class="consult on" v-if="user && user.userType === 'volunteer'">
-        <i class="fa-solid fa-circle"></i>&nbsp;상담 ON
+      <button
+        :class="{ consult: true, on: user.talkable, off: !user.talkable }"
+        v-if="user && user.userType === 'volunteer'"
+        @click="toggleTalkable"
+      >
+        <i class="fa-solid fa-circle"></i>&nbsp;상담
+        {{ user.talkable ? "ON" : "OFF" }}
       </button>
     </section>
   </div>
@@ -139,9 +144,16 @@ export default {
     };
 
     const logout = () => {
-      store.dispatch("root/inactiveKakaoToken", user.accessToken);
+      store.dispatch("root/inactiveKakaoToken", user.value.accessToken);
       store.commit("root/logoutUser");
       location.href = "/";
+    };
+
+    const toggleTalkable = () => {
+      store
+        .dispatch("root/toggleTalkable", user.value.vid)
+        .then(() => store.commit("root/toggleTalkable"))
+        .catch((err) => console.log(err.message));
     };
 
     return {
@@ -152,6 +164,7 @@ export default {
       toggleNoticeModal,
       notices,
       logout,
+      toggleTalkable,
     };
   },
 };

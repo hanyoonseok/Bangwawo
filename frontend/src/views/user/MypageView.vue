@@ -104,6 +104,26 @@ export default {
     };
     getUserInfo();
 
+    const getStudentClasses = async (sid) => {
+      await store.dispatch("root/getStudentClasses", sid).then((res) => {
+        console.log(res);
+        classes.value = res.data;
+
+        const tempComingClass = [];
+        const tempEndClass = [];
+
+        classes.value.forEach((e) => {
+          if (e.classes.state === 0 || e.classes.state === 1) {
+            tempComingClass.push(e.classes);
+          } else if (e.classes.state === 2) {
+            tempEndClass.push(e.classes);
+          }
+        });
+        comingClass.value = tempComingClass;
+        endClass.value = tempEndClass;
+      });
+    };
+
     const getUserClasses = () => {
       if (state.userType === "student") {
         getStudentClasses(state.userInfo.sid);
@@ -124,26 +144,6 @@ export default {
       }
     };
     getUserClasses();
-
-    const getStudentClasses = async (sid) => {
-      await store.dispatch("root/getStudentClasses", sid).then((res) => {
-        console.log(res);
-        classes.value = res.data;
-
-        const tempComingClass = [];
-        const tempEndClass = [];
-
-        classes.value.forEach((e) => {
-          if (e.classes.state === 0 || e.classes.state === 1) {
-            tempComingClass.push(e.classes);
-          } else if (e.classes.state === 2) {
-            tempEndClass.push(e.classes);
-          }
-        });
-        comingClass.value = tempComingClass;
-        endClass.value = tempEndClass;
-      });
-    };
 
     const doMenuActive = (e) => {
       if (!e.target.classList.contains("active")) {

@@ -158,3 +158,9 @@ export const getOneUser = ({ state }, payload) => {
   const url = `/${payload.userType}/${payload.sid || payload.vid}`;
   return axios.get(url);
 };
+
+export const toggleTalkable = ({ state }, vid) => {
+  console.log("toggleTalkable", state, vid);
+  const url = `/volunteer/talkable/${vid}`;
+  return axios.put(url);
+};
