@@ -116,7 +116,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import axios from "axios";
 
@@ -181,8 +181,14 @@ export default {
     };
     console.log(user);
     if (user.value && user.value.userType === "student") {
-      getClassOpenAlarm();
+      setInterval(() => {
+        getClassOpenAlarm();
+      }, 3000);
     }
+
+    onMounted(() => {
+      getClassOpenAlarm();
+    });
 
     // 학생별 알람에 대한 읽기 완료
     const checkAlarm = async (rid) => {
