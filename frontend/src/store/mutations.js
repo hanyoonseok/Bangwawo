@@ -10,8 +10,8 @@ export const setUserInfo = (state, payload) => {
 };
 
 export const logoutUser = (state) => {
-  state.user = null;
   localStorage.removeItem("isLogin");
+  state.user = null;
 };
 
 export const setModifiedStudentInfo = (state, payload) => {

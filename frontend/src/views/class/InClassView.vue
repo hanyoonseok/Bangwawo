@@ -1,7 +1,7 @@
 <template>
   <section class="background">
     <HostView
-      v-if="state.isHost && state.session"
+      v-if="user && user.userType === 'volunteer' && state.session"
       :dataLen="dataLen"
       :currentUsers="currentUsers"
       :leaveSession="leaveSession"
@@ -15,7 +15,7 @@
       :screen="state.screenShareState"
     />
     <UserView
-      v-if="!state.isHost && state.session"
+      v-if="user && user.userType === 'student' && state.session"
       :dataLen="dataLen"
       :currentUsers="currentUsers"
       :leaveSession="leaveSession"
@@ -30,13 +30,21 @@
 </template>
 
 <script>
-import { reactive, onBeforeUnmount, computed, onMounted, watch } from "vue";
+import {
+  reactive,
+  onBeforeUnmount,
+  computed,
+  onMounted,
+  watch,
+  ref,
+} from "vue";
 import axios from "axios";
 import moment from "moment";
 import { OpenVidu } from "openvidu-browser";
 import HostView from "@/components/class/HostView.vue";
 import UserView from "@/components/class/UserView.vue";
 import { useRoute } from "vue-router";
+import { useStore } from "vuex";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
@@ -54,6 +62,9 @@ export default {
     const OVScreen = new OpenVidu(); // 화면 공유
 
     const route = useRoute();
+    const store = useStore();
+
+    const user = ref(store.state.root.user);
 
     const mySessionId = route.params.mySessionId;
     console.log("mySessionId", mySessionId);
@@ -86,9 +97,8 @@ export default {
           Math.min(state.dataIdx + state.dataLen, state.subscribers.length + 1),
         );
       }),
-      isHost: false,
       dataLen: computed(() => {
-        return state.isHost ? 12 : 4;
+        return user.value.userType === "volunteer" ? 12 : 4;
       }),
       dataIdx: 0,
 

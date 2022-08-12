@@ -25,14 +25,17 @@ export default {
 
     let changeParts = computed(() => {
       if (props.childColor) return props.childColor;
-      else return store.state.root.user.character;
+      else {
+        if (!store.state.root.user) return null;
+        return store.state.root.user.character;
+      }
     });
 
     // state에 저장되어 있는 색 변경될때마다 watch에서 감지
     watch(
       () => changeParts,
       (cur) => {
-        console.log(cur);
+        if (!cur.value) return;
         // 지역변수 parts 값 변경 후 프로필 사진에 색 적용
         parts = cur.value;
         for (let object of INITIAL_MAP) {
