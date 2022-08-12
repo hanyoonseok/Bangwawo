@@ -62,12 +62,10 @@
         </ul>
       </div>
       <div class="bell-wrapper" v-if="user">
-        <i
-          class="fa-solid fa-bell"
-          v-if="user.userType === 'student' || user.userType === 'parent'"
-          @click="toggleNoticeModal"
+        <i class="fa-solid fa-bell" @click="toggleNoticeModal"
           ><div class="count">{{ notices.length }}</div></i
         >
+
         <article class="modal" v-if="isNoticeOpen">
           <div class="title-wrapper">
             <i class="fa-solid fa-bell"></i>
