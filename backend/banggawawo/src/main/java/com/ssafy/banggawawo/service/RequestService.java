@@ -34,7 +34,7 @@ public class RequestService {
                 .createDate(LocalDate.now())
                 .solved(false)
                 .count(0)
-                .likes(1)
+                .likes(0)
                 .build();
         return requestRepository.save(request) != null ? 1 : 0;
     }
