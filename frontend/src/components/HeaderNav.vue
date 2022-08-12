@@ -189,10 +189,11 @@ export default {
         });
     };
     console.log(user);
+    // 학생일 경우 학생에 대한 알람 socket 알람을 받어.
     if (user.value && user.value.userType === "student") {
-      setInterval(() => {
+      $soketio.on("updateStudentAlarm", () => {
         getClassOpenAlarm();
-      }, 3000);
+      });
     }
 
     onMounted(() => {
@@ -210,6 +211,7 @@ export default {
         })
         .then((response) => {
           console.log(response);
+          $soketio.emit("readStudentAlarm");
         });
     };
 
@@ -224,6 +226,7 @@ export default {
         .then((response) => {
           console.log(response);
           store.commit("root/setVolunteerTalkingState");
+          console.log(user.value.talkable);
         });
     };
 

@@ -103,7 +103,7 @@ import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";
 import HeaderNav from "@/components/HeaderNav.vue";
 import RectPostCard from "@/components/common/RectPostCard.vue";
-import { reactive, ref } from "vue";
+import { reactive, ref, getCurrentInstance } from "vue";
 import { useStore } from "vuex";
 
 export default {
@@ -112,6 +112,8 @@ export default {
     RectPostCard,
   },
   setup() {
+    const app = getCurrentInstance();
+    const $soketio = app.appContext.config.globalProperties.$soketio;
     const router = useRouter();
     const route = useRoute();
     const store = useStore();
@@ -204,6 +206,9 @@ export default {
             .then((response) => {
               console.log(response);
               router.push(`/class/requestdetail/${rid}`);
+              // 요청을 해결하는 수업을 개설했을 경우, 사용자들에게 알림
+              $soketio.emit("resolveRequest");
+              // $soketio.emit("matchingStart", user.value.sid);
             });
         }
       }
