@@ -39,6 +39,11 @@ export default {
       $soketio.emit("matchingStart", user.value.sid);
     };
 
+    //봉사자가 학생의 매칭 요청을 승인했을때 실행되는 함수
+    $soketio.on("gotoSecretPage", () => {
+      // 대충 학생이 비밀페이지로 간다는 코드
+    });
+
     return {
       state,
       startMatch,

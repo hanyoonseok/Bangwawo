@@ -258,9 +258,14 @@ export default {
     }
 
     const acceptMatching = () => {
-      //봉사자가 요청을 받아들였을 때
       // 한명이 수락을 하면 다른사람들의 모달을 다 지워줘야 함.
       $soketio.emit("matchingComplete");
+
+      //봉사자가 요청을 받아들였을 때
+      // 대충 봉사자가 비밀친구 페이지로 가는 코드
+
+      // 학생에게 봉사자가 매칭을 승인했다고 알려주기.
+      $soketio.emit("volunteerAcceptMatching");
     };
 
     return {
