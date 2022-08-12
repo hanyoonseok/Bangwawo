@@ -14,6 +14,8 @@
       :chats="state.chats"
       :screen="state.screenShareState"
       :cid="cid"
+      @updateMainVideoStreamManager="updateMainVideoStreamManager"
+      @leaveSession="leaveSession"
     />
     <UserView
       v-if="!state.isHost && state.session"
@@ -23,9 +25,11 @@
       :state="state"
       :me="state.publisher"
       :subs="state.subscribers"
+      :session="state.session"
+      :chats="state.chats"
       @activeVideo="activeVideo"
       @activeMute="activeMute"
-      @publishScreenShare="publishScreenShare"
+      @updateMainVideoStreamManager="updateMainVideoStreamManager"
     />
   </section>
 </template>
@@ -45,7 +49,8 @@ import moment from "moment";
 import { OpenVidu } from "openvidu-browser";
 import HostView from "@/components/class/HostView.vue";
 import UserView from "@/components/class/UserView.vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
@@ -56,10 +61,8 @@ export default {
     UserView,
   },
   setup() {
-    // 테스트용
-    // const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
-    // const OPENVIDU_SERVER_SECRET = "MY_SECRET";
-
+    const store = useStore();
+    const router = useRouter();
     const OPENVIDU_SERVER_URL = process.env.VUE_APP_OV_DOMAIN;
     const OPENVIDU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
     const OV = new OpenVidu();
@@ -74,6 +77,7 @@ export default {
     const nickname = route.params.nickname;
     console.log("nickname", nickname);
     const cid = route.params.cid;
+    const vid = route.params.vid;
 
     const state = reactive({
       OV: OV,
@@ -93,8 +97,6 @@ export default {
       }),
       subscribers: [],
       mySessionId: sessionId,
-      // mySessionId: "sessionId",
-      // myUserName: "Participant" + Math.floor(Math.random() * 100),
       myUserName: nickname,
       joinedPlayerNumbers: 0,
       chats: [],
@@ -106,7 +108,6 @@ export default {
         );
       }),
       isHost: userType,
-      // isHost: true,
       dataLen: computed(() => {
         return state.isHost ? 12 : 4;
       }),
@@ -128,15 +129,19 @@ export default {
       console.log("싱태", cur);
       if (cur) {
         // true일때는 화면공유 창 보여주기
-        document.getElementById("screenShareStart").style.display = "none";
+        if (state.isHost) {
+          document.getElementById("screenShareStart").style.display = "none";
+        }
         document.getElementById("container-screens").style.display = "block";
       } else {
-        document.getElementById("screenShareStart").style.display = "block";
+        if (state.isHost) {
+          document.getElementById("screenShareStart").style.display = "block";
+        }
+
         document.getElementById("container-screens").style.display = "hidden";
       }
     };
 
-    // 사용자가 방에 참여하겠다는 버튼 누를때마다 호출
     const joinSession = () => {
       console.log("join session");
       // 초기화
@@ -145,6 +150,10 @@ export default {
 
       // 새로운 Stream을 구독하고 subscribers배열에 저장
       state.session.on("streamCreated", ({ stream }) => {
+        console.log(
+          "누구인가???????????",
+          state.isHost ? "봉사자다" : "학생이다",
+        );
         // 웹 캠 사용하면서 사용자가 학생일때만 sub에 들어감
         if (stream.typeOfVideo == "CAMERA") {
           const subscriber = state.session.subscribe(stream);
@@ -198,6 +207,12 @@ export default {
         });
       });
 
+      // 봉사자가 세션 종료하면 학생도 자동으로 종료시켜야 함
+      state.session.on("signal:end", (e) => {
+        console.log(e);
+        leaveSession();
+      });
+
       console.log("sessionid", state.mySessionId);
       console.log("user name", state.myUserName);
       // 'getToken' method is simulating what your server-side should do.
@@ -223,6 +238,7 @@ export default {
             state.publisher = publisher;
             state.joinedPlayerNumbers++;
             state.session.publish(publisher);
+            console.log("######################joinSession", state.session);
             startRecording(); // 녹화 시작
           })
           .catch((error) => {
@@ -254,18 +270,6 @@ export default {
     };
 
     const recordId = ref(null);
-
-    // axios
-    //   .get(OPENVIDU_SERVER_URL + "/openvidu/api/recordings/55Class55", {
-    //     headers: {
-    //       Authorization:
-    //         "Basic " + btoa("OPENVIDUAPP:" + OPENVIDU_SERVER_SECRET),
-    //       "Content-Type": "application/json",
-    //     },
-    //   })
-    //   .then((res) => {
-    //     console.log(res);
-    //   });
 
     const startRecording = () => {
       const recordings = {
@@ -344,6 +348,16 @@ export default {
       state.subscribers = [];
       state.OV = undefined;
       window.removeEventListener("beforeunload", leaveSession);
+
+      store
+        .dispatch("root/endClass", { cid: cid, vid: vid })
+        .then((response) => {
+          console.log(response);
+          router.push({ name: "feedbackSubmit", params: { cid: cid } });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     };
 
     const getToken = (mySessionId) => {
@@ -524,9 +538,17 @@ export default {
     };
 
     onMounted(() => {
-      document.getElementById("screenShareStart").style.display = "block";
-      document.getElementById("container-screens").style.display = "none";
+      console.log("mounted", userType);
+      if (userType) {
+        document.getElementById("screenShareStart").style.display = "block";
+        document.getElementById("container-screens").style.display = "none";
+      }
     });
+
+    const updateMainVideoStreamManager = (stream) => {
+      if (state.mainStreamManager === stream) return;
+      state.mainStreamManager = stream;
+    };
 
     return {
       state,
@@ -542,6 +564,7 @@ export default {
       publishScreenShare,
       startRecording,
       stopRecording,
+      updateMainVideoStreamManager,
     };
   },
 };

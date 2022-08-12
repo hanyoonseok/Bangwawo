@@ -19,13 +19,13 @@
               <img
                 src="@/assets/thumbnail.png"
                 alt="썸네일이미지"
-                v-if="classInfo.thumbnail"
+                v-if="!classInfo.thumbnail"
                 class="left-box-img"
               />
 
               <img
                 v-else
-                :src="'http://localhost:8081/api' + classInfo.thumbnail"
+                :src="classInfo.thumbnail"
                 alt="썸네일이미지"
                 class="left-box-img"
               />
@@ -206,6 +206,7 @@ export default {
         .then((response) => {
           console.log(response.data);
           classInfo.value = response.data;
+          console.log("수업 상태", classInfo.value.state);
         })
         .catch((error) => {
           console.log(error);
@@ -222,12 +223,14 @@ export default {
           console.log(response);
           let flag = false;
           for (const item of response.data) {
-            if (item.student.sid === userInfo.sid) {
+            if (item.sid === userInfo.sid) {
               flag = true;
               break;
             }
           }
+          console.log("뭐죠?");
           user.subscribe = flag;
+          console.log("신청했니??", user.subscribe ? "ㅇㅇ" : "ㄴㄴ");
         })
         .catch((error) => {
           error;
@@ -248,6 +251,7 @@ export default {
         .then((response) => {
           console.log(response);
           user.subscribe = true;
+          console.log("신청했니??", user.subscribe ? "ㅇㅇ" : "ㄴㄴ");
         })
         .catch((error) => {
           error;
@@ -323,6 +327,7 @@ export default {
               userType: userInfo.userType,
               nickname: userInfo.nickname,
               cid: cid,
+              vid: userInfo.vid,
             },
           });
         })
