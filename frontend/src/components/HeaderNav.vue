@@ -107,10 +107,17 @@
           </div>
         </article>
       </div>
-
-      <button class="consult on" v-if="user && user.userType === 'volunteer'">
-        <i class="fa-solid fa-circle"></i>&nbsp;상담 ON
-      </button>
+      <div
+        v-if="user && user.userType === 'volunteer'"
+        @click="changeTalkableState"
+      >
+        <button class="consult on" v-if="user.talkable">
+          <i class="fa-solid fa-circle"></i>&nbsp;상담 ON
+        </button>
+        <button class="consult off" v-else>
+          <i class="fa-solid fa-circle"></i>&nbsp;상담 OFF
+        </button>
+      </div>
     </section>
   </div>
 </template>
@@ -130,28 +137,6 @@ export default {
 
     let isProfileOpen = ref(false);
 
-    // const notices = ref([
-    //   {
-    //     id: "1",
-    //     content: "자녀의 상담중 위험 단어를 감지했습니다.",
-    //     date: "07-22",
-    //   },
-    //   {
-    //     id: "2",
-    //     content: "자녀의 상담중 위험 단어를 감지했습니다.",
-    //     date: "07-22",
-    //   },
-    //   {
-    //     id: "3",
-    //     content: "자녀의 상담중 위험 단어를 감지했습니다.",
-    //     date: "07-22",
-    //   },
-    //   {
-    //     id: "4",
-    //     content: "자녀의 상담중 위험 단어를 감지했습니다.",
-    //     date: "07-22",
-    //   },
-    // ]);
     const notices = ref("");
     const toggleProfileModal = () => {
       isNoticeOpen.value = false;
@@ -187,7 +172,9 @@ export default {
     }
 
     onMounted(() => {
-      getClassOpenAlarm();
+      if (user.value && user.value.userType === "student") {
+        getClassOpenAlarm();
+      }
     });
 
     // 학생별 알람에 대한 읽기 완료
@@ -202,6 +189,20 @@ export default {
         });
     };
 
+    // 상담 on/off 상태 변경
+    const changeTalkableState = async () => {
+      console.log("시작한다아아");
+      await axios
+        .put(
+          `${process.env.VUE_APP_API_URL}/volunteer/talkable/${user.value.vid}`,
+          { id: user.value.vid },
+        )
+        .then((response) => {
+          console.log(response);
+          store.commit("root/setVolunteerTalkingState");
+        });
+    };
+
     return {
       user,
       isNoticeOpen,
@@ -209,6 +210,7 @@ export default {
       toggleProfileModal,
       getClassOpenAlarm,
       toggleNoticeModal,
+      changeTalkableState,
       notices,
       checkAlarm,
       logout,

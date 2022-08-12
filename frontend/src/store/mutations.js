@@ -25,3 +25,7 @@ export const setModifiedVolunteerInfo = (state, payload) => {
 export const setCharacterInfo = (state, payload) => {
   state.user.character = payload.character;
 };
+
+export const setVolunteerTalkingState = (state) => {
+  state.user.talkable = !state.user.talkable;
+};
