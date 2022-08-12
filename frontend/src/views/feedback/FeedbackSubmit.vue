@@ -9,14 +9,10 @@
         <div
           class="profile"
           v-for="student in students"
-          :key="student.id"
+          :key="student.sid"
           @click="selected = student"
         >
-          <img :src="student.img" />
-          <div class="person-info">
-            <label>이름</label>
-            {{ student.name }}
-          </div>
+          <ProfileCanvas :childColor="student.character" :idx="student.sid" />
           <div class="person-info">
             <label>별명</label>{{ student.nickname }}
           </div>
@@ -28,7 +24,7 @@
         </button>
       </article>
     </section>
-    <FeedbackModal v-if="selected" :info="selected" :close="close" />
+    <FeedbackModal v-if="selected" :info="selected" :close="close" :cid="CID" />
     <div class="confirm" v-if="isConfirm">
       <div class="container">
         <img src="@/assets/profile.png" alt="오리" />
@@ -48,70 +44,53 @@
 import { ref } from "vue";
 import HeaderNav from "@/components/HeaderNav.vue";
 import FeedbackModal from "@/components/feedback/FeedbackModal.vue";
+import ProfileCanvas from "@/components/mypage/ProfileCanvas.vue";
 import { useRoute } from "vue-router";
+import { useStore } from "vuex";
 
 export default {
   name: "FeedBack",
   components: {
     HeaderNav,
     FeedbackModal,
+    ProfileCanvas,
   },
   props: ["cid"],
   setup() {
     const route = useRoute();
-    console.log(route.params.cid);
-
-    const students = ref([
-      {
-        id: 1,
-        img: require("@/assets/profile.png"),
-        name: "이화연",
-        nickname: "애기화연",
-      },
-      {
-        id: 2,
-        img: require("@/assets/profile.png"),
-        name: "이수빈",
-        nickname: "애기수빈",
-      },
-      {
-        id: 3,
-        img: require("@/assets/profile.png"),
-        name: "이진호",
-        nickname: "애기진호",
-      },
-      {
-        id: 4,
-        img: require("@/assets/profile.png"),
-        name: "이윤석",
-        nickname: "애기윤석",
-      },
-      {
-        id: 5,
-        img: require("@/assets/profile.png"),
-        name: "이다빈",
-        nickname: "애기다빈",
-      },
-      {
-        id: 6,
-        img: require("@/assets/profile.png"),
-        name: "이반장",
-        nickname: "애기반장",
-      },
-      {
-        id: 7,
-        img: require("@/assets/profile.png"),
-        name: "이CA",
-        nickname: "애기CA",
-      },
-    ]);
-
+    const store = useStore();
+    const CID = ref(route.params.cid);
+    const students = ref([]);
     let selected = ref(null);
+
+    const getClassStudents = () => {
+      store.dispatch("root/getClassStudents", CID.value).then((res) => {
+        const { data } = res;
+        for (let i = 0; i < data.length; i++) data[i].idx = i;
+
+        students.value = data;
+        console.log(students.value);
+      });
+    };
+    getClassStudents();
 
     let isConfirm = ref(false);
 
-    const close = (e) => {
+    const close = (e, textareaValue) => {
+      console.log(textareaValue);
       e.stopPropagation();
+      const payload = {
+        cid: {
+          cid: CID.value,
+        },
+        sid: {
+          sid: selected.value.sid,
+        },
+        feedback: textareaValue,
+      };
+      if (textareaValue) {
+        store.dispatch("root/submitFeedback", payload);
+      }
       selected.value = null;
     };
 
@@ -120,6 +99,7 @@ export default {
       selected,
       close,
       isConfirm,
+      CID,
     };
   },
 };

@@ -1,5 +1,5 @@
 <template>
-  <div id="profile-canvas"></div>
+  <div :id="`pc${idx ? idx : ''}`" class="profile-canvas"></div>
 </template>
 
 <script>
@@ -11,7 +11,7 @@ import { onMounted, watch, computed, reactive } from "vue";
 
 export default {
   name: "ProfileCanvas",
-  props: ["childColor"],
+  props: ["childColor", "idx"],
   setup(props) {
     // Initial material
     const store = useStore();
@@ -216,9 +216,16 @@ export default {
     };
 
     onMounted(() => {
-      document
-        .getElementById("profile-canvas")
-        .appendChild(renderer.domElement);
+      if (props.idx) {
+        document
+          .getElementById(`pc${props.idx}`)
+          .appendChild(renderer.domElement);
+      } else {
+        document
+          .querySelector(".profile-canvas")
+          .appendChild(renderer.domElement);
+      }
+
       animate();
     });
 
@@ -234,7 +241,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-#profile-canvas ::v-deep(canvas) {
+.profile-canvas ::v-deep(canvas) {
   width: 100%;
   height: 100%;
   border-radius: 100px;

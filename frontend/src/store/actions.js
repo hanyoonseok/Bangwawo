@@ -172,3 +172,21 @@ export const toggleTalkable = ({ state }, vid) => {
   const url = `/volunteer/talkable/${vid}`;
   return axios.put(url);
 };
+
+export const getClassStudents = ({ state }, cid) => {
+  console.log("getClassStudents", state, cid);
+  const url = `/enrol/class/${cid}`;
+  return axios.get(url);
+};
+
+export const submitFeedback = ({ state }, payload) => {
+  console.log("getClassStudents", state, payload);
+  const url = "/enrol/feedback";
+  return axios.put(url, payload);
+};
+
+export const getStudentFeedback = ({ state }, payload) => {
+  console.log("getStudentFeedback", state, payload);
+  const url = `/enrol/${payload.cid}/${payload.sid}`;
+  return axios.get(url);
+};

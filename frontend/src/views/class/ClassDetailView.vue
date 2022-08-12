@@ -333,7 +333,7 @@ export default {
       store
         .dispatch("root/entranceClass", { sid: userInfo.sid, cid: cid })
         .then((response) => {
-          console.log(response);
+          sessionId = response.data;
           router.push({
             name: "inclass",
             params: {
@@ -347,7 +347,6 @@ export default {
           console.log(err);
         });
     };
-
     return {
       classInfo,
       user,
