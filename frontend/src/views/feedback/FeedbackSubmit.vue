@@ -55,6 +55,7 @@ export default {
     HeaderNav,
     FeedbackModal,
   },
+  props: ["cid"],
   setup() {
     const students = ref([
       {

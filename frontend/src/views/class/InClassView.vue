@@ -87,7 +87,7 @@ export default {
       }),
       subscribers: [],
       mySessionId: mySessionId,
-      myUserName: "Participant" + Math.floor(Math.random() * 100),
+      myUserName: user.value.nickname,
       joinedPlayerNumbers: 0,
       chats: [],
 
@@ -444,8 +444,14 @@ export default {
     };
 
     onMounted(() => {
-      document.getElementById("screenShareStart").style.display = "block";
-      document.getElementById("container-screens").style.display = "none";
+      const screenShare = document.getElementById("screenShareStart");
+      if (screenShare) {
+        screenShare.style.display = "block";
+      }
+      const containerScreens = document.getElementById("container-screens");
+      if (containerScreens) {
+        containerScreens.style.display = "none";
+      }
     });
 
     return {
@@ -459,6 +465,7 @@ export default {
       activeVideo,
       activeMute,
       publishScreenShare,
+      user,
     };
   },
 };
