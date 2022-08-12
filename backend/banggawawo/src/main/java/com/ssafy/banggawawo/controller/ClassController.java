@@ -1,9 +1,6 @@
 package com.ssafy.banggawawo.controller;
 
 import com.ssafy.banggawawo.domain.dto.ClassDto;
-import com.ssafy.banggawawo.domain.entity.ClassRoom;
-import com.ssafy.banggawawo.domain.dto.EnrolDto;
-import com.ssafy.banggawawo.domain.entity.Enrol;
 import com.ssafy.banggawawo.domain.entity.Likes;
 import com.ssafy.banggawawo.domain.entity.Request;
 import com.ssafy.banggawawo.service.ClassService;
@@ -12,20 +9,17 @@ import com.ssafy.banggawawo.service.LikesService;
 import com.ssafy.banggawawo.service.RequestService;
 import com.ssafy.banggawawo.util.FileUploadUtil;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -81,25 +75,9 @@ public class ClassController {
     @ApiOperation(value = "이미지 등록")
     @PostMapping("/image")
     public ResponseEntity<String> fileImage(@RequestParam(name = "thumbnail") MultipartFile multipartFile) throws Exception {
-        LocalDateTime now = LocalDateTime.now();
-        String dir1 = "src/main/resources/static/";
-        String dir2 = "class_thumbnail/";
+        String encodedImage = Base64.getEncoder().encodeToString(multipartFile.getBytes());
         String ext = multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf(".") + 1);
-        String fileName = "" + now.getYear() + now.getMonth() + now.getDayOfMonth() + Long.toString(now.toEpochSecond(ZoneOffset.UTC)) + "." + ext;
-        try {
-            FileUploadUtil.saveFile(dir1 + dir2, fileName, multipartFile);
-        } catch (IOException e) {
-            return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
-        }
-        return new ResponseEntity<>("/class/image/" + fileName, HttpStatus.OK);
-    }
-
-    @ApiOperation("이미지 받아오기")
-    @GetMapping("/image/{fileName}")
-    public ResponseEntity<Resource> showImage(@PathVariable String fileName) throws Exception {
-        String dir0 = new File("").getAbsolutePath() + "\\";
-        String dir1 = "src\\main\\resources\\static\\class_thumbnail\\";
-        return new ResponseEntity<Resource>(new UrlResource("file:" + dir0 + dir1 + fileName), HttpStatus.OK);
+        return new ResponseEntity<>("data:image/"+ext+";base64,"+encodedImage, HttpStatus.OK);
     }
 
     @ApiOperation(value = "수업 수정")
