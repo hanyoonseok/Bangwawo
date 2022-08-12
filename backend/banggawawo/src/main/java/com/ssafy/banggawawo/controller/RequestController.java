@@ -1,7 +1,9 @@
 package com.ssafy.banggawawo.controller;
 
+import com.ssafy.banggawawo.domain.dto.LikesDto;
 import com.ssafy.banggawawo.domain.dto.RequestDto;
 import com.ssafy.banggawawo.domain.entity.Request;
+import com.ssafy.banggawawo.service.LikesService;
 import com.ssafy.banggawawo.service.RequestService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +25,20 @@ public class RequestController {
 
     @Autowired
     private RequestService requestservice;
+    @Autowired
+    private LikesService likesService;
 
     //요청글 작성 (sid,content,title을 입력받는다.)
     @PostMapping()
     @ApiOperation(value = "요청글 작성")
     public ResponseEntity<?> write(@RequestBody RequestDto requestdto) throws Exception {
         if (requestservice.write(requestdto) > 0){
+            // 요청글 작성시 자동을 공감 추가
+            LikesDto result= new LikesDto();
+            result.setRId(requestdto.getRId());
+            result.setRTitle(requestdto.getTitle());
+            likesService.sympathy(result);
+
             return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);}
         else
             return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
