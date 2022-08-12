@@ -1,6 +1,9 @@
 package com.ssafy.banggawawo.controller;
 
+import com.ssafy.banggawawo.domain.dto.ColorDto;
 import com.ssafy.banggawawo.domain.dto.EnrolDto;
+import com.ssafy.banggawawo.domain.dto.StudentDto;
+import com.ssafy.banggawawo.domain.dto.StudentFrontDto;
 import com.ssafy.banggawawo.domain.entity.ClassRoom;
 import com.ssafy.banggawawo.domain.entity.Enrol;
 import com.ssafy.banggawawo.domain.entity.Student;
@@ -12,7 +15,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/enrol")
@@ -38,8 +44,14 @@ public class EnrolController {
     }
     @ApiOperation("수업에 수강신청한 학생 받아오기")
     @GetMapping("/class/{cid}")
-    public ResponseEntity<List<Enrol>> findByClassRoom(@PathVariable("cid") Long cId) throws Exception{
-        return new ResponseEntity<>(enrolService.findByClassRoom(cId) ,HttpStatus.OK);
+    public ResponseEntity<List<StudentFrontDto>> findByClassRoom(@PathVariable("cid") Long cId) throws Exception{
+        List<Enrol> enrolList = enrolService.findByClassRoom(cId);
+        List<StudentFrontDto> response = new ArrayList<StudentFrontDto>();
+        for(Enrol e : enrolList){
+            Student student = e.getStudent();
+            response.add(new StudentFrontDto(new StudentDto(student)));
+        }
+        return new ResponseEntity<>(response ,HttpStatus.OK);
     }
     @ApiOperation("학생이 수강신청한 수업 받아오기")
     @GetMapping("/student/{sid}")
