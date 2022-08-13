@@ -13,6 +13,7 @@ export default {
   name: "App",
   setup() {
     AOS.init();
+    return {};
   },
 };
 </script>

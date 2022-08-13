@@ -15,6 +15,7 @@ export default {
     // Initial material
     const store = useStore();
     let parts = reactive(store.state.root.user.character);
+    console.log("parts임", parts);
     const INITIAL_MTL = new THREE.MeshPhongMaterial({
       color: 0xffcb57,
       shininess: 10,
@@ -107,7 +108,7 @@ export default {
     controls.autoRotate = false; // Toggle this if you'd like the chair to automatically rotate
     controls.autoRotateSpeed = 0.2; // 30
 
-    const MODEL_PATH = "./duckduck3.glb";
+    const MODEL_PATH = `${window.location.protocol}//${window.location.host}/duckduck3.glb`;
 
     let mixer = null;
     let clips = null;

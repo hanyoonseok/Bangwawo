@@ -82,6 +82,7 @@
           <RectPostCard :state="state" />
         </div>
       </article>
+
       <button class="register-btn" @click="classRegister">등록</button>
     </div>
     <div class="confirm" v-if="isConfirm.status">
@@ -97,10 +98,12 @@
 </template>
 
 <script>
+import axios from "axios";
+import { useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import HeaderNav from "@/components/HeaderNav.vue";
 import RectPostCard from "@/components/common/RectPostCard.vue";
 import { reactive, ref } from "vue";
-import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
 export default {
@@ -110,6 +113,7 @@ export default {
   },
   setup() {
     const router = useRouter();
+    const route = useRoute();
     const store = useStore();
     const user = reactive(store.state.root.user);
     console.log(user);
@@ -129,6 +133,8 @@ export default {
       introduce: inputIntroduce,
       vid: { nickname: user.nickname },
     });
+    // 요청글에서 들어온 경우는 room id, 헤더에서 들어온 경우 -1임.
+    const rid = route.params.rid;
 
     const formData = new FormData();
     const fileChange = async (e) => {
@@ -166,29 +172,39 @@ export default {
         classDto.stime = state.dateStr + "T" + state.stimeStr;
         classDto.etime = state.dateStr + "T" + state.etimeStr;
 
-        if (classDto.thumbnail !== "") {
-          // 이미지 파일 등록
-          store
-            .dispatch("root/registerImage", formData)
-            .then((response) => {
-              console.log(response.data);
-              classDto.thumbnail = response.data;
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        }
-
-        // 클래스 등록
-        store
-          .dispatch("root/registerClass", classDto)
+        // 이미지 파일 등록
+        await axios
+          .post(`${process.env.VUE_APP_API_URL}/class/image`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
           .then((response) => {
-            console.log(response);
-            router.push("/class/list");
+            console.log(response.data);
+            classDto.thumbnail = response.data;
           })
           .catch((error) => {
             console.log(error);
           });
+        if (rid == -1) {
+          // 클래스 등록. (만약 요청을 통해 들어온것이 아니라면)
+          store
+            .dispatch("root/registerClass", classDto)
+            .then((response) => {
+              console.log(response);
+              router.push("/class/list");
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          await axios
+            .post(`${process.env.VUE_APP_API_URL}/class/${rid}`, classDto)
+            .then((response) => {
+              console.log(response);
+              router.push(`/class/requestdetail/${rid}`);
+            });
+        }
       }
     };
 
@@ -209,6 +225,7 @@ export default {
       fileChange,
       inputChange,
       classRegister,
+      rid,
       isConfirm,
     };
   },
