@@ -5,7 +5,12 @@
       <h2>수업 요청해요</h2>
     </div>
     <div class="search-bar">
-      <input type="text" placeholder="찾고 싶은 수업을 입력하세요." />
+      <input
+        type="text"
+        placeholder="찾고 싶은 수업을 입력하세요."
+        @keyup="searchRequest()"
+        @input="changeKeyword"
+      />
       <button class="search-btn">
         <i class="fa-solid fa-magnifying-glass"></i>
       </button>
@@ -82,7 +87,7 @@
 <script>
 import HeaderNav from "@/components/HeaderNav.vue";
 import PaginationView from "@/components/class/PaginationView.vue";
-import { reactive, ref, onMounted } from "vue";
+import { reactive, ref, onMounted, watch } from "vue";
 import axios from "axios";
 import { useStore } from "vuex";
 
@@ -96,12 +101,14 @@ export default {
     const store = useStore();
     const state = reactive({
       requestList: [],
+      isUnsolvedFilter: false,
       userInfo: store.state.root.user,
       userType: store.state.root.user.userType,
       regDate: undefined,
       totalRequest: 0,
     });
 
+    const keyword = ref("");
     const pages = reactive({
       listData: [], // 6개의 페이지가 담겨질 것
       page: 1, // 현재 어느 페이지에 있는지
@@ -122,11 +129,22 @@ export default {
     };
     onMounted(() => {
       pagingMethod(pages.page);
+      searchRequest(pages.page);
     });
     const pagingMethod = (page) => {
       pages.page = page;
       // 여기서 새로 데이터를 받아와야 함.
-      getRequestList(pages.page);
+      if (keyword.value === "" && !state.isUnsolvedFilter) {
+        getRequestList(pages.page);
+        pages.total = state.requestList.length;
+      } else {
+        pages.listData = state.requestList.slice(
+          (page - 1) * pages.limit,
+          page * pages.limit,
+        ); //6개 잘라서 넣기
+      }
+      console.log("보여드림~", state.requestList);
+
       pageDataSetting(pages.total, pages.limit, pages.block, page);
     };
 
@@ -158,33 +176,45 @@ export default {
     };
 
     const unresolved = ref(false);
-    const getUnsolvedRequests = async () => {
-      axios
-        .get(`${process.env.VUE_APP_API_URL}/request/unfind`)
-        .then((response) => {
-          console.log(response);
-        });
-    };
-    const unSolvedFilter = (e) => {
+    const unSolvedFilter = async (e) => {
       if (e.target.checked === true) {
-        // 미해결 필터가 되는지 확인하려면 해결된 글이 있어야하므로...
-        // 일단 미해결필터는 해결/미해결 api 연결한 후 구현해야할듯.
-        getUnsolvedRequests();
-        // let arr = [];
-        //   for (const item of state.requestList) {
-        //     if (item.solved === false) {
-        //       // 미해결만 배열에 담기
-        //       arr.push(item);
-        //     }
-        //   }
-        //   state.requestList = arr;
-        //   pages.total = state.requestList.length;
-        //   pagingMethod(pages.page);
-        // } else {
-        //   console.log("false");
-        //   // 나중에 다시 api에서 데이터 불러올것 지금 임시로 넣어놈
-        //   pages.total = state.requestList.length;
-        //   pagingMethod(pages.page);
+        await axios
+          .get(`${process.env.VUE_APP_API_URL}/request/unfind`)
+          .then((response) => {
+            console.log(response);
+            state.requestList = response.data.requestsList;
+            console.log(state.requestList);
+            pages.total = state.requestList.length;
+            state.isUnsolvedFilter = true;
+            pagingMethod(pages.page);
+          });
+      } else {
+        state.isUnsolvedFilter = false;
+        pagingMethod(pages.page);
+      }
+    };
+
+    const changeKeyword = (e) => {
+      keyword.value = e.target.value;
+    };
+
+    watch(
+      () => keyword.value,
+      () => pagingMethod(pages.page),
+    );
+
+    // 검색기능
+    const searchRequest = async () => {
+      if (keyword.value !== "") {
+        console.log(keyword.value);
+        axios
+          .get(`${process.env.VUE_APP_API_URL}/request/topic/${keyword.value}`)
+          .then((response) => {
+            const data = response.data;
+            console.log("검색결과", data.requestsList);
+
+            state.requestList = data.requestsList;
+          });
       }
     };
     return {
@@ -192,9 +222,10 @@ export default {
       unresolved,
       pagingMethod,
       getRequestList,
-      getUnsolvedRequests,
       pageDataSetting,
       unSolvedFilter,
+      changeKeyword,
+      searchRequest,
       state,
     };
   },

@@ -169,3 +169,37 @@ export const getStudentInfo = ({ state }, id) => {
   const url = `/student/${id}`;
   return axios.get(url);
 };
+
+export const getVolunteerInfo = ({ state }, id) => {
+  console.log("getVolunteerInfo", state, id);
+  const url = `/volunteer/${id}`;
+  return axios.get(url);
+};
+
+// 상담가능한 봉사자들 얻어오기
+export const getTalkableVolunteer = ({ state }) => {
+  console.log("getTalkableVolunteer", state);
+  const url = `/volunteer/talkable`;
+  return axios.get(url);
+};
+
+// 요청글 검색
+
+export const getSearchByTtileRequest = ({ state }, topic) => {
+  console.log("getSearchByTtileRequest", state);
+  const url = `/request/topic/${topic}`;
+  return axios.get(url);
+};
+
+// 학생의 위험발언 저장
+export const studentDangerWord = ({ state }, payload) => {
+  console.log("studentDangerWord", state);
+  const url = `/chat`;
+  return axios.post(url, payload);
+};
+
+export const getChildrenDangerAlarm = ({ state }, sid) => {
+  console.log("getChildrenDangerAlarm", state);
+  const url = `/chat/${sid}`;
+  return axios.get(url);
+};

@@ -5,8 +5,13 @@
     </article>
     <article class="user-wrapper" v-if="state.session">
       <SecretCanvas
-        :parts="volunteer"
-        class="user-card"
+        v-if="publisher"
+        :parts="publisher"
+        :class="{
+          'user-card': true,
+          'talking-active': state.isPublisherTalking,
+        }"
+        :backgroundPubImg="state.backgroundPubImg"
         user="publisher"
         id="publisher"
         :isPublisherTalking="state.isPublisherTalking"
@@ -14,20 +19,38 @@
         :isPublisher="true"
       />
       <SecretCanvas
-        :parts="student"
-        class="user-card"
+        v-if="subscriber"
+        :parts="subscriber"
+        :class="{
+          'user-card': true,
+          'talking-active': state.isSubscribeTalking,
+        }"
         user="subscriber"
         id="subscriber"
+        :backgroundSubImg="state.backgroundSubImg"
         :isPublisherTalking="state.isPublisherTalking"
         :isSubscribeTalking="state.isSubscribeTalking"
         :isPublisher="false"
       />
+      <div class="background-area">
+        <button @click="activeBackgroudSelect" class="changeBg-btn">
+          배경바꾸기
+        </button>
+        <div v-if="state.showBackgroundSelection" class="selection-area">
+          <div class="bg-wrapper">
+            <div v-for="(bg, index) in backgrounds" :key="index">
+              <img
+                class="selection-background"
+                :src="bg"
+                @click="changeBgImg(bg)"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </article>
 
     <div id="session" v-if="state.session">
-      <div id="session-header">
-        <h1 id="session-title">{{ state.mySessionId }}</h1>
-      </div>
       <div id="video-container" class="col-md-6">
         <user-video
           :stream-manager="state.publisher"
@@ -42,6 +65,7 @@
       </div>
     </div>
     <article class="btn-wrapper">
+      {{ state.mySessionId }}
       <button class="option-btn" @click="clickMute" v-if="state.audioState">
         <i class="fa-solid fa-microphone-slash"></i>
         &nbsp;음소거
@@ -59,11 +83,9 @@
 
 <script>
 import SecretCanvas from "@/components/secret/SecretCanvas.vue";
-import { reactive, onBeforeUnmount } from "vue";
+import { reactive, onBeforeUnmount, ref, watch } from "vue";
 import { useStore } from "vuex";
-
-import { useRouter } from "vue-router";
-
+import { useRouter, useRoute } from "vue-router";
 import axios from "axios";
 import { OpenVidu } from "openvidu-browser";
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -83,16 +105,39 @@ export default {
   },
   setup() {
     const router = useRouter();
-
+    const route = useRoute();
+    const vid = route.params.vid;
     const store = useStore();
+    const user = ref(store.state.root.user);
+    const sid = route.params.sid;
     let model = store.state.root.user.model;
 
     //초기 캐릭터 색 : 백엔드에 저장한 db에서 받아올것임
-    let student = reactive(store.state.root.user.characterColors);
-    let volunteer = reactive(store.state.root.user.characterColors);
+
+    let publisher = ref(null);
+    let subscriber = ref(null);
     // 테스트용
-    // const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
-    // const OPENVIDU_SERVER_SECRET = "MY_SECRET";
+    const getStudentInfo = async () => {
+      store.dispatch("root/getStudentInfo", sid).then((res) => {
+        if (user.value.userType === "volunteer")
+          subscriber.value = res.data.user.character;
+        else {
+          publisher.value = res.data.user.character;
+        }
+      });
+    };
+    const getVolunteerInfo = async () => {
+      store.dispatch("root/getVolunteerInfo", vid).then((res) => {
+        if (user.value.userType === "volunteer")
+          publisher.value = res.data.user.character;
+        else {
+          subscriber.value = res.data.user.character;
+        }
+      });
+    };
+
+    getStudentInfo();
+    getVolunteerInfo();
 
     const OPENVIDU_SERVER_URL = process.env.VUE_APP_OV_DOMAIN;
     const OPENVIDU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
@@ -104,7 +149,7 @@ export default {
       mainStreamManager: undefined,
       publisher: undefined,
       subscribers: [],
-      mySessionId: "SessionX",
+      mySessionId: `SessionX`,
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       joinedPlayerNumbers: 0,
       audioState: true,
@@ -112,17 +157,25 @@ export default {
       danger: 0,
       isSubscribeTalking: false,
       isPublisherTalking: false,
+      backgroundPubImg: "./../../secretBg.png",
+      backgroundSubImg: "./../../secretBg.png",
+      showBackgroundSelection: false,
     });
+
+    // 배경리스트
+    const backgrounds = [
+      "./../../secretBg.png",
+      "./../../secretBg2.png",
+      "./../../secretBg2.png",
+    ];
+
+    const changeBgImg = (bg) => {
+      state.backgroundPubImg = bg;
+      console.log("변경하자.", state.backgroundPubImg);
+    };
 
     //위험 단어 리스트
     const dangerWord = ["안녕", "자살", "타살", "괴롭힘", "왕따", "따돌림"];
-
-    /*
-  닉네임:사용자
-  sessionName : 방 이름?
-  token : 토큰 들어오는데 이건 입장 할때마다 바뀌는 값
-  userName : 아이디인데 아마 로그인할대 아이디로 쓸듯?
-*/
 
     // 사용자가 방에 참여하겠다는 버튼 누를때마다 호출
     const joinSession = () => {
@@ -234,6 +287,9 @@ export default {
       window.addEventListener("beforeunload", leaveSession);
     };
 
+    const activeBackgroudSelect = () => {
+      state.showBackgroundSelection = !state.showBackgroundSelection;
+    };
     const leaveSession = () => {
       // --- Leave the session by calling 'disconnect' method over the Session object ---
       if (state.session) {
@@ -348,6 +404,39 @@ export default {
       );
     }
 
+    watch(
+      () => state.backgroundPubImg,
+      (cur) => {
+        console.log(cur);
+        // 만약 배경이미지를 바꾼다면 메세지를보내준다.
+        state.session
+          .signal({
+            data: cur, // Any string (optional)
+            to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
+            type: "bg-change", // The type of message (optional)
+          })
+          .then(() => {
+            console.log("Message successfully sent");
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      },
+    );
+
+    state.session.on("signal:bg-change", (event) => {
+      console.log(event.data); // Message
+      console.log("누구로부터왔니?------------", event.from); // Connection object of the sender
+      console.log(
+        "지금은누구니??------------",
+        state.publisher.stream.connection.connectionId,
+      );
+      if (
+        state.publisher.stream.connection.connectionId !==
+        event.from.connectionId
+      )
+        state.backgroundSubImg = event.data;
+    });
     recognition.lang = "ko-KR"; // 한국어 지정
     recognition.onresult = (event) => {
       const text = event.results[0][0].transcript;
@@ -355,9 +444,22 @@ export default {
       for (const item of dangerWord) {
         if (text.indexOf(item) >= 0) {
           state.danger++;
-          console.log("위험하다아ㅏㅏ");
+          // 위험단어 알려줌.
+          studentDangerWord(item);
         }
       }
+    };
+
+    const studentDangerWord = async (item) => {
+      const secretChatDto = {
+        parentsCheck: true,
+        scId: 0,
+        sccontent: item,
+        sid: sid,
+      };
+      await store
+        .dispatch("root/studentDangerWord", secretChatDto)
+        .then((res) => console.log(res));
     };
 
     recognition.onspeechend = () => {
@@ -386,12 +488,20 @@ export default {
 
     return {
       state,
-      student,
-      volunteer,
+      publisher,
+      subscriber,
       model,
       // applyVoiceFilter,
       leaveSession,
       clickMute,
+      activeBackgroudSelect,
+      studentDangerWord,
+      getVolunteerInfo,
+      getStudentInfo,
+      backgrounds,
+      changeBgImg,
+      vid,
+      sid,
     };
   },
 };

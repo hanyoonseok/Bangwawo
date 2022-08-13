@@ -65,7 +65,7 @@ export default {
     camera.position.x = 14; // 화면에 보여지는 위치인것같음
     camera.position.y = -3;
 
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.75);
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.6);
     hemiLight.position.set(1, -2, 1);
     scene.add(hemiLight);
     // 특정 방향으로 빛 방출

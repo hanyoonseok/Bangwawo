@@ -140,7 +140,7 @@ import { onMounted, ref, getCurrentInstance, reactive } from "vue";
 import { useStore } from "vuex";
 import axios from "axios";
 import RequestPostCanvas from "@/components/class/RequestPostCanvas.vue";
-// import { io } from "socket.io-client";
+import { useRouter } from "vue-router";
 
 export default {
   components: {
@@ -148,6 +148,7 @@ export default {
   },
   name: "HeaderNav",
   setup() {
+    const router = useRouter();
     const app = getCurrentInstance();
     const $soketio = app.appContext.config.globalProperties.$soketio;
     const store = useStore();
@@ -156,12 +157,14 @@ export default {
       isMatchingModal: false,
       characterColor: null,
       studentName: "",
+      matchingSid: null,
     });
     let isNoticeOpen = ref(false);
 
     let isProfileOpen = ref(false);
 
     const notices = ref("");
+    const children = ref("");
     const toggleProfileModal = () => {
       isNoticeOpen.value = false;
       isProfileOpen.value = !isProfileOpen.value;
@@ -200,7 +203,18 @@ export default {
       if (user.value && user.value.userType === "student") {
         getClassOpenAlarm();
       }
+      if (user.value && user.value.userType === "parent") {
+        // getChildren();
+        // getChildrenDangerAlarm();
+      }
+      console.log(user.value);
     });
+
+    const getChildren = async () => {
+      await store
+        .dispatch("root/getChildren", user.value.email)
+        .then((res) => console.log(res));
+    };
 
     // 학생별 알람에 대한 읽기 완료
     const checkAlarm = async (rid) => {
@@ -214,6 +228,13 @@ export default {
           $soketio.emit("readStudentAlarm");
         });
     };
+    //자식들에 위험단어 알림을 받는다~
+    const getChildrenDangerAlarm = async () => {
+      store.dispatch("root/getChildrenDangerAlarm").then((response) => {
+        console.log(response);
+        notices.value = response.data.requsest;
+      });
+    };
 
     // 상담 on/off 상태 변경
     const changeTalkableState = async () => {
@@ -226,6 +247,7 @@ export default {
         .then((response) => {
           console.log(response);
           store.commit("root/setVolunteerTalkingState");
+          $soketio.emit("volunteerChangeTalkState");
           console.log(user.value.talkable);
         });
     };
@@ -245,8 +267,8 @@ export default {
         state.isMatchingModal = true;
         store.dispatch("root/getStudentInfo", data).then((res) => {
           state.characterColor = res.data.user.character;
+          state.matchingSid = res.data.user.sid;
           state.studentName = res.data.user.nickname;
-          console.log("여기옴?", state.characterColor);
         });
       });
 
@@ -263,9 +285,12 @@ export default {
 
       //봉사자가 요청을 받아들였을 때
       // 대충 봉사자가 비밀친구 페이지로 가는 코드
-
+      router.push({
+        name: "secrettalk",
+        params: { sid: state.matchingSid, vid: user.value.vid },
+      });
       // 학생에게 봉사자가 매칭을 승인했다고 알려주기.
-      $soketio.emit("volunteerAcceptMatching");
+      $soketio.emit("volunteerAcceptMatching", user.value.vid);
     };
 
     return {
@@ -279,9 +304,12 @@ export default {
       acceptMatching,
       rejectMatching,
       notices,
+      getChildrenDangerAlarm,
       checkAlarm,
+      children,
       logout,
       state,
+      getChildren,
     };
   },
 };
