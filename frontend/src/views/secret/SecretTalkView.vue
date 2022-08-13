@@ -275,7 +275,7 @@ export default {
           )
           .then((response) => {
             console.log(response);
-            response.data;
+            return response.data;
           })
           .then((data) => resolve(data.id))
           .catch((error) => {

@@ -105,17 +105,15 @@
           </div>
         </article>
       </div>
-      <div
+
+      <button
+        :class="{ consult: true, on: user.talkable, off: !user.talkable }"
         v-if="user && user.userType === 'volunteer'"
-        @click="changeTalkableState"
+        @click="toggleTalkable"
       >
-        <button class="consult on" v-if="user.talkable">
-          <i class="fa-solid fa-circle"></i>&nbsp;상담 ON
-        </button>
-        <button class="consult off" v-else>
-          <i class="fa-solid fa-circle"></i>&nbsp;상담 OFF
-        </button>
-      </div>
+        <i class="fa-solid fa-circle"></i>&nbsp;상담
+        {{ user.talkable ? "ON" : "OFF" }}
+      </button>
     </section>
   </div>
 </template>
@@ -147,10 +145,16 @@ export default {
     };
 
     const logout = () => {
-      store.dispatch("root/inactiveKakaoToken", user.accessToken).then(() => {
-        store.commit("root/logoutUser");
-        location.href = "/";
-      });
+      store.dispatch("root/inactiveKakaoToken", user.value.accessToken);
+      store.commit("root/logoutUser");
+      location.href = "/";
+    };
+
+    const toggleTalkable = () => {
+      store
+        .dispatch("root/toggleTalkable", user.value.vid)
+        .then(() => store.commit("root/toggleTalkable"))
+        .catch((err) => console.log(err.message));
     };
 
     //클래스 오픈 알람
@@ -212,6 +216,7 @@ export default {
       notices,
       checkAlarm,
       logout,
+      toggleTalkable,
     };
   },
 };
