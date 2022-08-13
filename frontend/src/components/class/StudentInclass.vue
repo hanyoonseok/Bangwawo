@@ -15,8 +15,4 @@ export default {
 };
 </script>
 
-<style scoped src="@/css/class.scss" lang="scss">
-#container-screens > video {
-  width: 100%;
-}
-</style>
+<style scoped src="@/css/class.scss" lang="scss"></style>

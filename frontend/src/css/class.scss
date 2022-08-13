@@ -21,6 +21,7 @@
   width: 100%;
   height: calc(100% - 60px);
   @include flexCenter;
+
   .top-left {
     //flex: 7.5;
     height: 100%;
@@ -38,6 +39,7 @@
       grid-column-gap: 16px;
       grid-row-gap: 16px;
       position: relative;
+      @include flexCenter;
       &.expand {
         width: 95%;
         grid-template-columns: repeat(4, 1fr);
@@ -89,7 +91,7 @@
 
     .user-card-wrapper {
       width: 100%;
-      height: 100%;
+      height: 50%;
       .user-card {
         width: 100%;
         height: 100%;

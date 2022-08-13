@@ -103,7 +103,7 @@
 </template>
 
 <script>
-import { reactive, computed } from "vue";
+import { reactive, computed, onMounted } from "vue";
 import ParticipantsList from "@/components/class/ParticipantsList.vue";
 import ChatForm from "@/components/class/ChatForm.vue";
 import OXForm from "@/components/class/OXForm.vue";
@@ -231,6 +231,14 @@ export default {
       emit("updateMainVideoStreamManager", stream);
     };
 
+    onMounted(() => {
+      // const left = document.querySelector(".top-left");
+      // if(left.classList.contains("host-12orless")){
+      //   left
+      // }
+      // console.log("부모", left.parentNode.classList);
+    });
+
     return {
       state,
       toggleParticipants,
@@ -253,15 +261,4 @@ export default {
 };
 </script>
 
-<style scoped src="@/css/class.scss" lang="scss">
-/* .top-section ::v-deep(#container-screens video) {
-  width: 100px;
-  height: 100px;
-} */
-
-#container-screens video {
-  position: relative;
-  width: 100px;
-  height: 100px;
-}
-</style>
+<style scoped src="@/css/class.scss" lang="scss"></style>
