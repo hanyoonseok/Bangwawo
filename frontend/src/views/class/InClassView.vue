@@ -192,6 +192,7 @@ export default {
         }
       });
 
+      // 채팅
       state.session.on("signal:my-chat", (e) => {
         console.log(e.data); // Message
         console.log(e.from); // Connection object of the sender
@@ -209,7 +210,7 @@ export default {
 
       // 봉사자가 세션 종료하면 학생도 자동으로 종료시켜야 함
       state.session.on("signal:end", (e) => {
-        console.log(e);
+        console.log("봉사자가 세션 종료???", e);
         leaveSession();
       });
 
@@ -277,7 +278,7 @@ export default {
         name: "dk",
         hasAudio: true,
         hasVideo: true,
-        outputMode: "COMPOSED",
+        outputMode: "INDIVIDUAL", //개별녹화?
         resolution: "1280x720",
         frameRate: 25,
         shmSize: 536870912,
