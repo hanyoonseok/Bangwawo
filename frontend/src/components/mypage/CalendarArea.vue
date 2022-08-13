@@ -6,22 +6,25 @@
 
 <script>
 import "v-calendar/dist/style.css";
+import { ref } from "vue";
 
 export default {
   name: "CalendarArea",
-  data() {
-    return {
-      // Attributes are supplied as an array
-      attributes: [
-        // This is a single attribute
-        {
+  props: ["comingClass"],
+  setup(props) {
+    // Attributes are supplied as an array
+    const attributes = ref([]);
+    const setAttributes = () => {
+      props.comingClass.forEach((e) => {
+        console.log(e);
+        attributes.push({
           key: {},
           highlight: {
             color: "yellow",
             fillMode: "solid",
           },
           popover: {
-            label: "오리선생님 수업있음",
+            label: `${e.volunteer.nickname}의 수업 있음`,
             isInteractive: true,
           },
           dot: {
@@ -39,8 +42,14 @@ export default {
           excludeDates: null,
           // Think of `order` like `z-index`
           order: 0,
-        },
-      ],
+        });
+      });
+    };
+    setAttributes();
+    // This is a single attribute
+
+    return {
+      attributes,
     };
   },
 };
