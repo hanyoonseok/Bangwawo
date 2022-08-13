@@ -22,7 +22,6 @@
           <div class="idx-btn-wrapper prev" @click="prevClick">
             <button class="idx-btn prev"></button>
           </div>
-          <div id="container-screens"></div>
           <div class="user-card-wrapper" id="myVideo">
             <div class="hover-wrapper">나</div>
             <div class="user-card" @click="updateMainVideoStreamManager(me)">
@@ -42,7 +41,7 @@
         </article>
         <article class="top-article-left bot">
           <StudentOX v-if="state.isOXOpen" />
-          <StudentInclass :publisher="volunteer" v-else />
+          <StudentInclass :publisher="volunteer" :screen="screen" />
         </article>
       </article>
 

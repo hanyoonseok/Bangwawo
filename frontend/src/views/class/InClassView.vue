@@ -130,17 +130,25 @@ export default {
 
     const screenShare = (cur) => {
       console.log("상태", cur);
+      const screenShareStart = document.getElementById("screenShareStart");
+      const volunteerVideo = document.getElementById("volunteerVideo");
+      const screenContainer = document.getElementById("container-screens");
       if (cur) {
         // true일때는 화면공유 창 보여주기
         if (state.isHost) {
-          document.getElementById("screenShareStart").style.display = "none";
+          screenShareStart.style.display = "none"; //봉사자는 화면공유 시작 버튼 안보여야 함
+        } else {
+          // 학생은 화면공유창 보여야하고 기존 봉사자 화면 안보여야함..?
+          screenContainer.style.display = "block";
+          volunteerVideo.style.display = "none";
         }
-        document.getElementById("container-screens").style.display = "block";
       } else {
         if (state.isHost) {
-          document.getElementById("screenShareStart").style.display = "block";
+          screenShareStart.style.display = "block";
+        } else {
+          screenContainer.style.display = "none";
+          volunteerVideo.style.display = "block";
         }
-        document.getElementById("container-screens").style.display = "hidden";
         state.session.signal({
           data: "0",
           to: [],
