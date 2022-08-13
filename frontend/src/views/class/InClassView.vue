@@ -1,7 +1,7 @@
 <template>
   <section class="background">
     <HostView
-      v-if="state.isHost && state.session"
+      v-if="user && user.userType === 'volunteer' && state.session"
       :dataLen="dataLen"
       :currentUsers="currentUsers"
       :leaveSession="leaveSession"
@@ -17,7 +17,7 @@
     />
     <div id="recording" @click="recording">녹화 시작</div>
     <UserView
-      v-if="!state.isHost && state.session"
+      v-if="user && user.userType === 'student' && state.session"
       :dataLen="dataLen"
       :currentUsers="currentUsers"
       :leaveSession="leaveSession"
@@ -32,7 +32,14 @@
 </template>
 
 <script>
-import { reactive, onBeforeUnmount, computed, onMounted, watch } from "vue";
+import {
+  reactive,
+  onBeforeUnmount,
+  computed,
+  onMounted,
+  watch,
+  ref,
+} from "vue";
 import axios from "axios";
 import moment from "moment";
 // import { OpenVidu } from "openvidu-browser";
@@ -40,6 +47,7 @@ import { OpenVidu, RecordingMode, Recording } from "openvidu-browser";
 import HostView from "@/components/class/HostView.vue";
 import UserView from "@/components/class/UserView.vue";
 import { useRoute } from "vue-router";
+import { useStore } from "vuex";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
@@ -60,6 +68,9 @@ export default {
     const OVScreen = new OpenVidu(); // 화면 공유
 
     const route = useRoute();
+    const store = useStore();
+
+    const user = ref(store.state.root.user);
 
     const sessionId = route.params.mySessionId;
     console.log("mySessionId", sessionId);
@@ -98,10 +109,10 @@ export default {
           Math.min(state.dataIdx + state.dataLen, state.subscribers.length + 1),
         );
       }),
+
       isHost: userType,
-      // isHost: true,
       dataLen: computed(() => {
-        return state.isHost ? 12 : 4;
+        return user.value.userType === "volunteer" ? 12 : 4;
       }),
       dataIdx: 0,
 
@@ -459,8 +470,14 @@ export default {
     };
 
     onMounted(() => {
-      document.getElementById("screenShareStart").style.display = "block";
-      document.getElementById("container-screens").style.display = "none";
+      const screenShare = document.getElementById("screenShareStart");
+      if (screenShare) {
+        screenShare.style.display = "block";
+      }
+      const containerScreens = document.getElementById("container-screens");
+      if (containerScreens) {
+        containerScreens.style.display = "none";
+      }
     });
 
     return {
@@ -475,6 +492,7 @@ export default {
       activeVideo,
       activeMute,
       publishScreenShare,
+      user,
       recording,
     };
   },

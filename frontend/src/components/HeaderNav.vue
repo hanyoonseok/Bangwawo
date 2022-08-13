@@ -122,17 +122,15 @@
           </div>
         </article>
       </div>
-      <div
+
+      <button
+        :class="{ consult: true, on: user.talkable, off: !user.talkable }"
         v-if="user && user.userType === 'volunteer'"
-        @click="changeTalkableState"
+        @click="toggleTalkable"
       >
-        <button class="consult on" v-if="user.talkable">
-          <i class="fa-solid fa-circle"></i>&nbsp;상담 ON
-        </button>
-        <button class="consult off" v-else>
-          <i class="fa-solid fa-circle"></i>&nbsp;상담 OFF
-        </button>
-      </div>
+        <i class="fa-solid fa-circle"></i>&nbsp;상담
+        {{ user.talkable ? "ON" : "OFF" }}
+      </button>
     </section>
 
     <div v-if="state.isMatchingModal" class="matching-modal">
@@ -153,9 +151,10 @@
 </template>
 
 <script>
-import { onMounted, ref, getCurrentInstance, reactive } from "vue";
+import { onMounted, ref, getCurrentInstance, reactive, watch } from "vue";
 import { useStore } from "vuex";
 import axios from "axios";
+import { watchEffect } from "@vue/runtime-core";
 import RequestPostCanvas from "@/components/class/RequestPostCanvas.vue";
 import { useRouter } from "vue-router";
 
@@ -180,6 +179,7 @@ export default {
     });
     let isNoticeOpen = ref(false);
 
+    let isTalkable = ref(store.state.root.user.talkable);
     let isProfileOpen = ref(false);
 
     const notices = ref("");
@@ -194,10 +194,16 @@ export default {
     };
 
     const logout = () => {
-      store.dispatch("root/inactiveKakaoToken", user.accessToken).then(() => {
-        store.commit("root/logoutUser");
-        location.href = "/";
-      });
+      store.dispatch("root/inactiveKakaoToken", user.value.accessToken);
+      store.commit("root/logoutUser");
+      location.href = "/";
+    };
+
+    const toggleTalkable = () => {
+      store
+        .dispatch("root/toggleTalkable", user.value.vid)
+        .then(() => store.commit("root/toggleTalkable"))
+        .catch((err) => console.log(err.message));
     };
 
     //클래스 오픈 알람
@@ -287,12 +293,16 @@ export default {
     };
     console.log(user.value);
 
+    watch(
+      () => store.state.root.user.talkable,
+      (cur) => {
+        isTalkable.value = cur;
+        console.log("cur-----------------------------", cur);
+      },
+    );
+
     // 봉사자일 경우 socket 알람을 받는다.
-    if (
-      user.value &&
-      user.value.userType === "volunteer" &&
-      user.value.talkable
-    ) {
+    if (user.value && user.value.userType === "volunteer" && isTalkable.value) {
       $soketio.on("newMessage", (data) => {
         state.isMatchingModal = true;
         store.dispatch("root/getStudentInfo", data).then((res) => {
@@ -333,6 +343,13 @@ export default {
           console.log(res);
         });
     };
+    watchEffect(() => {
+      // pretend you have a getData getter in store
+      const data = store.state.root.user.talkable;
+      if (data === null) return;
+      console.log(data);
+      isTalkable.value = data;
+    });
 
     return {
       user,
@@ -345,12 +362,14 @@ export default {
       acceptMatching,
       readAlaramParent,
       rejectMatching,
+      isTalkable,
       notices,
       getChildrenDangerAlarm,
       checkAlarm,
       logout,
       state,
       getChildren,
+      toggleTalkable,
     };
   },
 };

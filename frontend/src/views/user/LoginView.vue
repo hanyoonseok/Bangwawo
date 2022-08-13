@@ -17,14 +17,15 @@
         <img src="@/assets/kakao.png" />카카오톡으로 로그인
       </button>
     </div>
-    <div class="parent" v-if="!state.isStudent">
+    <form class="parent" v-if="!state.isStudent" @submit.prevent="loginParent">
       <div class="parent-login">
         <label><i class="fa-solid fa-user"></i></label>
         <input
           class="parent-input"
-          type="text"
+          type="email"
           placeholder="이메일"
           v-model="pEmail"
+          required
         />
       </div>
       <div class="parent-login">
@@ -34,10 +35,11 @@
           type="password"
           placeholder="비밀번호"
           v-model="pPassword"
+          required
         />
       </div>
-      <button class="login-submit" @click="loginParent">로그인</button>
-    </div>
+      <button class="login-submit">로그인</button>
+    </form>
   </div>
 </template>
 

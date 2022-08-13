@@ -7,10 +7,10 @@
   font-family: $SCore;
   font-size: 14px;
   padding: 15px 40px;
+  z-index: 40;
 
   @include flexBetween;
   align-items: center;
-  z-index: 30;
 
   .left {
     display: flex;
@@ -74,6 +74,7 @@
       height: 35px;
       margin-left: 20px;
       position: relative;
+      z-index: 40;
       cursor: pointer;
 
       img {
@@ -99,6 +100,7 @@
         width: 108px;
         border-radius: 12px;
         padding: 8px 10px;
+        z-index: 40;
         @include flexColumn;
         background-color: $white;
         a {
@@ -107,6 +109,7 @@
           padding: 6px 0;
           font-family: $appleM;
           font-size: 13px;
+          z-index: 40;
           &:first-child {
             border-bottom: 1px solid $light-grey;
             color: #3e3e3e;
