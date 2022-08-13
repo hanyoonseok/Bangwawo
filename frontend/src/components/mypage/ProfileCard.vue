@@ -1,12 +1,12 @@
 <template>
   <div v-if="user.userType === 'parent'" class="parent-profile">
-    <div class="bookmark-area" @click="changeChildTab">
+    <div class="bookmark-area">
       <!--부모일경우 북마크 추가-->
       <div
         class="children-bookmark"
         v-for="(child, index) in children"
         :key="index"
-        @click="selectChild(child.nickname)"
+        @click="selectChild(child)"
       >
         <div class="children-name">{{ child.nickname }}</div>
         <img src="@/assets/profile.png" />
@@ -24,8 +24,8 @@
           </li>
         </ul></i
       >
-      <div>
-        <img src="@/assets/profile.png" />
+      <div class="img-box">
+        <ProfileCanvas v-if="childColor" :childColor="childColor" />
       </div>
 
       <div class="person-info">
@@ -80,7 +80,7 @@
 
 <script>
 import ProfileCanvas from "@/components/mypage/ProfileCanvas.vue";
-import { ref, watch, reactive } from "vue";
+import { ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 
@@ -92,6 +92,7 @@ export default {
     let isModalOpen = ref(false);
     let isModifyOpen = ref(false);
     let selectedChild = ref(null);
+    let childColor = ref(null);
     const store = useStore();
     const router = useRouter();
 
@@ -99,6 +100,7 @@ export default {
       () => props.children,
       (cur) => {
         selectedChild.value = props.children ? cur[0].nickname : "";
+        childColor.value = props.children ? cur[0].character : null;
       },
       { deep: true },
     );
@@ -106,12 +108,11 @@ export default {
     const toggleModal = () => {
       isModalOpen.value = !isModalOpen.value;
     };
-    const state = reactive({
-      childrenNo: 0,
-    });
 
-    const selectChild = (childName) => {
-      selectedChild.value = childName;
+    const selectChild = (child) => {
+      selectedChild.value = child.nickname;
+      childColor.value = child.character;
+      emit("selectChild", child);
     };
 
     const openCharacterModal = () => {
@@ -119,28 +120,24 @@ export default {
     };
 
     const deleteUser = () => {
+      store.dispatch("root/deleteUser", props.user);
       store
-        .dispatch("root/deleteUser", props.user)
+        .dispatch("root/deleteKakaoInfo", props.user.accessToken)
         .then(() => {
-          store
-            .dispatch("root/deleteKakaoInfo", props.user.accessToken)
-            .then(() => {
-              store.commit("root/logoutUser");
-              router.push("/");
-            });
-        })
-        .catch((err) => alert(err.message));
+          store.commit("root/logoutUser");
+          router.push("/");
+        });
     };
 
     return {
       toggleModal,
       isModalOpen,
-      state,
       openCharacterModal,
       isModifyOpen,
       selectedChild,
       selectChild,
       deleteUser,
+      childColor,
     };
   },
 };

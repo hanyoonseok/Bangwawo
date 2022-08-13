@@ -1,7 +1,7 @@
 <template>
   <section class="background">
     <HostView
-      v-if="state.isHost && state.session"
+      v-if="user && user.userType === 'volunteer' && state.session"
       :dataLen="dataLen"
       :currentUsers="currentUsers"
       :leaveSession="leaveSession"
@@ -18,7 +18,7 @@
       @leaveSession="leaveSession"
     />
     <UserView
-      v-if="!state.isHost && state.session"
+      v-if="user && user.userType === 'student' && state.session"
       :dataLen="dataLen"
       :currentUsers="currentUsers"
       :leaveSession="leaveSession"
@@ -70,6 +70,8 @@ export default {
 
     const route = useRoute();
 
+    const user = ref(store.state.root.user);
+
     const sessionId = route.params.mySessionId;
     console.log("mySessionId", sessionId);
     const userType = route.params.userType === "volunteer" ? true : false;
@@ -107,9 +109,10 @@ export default {
           Math.min(state.dataIdx + state.dataLen, state.subscribers.length + 1),
         );
       }),
+
       isHost: userType,
       dataLen: computed(() => {
-        return state.isHost ? 12 : 4;
+        return user.value.userType === "volunteer" ? 12 : 4;
       }),
       dataIdx: 0,
 
@@ -543,6 +546,14 @@ export default {
       if (userType) {
         document.getElementById("screenShareStart").style.display = "block";
         document.getElementById("container-screens").style.display = "none";
+        // const screenShare = document.getElementById("screenShareStart");
+        // if (screenShare) {
+        //   screenShare.style.display = "block";
+        // }
+        // const containerScreens = document.getElementById("container-screens");
+        // if (containerScreens) {
+        //   containerScreens.style.display = "none";
+        // }
       }
     });
 
@@ -566,6 +577,7 @@ export default {
       startRecording,
       stopRecording,
       updateMainVideoStreamManager,
+      user,
     };
   },
 };

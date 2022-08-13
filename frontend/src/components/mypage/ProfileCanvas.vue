@@ -1,5 +1,5 @@
 <template>
-  <div id="profile-canvas"></div>
+  <div :id="`pc${idx ? idx : ''}`" class="profile-canvas"></div>
 </template>
 
 <script>
@@ -11,24 +11,32 @@ import { onMounted, watch, computed, reactive } from "vue";
 
 export default {
   name: "ProfileCanvas",
-  setup() {
+  props: ["childColor", "idx"],
+  setup(props) {
     // Initial material
     const store = useStore();
-    let parts = reactive(store.state.root.user.character);
+    let parts = reactive(
+      props.childColor ? props.childColor : store.state.root.user.character,
+    );
+
     const INITIAL_MTL = new THREE.MeshPhongMaterial({
       color: 0xffcb57,
       shininess: 10,
     });
 
     let changeParts = computed(() => {
-      return store.state.root.user.character;
+      if (props.childColor) return props.childColor;
+      else {
+        if (!store.state.root.user) return null;
+        return store.state.root.user.character;
+      }
     });
 
     // state에 저장되어 있는 색 변경될때마다 watch에서 감지
     watch(
       () => changeParts,
       (cur) => {
-        console.log(cur);
+        if (!cur.value) return;
         // 지역변수 parts 값 변경 후 프로필 사진에 색 적용
         parts = cur.value;
         for (let object of INITIAL_MAP) {
@@ -107,7 +115,7 @@ export default {
     controls.autoRotate = false; // Toggle this if you'd like the chair to automatically rotate
     controls.autoRotateSpeed = 0.2; // 30
 
-    const MODEL_PATH = "./duckduck3.glb";
+    const MODEL_PATH = `${window.location.protocol}//${window.location.host}/duckduck3.glb`;
 
     let mixer = null;
     let clips = null;
@@ -209,9 +217,16 @@ export default {
     };
 
     onMounted(() => {
-      document
-        .getElementById("profile-canvas")
-        .appendChild(renderer.domElement);
+      if (props.idx) {
+        document
+          .getElementById(`pc${props.idx}`)
+          .appendChild(renderer.domElement);
+      } else {
+        document
+          .querySelector(".profile-canvas")
+          .appendChild(renderer.domElement);
+      }
+
       animate();
     });
 
@@ -227,7 +242,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-#profile-canvas ::v-deep(canvas) {
+.profile-canvas ::v-deep(canvas) {
   width: 100%;
   height: 100%;
   border-radius: 100px;

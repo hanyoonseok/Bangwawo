@@ -8,6 +8,7 @@
           :children="children"
           :toggleModifyModal="toggleModifyModal"
           @open-character-modal="openCharacterModal"
+          @selectChild="selectChild"
         ></profile-card>
         <div class="left-box calendar">
           <h4>수업 일정</h4>
@@ -16,14 +17,25 @@
       </div>
       <div class="lecture-container">
         <ul class="lecture-nav">
-          <li class="nav-item active" @click="doActive">예정된 수업</li>
-          <li class="nav-item" @click="doActive">종료된 수업</li>
+          <li
+            :class="{ 'nav-item': true, active: !state.isEndTab }"
+            @click="doMenuActive"
+          >
+            예정된 수업
+          </li>
+          <li
+            :class="{ 'nav-item': true, active: state.isEndTab }"
+            @click="doMenuActive"
+          >
+            종료된 수업
+          </li>
         </ul>
         <lecture-area
           :user="state.userInfo"
           :isEndTab="state.isEndTab"
           :endClass="endClass"
           :comingClass="comingClass"
+          :selectedChild="selectedChild"
         ></lecture-area>
       </div>
     </div>
@@ -79,36 +91,45 @@ export default {
     let comingClass = ref([]);
     let navItem;
     let isModifyOpen = ref(false);
+    let selectedChild = ref(null);
 
     const getUserInfo = () => {
       if (state.userType === "parent") {
-        store
-          .dispatch("root/getChildren", state.userInfo.email)
-          .then((res) => (children.value = res.data.childs));
+        store.dispatch("root/getChildren", state.userInfo.email).then((res) => {
+          children.value = res.data.childs;
+          if (children.value.length > 0) {
+            getStudentClasses(children.value[0].sid);
+            selectedChild.value = children.value[0];
+          }
+          console.log(children.value);
+        });
       }
     };
     getUserInfo();
 
-    const getUserClasses = async () => {
-      if (state.userType === "parent") {
-        console.log("hi");
-      } else if (state.userType === "student") {
-        await store
-          .dispatch("root/getStudentClasses", state.userInfo.sid)
-          .then((res) => {
-            console.log(res);
-            classes.value = res.data;
+    const getStudentClasses = async (sid) => {
+      await store.dispatch("root/getStudentClasses", sid).then((res) => {
+        console.log(res);
+        classes.value = res.data;
 
-            classes.value.forEach((e) => {
-              if (e.classes.state === 0) {
-                console.log("예정");
-                comingClass.value.push(e.classes);
-              } else if (e.classes.state === 2) {
-                console.log("완료");
-                endClass.value.push(e.classes);
-              }
-            });
-          });
+        const tempComingClass = [];
+        const tempEndClass = [];
+
+        classes.value.forEach((e) => {
+          if (e.classes.state === 0 || e.classes.state === 1) {
+            tempComingClass.push(e.classes);
+          } else if (e.classes.state === 2) {
+            tempEndClass.push(e.classes);
+          }
+        });
+        comingClass.value = tempComingClass;
+        endClass.value = tempEndClass;
+      });
+    };
+
+    const getUserClasses = () => {
+      if (state.userType === "student") {
+        getStudentClasses(state.userInfo.sid);
       } else if (state.userType === "volunteer") {
         store
           .dispatch("root/getEndedClasses", state.userInfo.vid)
@@ -127,7 +148,7 @@ export default {
     };
     getUserClasses();
 
-    const doActive = (e) => {
+    const doMenuActive = (e) => {
       if (!e.target.classList.contains("active")) {
         e.target.classList.add("active");
       }
@@ -202,6 +223,11 @@ export default {
       isModifyOpen.value = false;
     };
 
+    const selectChild = (child) => {
+      getStudentClasses(child.sid);
+      selectedChild.value = child;
+    };
+
     return {
       isCharacterModalOpen,
       state,
@@ -209,13 +235,15 @@ export default {
       classes,
       endClass,
       comingClass,
-      doActive,
+      doMenuActive,
       openCharacterModal,
       closeCharacterModal,
       isModifyOpen,
       toggleModifyModal,
       modifyInfo,
       children,
+      selectChild,
+      selectedChild,
     };
   },
 };

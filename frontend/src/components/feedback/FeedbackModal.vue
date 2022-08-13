@@ -12,19 +12,17 @@
         </article>
         <article class="center-wrapper">
           <div class="modal-profile">
-            <img :src="info.img" />
-            <div class="person-info">
-              <label>이름</label>
-              {{ info.name }}
-            </div>
+            <ProfileCanvas :childColor="info.character" :idx="info.sid + 'a'" />
             <div class="person-info">
               <label>별명</label>{{ info.nickname }}
             </div>
           </div>
-          <textarea></textarea>
+          <textarea v-model="textareaValue"></textarea>
         </article>
         <article class="btn-wrapper">
-          <button class="submit-btn" @click="close">작성 완료</button>
+          <button class="submit-btn" @click="(e) => close(e, textareaValue)">
+            작성 완료
+          </button>
         </article>
       </div>
     </div>
@@ -32,9 +30,34 @@
 </template>
 
 <script>
+import ProfileCanvas from "@/components/mypage/ProfileCanvas.vue";
+import { ref } from "vue";
+import { useStore } from "vuex";
+
 export default {
   name: "FeedbackModal",
-  props: ["info", "close"],
+  props: ["info", "close", "cid"],
+  setup(props) {
+    const store = useStore();
+    let textareaValue = ref("");
+    console.log(props.info);
+    store
+      .dispatch("root/getStudentFeedback", {
+        sid: props.info.sid,
+        cid: props.cid,
+      })
+      .then((res) => {
+        console.log(res);
+        textareaValue.value = res.data.feedback;
+      });
+
+    return {
+      textareaValue,
+    };
+  },
+  components: {
+    ProfileCanvas,
+  },
 };
 </script>
 

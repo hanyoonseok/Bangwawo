@@ -30,7 +30,9 @@
         <router-link :to="{ name: 'classlist' }" class="list"
           >수업목록</router-link
         >
-        <router-link :to="{ name: 'classregister' }" class="list"
+        <router-link
+          :to="{ name: 'classregister', params: { rid: -1 } }"
+          class="list"
           >수업등록</router-link
         >
         <router-link :to="{ name: 'classrequest' }" class="list"
@@ -60,18 +62,16 @@
         </ul>
       </div>
       <div class="bell-wrapper" v-if="user">
-        <i
-          class="fa-solid fa-bell"
-          v-if="user.userType === 'student' || user.userType === 'parent'"
-          @click="toggleNoticeModal"
+        <i class="fa-solid fa-bell" @click="toggleNoticeModal"
           ><div class="count">{{ notices.length }}</div></i
         >
+
         <article class="modal" v-if="isNoticeOpen">
           <div class="title-wrapper">
             <i class="fa-solid fa-bell"></i>
             알림창
           </div>
-          <div class="row-wrapper">
+          <div class="row-wrapper" v-if="user.userType === 'parent'">
             <div class="row" v-for="notice in notices" :key="notice.id">
               <img src="@/assets/profile.png" />
               <label
@@ -81,19 +81,47 @@
               <i class="fa-solid fa-xmark close"></i>
             </div>
           </div>
+          <div class="row-wrapper" v-else>
+            <div class="row" v-for="(notice, index) in notices" :key="index">
+              <label>
+                <p>
+                  요청글
+                  <span class="notice-title">{{ notice.rtitle }}</span> 의
+                  수업이 개설되었습니다.
+                </p>
+              </label>
+              <router-link
+                :to="{
+                  name: 'classrequestdetail',
+                  params: { rid: notice.rid },
+                }"
+                @click="checkAlarm(notice.rid)"
+                ><i
+                  class="fa-solid fa-circle-arrow-right"
+                  style="font-size: 24px"
+                ></i
+              ></router-link>
+            </div>
+          </div>
         </article>
       </div>
 
-      <button class="consult on" v-if="user && user.userType === 'volunteer'">
-        <i class="fa-solid fa-circle"></i>&nbsp;상담 ON
+      <button
+        :class="{ consult: true, on: user.talkable, off: !user.talkable }"
+        v-if="user && user.userType === 'volunteer'"
+        @click="toggleTalkable"
+      >
+        <i class="fa-solid fa-circle"></i>&nbsp;상담
+        {{ user.talkable ? "ON" : "OFF" }}
       </button>
     </section>
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useStore } from "vuex";
+import axios from "axios";
 
 export default {
   name: "HeaderNav",
@@ -105,29 +133,7 @@ export default {
 
     let isProfileOpen = ref(false);
 
-    const notices = ref([
-      {
-        id: "1",
-        content: "자녀의 상담중 위험 단어를 감지했습니다.",
-        date: "07-22",
-      },
-      {
-        id: "2",
-        content: "자녀의 상담중 위험 단어를 감지했습니다.",
-        date: "07-22",
-      },
-      {
-        id: "3",
-        content: "자녀의 상담중 위험 단어를 감지했습니다.",
-        date: "07-22",
-      },
-      {
-        id: "4",
-        content: "자녀의 상담중 위험 단어를 감지했습니다.",
-        date: "07-22",
-      },
-    ]);
-
+    const notices = ref("");
     const toggleProfileModal = () => {
       isNoticeOpen.value = false;
       isProfileOpen.value = !isProfileOpen.value;
@@ -139,10 +145,64 @@ export default {
     };
 
     const logout = () => {
-      store.dispatch("root/inactiveKakaoToken", user.accessToken).then(() => {
-        store.commit("root/logoutUser");
-        location.href = "/";
-      });
+      store.dispatch("root/inactiveKakaoToken", user.value.accessToken);
+      store.commit("root/logoutUser");
+      location.href = "/";
+    };
+
+    const toggleTalkable = () => {
+      store
+        .dispatch("root/toggleTalkable", user.value.vid)
+        .then(() => store.commit("root/toggleTalkable"))
+        .catch((err) => console.log(err.message));
+    };
+
+    //클래스 오픈 알람
+    const getClassOpenAlarm = async () => {
+      await axios
+        .get(`${process.env.VUE_APP_API_URL}/likes/${user.value.sid}`)
+        .then((response) => {
+          console.log("좋아요버튼", response.data.requsest);
+          notices.value = response.data.requsest;
+        });
+    };
+    console.log(user);
+    if (user.value && user.value.userType === "student") {
+      setInterval(() => {
+        getClassOpenAlarm();
+      }, 3000);
+    }
+
+    onMounted(() => {
+      if (user.value && user.value.userType === "student") {
+        getClassOpenAlarm();
+      }
+    });
+
+    // 학생별 알람에 대한 읽기 완료
+    const checkAlarm = async (rid) => {
+      await axios
+        .post(`${process.env.VUE_APP_API_URL}/likes/read`, {
+          rid: rid,
+          sid: user.value.sid,
+        })
+        .then((response) => {
+          console.log(response);
+        });
+    };
+
+    // 상담 on/off 상태 변경
+    const changeTalkableState = async () => {
+      console.log("시작한다아아");
+      await axios
+        .put(
+          `${process.env.VUE_APP_API_URL}/volunteer/talkable/${user.value.vid}`,
+          { id: user.value.vid },
+        )
+        .then((response) => {
+          console.log(response);
+          store.commit("root/setVolunteerTalkingState");
+        });
     };
 
     return {
@@ -150,9 +210,13 @@ export default {
       isNoticeOpen,
       isProfileOpen,
       toggleProfileModal,
+      getClassOpenAlarm,
       toggleNoticeModal,
+      changeTalkableState,
       notices,
+      checkAlarm,
       logout,
+      toggleTalkable,
     };
   },
 };

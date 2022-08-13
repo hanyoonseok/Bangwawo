@@ -55,7 +55,32 @@ export const getComingClasses = ({ state }, vid) => {
   return axios.get(url);
 };
 
-///////////////////////////////////// 수업
+export const setCharacterInfo = ({ state }, modifyInfo) => {
+  console.log("setCharacterInfo", state, modifyInfo);
+  const url = `/${modifyInfo.userType}/character`;
+  return axios.put(url, modifyInfo);
+};
+
+export const deleteUser = ({ state }, payload) => {
+  console.log("deleteUser", state, payload);
+  const url = `/${payload.userType}/${payload.vid || payload.sid}`;
+  return axios.delete(url);
+};
+
+export const deleteKakaoInfo = ({ state }, accessToken) => {
+  console.log("deleteKakaoInfo", state, accessToken);
+  const url = `/kakao/delete/${accessToken}`;
+  return axios.get(url);
+};
+
+export const inactiveKakaoToken = ({ state }, accessToken) => {
+  console.log("inactiveKakaoToken", state, accessToken);
+  const url = `/kakao/logout/${accessToken}`;
+  return axios.get(url);
+};
+
+// 수업
+
 export const getClassList = ({ state }) => {
   console.log("getClassList", state);
   const url = `/class`;
@@ -84,20 +109,6 @@ export const deleteClass = ({ state }, cid) => {
   console.log("deleteClass", state, cid);
   const url = `/class/${cid}`;
   return axios.delete(url);
-};
-
-// 봉사자가 세션 만들기
-export const startVolunteerClass = ({ state }, payload) => {
-  console.log("startClass", state, payload);
-  const url = `/session/class/start/${payload.cid}/${payload.vid}`;
-  return axios.get(url);
-};
-
-//학생이 수업 입장하기
-export const entranceClass = ({ state }, payload) => {
-  console.log("entranceClass", state, payload);
-  const url = `/session/class/join/${payload.cid}/${payload.sid}`;
-  return axios.get(url);
 };
 
 //봉사자가 수업 종료하기
@@ -135,26 +146,67 @@ export const startClass = ({ state }, payload) => {
   const url = `/class`;
   return axios.put(url, payload);
 };
-export const setCharacterInfo = ({ state }, modifyInfo) => {
-  console.log("setCharacterInfo", state, modifyInfo);
-  const url = `/${modifyInfo.userType}/character`;
-  return axios.put(url, modifyInfo);
-};
 
-export const deleteUser = ({ state }, payload) => {
-  console.log("deleteUser", state, payload);
-  const url = `/${payload.userType}/${payload.vid || payload.sid}`;
-  return axios.delete(url);
-};
-
-export const deleteKakaoInfo = ({ state }, accessToken) => {
-  console.log("deleteKakaoInfo", state, accessToken);
-  const url = `/kakao/delete/${accessToken}`;
+// 봉사자가 세션 만들기
+export const startVolunteerClass = ({ state }, payload) => {
+  console.log("startClass", state, payload);
+  const url = `/session/class/start/${payload.cid}/${payload.vid}`;
   return axios.get(url);
 };
 
-export const inactiveKakaoToken = ({ state }, accessToken) => {
-  console.log("inactiveKakaoToken", state, accessToken);
-  const url = `/kakao/logout/${accessToken}`;
+//학생이 수업 입장하기
+export const entranceClass = ({ state }, payload) => {
+  console.log("entranceClass", state, payload);
+  const url = `/session/class/join/${payload.cid}/${payload.sid}`;
   return axios.get(url);
+};
+
+export const getOneUser = ({ state }, payload) => {
+  console.log("getOneUser", state, payload);
+  const url = `/${payload.userType}/${payload.sid || payload.vid}`;
+  return axios.get(url);
+};
+
+export const toggleTalkable = ({ state }, vid) => {
+  console.log("toggleTalkable", state, vid);
+  const url = `/volunteer/talkable/${vid}`;
+  return axios.put(url);
+};
+
+export const getClassStudents = ({ state }, cid) => {
+  console.log("getClassStudents", state, cid);
+  const url = `/enrol/class/${cid}`;
+  return axios.get(url);
+};
+
+export const submitFeedback = ({ state }, payload) => {
+  console.log("getClassStudents", state, payload);
+  const url = "/enrol/feedback";
+  return axios.put(url, payload);
+};
+
+export const getStudentFeedback = ({ state }, payload) => {
+  console.log("getStudentFeedback", state, payload);
+  const url = `/enrol/${payload.cid}/${payload.sid}`;
+  return axios.get(url);
+};
+
+export const getRecordVideo = ({ state }, recordId) => {
+  console.log("getRecordVideo", state, recordId);
+  axios.defaults.baseURL = "";
+  const url = `${process.env.VUE_APP_OV_DOMAIN}/openvidu/api/recordings/${recordId}`;
+  const headers = {
+    headers: {
+      Authorization:
+        "Basic " + btoa("OPENVIDUAPP:" + process.env.VUE_APP_OV_SECRET),
+      "Content-Type": "application/json",
+    },
+  };
+  return axios.get(url, headers);
+};
+// 좋아요 추가
+export const addLikeRequest = ({ state }, payload) => {
+  console.log("addLikeRequest", state, payload);
+  const url = `/likes`;
+  return axios.post(url, payload);
 };

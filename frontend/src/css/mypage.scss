@@ -256,6 +256,7 @@
               position: absolute;
               top: 10px;
               right: 13px;
+              color: $dark-grey;
               @include StatusBtn(true);
               width: 60px;
               font-size: 10px;

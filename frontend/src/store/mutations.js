@@ -10,8 +10,8 @@ export const setUserInfo = (state, payload) => {
 };
 
 export const logoutUser = (state) => {
-  state.user = null;
   localStorage.removeItem("isLogin");
+  state.user = null;
 };
 
 export const setModifiedStudentInfo = (state, payload) => {
@@ -24,4 +24,8 @@ export const setModifiedVolunteerInfo = (state, payload) => {
 
 export const setCharacterInfo = (state, payload) => {
   state.user.character = payload.character;
+};
+
+export const toggleTalkable = (state) => {
+  state.user.talkable = !state.user.talkable;
 };
