@@ -24,6 +24,7 @@
       :subs="state.subscribers"
       :session="state.session"
       :chats="state.chats"
+      :screen="state.screenShareState"
       @activeVideo="activeVideo"
       @activeMute="activeMute"
       @updateMainVideoStreamManager="updateMainVideoStreamManager"
@@ -121,13 +122,14 @@ export default {
     watch(
       () => state.screenShareState,
       (cur) => {
+        console.log("watch야 일을 하고 있니?????????????");
         screenShare(cur);
       },
       { deep: true },
     );
 
     const screenShare = (cur) => {
-      console.log("싱태", cur);
+      console.log("상태", cur);
       if (cur) {
         // true일때는 화면공유 창 보여주기
         if (state.isHost) {
@@ -138,8 +140,12 @@ export default {
         if (state.isHost) {
           document.getElementById("screenShareStart").style.display = "block";
         }
-
         document.getElementById("container-screens").style.display = "hidden";
+        state.session.signal({
+          data: "0",
+          to: [],
+          type: "screen-off",
+        });
       }
     };
 
@@ -191,6 +197,22 @@ export default {
             // appendUserData(event.element, subscriberScreen.stream.connection);
           });
         }
+      });
+
+      state.session.on("signal:screen-off", () => {
+        // console.log("화면공유 끝났다고", e);
+        state.screenShareState = false;
+        const screenShare = document.getElementById("screenShareStart");
+        // console.log("화면공유버튼", screenShare);
+        if (screenShare) {
+          screenShare.style.display = "block";
+        }
+        const containerScreens = document.getElementById("container-screens");
+        // console.log("화면공유 컨테이너", containerScreens);
+        if (containerScreens) {
+          containerScreens.style.display = "none";
+        }
+        // console.log("공유상태", state.screenShareState);
       });
 
       // 채팅
@@ -552,18 +574,13 @@ export default {
     };
 
     onMounted(() => {
-      console.log("mounted", userType);
-      if (userType) {
-        document.getElementById("screenShareStart").style.display = "block";
-        document.getElementById("container-screens").style.display = "none";
-        // const screenShare = document.getElementById("screenShareStart");
-        // if (screenShare) {
-        //   screenShare.style.display = "block";
-        // }
-        // const containerScreens = document.getElementById("container-screens");
-        // if (containerScreens) {
-        //   containerScreens.style.display = "none";
-        // }
+      const screenShare = document.getElementById("screenShareStart");
+      if (screenShare) {
+        screenShare.style.display = "block";
+      }
+      const containerScreens = document.getElementById("container-screens");
+      if (containerScreens) {
+        containerScreens.style.display = "none";
       }
     });
 

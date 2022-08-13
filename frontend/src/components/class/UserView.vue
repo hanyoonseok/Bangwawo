@@ -22,9 +22,7 @@
           <div class="idx-btn-wrapper prev" @click="prevClick">
             <button class="idx-btn prev"></button>
           </div>
-          <div id="container-screens">
-            <h4>화면 공유</h4>
-          </div>
+          <div id="container-screens"></div>
           <div class="user-card-wrapper" id="myVideo">
             <div class="hover-wrapper">나</div>
             <div class="user-card" @click="updateMainVideoStreamManager(me)">
@@ -44,7 +42,7 @@
         </article>
         <article class="top-article-left bot">
           <StudentOX v-if="state.isOXOpen" />
-          <StudentInclass :publisher="me" v-else />
+          <StudentInclass v-else />
         </article>
       </article>
 
@@ -120,6 +118,7 @@ export default {
     "leaveSession",
     "session",
     "chats",
+    "screen",
     "me",
     "subs",
   ],
