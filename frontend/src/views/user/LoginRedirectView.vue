@@ -21,6 +21,7 @@ export default {
         store.commit("root/setUserInfo", data);
         router.push("/class/list");
       } else {
+        data.ageRange = 10;
         data.ageRange < 20
           ? router.push({
               name: "signupStudent",

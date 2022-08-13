@@ -106,41 +106,74 @@
               </button>
             </div>
             <div v-else-if="userInfo.userType === 'student'">
-              <!-- 수업 신청을 했고(1) 수업 시작한 경우(1) -->
+              <!-- 수업 신청을 했고 수업 시작한 경우 or 오픈방이면서 정원안찬방 -->
               <button
-                v-if="user.subscribe && classInfo.state === 1"
+                v-if="
+                  (user.subscribe && classInfo.state === 1) ||
+                  (classInfo.opened && classInfo.enrolcnt < classInfo.maxcnt)
+                "
                 class="class-entrance-btn"
                 id="ing"
                 @click="entranceClass"
               >
                 수업 입장
               </button>
-              <!-- 수업 신청을 했고(1) 수업 시작 안 한 경우(0) -->
+              <!-- 오픈방인데 정원 다 찬방 -->
+              <button
+                v-else-if="
+                  classInfo.opened && classInfo.enrolcnt >= classInfo.maxcnt
+                "
+                class="class-subscribe-btn"
+                id="end"
+              >
+                입장 불가
+              </button>
+              <!-- 수업 신청을 했고 수업 시작 안 한 경우 -->
               <button
                 v-else-if="user.subscribe && classInfo.state === 0"
                 class="class-entrance-btn"
               >
                 수업 대기
               </button>
-              <!-- 수업 신청을 안했고(0) 수업 시작 안 한 경우(0) -->
+              <!-- 수업 신청을 안했고 수업 시작 안했는데 정원 다 안찬경우 -->
               <button
-                v-else-if="!user.subscribe && classInfo.state === 0"
+                v-else-if="
+                  !user.subscribe &&
+                  classInfo.state === 0 &&
+                  classInfo.enrolcnt < classInfo.maxcnt
+                "
                 class="class-subscribe-btn"
                 @click="enrolClass"
               >
                 수업 신청
               </button>
-              <!-- 수업 신청을 안했고(0) 수업 시작 한 경우(1) -->
+              <!-- 수업 신청을 안했고 수업 시작 안했는데 정원이 차있는 경우 -->
               <button
                 v-else-if="
-                  (!user.subscribe && classInfo.state === 1) ||
+                  !user.subscribe &&
+                  classInfo.state === 0 &&
                   classInfo.enrolcnt >= classInfo.maxcnt
                 "
                 class="class-subscribe-btn"
                 id="end"
-                @click="enrolClass"
               >
-                수업 신청 불가
+                수업 신청불가
+              </button>
+              <!-- 수업 신청을 안했고 수업 시작 한 경우 -->
+              <button
+                v-else-if="!user.subscribe && classInfo.state === 1"
+                class="class-subscribe-btn"
+                id="end"
+              >
+                수업 진행중
+              </button>
+              <!-- 수업 끝난경우 -->
+              <button
+                v-else-if="classInfo.state === 2"
+                class="class-subscribe-btn"
+                id="end"
+              >
+                종료된 수업
               </button>
             </div>
           </div>
