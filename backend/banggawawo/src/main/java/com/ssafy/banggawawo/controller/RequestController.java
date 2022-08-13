@@ -118,16 +118,4 @@ public class RequestController {
         else
             return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
     }
-
-//    @PutMapping("/make")
-//    @ApiOperation(value = "요청글에 대한 수업이 개설되었습니다")
-//    public String makeclassroom(@RequestBody RequestDto requestdto) throws Exception {
-//        Optional<Request> orequest = requestservice.readonly(requestdto.getRId());
-//        if (orequest.isPresent()) {
-//            orequest.get().setSolved(true);
-//            requestservice.update(orequest.get());
-//            return "요청글에 대한 수업이 개설되었습니다.";
-//        } else
-//            return "요청글에 대한 수업이 개설 실패하였습니다.";
-//    }
 }
