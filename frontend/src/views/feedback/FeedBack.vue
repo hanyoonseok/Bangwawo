@@ -3,7 +3,6 @@
     <HeaderNav />
     <h2 class="feedback-title">피드백</h2>
     <div class="feedback-container">
-      <img src="@/assets/threeDuck.png" class="duck-img" />
       <div class="left">
         <div class="lecture-area">
           <!-- <img src="@/assets/lecture-thumb.png" class="slide-open" /> -->
