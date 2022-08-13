@@ -69,6 +69,7 @@ public class ClassRoom {
         this.opened = opened;
         this.thumbnail = thumbnail;
         this.state = state;
+        if(state == null) this.state = 0;
     }
 
     //cid가 같으면 무조건 같은걸로 판단하자
