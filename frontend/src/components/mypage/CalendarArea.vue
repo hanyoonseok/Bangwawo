@@ -6,25 +6,38 @@
 
 <script>
 import "v-calendar/dist/style.css";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 export default {
   name: "CalendarArea",
-  props: ["comingClass"],
+  props: ["comingClass", "userInfo"],
   setup(props) {
     // Attributes are supplied as an array
     const attributes = ref([]);
+
+    watch(
+      () => props.comingClass,
+      () => {
+        setAttributes();
+      },
+      { deep: true },
+    );
+
     const setAttributes = () => {
+      attributes.value = [];
       props.comingClass.forEach((e) => {
         console.log(e);
-        attributes.push({
+        attributes.value.push({
           key: {},
           highlight: {
             color: "yellow",
             fillMode: "solid",
           },
           popover: {
-            label: `${e.volunteer.nickname}의 수업 있음`,
+            label:
+              props.userInfo.userType === "volunteer"
+                ? `${e.title}수업 예정`
+                : `${e.volunteer.nickname} 강사님의 수업`,
             isInteractive: true,
           },
           dot: {
@@ -37,13 +50,14 @@ export default {
           // We also need some dates to know where to display the attribute
           // We use a single date here, but it could also be an array of dates,
           //  a date range or a complex date pattern.
-          dates: new Date(),
+          dates: `${e.stime[0]}-${e.stime[1]}-${e.stime[2]} ${e.stime[3]}:${e.stime[4]}`,
           // You can optionally provide dates to exclude
           excludeDates: null,
           // Think of `order` like `z-index`
           order: 0,
         });
       });
+      console.log(attributes.value);
     };
     setAttributes();
     // This is a single attribute

@@ -12,7 +12,10 @@
         ></profile-card>
         <div class="left-box calendar">
           <h4>수업 일정</h4>
-          <calendar-area :comingClass="comingClass" />
+          <calendar-area
+            :comingClass="comingClass"
+            :userInfo="state.userInfo"
+          />
         </div>
       </div>
       <div class="lecture-container">
