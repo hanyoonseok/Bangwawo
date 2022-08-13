@@ -203,3 +203,9 @@ export const getChildrenDangerAlarm = ({ state }, sid) => {
   const url = `/chat/${sid}`;
   return axios.get(url);
 };
+
+export const readAlaramParent = ({ state }, payload) => {
+  console.log("readAlaramParent", state);
+  const url = `/chat/read`;
+  return axios.post(url, payload);
+};

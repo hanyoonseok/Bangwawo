@@ -124,6 +124,7 @@ export default {
         else {
           publisher.value = res.data.user.character;
         }
+        state.studentName = res.data.user.nickname;
       });
     };
     const getVolunteerInfo = async () => {
@@ -160,6 +161,7 @@ export default {
       backgroundPubImg: "./../../secretBg.png",
       backgroundSubImg: "./../../secretBg.png",
       showBackgroundSelection: false,
+      studentName: "",
     });
 
     // 배경리스트
@@ -437,23 +439,23 @@ export default {
       )
         state.backgroundSubImg = event.data;
     });
+
     recognition.lang = "ko-KR"; // 한국어 지정
     recognition.onresult = (event) => {
       const text = event.results[0][0].transcript;
       console.log("transcript", text);
-      for (const item of dangerWord) {
-        if (text.indexOf(item) >= 0) {
-          state.danger++;
-          // 위험단어 알려줌.
-          studentDangerWord(item);
+      if (user.value.userType === "student")
+        for (const item of dangerWord) {
+          if (text.indexOf(item) >= 0) {
+            state.danger++;
+            studentDangerWord(item);
+          }
         }
-      }
     };
 
     const studentDangerWord = async (item) => {
       const secretChatDto = {
-        parentsCheck: true,
-        scId: 0,
+        sname: state.studentName,
         sccontent: item,
         sid: sid,
       };

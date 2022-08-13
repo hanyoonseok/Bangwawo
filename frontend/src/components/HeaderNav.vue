@@ -63,7 +63,12 @@
       </div>
       <div class="bell-wrapper" v-if="user && user.userType != 'volunteer'">
         <i class="fa-solid fa-bell" @click="toggleNoticeModal"
-          ><div class="count">{{ notices.length }}</div></i
+          ><div v-if="user.userType === 'student'" class="count">
+            {{ notices.length }}
+          </div>
+          <div v-else class="count">
+            {{ state.totalNotice }}
+          </div></i
         >
 
         <article class="modal" v-if="isNoticeOpen">
@@ -72,13 +77,25 @@
             알림창
           </div>
           <div class="row-wrapper" v-if="user.userType === 'parent'">
-            <div class="row" v-for="notice in notices" :key="notice.id">
-              <img src="@/assets/profile.png" />
-              <label
-                ><p>자녀의 상담중 위험 용어가 발생했습니다.</p>
-                <p class="date">2022-07-25</p></label
-              >
-              <i class="fa-solid fa-xmark close"></i>
+            <div v-for="(children, index) in notices" :key="index">
+              <div v-for="notice in children" :key="notice.scid" class="row">
+                <img src="@/assets/profile.png" />
+                <label
+                  ><p>
+                    자녀
+                    <span style="font-weight: bold">{{ notice.sname }}</span
+                    >의 상담중 위험 용어
+                    <span style="color: #ffadad; font-weight: bold">{{
+                      notice.sccontent
+                    }}</span
+                    >이(가) 발생했습니다.
+                  </p>
+                </label>
+                <i
+                  class="fa-solid fa-xmark close"
+                  @click="readAlaramParent(notice.scid)"
+                ></i>
+              </div>
             </div>
           </div>
           <div class="row-wrapper" v-else>
@@ -158,13 +175,14 @@ export default {
       characterColor: null,
       studentName: "",
       matchingSid: null,
+      children: [],
+      totalNotice: 0,
     });
     let isNoticeOpen = ref(false);
 
     let isProfileOpen = ref(false);
 
     const notices = ref("");
-    const children = ref("");
     const toggleProfileModal = () => {
       isNoticeOpen.value = false;
       isProfileOpen.value = !isProfileOpen.value;
@@ -204,16 +222,19 @@ export default {
         getClassOpenAlarm();
       }
       if (user.value && user.value.userType === "parent") {
-        // getChildren();
-        // getChildrenDangerAlarm();
+        getChildren();
       }
       console.log(user.value);
     });
 
+    // 자식정보 불러오기
     const getChildren = async () => {
-      await store
-        .dispatch("root/getChildren", user.value.email)
-        .then((res) => console.log(res));
+      await store.dispatch("root/getChildren", user.value.email).then((res) => {
+        state.children = res.data.childs;
+        console.log("내자식들이다", state.children);
+
+        getChildrenDangerAlarm();
+      });
     };
 
     // 학생별 알람에 대한 읽기 완료
@@ -228,11 +249,20 @@ export default {
           $soketio.emit("readStudentAlarm");
         });
     };
-    //자식들에 위험단어 알림을 받는다~
+
+    //자식들 위험단어 알림을 받는다~
     const getChildrenDangerAlarm = async () => {
-      store.dispatch("root/getChildrenDangerAlarm").then((response) => {
-        console.log(response);
-        notices.value = response.data.requsest;
+      state.children.forEach((child) => {
+        console.log("내자식번호찾기", child.sid);
+        store
+          .dispatch("root/getChildrenDangerAlarm", child.sid)
+          .then((response) => {
+            console.log(response.data.requsest);
+            notices.value = [];
+            // 자녀당 배열이 들어있음
+            notices.value.push(response.data.requsest);
+            state.totalNotice += response.data.requsest.length;
+          });
       });
     };
 
@@ -293,6 +323,17 @@ export default {
       $soketio.emit("volunteerAcceptMatching", user.value.vid);
     };
 
+    //부모님이 알람을 읽었따!
+    const readAlaramParent = async (scid) => {
+      store
+        .dispatch("root/readAlaramParent", {
+          scId: scid,
+        })
+        .then((res) => {
+          console.log(res);
+        });
+    };
+
     return {
       user,
       isNoticeOpen,
@@ -302,11 +343,11 @@ export default {
       toggleNoticeModal,
       changeTalkableState,
       acceptMatching,
+      readAlaramParent,
       rejectMatching,
       notices,
       getChildrenDangerAlarm,
       checkAlarm,
-      children,
       logout,
       state,
       getChildren,
