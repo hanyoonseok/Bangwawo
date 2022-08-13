@@ -14,8 +14,9 @@
       :chats="state.chats"
       :screen="state.screenShareState"
       :cid="cid"
+      @updateMainVideoStreamManager="updateMainVideoStreamManager"
+      @leaveSession="leaveSession"
     />
-    <div id="recording" @click="recording">녹화 시작</div>
     <UserView
       v-if="user && user.userType === 'student' && state.session"
       :dataLen="dataLen"
@@ -24,9 +25,11 @@
       :state="state"
       :me="state.publisher"
       :subs="state.subscribers"
+      :session="state.session"
+      :chats="state.chats"
       @activeVideo="activeVideo"
       @activeMute="activeMute"
-      @publishScreenShare="publishScreenShare"
+      @updateMainVideoStreamManager="updateMainVideoStreamManager"
     />
   </section>
 </template>
@@ -43,10 +46,10 @@ import {
 import axios from "axios";
 import moment from "moment";
 // import { OpenVidu } from "openvidu-browser";
-import { OpenVidu, RecordingMode, Recording } from "openvidu-browser";
+import { OpenVidu } from "openvidu-browser";
 import HostView from "@/components/class/HostView.vue";
 import UserView from "@/components/class/UserView.vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -58,26 +61,25 @@ export default {
     UserView,
   },
   setup() {
-    // 테스트용
-    // const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
-    // const OPENVIDU_SERVER_SECRET = "MY_SECRET";
-
+    const store = useStore();
+    const router = useRouter();
     const OPENVIDU_SERVER_URL = process.env.VUE_APP_OV_DOMAIN;
     const OPENVIDU_SERVER_SECRET = process.env.VUE_APP_OV_SECRET;
     const OV = new OpenVidu();
     const OVScreen = new OpenVidu(); // 화면 공유
 
     const route = useRoute();
-    const store = useStore();
 
     const user = ref(store.state.root.user);
 
     const sessionId = route.params.mySessionId;
     console.log("mySessionId", sessionId);
     const userType = route.params.userType === "volunteer" ? true : false;
+    console.log("userType", userType);
     const nickname = route.params.nickname;
     console.log("nickname", nickname);
     const cid = route.params.cid;
+    const vid = route.params.vid;
 
     const state = reactive({
       OV: OV,
@@ -97,8 +99,6 @@ export default {
       }),
       subscribers: [],
       mySessionId: sessionId,
-      // mySessionId: "sessionId",
-      // myUserName: "Participant" + Math.floor(Math.random() * 100),
       myUserName: nickname,
       joinedPlayerNumbers: 0,
       chats: [],
@@ -132,15 +132,19 @@ export default {
       console.log("싱태", cur);
       if (cur) {
         // true일때는 화면공유 창 보여주기
-        document.getElementById("screenShareStart").style.display = "none";
+        if (state.isHost) {
+          document.getElementById("screenShareStart").style.display = "none";
+        }
         document.getElementById("container-screens").style.display = "block";
       } else {
-        document.getElementById("screenShareStart").style.display = "block";
+        if (state.isHost) {
+          document.getElementById("screenShareStart").style.display = "block";
+        }
+
         document.getElementById("container-screens").style.display = "hidden";
       }
     };
 
-    // 사용자가 방에 참여하겠다는 버튼 누를때마다 호출
     const joinSession = () => {
       console.log("join session");
       // 초기화
@@ -149,6 +153,11 @@ export default {
 
       // 새로운 Stream을 구독하고 subscribers배열에 저장
       state.session.on("streamCreated", ({ stream }) => {
+        console.log(
+          "누구인가???????????",
+          state.isHost ? "봉사자다" : "학생이다",
+        );
+        // 웹 캠 사용하면서 사용자가 학생일때만 sub에 들어감
         if (stream.typeOfVideo == "CAMERA") {
           const subscriber = state.session.subscribe(stream);
           state.subscribers.push(subscriber);
@@ -186,6 +195,7 @@ export default {
         }
       });
 
+      // 채팅
       state.session.on("signal:my-chat", (e) => {
         console.log(e.data); // Message
         console.log(e.from); // Connection object of the sender
@@ -199,6 +209,12 @@ export default {
           msg: e.data,
           date: finalDate,
         });
+      });
+
+      // 봉사자가 세션 종료하면 학생도 자동으로 종료시켜야 함
+      state.session.on("signal:end", (e) => {
+        console.log("봉사자가 세션 종료???", e);
+        leaveSession();
       });
 
       console.log("sessionid", state.mySessionId);
@@ -221,10 +237,13 @@ export default {
               insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
               mirror: false, // Whether to mirror your local video or not
             });
+
             state.mainStreamManager = publisher;
             state.publisher = publisher;
             state.joinedPlayerNumbers++;
             state.session.publish(publisher);
+            console.log("######################joinSession", state.session);
+            startRecording(); // 녹화 시작
           })
           .catch((error) => {
             console.log(
@@ -254,24 +273,64 @@ export default {
       window.addEventListener("beforeunload", leaveSession);
     };
 
-    const recording = () => {
-      const sessionProperties = {
-        session: state.session,
-        recordingMode: RecordingMode.MANUAL, // RecordingMode.ALWAYS for automatic recording
-        defaultRecordingProperties: {
-          outputMode: Recording.OutputMode.COMPOSED,
-          resolution: "640x480",
-          frameRate: 24,
-        },
+    const recordId = ref(null);
+
+    const startRecording = () => {
+      const recordings = {
+        session: state.mySessionId,
+        name: "dk",
         hasAudio: true,
         hasVideo: true,
-        outputMode: "COMPOSED",
+        outputMode: "INDIVIDUAL", //개별녹화?
         resolution: "1280x720",
         frameRate: 25,
         shmSize: 536870912,
         ignoreFailedStreams: false,
+        mediaNode: {
+          id: "media_i-0c58bcdd26l11d0sd",
+        },
       };
-      console.log(sessionProperties);
+      console.log(recordings);
+
+      axios
+        .post(
+          OPENVIDU_SERVER_URL + "/openvidu/api/recordings/start",
+          recordings,
+          {
+            headers: {
+              Authorization:
+                "Basic " + btoa("OPENVIDUAPP:" + OPENVIDU_SERVER_SECRET),
+              "Content-Type": "application/json",
+            },
+          },
+        )
+        .then((response) => {
+          console.log("===== 녹화 시작 =====", response.data);
+          recordId.value = response.data.id;
+        })
+        .catch((error) => console.error(error));
+    };
+
+    const stopRecording = () => {
+      console.log("stop");
+      console.log(recordId.value);
+      axios
+        .post(
+          OPENVIDU_SERVER_URL +
+            "/openvidu/api/recordings/stop/" +
+            recordId.value,
+          null,
+          {
+            headers: {
+              Authorization:
+                "Basic " + btoa("OPENVIDUAPP:" + OPENVIDU_SERVER_SECRET),
+            },
+          },
+        )
+        .then((response) => {
+          console.log("===== 녹화 끝 =====", response);
+        })
+        .catch((error) => console.error(error));
     };
 
     const leaveSession = () => {
@@ -283,6 +342,9 @@ export default {
       if (state.sessionScreen) {
         state.sessionScreen.disconnect();
       }
+
+      // 녹화 끝
+      stopRecording();
       state.session = undefined;
       state.sessionScreen = undefined;
       state.mainStreamManager = undefined;
@@ -290,6 +352,16 @@ export default {
       state.subscribers = [];
       state.OV = undefined;
       window.removeEventListener("beforeunload", leaveSession);
+
+      store
+        .dispatch("root/endClass", { cid: cid, vid: vid })
+        .then((response) => {
+          console.log(response);
+          router.push({ name: "feedbackSubmit", params: { cid: cid } });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     };
 
     const getToken = (mySessionId) => {
@@ -470,15 +542,25 @@ export default {
     };
 
     onMounted(() => {
-      const screenShare = document.getElementById("screenShareStart");
-      if (screenShare) {
-        screenShare.style.display = "block";
-      }
-      const containerScreens = document.getElementById("container-screens");
-      if (containerScreens) {
-        containerScreens.style.display = "none";
+      console.log("mounted", userType);
+      if (userType) {
+        document.getElementById("screenShareStart").style.display = "block";
+        document.getElementById("container-screens").style.display = "none";
+        // const screenShare = document.getElementById("screenShareStart");
+        // if (screenShare) {
+        //   screenShare.style.display = "block";
+        // }
+        // const containerScreens = document.getElementById("container-screens");
+        // if (containerScreens) {
+        //   containerScreens.style.display = "none";
+        // }
       }
     });
+
+    const updateMainVideoStreamManager = (stream) => {
+      if (state.mainStreamManager === stream) return;
+      state.mainStreamManager = stream;
+    };
 
     return {
       state,
@@ -492,8 +574,10 @@ export default {
       activeVideo,
       activeMute,
       publishScreenShare,
+      startRecording,
+      stopRecording,
+      updateMainVideoStreamManager,
       user,
-      recording,
     };
   },
 };

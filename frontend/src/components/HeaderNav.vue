@@ -162,7 +162,7 @@ export default {
       await axios
         .get(`${process.env.VUE_APP_API_URL}/likes/${user.value.sid}`)
         .then((response) => {
-          console.log("좋아요버튼", response.data.requsest);
+          // console.log("좋아요버튼", response.data.requsest);
           notices.value = response.data.requsest;
         });
     };
