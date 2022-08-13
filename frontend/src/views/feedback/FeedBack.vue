@@ -2,7 +2,7 @@
   <div class="background-view">
     <HeaderNav />
     <h2 class="feedback-title">피드백</h2>
-    <div class="feedback-container" v-if="feedbackInfo">
+    <div class="feedback-container">
       <img src="@/assets/threeDuck.png" class="duck-img" />
       <div class="left">
         <div class="lecture-area">
@@ -34,7 +34,7 @@
                 피드백
               </li>
             </ul>
-            <div class="feedback-info">
+            <div class="feedback-info" v-if="feedbackInfo">
               <div class="feedback-box" v-if="state.isFeedback">
                 {{ feedbackInfo.feedback }}
               </div>
@@ -109,13 +109,14 @@ export default {
     onMounted(() => {
       slider = document.querySelector(".slider");
       menuBtn = document.querySelectorAll(".menu-btn");
-      slideOpen = document.querySelector(".slide-open");
+      slideOpen = document.querySelector("video");
     });
     const state = reactive({
       isFeedback: false,
     });
     const doSlide = (e) => {
       //   console.dir(slider);
+      slider = document.querySelector(".slider");
       if (slider.classList.contains("closed")) {
         slider.classList.remove("closed");
         console.log(slideOpen);

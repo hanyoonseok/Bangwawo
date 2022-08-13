@@ -51,7 +51,7 @@ const routes = [
         beforeEnter: onlyAuthUser,
       },
       {
-        path: "register",
+        path: "register/:rid",
         name: "classregister",
         component: () => import("@/views/class/ClassRegisterView"),
         beforeEnter: onlyAuthUser,
@@ -74,13 +74,13 @@ const routes = [
         beforeEnter: onlyAuthUser,
       },
       {
-        path: "requestmodify",
+        path: "requestmodify/:rid",
         name: "classrequestmodify",
         component: () => import("@/views/class/ClassRequestModify"),
         beforeEnter: onlyAuthUser,
       },
       {
-        path: "requestdetail",
+        path: "requestdetail/:rid",
         name: "classrequestdetail",
         component: () => import("@/views/class/ClassRequestDetail"),
         beforeEnter: onlyAuthUser,

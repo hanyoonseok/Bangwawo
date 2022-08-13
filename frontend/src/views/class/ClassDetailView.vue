@@ -168,7 +168,7 @@
     <div class="confirm" v-if="isConfirm.status">
       <div class="container">
         <img src="@/assets/profile.png" alt="오리" />
-        <h2>정말로 삭제하시겠습니까?</h2>
+        <h4>정말로 삭제하시겠습니까?</h4>
         <div class="btn-wrapper">
           <button class="btn" @click="deleteClass">네</button>
           <button class="btn" @click="isConfirm.status = false">아니요</button>
@@ -272,8 +272,6 @@ export default {
         document.querySelector(".profile").style.display = "none";
       }
     };
-
-    // alert 창
     const isConfirm = reactive({
       status: false,
     });

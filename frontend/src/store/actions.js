@@ -78,6 +78,7 @@ export const inactiveKakaoToken = ({ state }, accessToken) => {
   const url = `/kakao/logout/${accessToken}`;
   return axios.get(url);
 };
+
 // 수업
 
 export const getClassList = ({ state }) => {
@@ -203,4 +204,10 @@ export const getRecordVideo = ({ state }, recordId) => {
     },
   };
   return axios.get(url, headers);
+};
+// 좋아요 추가
+export const addLikeRequest = ({ state }, payload) => {
+  console.log("addLikeRequest", state, payload);
+  const url = `/likes`;
+  return axios.post(url, payload);
 };

@@ -200,6 +200,19 @@
           width: 100%;
           padding: 10px 0;
           @include flexBetween;
+          transition: all 200ms ease;
+          &:hover {
+            background-color: #fff4e2;
+          }
+          p {
+            color: $dark-grey;
+          }
+
+          .notice-title {
+            font-weight: bolder;
+            color: $dark-grey;
+          }
+
           img {
             width: 35px;
             height: 35px;
