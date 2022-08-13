@@ -12,12 +12,12 @@ import javax.persistence.Embeddable;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Emotion {
-    private int angry;     // 화남
-    private int disgusted; // 역겨움
-    private int fearful;   // 공포
-    private int happy;     // 행복
-    private int neutral;   // 보통
-    private int sad;       // 슬픔
-    private int surprised; // 놀람
+    private Integer angry;     // 화남
+    private Integer disgusted; // 역겨움
+    private Integer fearful;   // 공포
+    private Integer happy;     // 행복
+    private Integer neutral;   // 보통
+    private Integer sad;       // 슬픔
+    private Integer surprised; // 놀람
 }
 
