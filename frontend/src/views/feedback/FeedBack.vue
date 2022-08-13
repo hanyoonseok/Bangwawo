@@ -35,6 +35,45 @@
               </li>
             </ul>
             <div class="feedback-info" v-if="feedbackInfo">
+              <div class="emotion-feedback-box" v-if="state.isFeedback">
+                <div class="emotion-box">
+                  <span
+                    ><img src="@/assets/profile.png" /><label
+                      >{{ feedbackInfo.emotion.angry }}%</label
+                    ></span
+                  >
+                  <span
+                    ><img src="@/assets/profile.png" /><label
+                      >{{ feedbackInfo.emotion.disgusted }}%</label
+                    ></span
+                  >
+                  <span
+                    ><img src="@/assets/profile.png" /><label
+                      >{{ feedbackInfo.emotion.fearful }}%</label
+                    ></span
+                  >
+                  <span
+                    ><img src="@/assets/profile.png" /><label
+                      >{{ feedbackInfo.emotion.happy }}%</label
+                    ></span
+                  >
+                  <span
+                    ><img src="@/assets/profile.png" /><label
+                      >{{ feedbackInfo.emotion.neutral }}%</label
+                    ></span
+                  >
+                  <span
+                    ><img src="@/assets/profile.png" /><label
+                      >{{ feedbackInfo.emotion.sad }}%</label
+                    ></span
+                  >
+                  <span
+                    ><img src="@/assets/profile.png" /><label
+                      >{{ feedbackInfo.emotion.surprised }}%</label
+                    ></span
+                  >
+                </div>
+              </div>
               <div class="feedback-box" v-if="state.isFeedback">
                 {{ feedbackInfo.feedback }}
               </div>

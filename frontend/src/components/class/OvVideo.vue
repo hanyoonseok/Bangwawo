@@ -4,19 +4,30 @@
 
 <script>
 import * as faceapi from "face-api.js";
+import { useStore } from "vuex";
 
 export default {
   name: "OvVideo",
 
   props: {
     streamManager: Object,
+    onEmotion: Boolean,
+  },
+
+  data() {
+    return {
+      store: null,
+    };
+  },
+
+  created() {
+    this.store = useStore();
   },
 
   mounted() {
     this.streamManager.addVideoElement(this.$el);
 
     const video = document.getElementById("video");
-    console.log(video);
 
     Promise.all([
       faceapi.nets.tinyFaceDetector.loadFromUri("./models"),
@@ -34,8 +45,8 @@ export default {
     }
 
     video.addEventListener("play", () => {
+      if (!this.onEmotion) return;
       const canvas = faceapi.createCanvasFromMedia(video);
-      console.log(canvas, video.width);
 
       document.body.append(canvas);
       // const displaySize = { width: video.width, height: video.height };
@@ -52,10 +63,14 @@ export default {
         );
         if (resizedDetections.length > 0) {
           console.log(resizedDetections[0].expressions);
+          this.store.commit(
+            "root/addEmotion",
+            resizedDetections[0].expressions,
+          );
         }
         //canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
         faceapi.draw.drawFaceExpressions(canvas, resizedDetections); // 감정 상태
-      }, 100);
+      }, 10000);
     });
   },
 };

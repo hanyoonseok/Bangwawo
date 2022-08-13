@@ -210,3 +210,9 @@ export const addLikeRequest = ({ state }, payload) => {
   const url = `/likes`;
   return axios.post(url, payload);
 };
+
+export const storeEmotion = ({ state }, payload) => {
+  console.log("storeEmotion", state, payload);
+  const url = `/enrol/emotion`;
+  return axios.put(url, payload);
+};
