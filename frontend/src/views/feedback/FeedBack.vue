@@ -7,8 +7,8 @@
       <div class="left">
         <div class="lecture-area">
           <!-- <img src="@/assets/lecture-thumb.png" class="slide-open" /> -->
-          <video controls class="slide-open">
-            <source src="@/assets/video.mp4" type="video/mp4" />
+          <video controls class="slide-open" :src="videoURL">
+            <!-- <source :src="videoURL" type="video/mp4" /> -->
             Your browser does not support the video tag.
           </video>
           <i
@@ -21,31 +21,42 @@
         <div class="slider">
           <div class="feedback-area">
             <ul class="feedback-menu">
-              <li class="menu-btn active" @click="doActive">강의 상세</li>
-              <li class="menu-btn" @click="doActive">피드백</li>
+              <li
+                :class="{ 'menu-btn': true, active: !state.isFeedback }"
+                @click="toggleFeedback(false)"
+              >
+                강의 상세
+              </li>
+              <li
+                :class="{ 'menu-btn': true, active: state.isFeedback }"
+                @click="toggleFeedback(true)"
+              >
+                피드백
+              </li>
             </ul>
-            <div class="feedback-info">
+            <div class="feedback-info" v-if="feedbackInfo">
               <div class="feedback-box" v-if="state.isFeedback">
-                아이가 너무 잘합니다 집중력도 좋고 적극적이에요! 아이가 너무
-                잘합니다 집중력도 좋고 적극적이에요! 아이가 너무 잘합니다
-                집중력도 좋고 적극적이에요! 아이가 너무 잘합니다 집중력도 좋고
-                적극적이에요!
+                {{ feedbackInfo.feedback }}
               </div>
               <div class="feedback-box" v-else>
                 <div class="lecture-desc">
                   <div class="lecture-value">
                     <label>강사</label>
-                    <div class="label-value">김오리</div>
+                    <div class="label-value">
+                      {{ feedbackInfo.cid.volunteer.nickname }}
+                    </div>
                   </div>
                   <div class="lecture-value">
                     <label>시간</label>
-                    <div class="label-value">22.07.20 13:00 ~ 15:00</div>
+                    <div class="label-value">
+                      {{ toTimeStr(feedbackInfo.cid.stime) }} ~<br />
+                      {{ toTimeStr(feedbackInfo.cid.etime) }}
+                    </div>
                   </div>
                   <div class="lecture-value">
                     <label>소개</label>
                     <div class="label-value">
-                      대충 수업소개글임 대충 수업소개글임 대충 수업 소개글임
-                      대충 수업 소개글!!
+                      {{ feedbackInfo.cid.volunteer.introduce }}
                     </div>
                   </div>
                   <div class="lecture-value">
@@ -54,7 +65,9 @@
                   </div>
                   <div class="lecture-value">
                     <label>인원</label>
-                    <div class="label-value">12/45</div>
+                    <div class="label-value">
+                      {{ studentNum }}/{{ feedbackInfo.cid.maxcnt }}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -68,22 +81,42 @@
 
 <script>
 import HeaderNav from "@/components/HeaderNav.vue";
-import { reactive, onMounted } from "vue";
+import { reactive, onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
+import { useStore } from "vuex";
+
 export default {
   setup() {
     let slider;
     let menuBtn;
     let slideOpen;
+    const route = useRoute();
+    const store = useStore();
+    const cid = route.params.cid;
+    const sid = route.params.sid;
+    let feedbackInfo = ref(null);
+    let studentNum = ref(0);
+    let videoURL = ref("");
+
+    const getStudentFeedback = () => {
+      store.dispatch("root/getStudentFeedback", { sid, cid }).then((res) => {
+        feedbackInfo.value = res.data;
+        console.log(res.data);
+      });
+    };
+    getStudentFeedback();
+
     onMounted(() => {
       slider = document.querySelector(".slider");
       menuBtn = document.querySelectorAll(".menu-btn");
-      slideOpen = document.querySelector(".slide-open");
+      slideOpen = document.querySelector("video");
     });
     const state = reactive({
       isFeedback: false,
     });
     const doSlide = (e) => {
       //   console.dir(slider);
+      slider = document.querySelector(".slider");
       if (slider.classList.contains("closed")) {
         slider.classList.remove("closed");
         console.log(slideOpen);
@@ -99,29 +132,42 @@ export default {
         e.target.classList.remove("open");
       }
     };
-    const doActive = (e) => {
-      if (!e.target.classList.contains("active")) {
-        e.target.classList.add("active");
-      }
-      if (e.target.innerText === "강의 상세") {
-        if (state.isFeedback) {
-          state.isFeedback = !state.isFeedback;
-        }
-        menuBtn[1].classList.remove("active");
-      } else {
-        if (!state.isFeedback) {
-          state.isFeedback = !state.isFeedback;
-        }
-        menuBtn[0].classList.remove("active");
-      }
+    const toggleFeedback = (boolean) => {
+      state.isFeedback = boolean;
     };
+
+    const toTimeStr = (timeArr) => {
+      return `${timeArr[0]}.${timeArr[1]}.${timeArr[2]} ${timeArr[3]}:${
+        timeArr[4] < 10 ? "0" : ""
+      }${timeArr[4]}`;
+    };
+
+    const getClassStudentNum = () => {
+      store.dispatch("root/getClassStudents", cid).then((res) => {
+        studentNum.value = res.data.length;
+      });
+    };
+    getClassStudentNum();
+
+    const getRecordVideo = () => {
+      store.dispatch("root/getRecordVideo", `${55}Class${55}`).then((res) => {
+        console.log(res.data);
+        videoURL.value = res.data.url;
+      });
+    };
+    getRecordVideo();
+
     return {
       state,
       doSlide,
       slider,
       menuBtn,
       slideOpen,
-      doActive,
+      toggleFeedback,
+      feedbackInfo,
+      toTimeStr,
+      studentNum,
+      videoURL,
     };
   },
   components: {

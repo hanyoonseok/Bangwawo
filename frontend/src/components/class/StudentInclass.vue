@@ -1,9 +1,6 @@
 <template>
   <div class="stu-inclass-container">
-    <user-video
-      :stream-manager="publisher"
-      @click="updateMainVideoStreamManager(publisher)"
-    />
+    <user-video :stream-manager="publisher" />
   </div>
 </template>
 
@@ -11,10 +8,8 @@
 import UserVideo from "@/components/class/UserVideo.vue";
 export default {
   name: "StudentOX",
-  props: ["publisher", "joinSession"],
-  setup(props) {
-    props.joinSession();
-  },
+  props: ["publisher"],
+  setup() {},
   components: { UserVideo },
 };
 </script>
