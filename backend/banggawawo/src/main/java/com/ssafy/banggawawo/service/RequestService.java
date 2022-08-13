@@ -26,7 +26,7 @@ public class RequestService {
 
     // 요청글 작성
     @Transactional
-    public int write(RequestDto requestDto) throws Exception {
+    public Request write(RequestDto requestDto) throws Exception {
         Request request = Request.builder()
                 .student(requestDto.getSId())
                 .content(requestDto.getContent())
@@ -36,7 +36,8 @@ public class RequestService {
                 .count(0)
                 .likes(0)
                 .build();
-        return requestRepository.save(request) != null ? 1 : 0;
+
+        return requestRepository.save(request);
     }
 
     //요청글 목록
@@ -44,6 +45,15 @@ public class RequestService {
     public Map<String, Object> list(int scrollcnt) throws Exception {
         System.out.println(scrollcnt);
         Page<Request> requestsList = requestRepository.findAll(PageRequest.of(scrollcnt-1, 6));
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        result.put("requestsList", requestsList);
+        return result;
+    }
+
+    //검색요청글 목록
+    @Transactional(readOnly = true)
+    public Map<String, Object> searchlist(String topic) throws Exception {
+        List<Request> requestsList = requestRepository.findByContentContaining(topic);
         HashMap<String, Object> result = new HashMap<String, Object>();
         result.put("requestsList", requestsList);
         return result;

@@ -32,10 +32,13 @@ public class RequestController {
     @PostMapping()
     @ApiOperation(value = "요청글 작성")
     public ResponseEntity<?> write(@RequestBody RequestDto requestdto) throws Exception {
-        if (requestservice.write(requestdto) > 0){
+        Request request =requestservice.write(requestdto);
+        if (request.getRId() > 0){
             // 요청글 작성시 자동을 공감 추가
+
             LikesDto result= new LikesDto();
-            result.setRId(requestdto.getRId());
+            result.setRId(request.getRId());
+            result.setSId(requestdto.getSId().getSId());
             result.setRTitle(requestdto.getTitle());
             likesService.sympathy(result);
 
@@ -50,6 +53,18 @@ public class RequestController {
     public ResponseEntity<?> list(@RequestParam(value = "scrollcnt", defaultValue = "1") int scrollcnt) {
         try {
             return new ResponseEntity<Map<String, Object>>(requestservice.list(scrollcnt), HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //검색한 요청글 리스트 보기 (검색어 입력받는다)
+    @GetMapping("/topic/{topic}")
+    @ApiOperation(value = "검색어로 요청글 리스트 보기")
+    public ResponseEntity<?> searchlist(@PathVariable("topic") String topic) {
+        try {
+            return new ResponseEntity<Map<String, Object>>(requestservice.searchlist(topic), HttpStatus.ACCEPTED);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
