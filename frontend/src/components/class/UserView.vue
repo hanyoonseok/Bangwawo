@@ -31,7 +31,7 @@
           </div>
           <div
             class="user-card-wrapper"
-            v-for="(user, i) in subs"
+            v-for="(user, i) in otherStudent"
             :key="user.id"
           >
             <div class="hover-wrapper">이름{{ i }}</div>
@@ -42,7 +42,7 @@
         </article>
         <article class="top-article-left bot">
           <StudentOX v-if="state.isOXOpen" />
-          <StudentInclass v-else />
+          <StudentInclass :publisher="volunteer" v-else />
         </article>
       </article>
 
@@ -101,7 +101,7 @@
 </template>
 
 <script>
-import { reactive, computed } from "vue";
+import { reactive, computed, ref, watch } from "vue";
 import ParticipantsList from "@/components/class/ParticipantsList.vue";
 import ChatForm from "@/components/class/ChatForm.vue";
 import StudentOX from "@/components/class/StudentOX.vue";
@@ -125,7 +125,36 @@ export default {
   setup(props, { emit }) {
     console.log("@@@@@@@@@@@@me", props.me);
     console.log("=============subs", props.subs);
+
+    const volunteer = ref(null);
+
+    watch(
+      () => props.subs,
+      (cur) => {
+        console.log("watch", cur);
+        if (cur.length > 0) {
+          volunteer.value = props.subs[0];
+          otherStudent();
+        }
+      },
+      { deep: true },
+    );
+    console.log("첫번째ㅐㅐ", props.subs[0]);
+    for (let index = 0; index < props.subs.length; index++) {
+      console.log(props.subs[index]);
+    }
     console.log("~~~~~~~~~~~~~~~~~~~session", props.session);
+
+    // const volunteer = props.subs[0];
+    console.log("봉사자 정보야 제발 들어와", volunteer);
+    const otherStudent = () => {
+      const arr = [];
+      for (let index = 1; index < props.subs.length; index++) {
+        arr.push(props.subs[index]);
+      }
+      console.log("나머지 학생들이 담기나?", arr);
+      return arr;
+    };
 
     const state = reactive({
       isParticipantsOpen: false,
@@ -211,12 +240,14 @@ export default {
     //props.initCurrentStudents();
     return {
       state,
+      volunteer,
       toggleParticipants,
       toggleChat,
       activeVideo,
       activeMute,
       getConnectionSubs,
       updateMainVideoStreamManager,
+      otherStudent,
     };
   },
 

@@ -158,9 +158,10 @@ export default {
       // 새로운 Stream을 구독하고 subscribers배열에 저장
       state.session.on("streamCreated", ({ stream }) => {
         console.log(
-          "누구인가???????????",
+          "현재 퍼블리셔가 누구인가???????????",
           state.isHost ? "봉사자다" : "학생이다",
         );
+        console.log("봉사자인지 학생인지 파악하기 위해 도움이 될까..?", stream);
         // 웹 캠 사용하면서 사용자가 학생일때만 sub에 들어감
         if (stream.typeOfVideo == "CAMERA") {
           const subscriber = state.session.subscribe(stream);
