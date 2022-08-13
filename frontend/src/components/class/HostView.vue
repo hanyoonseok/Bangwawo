@@ -214,21 +214,21 @@ export default {
     };
 
     // 수업 종료
-    const leaveSession = (props) => {
+    const leaveSession = () => {
       props.session
         .signal({
           data: 0,
           to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
-          type: "end", // The type of message (optional)
+          type: "leave-session", // The type of message (optional)
         })
         .then(() => {
-          console.log("end");
+          console.log("leave-session");
+
+          emit("leaveSession");
         })
         .catch((error) => {
           console.error(error);
         });
-
-      emit("leaveSession");
     };
 
     const updateMainVideoStreamManager = (stream) => {

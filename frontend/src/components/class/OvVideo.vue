@@ -19,10 +19,10 @@ export default {
     console.log(video);
 
     Promise.all([
-      faceapi.nets.tinyFaceDetector.loadFromUri("./models"),
-      faceapi.nets.faceLandmark68Net.loadFromUri("./models"),
-      faceapi.nets.faceRecognitionNet.loadFromUri("./models"),
-      faceapi.nets.faceExpressionNet.loadFromUri("./models"),
+      faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
+      faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
+      faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
+      faceapi.nets.faceExpressionNet.loadFromUri("/models"),
     ]).then(startVideo);
 
     function startVideo() {
@@ -51,7 +51,7 @@ export default {
           displaySize,
         );
         if (resizedDetections.length > 0) {
-          console.log(resizedDetections[0].expressions);
+          // console.log(resizedDetections[0].expressions);
         }
         //canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
         faceapi.draw.drawFaceExpressions(canvas, resizedDetections); // 감정 상태

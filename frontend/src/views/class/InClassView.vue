@@ -4,7 +4,6 @@
       v-if="user && user.userType === 'volunteer' && state.session"
       :dataLen="dataLen"
       :currentUsers="currentUsers"
-      :leaveSession="leaveSession"
       :me="state.publisher"
       :subs="state.subscribers"
       @activeVideo="activeVideo"
@@ -15,13 +14,11 @@
       :screen="state.screenShareState"
       :cid="cid"
       @updateMainVideoStreamManager="updateMainVideoStreamManager"
-      @leaveSession="leaveSession"
     />
     <UserView
       v-if="user && user.userType === 'student' && state.session"
       :dataLen="dataLen"
       :currentUsers="currentUsers"
-      :leaveSession="leaveSession"
       :state="state"
       :me="state.publisher"
       :subs="state.subscribers"
@@ -80,6 +77,7 @@ export default {
     console.log("nickname", nickname);
     const cid = route.params.cid;
     const vid = route.params.vid;
+    const sid = route.params.sid;
 
     const state = reactive({
       OV: OV,
@@ -212,7 +210,7 @@ export default {
       });
 
       // 봉사자가 세션 종료하면 학생도 자동으로 종료시켜야 함
-      state.session.on("signal:end", (e) => {
+      state.session.on("signal:leave-session", (e) => {
         console.log("봉사자가 세션 종료???", e);
         leaveSession();
       });
@@ -243,7 +241,10 @@ export default {
             state.joinedPlayerNumbers++;
             state.session.publish(publisher);
             console.log("######################joinSession", state.session);
-            startRecording(); // 녹화 시작
+            if (!state.isHost) {
+              console.log("학생이니까 녹화를 시작하겠다ㅏㅏ");
+              startRecording(); // 녹화 시작
+            }
           })
           .catch((error) => {
             console.log(
@@ -278,7 +279,7 @@ export default {
     const startRecording = () => {
       const recordings = {
         session: state.mySessionId,
-        name: "dk",
+        name: sid,
         hasAudio: true,
         hasVideo: true,
         outputMode: "INDIVIDUAL", //개별녹화?
@@ -334,6 +335,7 @@ export default {
     };
 
     const leaveSession = () => {
+      console.log("세션을 종료시키고 싶슴다");
       // --- Leave the session by calling 'disconnect' method over the Session object ---
       if (state.session) {
         state.session.disconnect();
@@ -343,25 +345,33 @@ export default {
         state.sessionScreen.disconnect();
       }
 
-      // 녹화 끝
-      stopRecording();
-      state.session = undefined;
-      state.sessionScreen = undefined;
-      state.mainStreamManager = undefined;
-      state.publisher = undefined;
-      state.subscribers = [];
-      state.OV = undefined;
-      window.removeEventListener("beforeunload", leaveSession);
+      // state.session = undefined;
+      // state.sessionScreen = undefined;
+      // state.mainStreamManager = undefined;
+      // state.publisher = undefined;
+      // state.subscribers = [];
+      // state.OV = undefined;
 
-      store
-        .dispatch("root/endClass", { cid: cid, vid: vid })
-        .then((response) => {
-          console.log(response);
-          router.push({ name: "feedbackSubmit", params: { cid: cid } });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      if (state.isHost) {
+        console.log("세션을 종료할건데 난 봉사자입니당");
+        store
+          .dispatch("root/endClass", { cid: cid, vid: vid })
+          .then((response) => {
+            console.log(response);
+            window.removeEventListener("beforeunload", leaveSession);
+            router.push({ name: "feedbackSubmit", params: { cid: cid } });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        // 녹화 끝
+        stopRecording();
+        console.log("나는 학생!");
+        window.removeEventListener("beforeunload", leaveSession);
+
+        router.push({ name: "mypage" });
+      }
     };
 
     const getToken = (mySessionId) => {

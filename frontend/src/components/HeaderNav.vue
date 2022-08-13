@@ -168,9 +168,9 @@ export default {
     };
     console.log(user);
     if (user.value && user.value.userType === "student") {
-      setInterval(() => {
-        getClassOpenAlarm();
-      }, 3000);
+      // setInterval(() => {
+      //   getClassOpenAlarm();
+      // }, 3000);
     }
 
     onMounted(() => {
