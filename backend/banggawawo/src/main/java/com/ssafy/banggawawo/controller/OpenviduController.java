@@ -4,6 +4,7 @@ import com.ssafy.banggawawo.domain.dto.ClassDto;
 import com.ssafy.banggawawo.domain.dto.EnrolDto;
 import com.ssafy.banggawawo.service.ClassService;
 import com.ssafy.banggawawo.service.EnrolService;
+import com.ssafy.banggawawo.util.FileUtil;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -139,5 +140,22 @@ public class OpenviduController {
                 return new ResponseEntity<>(null, HttpStatus.MULTI_STATUS);
             }
         }
+    }
+    @ApiOperation("알집 풀기")
+    @GetMapping("/recording/unzip/{sessionid}/{name}")
+    public ResponseEntity<?> unzipSessionRecordingZip(@PathVariable String sessionid, @PathVariable String name) throws Exception {
+        FileUtil fileUtil = new FileUtil();
+        HttpStatus status = HttpStatus.OK;
+        if(!fileUtil.unzipFile("/opt/openvidu/recordings/"+sessionid, name, "zip", "/opt/openvidu/recordings/"+sessionid)){
+            status = HttpStatus.NOT_ACCEPTABLE;
+        }
+        return new ResponseEntity<>(status);
+    }
+
+    @ApiOperation("영상 가져오기")
+    @GetMapping("/recording/{sessionid}/{streamid}/{connectionid}")
+    public ResponseEntity<?> getSessionRecordingWebM(@PathVariable String sessionid, @PathVariable String streamid, @PathVariable String connectionid) throws Exception {
+        
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
