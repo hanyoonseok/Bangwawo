@@ -23,6 +23,7 @@ public class SecritChatService {
     public int warning(SecritChatDto secritChatDto) throws Exception {
         SecritChat secritChat = SecritChat.builder()
                 .sId(secritChatDto.getSId())
+                .sName(secritChatDto.getSName())
                 .sccontent(secritChatDto.getSccontent())
                 .parentsCheck(false)
                 .build();
