@@ -277,7 +277,6 @@ export default {
             state.session.publish(publisher);
             console.log("######################joinSession", state.session);
             console.log(state.publisher.stream);
-            console.log(state.publisher.stream);
             console.log(
               Object.keys(state.publisher.stream.streamManager.stream),
             );

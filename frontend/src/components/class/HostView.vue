@@ -4,19 +4,16 @@
       <article
         :class="{
           'top-left': true,
-          'host-2orless': subs.length < 2,
-          'host-4orless': subs.length < 4 && subs.length >= 2,
-          'host-6orless': subs.length < 6 && subs.length >= 4,
-          'host-12orless': subs.length >= 6,
+          'host-12orless': true,
           expand: !state.isTopOpen && !state.isChatOpen,
         }"
       >
-        <div class="idx-btn-wrapper next" @click="nextClick">
+        <!-- <div class="idx-btn-wrapper next" @click="nextClick">
           <button class="idx-btn next"></button>
         </div>
         <div class="idx-btn-wrapper prev" @click="prevClick">
           <button class="idx-btn prev"></button>
-        </div>
+        </div> -->
         <div id="container-screens"></div>
         <div class="user-card-wrapper" id="myVideo">
           <div class="hover-wrapper">나</div>
@@ -27,8 +24,10 @@
             />
           </div>
         </div>
-        <div class="user-card-wrapper" v-for="(user, i) in subs" :key="user.id">
-          <div class="hover-wrapper">이름{{ i }}</div>
+        <div class="user-card-wrapper" v-for="(user, i) in subs" :key="i">
+          <div class="hover-wrapper">
+            {{ getClientData(user) }}
+          </div>
           <div class="user-card">
             <user-video
               :stream-manager="user"
@@ -168,6 +167,12 @@ export default {
       return arr;
     };
 
+    const getClientData = (user) => {
+      let { connection } = user.stream;
+      let { clientData } = JSON.parse(connection.data);
+      return clientData;
+    };
+
     const toggleParticipants = () => {
       if (state.isOXOpen) state.isOXOpen = false;
       state.isParticipantsOpen = !state.isParticipantsOpen;
@@ -250,6 +255,7 @@ export default {
       publishScreenShare,
       leaveSession,
       updateMainVideoStreamManager,
+      getClientData,
     };
   },
   components: {

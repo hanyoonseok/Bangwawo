@@ -16,24 +16,22 @@
             'right-side': !state.isTopOpen && !state.isChatOpen,
           }"
         >
-          <div class="idx-btn-wrapper next" @click="nextClick">
+          <!-- <div class="idx-btn-wrapper next" @click="nextClick">
             <button class="idx-btn next"></button>
           </div>
           <div class="idx-btn-wrapper prev" @click="prevClick">
             <button class="idx-btn prev"></button>
-          </div>
+          </div> -->
           <div class="user-card-wrapper" id="myVideo">
             <div class="hover-wrapper">나</div>
             <div class="user-card" @click="updateMainVideoStreamManager(me)">
               <OvVideo :stream-manager="me" :onEmotion="true" />
             </div>
           </div>
-          <div
-            class="user-card-wrapper"
-            v-for="(user, i) in students"
-            :key="user.id"
-          >
-            <div class="hover-wrapper">이름{{ i }}</div>
+          <div class="user-card-wrapper" v-for="(user, i) in students" :key="i">
+            <div class="hover-wrapper">
+              {{ getClientData(user) }}
+            </div>
             <div class="user-card" @click="updateMainVideoStreamManager(user)">
               <OvVideo :stream-manager="user" />
             </div>
@@ -173,6 +171,12 @@ export default {
       }),
     });
 
+    const getClientData = (user) => {
+      let { connection } = user.stream;
+      let { clientData } = JSON.parse(connection.data);
+      return clientData;
+    };
+
     const getConnectionData = () => {
       console.log(props.me.stream);
       const { connection } = props.me.stream;
@@ -253,6 +257,7 @@ export default {
       getConnectionSubs,
       updateMainVideoStreamManager,
       leaveSession,
+      getClientData,
     };
   },
 
