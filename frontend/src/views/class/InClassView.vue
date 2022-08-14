@@ -30,6 +30,7 @@
       @activeMute="activeMute"
       @updateMainVideoStreamManager="updateMainVideoStreamManager"
       @leaveSession="leaveSession"
+      :volunteerNickname="volunteerNickname"
     />
   </section>
 </template>
