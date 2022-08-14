@@ -117,4 +117,16 @@ public class EnrolService {
         Long tmp = enrolRepository.countEnrolsByClasses_cId(cid);
         return tmp;
     }
+
+    @Transactional
+    public boolean updateRecording(EnrolDto enrolDto) throws Exception {
+        Enrol enrol = enrolRepository.findEnrolByClasses_cIdAndStudent_sId(enrolDto.getCId().getCId(), enrolDto.getSId().getSId());
+        enrol.setRecording(enrolDto.getRecording());
+        try{
+            enrolRepository.save(enrol);
+        }catch (Exception e){
+            return false;
+        }
+        return true;
+    }
 }
