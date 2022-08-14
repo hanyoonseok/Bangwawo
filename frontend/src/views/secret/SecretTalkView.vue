@@ -19,7 +19,7 @@
         :isPublisher="true"
       />
       <SecretCanvas
-        v-if="subscriber"
+        v-if="subscriber && state.subscribers.length > 0"
         :parts="subscriber"
         :class="{
           'user-card': true,
@@ -32,10 +32,10 @@
         :isSubscribeTalking="state.isSubscribeTalking"
         :isPublisher="false"
       />
+      <button @click="activeBackgroudSelect" class="changeBg-btn">
+        배경바꾸기
+      </button>
       <div class="background-area">
-        <button @click="activeBackgroudSelect" class="changeBg-btn">
-          배경바꾸기
-        </button>
         <div v-if="state.showBackgroundSelection" class="selection-area">
           <div class="bg-wrapper">
             <div v-for="(bg, index) in backgrounds" :key="index">
@@ -65,7 +65,6 @@
       </div>
     </div>
     <article class="btn-wrapper">
-      {{ state.mySessionId }}
       <button class="option-btn" @click="clickMute" v-if="state.audioState">
         <i class="fa-solid fa-microphone-slash"></i>
         &nbsp;음소거
@@ -150,7 +149,7 @@ export default {
       mainStreamManager: undefined,
       publisher: undefined,
       subscribers: [],
-      mySessionId: `SessionX`,
+      mySessionId: `${vid}with${sid}`,
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       joinedPlayerNumbers: 0,
       audioState: true,
@@ -168,7 +167,10 @@ export default {
     const backgrounds = [
       "./../../secretBg.png",
       "./../../secretBg2.png",
-      "./../../secretBg2.png",
+      "./../../secretBg3.png",
+      "./../../secretBg4.png",
+      "./../../secretBg5.png",
+      "./../../secretBg6.png",
     ];
 
     const changeBgImg = (bg) => {
@@ -305,7 +307,12 @@ export default {
       console.log("state", state);
       window.removeEventListener("beforeunload", leaveSession);
       console.log("대화종료 후 위험단어 수 : ", state.danger);
-      router.push({ name: "secret" });
+
+      if (user.value.userType === "student") {
+        router.push({ name: "secret" });
+      } else {
+        router.push({ name: "classlist" });
+      }
     };
 
     const getToken = (mySessionId) => {
@@ -425,14 +432,8 @@ export default {
           });
       },
     );
-
+    // 상대가 배경을 변경했다는 메세지 받기
     state.session.on("signal:bg-change", (event) => {
-      console.log(event.data); // Message
-      console.log("누구로부터왔니?------------", event.from); // Connection object of the sender
-      console.log(
-        "지금은누구니??------------",
-        state.publisher.stream.connection.connectionId,
-      );
       if (
         state.publisher.stream.connection.connectionId !==
         event.from.connectionId
