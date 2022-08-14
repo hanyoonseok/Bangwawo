@@ -14,6 +14,7 @@
       :screen="state.screenShareState"
       :cid="cid"
       @updateMainVideoStreamManager="updateMainVideoStreamManager"
+      :volunteerNickname="volunteerNickname"
     />
     <UserView
       v-if="user && user.userType === 'student' && state.session"
@@ -80,6 +81,7 @@ export default {
     const cid = route.params.cid;
     const vid = route.params.vid;
     const sid = route.params.sid;
+    const volunteerNickname = route.params.volunteerNickname;
 
     const state = reactive({
       OV: OV,
@@ -368,21 +370,22 @@ export default {
 
     const leaveSession = () => {
       console.log("세션을 종료시키고 싶슴다");
+      if (state.session == undefined) return;
+
+      console.log(state.publisher);
+      state.publisher.off();
+
       // --- Leave the session by calling 'disconnect' method over the Session object ---
       if (state.session) {
         state.session.disconnect();
       }
 
-      if (state.sessionScreen) {
-        state.sessionScreen.disconnect();
-      }
-
-      // state.session = undefined;
-      // state.sessionScreen = undefined;
-      // state.mainStreamManager = undefined;
-      // state.publisher = undefined;
-      // state.subscribers = [];
-      // state.OV = undefined;
+      state.session = undefined;
+      state.sessionScreen = undefined;
+      state.mainStreamManager = undefined;
+      state.publisher = undefined;
+      state.subscribers = [];
+      state.OV = undefined;
 
       if (state.isHost) {
         console.log("세션을 종료할건데 난 봉사자입니당");
@@ -632,6 +635,7 @@ export default {
       stopRecording,
       updateMainVideoStreamManager,
       user,
+      volunteerNickname,
     };
   },
 };

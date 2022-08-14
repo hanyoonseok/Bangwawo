@@ -375,6 +375,7 @@ export default {
               nickname: userInfo.nickname,
               cid: cid,
               vid: userInfo.vid,
+              volunteerNickname: classInfo.vid.nickname,
             },
           });
         })
@@ -399,6 +400,7 @@ export default {
               userType: userInfo.userType,
               sid: userInfo.sid,
               cid: cid,
+              volunteerNickname: classInfo.vid.nickname,
             },
           });
         })
