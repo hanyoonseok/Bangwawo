@@ -15,6 +15,9 @@
       :cid="cid"
       @updateMainVideoStreamManager="updateMainVideoStreamManager"
       :volunteerNickname="volunteerNickname"
+      :oxResult="oxResult"
+      :correctStudents="correctStudents"
+      :incorrectStudents="incorrectStudents"
     />
     <UserView
       v-if="user && user.userType === 'student' && state.session"
@@ -31,6 +34,8 @@
       @updateMainVideoStreamManager="updateMainVideoStreamManager"
       @leaveSession="leaveSession"
       :volunteerNickname="volunteerNickname"
+      :ox="state.oxState"
+      :oxData="state.oxData"
     />
   </section>
 </template>
@@ -118,9 +123,18 @@ export default {
         return user.value.userType === "volunteer" ? 12 : 4;
       }),
       dataIdx: 0,
-
+      oxState: false, //ox 시작 여부
+      oxData: {
+        question: null,
+        answer: null,
+      }, // ox 질문, 답 데이터
+      oxResult: false,
       screenShareState: false, //화면공유 여부
+      streamId: null,
     });
+
+    const correctStudents = [];
+    const incorrectStudents = [];
 
     // 화면 공유 상태 변화했는지 감지
     watch(
@@ -161,6 +175,15 @@ export default {
       }
     };
 
+    // ox 상태 변화했는지 감지
+    watch(
+      () => state.oxState,
+      () => {
+        console.log("ox 상태 변화했니??", state.oxState);
+      },
+      { deep: true },
+    );
+
     const joinSession = () => {
       console.log("join session");
       // 초기화
@@ -174,6 +197,9 @@ export default {
           state.isHost ? "봉사자다" : "학생이다",
         );
         console.log("봉사자인지 학생인지 파악하기 위해 도움이 될까..?", stream);
+        state.streamId = stream.streamId;
+        console.log("아이디 나와라", state.streamId);
+
         // 웹 캠 사용하면서 사용자가 학생일때만 sub에 들어감
         if (stream.typeOfVideo == "CAMERA") {
           const subscriber = state.session.subscribe(stream);
@@ -250,6 +276,29 @@ export default {
         leaveSession();
       });
 
+      // OX 시작
+      state.session.on("signal:start-question", (e) => {
+        console.log("=======OX 게임 시작, 질문=========", e);
+        state.oxData.question = e.data;
+      });
+      state.session.on("signal:start-answer", (e) => {
+        console.log("=======OX 게임 시작, 답=========", e);
+        state.oxState = true;
+        state.oxData.answer = e.data;
+      });
+      state.session.on("signal:ox-end", (e) => {
+        console.log("=======OX 게임 끝=========", e);
+        console.log("결과??", e.data);
+        if (e.data === "o") {
+          correctStudents.push({ sender: JSON.parse(e.from.data).clientData });
+        } else {
+          incorrectStudents.push({
+            sender: JSON.parse(e.from.data).clientData,
+          });
+        }
+        state.oxResult = true;
+      });
+
       console.log("sessionid", state.mySessionId);
       console.log("user name", state.myUserName);
       // 'getToken' method is simulating what your server-side should do.
@@ -318,10 +367,9 @@ export default {
     const recordId = ref(null);
 
     const startRecording = () => {
-      console.log(state.publisher.stream);
-      console.log(state.publisher.stream.streamId);
+      console.log("녹화", state.streamId);
       const recordings = {
-        session: state.publisher.stream.streamId,
+        session: state.streamId,
         name: cid,
         hasAudio: true,
         hasVideo: true,
@@ -659,6 +707,8 @@ export default {
       user,
       volunteerNickname,
       leaveSession,
+      correctStudents,
+      incorrectStudents,
     };
   },
 };

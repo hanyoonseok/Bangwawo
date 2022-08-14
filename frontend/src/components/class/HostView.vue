@@ -44,8 +44,19 @@
           :me="state.clientData"
           :subs="state.subs"
         />
-        <OXForm :state="state" :toggleOX="toggleOX" />
-        <OXResult :state="state" :toggleOX="toggleOX" />
+        <OXForm
+          :state="state"
+          :toggleOX="toggleOX"
+          :session="session"
+          @closeOX="closeOX"
+        />
+        <OXResult
+          :state="state"
+          :correctStudents="correctStudents"
+          :incorrectStudents="incorrectStudents"
+          :toggleOX="toggleOX"
+          v-if="oxResult"
+        />
         <ChatForm
           :state="state"
           :toggleChat="toggleChat"
@@ -123,6 +134,9 @@ export default {
     "chats",
     "screen",
     "cid",
+    "oxResult",
+    "correctStudents",
+    "incorrectStudents",
   ],
   setup(props, { emit }) {
     console.log("@@@@@@@@@@@@me", props.me);
@@ -237,6 +251,11 @@ export default {
       emit("updateMainVideoStreamManager", stream);
     };
 
+    const closeOX = () => {
+      state.isOXOpen = false;
+      state.isTopOpen = false;
+    };
+
     onMounted(() => {
       // const left = document.querySelector(".top-left");
       // if(left.classList.contains("host-12orless")){
@@ -256,6 +275,7 @@ export default {
       leaveSession,
       updateMainVideoStreamManager,
       getClientData,
+      closeOX,
     };
   },
   components: {

@@ -38,8 +38,8 @@
           </div>
         </article>
         <article class="top-article-left bot">
-          <StudentOX v-if="state.isOXOpen" />
-          <StudentInclass :publisher="volunteer" :screen="screen" />
+          <StudentOX v-if="oxState || ox" :oxData="oxData" @closeOX="closeOX" />
+          <StudentInclass :publisher="volunteer" :screen="screen" v-else />
         </article>
       </article>
 
@@ -119,6 +119,8 @@ export default {
     "me",
     "subs",
     "volunteerNickname",
+    "ox",
+    "oxData",
   ],
   setup(props, { emit }) {
     console.log("@@@@@@@@@@@@me", props.me);
@@ -126,6 +128,20 @@ export default {
 
     const volunteer = ref(null);
     const students = ref(null);
+
+    let oxState = ref(false);
+
+    watch(
+      () => props.ox,
+      () => {
+        if (props.ox) {
+          oxState = true;
+        } else {
+          oxState = false;
+        }
+      },
+      { deep: true },
+    );
 
     watch(
       () => props.subs,
@@ -245,6 +261,24 @@ export default {
       emit("leaveSession");
     };
 
+    const closeOX = (answer) => {
+      console.log("학생의 답??", answer);
+      oxState.value = false;
+      //학생이 맞았는지 틀렸는지 판단해서 signal 보내야함
+      props.session
+        .signal({
+          data: answer,
+          to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
+          type: "ox-end", // The type of message (optional)
+        })
+        .then(() => {
+          console.log("ox-end");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+
     //props.initCurrentStudents();
     return {
       state,
@@ -258,6 +292,8 @@ export default {
       updateMainVideoStreamManager,
       leaveSession,
       getClientData,
+      closeOX,
+      oxState,
     };
   },
 
