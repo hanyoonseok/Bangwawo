@@ -353,24 +353,26 @@ export default {
       state.OV = undefined;
       window.removeEventListener("beforeunload", leaveSession);
 
-      const emotionInfo = { ...store.state.root.emotions };
-      const emotionCnt = store.state.root.emotionCnt;
-      const keySet = Object.keys(emotionInfo);
-      for (let i = 0; i < keySet.length; i++) {
-        emotionInfo[keySet[i]] /= emotionCnt;
-      }
-      console.log(emotionInfo);
-      console.log(cid);
-      console.log(user.value.sid);
-      const payload = {
-        cid,
-        sid: user.value.sid,
-        emotion: emotionInfo,
-      };
+      if (user.value.userType === "student") {
+        const emotionInfo = { ...store.state.root.emotions };
+        const emotionCnt = store.state.root.emotionCnt;
+        const keySet = Object.keys(emotionInfo);
+        for (let i = 0; i < keySet.length; i++) {
+          emotionInfo[keySet[i]] /= emotionCnt;
+        }
+        console.log(emotionInfo);
+        console.log(cid);
+        console.log(user.value.sid);
+        const payload = {
+          cid,
+          sid: user.value.sid,
+          emotion: emotionInfo,
+        };
 
-      store.dispatch("root/storeEmotion", payload).then(() => {
-        store.commit("root/initEmotion");
-      });
+        store.dispatch("root/storeEmotion", payload).then(() => {
+          store.commit("root/initEmotion");
+        });
+      }
 
       store
         .dispatch("root/endClass", { cid: cid, vid: vid })

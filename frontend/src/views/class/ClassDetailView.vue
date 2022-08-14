@@ -343,6 +343,7 @@ export default {
               mySessionId: response.data,
               nickname: userInfo.nickname,
               userType: userInfo.userType,
+              cid: cid,
             },
           });
         })

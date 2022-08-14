@@ -48,7 +48,7 @@ export default {
       if (!this.onEmotion) return;
       const canvas = faceapi.createCanvasFromMedia(video);
 
-      document.body.append(canvas);
+      //document.body.append(canvas);
       // const displaySize = { width: video.width, height: video.height };
       const displaySize = { width: 300, height: 200 };
       faceapi.matchDimensions(canvas, displaySize);
