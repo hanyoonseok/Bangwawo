@@ -120,6 +120,7 @@ export default {
     "screen",
     "me",
     "subs",
+    "volunteerNickname",
   ],
   setup(props, { emit }) {
     console.log("@@@@@@@@@@@@me", props.me);
@@ -132,17 +133,20 @@ export default {
       () => props.subs,
       (cur) => {
         console.log("watch", cur);
-        if (cur.length > 0) {
-          volunteer.value = props.subs[0];
-          console.log("길이", props.subs.length);
-          const arr = [];
-          for (let index = 1; index < props.subs.length; index++) {
-            console.log("props.subs", props.subs[index]);
-            arr.push(props.subs[index]);
+        const arr = [];
+        for (const item of props.subs) {
+          const { connection } = item.stream;
+          const data = JSON.parse(connection.data);
+          const { clientData } = data;
+          if (clientData === props.volunteerNickname) {
+            volunteer.value = item;
+          } else {
+            arr.push(item);
           }
-          students.value = arr;
-          console.log("나머지 학생들이 담기나?", students.value);
         }
+        students.value = arr;
+        console.log("나머지 학생들이 담기나?", students.value);
+        console.log("봉사자가 담기나?", volunteer.value);
       },
       { deep: true },
     );
