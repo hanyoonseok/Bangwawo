@@ -276,6 +276,13 @@ export default {
             state.joinedPlayerNumbers++;
             state.session.publish(publisher);
             console.log("######################joinSession", state.session);
+            console.log(state.publisher.stream);
+            console.log(state.publisher.stream);
+            console.log(
+              Object.keys(state.publisher.stream.streamManager.stream),
+            );
+            const copy = { ...state.publisher.stream };
+            console.log(copy.streamId);
             if (!state.isHost) {
               console.log("학생이니까 녹화를 시작하겠다ㅏㅏ");
               startRecording(); // 녹화 시작
@@ -312,12 +319,14 @@ export default {
     const recordId = ref(null);
 
     const startRecording = () => {
+      console.log(state.publisher.stream);
+      console.log(state.publisher.stream.streamId);
       const recordings = {
-        session: state.mySessionId,
-        name: sid,
+        session: state.publisher.stream.streamId,
+        name: cid,
         hasAudio: true,
         hasVideo: true,
-        outputMode: "INDIVIDUAL", //개별녹화?
+        outputMode: "COMPOSED", //개별녹화?
         resolution: "1280x720",
         frameRate: 25,
         shmSize: 536870912,
@@ -384,7 +393,6 @@ export default {
       state.session = undefined;
       state.sessionScreen = undefined;
       state.mainStreamManager = undefined;
-      state.publisher = undefined;
       state.subscribers = [];
       state.OV = undefined;
 
@@ -395,6 +403,7 @@ export default {
           .then((response) => {
             console.log(response);
             window.removeEventListener("beforeunload", leaveSession);
+            state.publisher = undefined;
             router.push({ name: "feedbackSubmit", params: { cid: cid } });
           })
           .catch((error) => {
@@ -423,6 +432,19 @@ export default {
         store.dispatch("root/storeEmotion", payload).then(() => {
           store.commit("root/initEmotion");
         });
+
+        console.log(state.publisher.stream.streamId);
+        store
+          .dispatch("root/setStreamId", {
+            sid: { sid: sid },
+            cid: { cid: cid },
+            recording: state.publisher.stream.streamId,
+          })
+          .then((res) => {
+            console.log(res);
+            state.publisher = undefined;
+          });
+
         router.push({ name: "mypage" });
       }
     };
@@ -637,6 +659,7 @@ export default {
       updateMainVideoStreamManager,
       user,
       volunteerNickname,
+      leaveSession,
     };
   },
 };

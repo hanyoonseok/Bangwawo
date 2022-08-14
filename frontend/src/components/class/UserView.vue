@@ -131,8 +131,8 @@ export default {
 
     watch(
       () => props.subs,
-      (cur) => {
-        console.log("watch", cur);
+      () => {
+        // console.log("watch", cur);
         const arr = [];
         for (const item of props.subs) {
           const { connection } = item.stream;
@@ -145,8 +145,8 @@ export default {
           }
         }
         students.value = arr;
-        console.log("나머지 학생들이 담기나?", students.value);
-        console.log("봉사자가 담기나?", volunteer.value);
+        // console.log("나머지 학생들이 담기나?", students.value);
+        // console.log("봉사자가 담기나?", volunteer.value);
       },
       { deep: true },
     );
