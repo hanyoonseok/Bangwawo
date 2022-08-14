@@ -25,7 +25,7 @@
           <div class="user-card-wrapper" id="myVideo">
             <div class="hover-wrapper">나</div>
             <div class="user-card" @click="updateMainVideoStreamManager(me)">
-              <OvVideo :stream-manager="me" />
+              <OvVideo :stream-manager="me" :onEmotion="true" />
             </div>
           </div>
           <div
@@ -106,6 +106,7 @@ import ChatForm from "@/components/class/ChatForm.vue";
 import StudentOX from "@/components/class/StudentOX.vue";
 import StudentInclass from "@/components/class/StudentInclass.vue";
 import OvVideo from "./OvVideo";
+import { useStore } from "vuex";
 
 export default {
   name: "UserView",
@@ -147,6 +148,8 @@ export default {
     );
 
     console.log("~~~~~~~~~~~~~~~~~~~session", props.session);
+    const store = useStore();
+    store.commit("root/initEmotion");
 
     const state = reactive({
       isParticipantsOpen: false,

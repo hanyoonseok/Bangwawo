@@ -398,6 +398,7 @@ export default {
               nickname: userInfo.nickname,
               userType: userInfo.userType,
               sid: userInfo.sid,
+              cid: cid,
             },
           });
         })

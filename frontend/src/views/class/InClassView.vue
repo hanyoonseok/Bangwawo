@@ -401,7 +401,24 @@ export default {
         stopRecording();
         console.log("나는 학생!");
         window.removeEventListener("beforeunload", leaveSession);
+        const emotionInfo = { ...store.state.root.emotions };
+        const emotionCnt = store.state.root.emotionCnt;
+        const keySet = Object.keys(emotionInfo);
+        for (let i = 0; i < keySet.length; i++) {
+          emotionInfo[keySet[i]] /= emotionCnt;
+        }
+        console.log(emotionInfo);
+        console.log(cid);
+        console.log(user.value.sid);
+        const payload = {
+          cid,
+          sid: user.value.sid,
+          emotion: emotionInfo,
+        };
 
+        store.dispatch("root/storeEmotion", payload).then(() => {
+          store.commit("root/initEmotion");
+        });
         router.push({ name: "mypage" });
       }
     };

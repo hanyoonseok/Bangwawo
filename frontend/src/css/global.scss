@@ -102,6 +102,7 @@ body {
 textarea {
   resize: none;
   border: none;
+  font-family: $appleM !important;
   &:focus {
     outline: none;
   }
