@@ -13,9 +13,6 @@ public class NoticeDto {
 
     private VolunteerFrontDto volunteer; // 봉사자 정보
 
-//    @NotBlank
-//    private String message; // 통신 내용
-
     public NoticeDto(StudentFrontDto student, VolunteerFrontDto volunteer) {
         this.student = student;
         this.volunteer = volunteer;
