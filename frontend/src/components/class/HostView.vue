@@ -17,16 +17,24 @@
         <div class="idx-btn-wrapper prev" @click="prevClick">
           <button class="idx-btn prev"></button>
         </div>
-        <div id="container-screens">
-          <h4>화면 공유</h4>
-        </div>
+        <div id="container-screens"></div>
         <div class="user-card-wrapper" id="myVideo">
           <div class="hover-wrapper">나</div>
-          <div class="user-card"><user-video :stream-manager="me" /></div>
+          <div class="user-card">
+            <OvVideo
+              :stream-manager="me"
+              @click="updateMainVideoStreamManager(me)"
+            />
+          </div>
         </div>
         <div class="user-card-wrapper" v-for="(user, i) in subs" :key="user.id">
           <div class="hover-wrapper">이름{{ i }}</div>
-          <div class="user-card"><user-video :stream-manager="user" /></div>
+          <div class="user-card">
+            <user-video
+              :stream-manager="user"
+              @click="updateMainVideoStreamManager(user)"
+            />
+          </div>
         </div>
       </article>
 
@@ -75,8 +83,7 @@
           &nbsp;화면 공유 시작
         </button>
         <button class="option-btn" @click="toggleOX()">&nbsp;OX 퀴즈</button>
-
-        <a @click="endClass">
+        <a @click="leaveSession">
           <i class="fa-solid fa-xmark xmark"></i>
         </a>
       </article>
@@ -96,14 +103,13 @@
 </template>
 
 <script>
-import { reactive, computed } from "vue";
+import { reactive, computed, onMounted } from "vue";
 import ParticipantsList from "@/components/class/ParticipantsList.vue";
 import ChatForm from "@/components/class/ChatForm.vue";
 import OXForm from "@/components/class/OXForm.vue";
 import OXResult from "@/components/class/OXResult.vue";
 import UserVideo from "@/components/class/UserVideo.vue";
-import { useStore } from "vuex";
-import { useRouter } from "vue-router";
+import OvVideo from "./OvVideo";
 
 export default {
   name: "HostView",
@@ -112,7 +118,6 @@ export default {
     "currentUsers",
     "prevClick",
     "nextClick",
-    "leaveSession",
     "me",
     "subs",
     "session",
@@ -121,10 +126,8 @@ export default {
     "cid",
   ],
   setup(props, { emit }) {
-    const store = useStore();
-    const router = useRouter();
-    const userInfo = store.state.root.user;
-    console.log(props.subs);
+    console.log("@@@@@@@@@@@@me", props.me);
+    console.log("=============subs", props.subs);
 
     const state = reactive({
       isParticipantsOpen: false,
@@ -210,17 +213,32 @@ export default {
     };
 
     // 수업 종료
-    const endClass = () => {
-      store
-        .dispatch("root/endClass", { cid: props.cid, vid: userInfo.vid })
-        .then((response) => {
-          console.log(response);
-          router.push({ name: "feedbackSubmit", params: { cid: props.cid } });
+    const leaveSession = () => {
+      props.session
+        .signal({
+          data: 0,
+          to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
+          type: "leave-session", // The type of message (optional)
+        })
+        .then(() => {
+          console.log("leave-session");
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         });
     };
+
+    const updateMainVideoStreamManager = (stream) => {
+      emit("updateMainVideoStreamManager", stream);
+    };
+
+    onMounted(() => {
+      // const left = document.querySelector(".top-left");
+      // if(left.classList.contains("host-12orless")){
+      //   left
+      // }
+      // console.log("부모", left.parentNode.classList);
+    });
 
     return {
       state,
@@ -230,7 +248,8 @@ export default {
       activeVideo,
       activeMute,
       publishScreenShare,
-      endClass,
+      leaveSession,
+      updateMainVideoStreamManager,
     };
   },
   components: {
@@ -239,19 +258,9 @@ export default {
     OXForm,
     OXResult,
     UserVideo,
+    OvVideo,
   },
 };
 </script>
 
-<style scoped src="@/css/class.scss" lang="scss">
-/* .top-section ::v-deep(#container-screens video) {
-  width: 100px;
-  height: 100px;
-} */
-
-#container-screens video {
-  position: relative;
-  width: 100px;
-  height: 100px;
-}
-</style>
+<style scoped src="@/css/class.scss" lang="scss"></style>

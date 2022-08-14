@@ -148,6 +148,15 @@ export default {
         };
         reader.readAsDataURL(input.files[0]);
         formData.append("thumbnail", input.files[0]);
+        // // FormData의 key 확인
+        // for (let key of formData.keys()) {
+        //   console.log(key);
+        // }
+
+        // // FormData의 value 확인
+        // for (let value of formData.values()) {
+        //   console.log(value);
+        // }
       }
     };
 
@@ -158,10 +167,11 @@ export default {
         introduce: state.introduce,
         maxcnt: state.maxcnt,
         opened: state.classOpen,
-        thumbnail: state.thumbnail,
+        thumbnail: state.preview,
         enrolcnt: 0,
         etime: "",
         stime: "",
+        state: 0,
       };
 
       if (
@@ -183,24 +193,32 @@ export default {
             },
           })
           .then((response) => {
-            console.log(response.data);
+            // console.log(response.data);
             classDto.thumbnail = response.data;
           })
           .catch((error) => {
             console.log(error);
           });
+
         if (rid == -1) {
-          // 클래스 등록. (만약 요청을 통해 들어온것이 아니라면)
-          store
+          // 일반 클래스 등록. (만약 요청을 통해 들어온것이 아니라면)
+          await store
             .dispatch("root/registerClass", classDto)
             .then((response) => {
-              console.log(response);
-              router.push("/class/list");
+              console.log(response.data.cid);
+              if (classDto.opened) {
+                // 공개 수업이면 바로 세션으로 이동
+                classDto.state = 1; // 수업 진행중임
+                startClass(response.data.cid);
+              } else {
+                router.push("/class/list");
+              }
             })
             .catch((error) => {
               console.log(error);
             });
         } else {
+          // 요청한 클래스 등록
           await axios
             .post(`${process.env.VUE_APP_API_URL}/class/${rid}`, classDto)
             .then((response) => {
@@ -212,6 +230,31 @@ export default {
             });
         }
       }
+    };
+
+    const startClass = async (cid) => {
+      let sessionId = null;
+      await store
+        .dispatch("root/startVolunteerClass", { vid: user.vid, cid: cid })
+        .then((response) => {
+          console.log(response.data);
+          sessionId = response.data;
+          console.log(sessionId);
+          router.push({
+            name: "inclass",
+            params: {
+              mySessionId: sessionId,
+              userType: user.userType,
+              nickname: user.nickname,
+              cid: cid,
+              vid: user.vid,
+            },
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      console.log(sessionId);
     };
 
     const isConfirm = reactive({

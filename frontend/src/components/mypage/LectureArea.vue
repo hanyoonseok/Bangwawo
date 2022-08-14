@@ -18,9 +18,9 @@
           <div class="lecture-info">
             <div class="lecture-teacher">
               {{
-                user.userType === "parent"
-                  ? lecture.volunteer.nickname
-                  : lecture.vid.nickname
+                user.userType === "volunteer"
+                  ? lecture.vid.nickname
+                  : lecture.volunteer.nickname
               }}
               강사
             </div>
@@ -58,9 +58,9 @@
           <div class="lecture-info">
             <div class="lecture-teacher">
               {{
-                user.userType === "parent"
-                  ? lecture.volunteer.nickname
-                  : lecture.vid.nickname
+                user.userType === "volunteer"
+                  ? lecture.vid.nickname
+                  : lecture.volunteer.nickname
               }}
               강사
             </div>

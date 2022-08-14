@@ -22,22 +22,26 @@
           <div class="idx-btn-wrapper prev" @click="prevClick">
             <button class="idx-btn prev"></button>
           </div>
-          <div class="user-card-wrapper" id="container-screens">
+          <div class="user-card-wrapper" id="myVideo">
             <div class="hover-wrapper">나</div>
-            <div class="user-card"><OvVideo :stream-manager="me" /></div>
+            <div class="user-card" @click="updateMainVideoStreamManager(me)">
+              <OvVideo :stream-manager="me" :onEmotion="true" />
+            </div>
           </div>
           <div
             class="user-card-wrapper"
-            v-for="(user, i) in subs"
+            v-for="(user, i) in students"
             :key="user.id"
           >
             <div class="hover-wrapper">이름{{ i }}</div>
-            <div class="user-card"><OvVideo :stream-manager="user" /></div>
+            <div class="user-card" @click="updateMainVideoStreamManager(user)">
+              <OvVideo :stream-manager="user" />
+            </div>
           </div>
         </article>
         <article class="top-article-left bot">
           <StudentOX v-if="state.isOXOpen" />
-          <StudentInclass :publisher="me" v-else />
+          <StudentInclass :publisher="volunteer" :screen="screen" />
         </article>
       </article>
 
@@ -45,8 +49,15 @@
         <ParticipantsList
           :state="state"
           :toggleParticipants="toggleParticipants"
+          :me="state.clientData"
+          :subs="state.subs"
         />
-        <ChatForm :state="state" :toggleChat="toggleChat" />
+        <ChatForm
+          :state="state"
+          :toggleChat="toggleChat"
+          :session="session"
+          :chats="chats"
+        />
       </article>
     </section>
 
@@ -58,7 +69,7 @@
         </button>
         <button class="option-btn" @click="activeMute" v-else>
           <i class="fa-solid fa-microphone-slash"></i>
-          &nbsp;음소거
+          &nbsp;음소거 해제
         </button>
 
         <button class="option-btn" @click="activeVideo" v-if="state.videoState">
@@ -69,9 +80,9 @@
           <i class="fa-solid fa-video"></i>
           &nbsp;비디오 시작
         </button>
-        <router-link :to="{ name: 'mypage' }">
-          <i class="fa-solid fa-xmark xmark"></i
-        ></router-link>
+        <a @click="leaveSession">
+          <i class="fa-solid fa-xmark xmark"></i>
+        </a>
       </article>
 
       <article class="bot-right">
@@ -89,12 +100,13 @@
 </template>
 
 <script>
-import { reactive } from "vue";
+import { reactive, computed, ref, watch } from "vue";
 import ParticipantsList from "@/components/class/ParticipantsList.vue";
 import ChatForm from "@/components/class/ChatForm.vue";
 import StudentOX from "@/components/class/StudentOX.vue";
 import StudentInclass from "@/components/class/StudentInclass.vue";
 import OvVideo from "./OvVideo";
+import { useStore } from "vuex";
 
 export default {
   name: "UserView",
@@ -103,11 +115,42 @@ export default {
     "currentUsers",
     "prevClick",
     "nextClick",
-    "leaveSession",
+    "session",
+    "chats",
+    "screen",
     "me",
     "subs",
   ],
   setup(props, { emit }) {
+    console.log("@@@@@@@@@@@@me", props.me);
+    console.log("=============subs", props.subs);
+
+    const volunteer = ref(null);
+    const students = ref(null);
+
+    watch(
+      () => props.subs,
+      (cur) => {
+        console.log("watch", cur);
+        if (cur.length > 0) {
+          volunteer.value = props.subs[0];
+          console.log("길이", props.subs.length);
+          const arr = [];
+          for (let index = 1; index < props.subs.length; index++) {
+            console.log("props.subs", props.subs[index]);
+            arr.push(props.subs[index]);
+          }
+          students.value = arr;
+          console.log("나머지 학생들이 담기나?", students.value);
+        }
+      },
+      { deep: true },
+    );
+
+    console.log("~~~~~~~~~~~~~~~~~~~session", props.session);
+    const store = useStore();
+    store.commit("root/initEmotion");
+
     const state = reactive({
       isParticipantsOpen: false,
       isChatOpen: false,
@@ -115,7 +158,36 @@ export default {
       isOXOpen: false,
       videoState: true, // 비디오 on,off
       audioState: true, // 소리 on,off
+
+      clientData: computed(() => {
+        const { clientData } = getConnectionData();
+        return clientData;
+      }),
+
+      subs: computed(() => {
+        return getConnectionSubs();
+      }),
     });
+
+    const getConnectionData = () => {
+      console.log(props.me.stream);
+      const { connection } = props.me.stream;
+      return JSON.parse(connection.data);
+    };
+
+    const getConnectionSubs = () => {
+      console.log(props.subs);
+      const arr = [];
+      for (const item of props.subs) {
+        console.log("item", item);
+        let { connection } = item.stream;
+        let { clientData } = JSON.parse(connection.data);
+        arr.push(clientData);
+      }
+      console.log("arr", arr);
+
+      return arr;
+    };
 
     const toggleParticipants = () => {
       state.isParticipantsOpen = !state.isParticipantsOpen;
@@ -156,13 +228,27 @@ export default {
       emit("activeMute", state.audioState);
     };
 
+    const updateMainVideoStreamManager = (stream) => {
+      emit("updateMainVideoStreamManager", stream);
+    };
+
+    // 수업 종료
+    const leaveSession = () => {
+      emit("leaveSession");
+    };
+
     //props.initCurrentStudents();
     return {
       state,
+      volunteer,
+      students,
       toggleParticipants,
       toggleChat,
       activeVideo,
       activeMute,
+      getConnectionSubs,
+      updateMainVideoStreamManager,
+      leaveSession,
     };
   },
 

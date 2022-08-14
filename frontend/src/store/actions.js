@@ -115,8 +115,7 @@ export const endClass = ({ state }, payload) => {
 export const registerImage = ({ state }, payload) => {
   console.log("registerImage", state, payload);
   const url = `/class/image`;
-  const formData = payload;
-  return axios.post(url, formData, {
+  return axios.post(url, payload, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -248,4 +247,16 @@ export const getRecordVideo = ({ state }, recordId) => {
     },
   };
   return axios.get(url, headers);
+};
+// 좋아요 추가
+export const addLikeRequest = ({ state }, payload) => {
+  console.log("addLikeRequest", state, payload);
+  const url = `/likes`;
+  return axios.post(url, payload);
+};
+
+export const storeEmotion = ({ state }, payload) => {
+  console.log("storeEmotion", state, payload);
+  const url = `/enrol/emotion`;
+  return axios.put(url, payload);
 };

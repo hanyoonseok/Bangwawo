@@ -3,7 +3,7 @@
     <div class="guide-volunteer">
       <img src="@/assets/guide-volunteer.png" />
       <div class="guide">
-        안녕하세요 봉사자님. <br />자기소개를 입력해주세요.
+        안녕하세요 {{ nickname }}님. <br />자기소개를 입력해주세요.
       </div>
     </div>
     <textarea
