@@ -146,6 +146,15 @@ export default {
         };
         reader.readAsDataURL(input.files[0]);
         formData.append("thumbnail", input.files[0]);
+        // // FormData의 key 확인
+        // for (let key of formData.keys()) {
+        //   console.log(key);
+        // }
+
+        // // FormData의 value 확인
+        // for (let value of formData.values()) {
+        //   console.log(value);
+        // }
       }
     };
 
@@ -156,7 +165,7 @@ export default {
         introduce: state.introduce,
         maxcnt: state.maxcnt,
         opened: state.classOpen,
-        thumbnail: state.thumbnail,
+        thumbnail: state.preview,
         enrolcnt: 0,
         etime: "",
         stime: "",

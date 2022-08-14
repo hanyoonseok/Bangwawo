@@ -343,6 +343,7 @@
       height: 80px;
     }
     .left {
+      flex: 6.5;
       .lecture-area {
         position: relative;
         video {
@@ -351,7 +352,8 @@
           transition: all 300ms ease;
         }
         .slide-open {
-          width: 700px;
+          // width: 700px;
+          width: 100%;
         }
         i {
           position: absolute;
@@ -374,11 +376,14 @@
       transition: all 200ms ease;
     }
     .right {
+      flex: 3.5;
       margin-left: 50px;
+      width: 400px;
       transition: all 300ms ease;
+      padding-right: 20px;
       .slider {
         overflow-x: hidden;
-        width: 400px;
+        width: 100%;
         .feedback-area {
           @include flexColumn;
           box-shadow: none;
@@ -394,14 +399,70 @@
             }
           }
           .feedback-info {
-            max-width: 400px;
-            width: 400px;
+            // max-width: 400px;
+            width: 100%; //400px;
             margin-top: 25px;
             height: 400px;
             background-color: #fbfbfb;
             border-radius: 20px;
+            position: relative;
+            canvas {
+              width: 100%;
+              height: 100%;
+            }
+            .chart-btn {
+              position: absolute;
+              top: 0;
+              width: 70px;
+              height: 30px;
+              border-radius: 10px;
+              color: $white;
+              font-family: $appleM;
+              font-weight: bold;
+              &.blue {
+                background-color: skyblue;
+              }
+              &.red {
+                background-color: lightcoral;
+              }
+              &.green {
+                background-color: green;
+              }
+            }
             .feedback-box {
-              padding: 35px;
+              padding: 20px 35px 0 35px;
+            }
+            .emotion-feedback-box {
+              height: 100%;
+              width: 100%;
+              border-radius: 20px;
+              padding: 35px 35px 0 35px;
+              overflow: hidden;
+              display: flex;
+              flex-wrap: nowrap;
+              div {
+                width: 100%;
+              }
+              .emotion-box {
+                @include flexAround;
+                flex-wrap: wrap;
+                width: 100%;
+                transition: 0.3s ease;
+                span {
+                  @include flexColumn;
+                  align-items: center;
+                  color: $grey;
+                  font-size: 12px;
+                }
+                img {
+                  width: 80px;
+                  height: 80px;
+                  margin: 15px 0;
+                }
+                img + img {
+                  margin-left: 10px;
+                }
+              }
             }
             .detail-box {
               padding: 35px;

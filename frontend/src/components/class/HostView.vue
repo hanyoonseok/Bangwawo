@@ -22,11 +22,21 @@
         </div>
         <div class="user-card-wrapper" id="myVideo">
           <div class="hover-wrapper">나</div>
-          <div class="user-card"><user-video :stream-manager="me" /></div>
+          <div class="user-card">
+            <user-video
+              :stream-manager="me"
+              @click="updateMainVideoStreamManager(me)"
+            />
+          </div>
         </div>
         <div class="user-card-wrapper" v-for="(user, i) in subs" :key="user.id">
           <div class="hover-wrapper">이름{{ i }}</div>
-          <div class="user-card"><user-video :stream-manager="user" /></div>
+          <div class="user-card">
+            <user-video
+              :stream-manager="user"
+              @click="updateMainVideoStreamManager(user)"
+            />
+          </div>
         </div>
       </article>
 
@@ -75,8 +85,7 @@
           &nbsp;화면 공유 시작
         </button>
         <button class="option-btn" @click="toggleOX()">&nbsp;OX 퀴즈</button>
-
-        <a @click="endClass">
+        <a @click="leaveSession">
           <i class="fa-solid fa-xmark xmark"></i>
         </a>
       </article>
@@ -102,8 +111,6 @@ import ChatForm from "@/components/class/ChatForm.vue";
 import OXForm from "@/components/class/OXForm.vue";
 import OXResult from "@/components/class/OXResult.vue";
 import UserVideo from "@/components/class/UserVideo.vue";
-import { useStore } from "vuex";
-import { useRouter } from "vue-router";
 
 export default {
   name: "HostView",
@@ -112,7 +119,6 @@ export default {
     "currentUsers",
     "prevClick",
     "nextClick",
-    "leaveSession",
     "me",
     "subs",
     "session",
@@ -121,10 +127,8 @@ export default {
     "cid",
   ],
   setup(props, { emit }) {
-    const store = useStore();
-    const router = useRouter();
-    const userInfo = store.state.root.user;
-    console.log(props.subs);
+    console.log("@@@@@@@@@@@@me", props.me);
+    console.log("=============subs", props.subs);
 
     const state = reactive({
       isParticipantsOpen: false,
@@ -210,16 +214,25 @@ export default {
     };
 
     // 수업 종료
-    const endClass = () => {
-      store
-        .dispatch("root/endClass", { cid: props.cid, vid: userInfo.vid })
-        .then((response) => {
-          console.log(response);
-          router.push({ name: "feedbackSubmit", params: { cid: props.cid } });
+    const leaveSession = (props) => {
+      props.session
+        .signal({
+          data: 0,
+          to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
+          type: "end", // The type of message (optional)
+        })
+        .then(() => {
+          console.log("end");
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         });
+
+      emit("leaveSession");
+    };
+
+    const updateMainVideoStreamManager = (stream) => {
+      emit("updateMainVideoStreamManager", stream);
     };
 
     return {
@@ -230,7 +243,8 @@ export default {
       activeVideo,
       activeMute,
       publishScreenShare,
-      endClass,
+      leaveSession,
+      updateMainVideoStreamManager,
     };
   },
   components: {

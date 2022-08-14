@@ -159,12 +159,12 @@ export default {
 
     //클래스 오픈 알람
     const getClassOpenAlarm = async () => {
-      await axios
-        .get(`${process.env.VUE_APP_API_URL}/likes/${user.value.sid}`)
-        .then((response) => {
-          console.log("좋아요버튼", response.data.requsest);
-          notices.value = response.data.requsest;
-        });
+      // await axios
+      //   .get(`${process.env.VUE_APP_API_URL}/likes/${user.value.sid}`)
+      //   .then((response) => {
+      //     // console.log("좋아요버튼", response.data.requsest);
+      //     notices.value = response.data.requsest;
+      //   });
     };
     console.log(user);
     if (user.value && user.value.userType === "student") {

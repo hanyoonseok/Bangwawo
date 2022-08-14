@@ -40,6 +40,7 @@ export default {
     const currentMsg = ref("");
     const sendMsg = () => {
       console.log(currentMsg.value);
+      console.log("session", props.session);
       props.session
         .signal({
           data: currentMsg.value, // Any string (optional)
