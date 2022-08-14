@@ -254,6 +254,7 @@ export default {
           console.log(response.data);
           classInfo.value = response.data;
           console.log("수업 상태", classInfo.value.state);
+          console.log(classInfo.value);
         })
         .catch((error) => {
           console.log(error);
@@ -375,7 +376,7 @@ export default {
               nickname: userInfo.nickname,
               cid: cid,
               vid: userInfo.vid,
-              volunteerNickname: classInfo.vid.nickname,
+              volunteerNickname: classInfo.value.vid.nickname,
             },
           });
         })
@@ -400,7 +401,7 @@ export default {
               userType: userInfo.userType,
               sid: userInfo.sid,
               cid: cid,
-              volunteerNickname: classInfo.vid.nickname,
+              volunteerNickname: classInfo.value.vid.nickname,
             },
           });
         })
