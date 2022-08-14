@@ -1,6 +1,8 @@
 package com.ssafy.banggawawo.controller;
 
 import com.ssafy.banggawawo.domain.dto.ClassDto;
+import com.ssafy.banggawawo.domain.dto.VolunteerDto;
+import com.ssafy.banggawawo.domain.dto.VolunteerFrontDto;
 import com.ssafy.banggawawo.domain.entity.Likes;
 import com.ssafy.banggawawo.domain.entity.Request;
 import com.ssafy.banggawawo.service.ClassService;
@@ -19,9 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -108,12 +108,16 @@ public class ClassController {
         return new ResponseEntity<List<ClassDto>>(list, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "수업 하나 가져오기")
+    @ApiOperation(value = "수업 하나 가져오기", notes="수업id(cid)를 받아 수업 정보를 불러온다.\n 반환값 : class(수업정보), vCharacter(봉사자캐릭터정보)")
     @GetMapping("/{id}")
     public ResponseEntity<?> findByCId(@PathVariable("id") Long id) throws Exception {
+        Map<String, Object> response = new HashMap<String, Object>();
         ClassDto classDto = classService.findByCId(id);
         classDto.setEnrolcnt(Integer.parseInt(enrolService.countEnrolsByClassId(classDto.getCId())+""));
-        return new ResponseEntity<>(classDto, HttpStatus.OK);
+        response.put("class", classDto);
+        VolunteerFrontDto volunteerFrontDto = new VolunteerFrontDto(new VolunteerDto(classDto.getVId()));
+        response.put("vCharacter", volunteerFrontDto.getCharacter());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @ApiOperation(value = "수업 삭제")
