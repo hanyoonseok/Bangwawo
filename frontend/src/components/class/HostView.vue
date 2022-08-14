@@ -21,7 +21,7 @@
         <div class="user-card-wrapper" id="myVideo">
           <div class="hover-wrapper">나</div>
           <div class="user-card">
-            <user-video
+            <OvVideo
               :stream-manager="me"
               @click="updateMainVideoStreamManager(me)"
             />
@@ -109,6 +109,7 @@ import ChatForm from "@/components/class/ChatForm.vue";
 import OXForm from "@/components/class/OXForm.vue";
 import OXResult from "@/components/class/OXResult.vue";
 import UserVideo from "@/components/class/UserVideo.vue";
+import OvVideo from "./OvVideo";
 
 export default {
   name: "HostView",
@@ -257,6 +258,7 @@ export default {
     OXForm,
     OXResult,
     UserVideo,
+    OvVideo,
   },
 };
 </script>

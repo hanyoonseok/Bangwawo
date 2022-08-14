@@ -28,6 +28,7 @@
       @activeVideo="activeVideo"
       @activeMute="activeMute"
       @updateMainVideoStreamManager="updateMainVideoStreamManager"
+      @leaveSession="leaveSession"
     />
   </section>
 </template>

@@ -30,7 +30,7 @@
           </div>
           <div
             class="user-card-wrapper"
-            v-for="(user, i) in otherStudent"
+            v-for="(user, i) in students"
             :key="user.id"
           >
             <div class="hover-wrapper">이름{{ i }}</div>
@@ -80,9 +80,9 @@
           <i class="fa-solid fa-video"></i>
           &nbsp;비디오 시작
         </button>
-        <router-link :to="{ name: 'mypage' }">
-          <i class="fa-solid fa-xmark xmark"></i
-        ></router-link>
+        <a @click="leaveSession">
+          <i class="fa-solid fa-xmark xmark"></i>
+        </a>
       </article>
 
       <article class="bot-right">
@@ -114,7 +114,6 @@ export default {
     "currentUsers",
     "prevClick",
     "nextClick",
-    "leaveSession",
     "session",
     "chats",
     "screen",
@@ -126,6 +125,7 @@ export default {
     console.log("=============subs", props.subs);
 
     const volunteer = ref(null);
+    const students = ref(null);
 
     watch(
       () => props.subs,
@@ -133,27 +133,20 @@ export default {
         console.log("watch", cur);
         if (cur.length > 0) {
           volunteer.value = props.subs[0];
-          otherStudent();
+          console.log("길이", props.subs.length);
+          const arr = [];
+          for (let index = 1; index < props.subs.length; index++) {
+            console.log("props.subs", props.subs[index]);
+            arr.push(props.subs[index]);
+          }
+          students.value = arr;
+          console.log("나머지 학생들이 담기나?", students.value);
         }
       },
       { deep: true },
     );
-    console.log("첫번째ㅐㅐ", props.subs[0]);
-    for (let index = 0; index < props.subs.length; index++) {
-      console.log(props.subs[index]);
-    }
-    console.log("~~~~~~~~~~~~~~~~~~~session", props.session);
 
-    // const volunteer = props.subs[0];
-    console.log("봉사자 정보야 제발 들어와", volunteer);
-    const otherStudent = () => {
-      const arr = [];
-      for (let index = 1; index < props.subs.length; index++) {
-        arr.push(props.subs[index]);
-      }
-      console.log("나머지 학생들이 담기나?", arr);
-      return arr;
-    };
+    console.log("~~~~~~~~~~~~~~~~~~~session", props.session);
 
     const state = reactive({
       isParticipantsOpen: false,
@@ -236,17 +229,23 @@ export default {
       emit("updateMainVideoStreamManager", stream);
     };
 
+    // 수업 종료
+    const leaveSession = () => {
+      emit("leaveSession");
+    };
+
     //props.initCurrentStudents();
     return {
       state,
       volunteer,
+      students,
       toggleParticipants,
       toggleChat,
       activeVideo,
       activeMute,
       getConnectionSubs,
       updateMainVideoStreamManager,
-      otherStudent,
+      leaveSession,
     };
   },
 

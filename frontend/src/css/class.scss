@@ -90,11 +90,17 @@
     }
 
     .user-card-wrapper {
-      width: 100%;
-      height: 50%;
+      width: 95%;
+      margin: auto;
+      height: 95%;
       .user-card {
         width: 100%;
         height: 100%;
+
+        > div {
+          width: 100%;
+          height: 100%;
+        }
       }
       position: relative;
 
