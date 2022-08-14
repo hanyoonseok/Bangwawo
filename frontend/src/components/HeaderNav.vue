@@ -151,10 +151,9 @@
 </template>
 
 <script>
-import { onMounted, ref, getCurrentInstance, reactive, watch } from "vue";
+import { onMounted, ref, getCurrentInstance, reactive } from "vue";
 import { useStore } from "vuex";
 import axios from "axios";
-import { watchEffect } from "@vue/runtime-core";
 import RequestPostCanvas from "@/components/class/RequestPostCanvas.vue";
 import { useRouter } from "vue-router";
 
@@ -179,7 +178,6 @@ export default {
     });
     let isNoticeOpen = ref(false);
 
-    let isTalkable = ref(store.state.root.user.talkable);
     let isProfileOpen = ref(false);
 
     const notices = ref("");
@@ -293,16 +291,12 @@ export default {
     };
     console.log(user.value);
 
-    watch(
-      () => store.state.root.user.talkable,
-      (cur) => {
-        isTalkable.value = cur;
-        console.log("cur-----------------------------", cur);
-      },
-    );
-
     // 봉사자일 경우 socket 알람을 받는다.
-    if (user.value && user.value.userType === "volunteer" && isTalkable.value) {
+    if (
+      user.value &&
+      user.value.userType === "volunteer" &&
+      user.value.talkable
+    ) {
       $soketio.on("newMessage", (data) => {
         state.isMatchingModal = true;
         store.dispatch("root/getStudentInfo", data).then((res) => {
@@ -343,13 +337,6 @@ export default {
           console.log(res);
         });
     };
-    watchEffect(() => {
-      // pretend you have a getData getter in store
-      const data = store.state.root.user.talkable;
-      if (data === null) return;
-      console.log(data);
-      isTalkable.value = data;
-    });
 
     return {
       user,
@@ -362,7 +349,6 @@ export default {
       acceptMatching,
       readAlaramParent,
       rejectMatching,
-      isTalkable,
       notices,
       getChildrenDangerAlarm,
       checkAlarm,

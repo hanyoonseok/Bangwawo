@@ -8,7 +8,7 @@
       <input
         type="text"
         placeholder="찾고 싶은 수업을 입력하세요."
-        @keyup="searchRequest()"
+        @keyup="searchRequest"
         @input="changeKeyword"
       />
       <button class="search-btn">
@@ -212,8 +212,8 @@ export default {
           .then((response) => {
             const data = response.data;
             console.log("검색결과", data.requestsList);
-
             state.requestList = data.requestsList;
+            pages.total = state.requestList.length;
           });
       }
     };
