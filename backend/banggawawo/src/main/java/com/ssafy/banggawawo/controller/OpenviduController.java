@@ -151,11 +151,4 @@ public class OpenviduController {
         }
         return new ResponseEntity<>(status);
     }
-
-    @ApiOperation("영상 가져오기")
-    @GetMapping("/recording/{sessionid}/{streamid}/{connectionid}")
-    public ResponseEntity<?> getSessionRecordingWebM(@PathVariable String sessionid, @PathVariable String streamid, @PathVariable String connectionid) throws Exception {
-        
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 }
