@@ -147,9 +147,10 @@
         </div>
       </div>
       <!-- 강사 프로필 -->
-      <div class="profile">
-        <div class="profile-img">
-          <img src="@/assets/profile.png" alt="프로필이미지" />
+
+      <div class="profile" v-if="isProfileOpen">
+        <div class="profile-canvas-wrapper">
+          <ProfileCanvas :childColor="userColor" />
         </div>
         <div class="profile-info">
           <div class="info-box">
@@ -180,6 +181,7 @@
 
 <script>
 import HeaderNav from "@/components/HeaderNav.vue";
+import ProfileCanvas from "@/components/mypage/ProfileCanvas.vue";
 import { reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -188,6 +190,7 @@ export default {
   name: "ClassDetailView",
   components: {
     HeaderNav,
+    ProfileCanvas,
   },
   setup() {
     const route = useRoute();
@@ -197,7 +200,9 @@ export default {
     console.log("userInfo", userInfo);
     const cid = route.params.cid;
 
+    let userColor = ref(null);
     const classInfo = ref(null);
+    let isProfileOpen = ref(false);
 
     // 수업 상세정보 가져오기
     const getClassDetail = () => {
@@ -205,8 +210,8 @@ export default {
         .dispatch("root/getClassDetail", cid)
         .then((response) => {
           console.log(response.data);
-          classInfo.value = response.data;
-          console.log("수업 상태", classInfo.value.state);
+          classInfo.value = response.data.class;
+          userColor.value = response.data.vCharacter;
         })
         .catch((error) => {
           console.log(error);
@@ -264,17 +269,11 @@ export default {
     });
 
     const showProfile = () => {
-      if (document.querySelector(".profile").style.display === "block") {
-        document.querySelector(".profile").style.display = "none";
-      } else {
-        document.querySelector(".profile").style.display = "block";
-      }
+      isProfileOpen.value = true;
     };
 
     const hideProfile = () => {
-      if (document.querySelector(".profile").style.display === "block") {
-        document.querySelector(".profile").style.display = "none";
-      }
+      isProfileOpen.value = false;
     };
     const isConfirm = reactive({
       status: false,
@@ -355,6 +354,7 @@ export default {
       classInfo,
       user,
       userInfo,
+      userColor,
       showProfile,
       hideProfile,
       enrolClass,
@@ -363,6 +363,7 @@ export default {
       startClass,
       sessionId,
       entranceClass,
+      isProfileOpen,
     };
   },
 };
