@@ -8,9 +8,11 @@ import com.ssafy.banggawawo.repository.ClassRepository;
 import com.ssafy.banggawawo.repository.LikesRepository;
 import com.ssafy.banggawawo.repository.RequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,13 +51,9 @@ public class RequestService {
         int size  =  requestRepository.findAll().size()/6;
         int remain =requestRepository.findAll().size()%6;
         HashMap<String, Object> result = new HashMap<String, Object>();
-        if(remain ==0) {
-            Page<Request> requestsList = requestRepository.findAll(PageRequest.of(size - (scrollcnt - 1), 6));
+            Page<Request> requestsList = requestRepository.findAll(PageRequest.of(scrollcnt - 1, 6,Sort.by("rId").descending()));
             result.put("requestsList", requestsList);
-        }else{
-            Page<Request> requestsList = requestRepository.findAll(PageRequest.of(size-scrollcnt+1, 6));
-            result.put("requestsList", requestsList);
-        }
+
         return result;
     }
 
