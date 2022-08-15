@@ -102,15 +102,4 @@ public class EnrolController {
         );
         return new ResponseEntity<>(enrolService.updateEmotionAndRecording(cid, sid, emotion, recording),HttpStatus.OK);
     }
-
-    @ApiOperation("recording에 streamid 저장")
-    @PutMapping("/recording")
-    public ResponseEntity<?> updateRecording(@RequestBody EnrolDto enrolDto) throws Exception {
-        HttpStatus status = HttpStatus.OK;
-        if(!enrolService.updateRecording(enrolDto)){
-            status = HttpStatus.NOT_ACCEPTABLE;
-        }
-        return new ResponseEntity<>(status);
-    }
-
 }
