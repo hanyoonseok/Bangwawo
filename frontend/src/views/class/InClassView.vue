@@ -436,7 +436,7 @@ export default {
           return;
         })
         .catch(() => {
-          console.log("아직 unzip 안됐네 다시 돌아가");
+          console.log("아직 unzip 안됐네 다시 돌아가!!!");
           waitUntilUnzip();
         });
     };
@@ -487,7 +487,7 @@ export default {
         const emotionInfo = { ...store.state.root.emotions };
         const emotionCnt = store.state.root.emotionCnt;
         const keySet = Object.keys(emotionInfo);
-        if (emotionCnt != 0) {
+        if (emotionCnt > 0) {
           for (let i = 0; i < keySet.length; i++) {
             emotionInfo[keySet[i]] /= emotionCnt;
           }

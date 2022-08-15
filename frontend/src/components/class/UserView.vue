@@ -104,7 +104,6 @@ import ChatForm from "@/components/class/ChatForm.vue";
 import StudentOX from "@/components/class/StudentOX.vue";
 import StudentInclass from "@/components/class/StudentInclass.vue";
 import OvVideo from "./OvVideo";
-import { useStore } from "vuex";
 
 export default {
   name: "UserView",
@@ -166,8 +165,6 @@ export default {
     );
 
     console.log("~~~~~~~~~~~~~~~~~~~session", props.session);
-    const store = useStore();
-    store.commit("root/initEmotion");
 
     const state = reactive({
       isParticipantsOpen: false,
@@ -190,6 +187,7 @@ export default {
     const getClientData = (user) => {
       let { connection } = user.stream;
       let { clientData } = JSON.parse(connection.data);
+
       return clientData;
     };
 
