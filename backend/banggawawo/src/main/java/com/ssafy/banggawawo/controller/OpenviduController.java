@@ -145,10 +145,12 @@ public class OpenviduController {
     @GetMapping("/recording/unzip/{sessionid}/{name}")
     public ResponseEntity<?> unzipSessionRecordingZip(@PathVariable String sessionid, @PathVariable String name) throws Exception {
         FileUtil fileUtil = new FileUtil();
-        HttpStatus status = HttpStatus.OK;
-        if(!fileUtil.unzipFile("/opt/openvidu/recordings/"+sessionid, name, "zip", "/opt/openvidu/recordings/"+sessionid)){
-            status = HttpStatus.NOT_ACCEPTABLE;
+        if(!fileUtil.isExist("/opt/openvidu/recordings/"+sessionid, name, "zip")){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(status);
+        if(!fileUtil.unzipFile("/opt/openvidu/recordings/"+sessionid, name, "zip", "/opt/openvidu/recordings/"+sessionid)){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

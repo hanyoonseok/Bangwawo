@@ -87,4 +87,11 @@ public class FileUtil {
         return normalizePath;
     }
 
+    public static boolean isExist(String sourceStr, String fileName, String ext) throws Exception{
+        File file = new File(sourceStr+"/"+fileName+"."+ext);
+        if(file.exists()){
+            return true;
+        }
+        return false;
+    }
 }
