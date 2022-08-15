@@ -437,7 +437,9 @@ export default {
         })
         .catch(() => {
           console.log("아직 unzip 안됐네 다시 돌아가!!!");
-          waitUntilUnzip();
+          setInterval(() => {
+            waitUntilUnzip();
+          }, 1000);
         });
     };
 
@@ -497,24 +499,16 @@ export default {
         console.log(user.value.sid);
         const payload = {
           cid,
-          sid: user.value.sid,
+          sid,
           emotion: emotionInfo,
+          recording: `${sessionId}/${state.publisher.stream.streamId}`,
         };
 
-        store.dispatch("root/storeEmotion", payload);
+        store.dispatch("root/setStudentFeedbackInfo", payload);
         store.commit("root/initEmotion");
 
         console.log(state.publisher.stream.streamId);
-        store
-          .dispatch("root/setStreamId", {
-            sid: { sid: sid },
-            cid: { cid: cid },
-            recording: `${sessionId}/${state.publisher.stream.streamId}`,
-          })
-          .then((res) => {
-            console.log(res);
-            state.publisher = undefined;
-          });
+        state.publisher = undefined;
         // store
         //   .dispatch("root/unzipRecords", { sessionId, name: cid })
         //   .then((res) => {

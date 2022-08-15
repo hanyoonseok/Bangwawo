@@ -198,8 +198,8 @@ export const addLikeRequest = ({ state }, payload) => {
   return axios.post(url, payload);
 };
 
-export const storeEmotion = ({ state }, payload) => {
-  console.log("storeEmotion", state, payload);
+export const setStudentFeedbackInfo = ({ state }, payload) => {
+  console.log("setStudentFeedbackInfo", state, payload);
   const url = `/enrol/emotion`;
   return axios.put(url, payload);
 };
