@@ -278,7 +278,7 @@ export default {
     const startRecording = () => {
       const recordings = {
         session: state.mySessionId,
-        name: "dk",
+        name: cid,
         hasAudio: true,
         hasVideo: true,
         outputMode: "INDIVIDUAL", //개별녹화?
@@ -307,14 +307,15 @@ export default {
         .then((response) => {
           console.log("===== 녹화 시작 =====", response.data);
           recordId.value = response.data.id;
+          console.log("@@@@@ start record Id : ", recordId.value);
         })
         .catch((error) => console.error(error));
     };
 
-    const stopRecording = () => {
+    const stopRecording = async () => {
       console.log("stop");
       console.log(recordId.value);
-      axios
+      await axios
         .post(
           OPENVIDU_SERVER_URL +
             "/openvidu/api/recordings/stop/" +
@@ -351,14 +352,32 @@ export default {
       state.publisher = undefined;
       state.subscribers = [];
       state.OV = undefined;
-      window.removeEventListener("beforeunload", leaveSession);
 
-      if (user.value.userType === "student") {
+      if (state.isHost) {
+        console.log("세션을 종료할건데 난 봉사자입니당");
+        store
+          .dispatch("root/endClass", { cid: cid, vid: vid })
+          .then((response) => {
+            console.log(response);
+            window.removeEventListener("beforeunload", leaveSession);
+            state.publisher = undefined;
+            router.push({ name: "feedbackSubmit", params: { cid: cid } });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        // 녹화 끝
+        stopRecording();
+        console.log("나는 학생!");
+        window.removeEventListener("beforeunload", leaveSession);
         const emotionInfo = { ...store.state.root.emotions };
         const emotionCnt = store.state.root.emotionCnt;
         const keySet = Object.keys(emotionInfo);
-        for (let i = 0; i < keySet.length; i++) {
-          emotionInfo[keySet[i]] /= emotionCnt;
+        if (emotionCnt != 0) {
+          for (let i = 0; i < keySet.length; i++) {
+            emotionInfo[keySet[i]] /= emotionCnt;
+          }
         }
         console.log(emotionInfo);
         console.log(cid);
@@ -369,9 +388,8 @@ export default {
           emotion: emotionInfo,
         };
 
-        store.dispatch("root/storeEmotion", payload).then(() => {
-          store.commit("root/initEmotion");
-        });
+        store.dispatch("root/storeEmotion", payload);
+        store.commit("root/initEmotion");
       }
 
       store
