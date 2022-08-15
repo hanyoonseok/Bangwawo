@@ -79,7 +79,7 @@ public class EnrolController {
             return new ResponseEntity<>(enrolService.findByClassAndStudent(cid, sid), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "감정 피드백 저장" , notes="요청 값 : 클래스id(cid), 학생id(sid), 감정피드백(emotion) \n반환 값 : 감정 피드백이 수정완료된 수강신청 정보(enrol)")
+    @ApiOperation(value = "감정 피드백 & 녹화영상 저장" , notes="요청 값 : 클래스id(cid), 학생id(sid), 감정피드백(emotion), 녹화영상(recording) \n반환 값 : 감정 피드백과 녹화영상이 반영된 수강신청 정보(enrol)")
     @PutMapping("/emotion")
     public ResponseEntity<?> updateEmotion(@RequestBody Map<String, Object> request) throws Exception{
         ObjectMapper mapper = new ObjectMapper();
@@ -87,6 +87,7 @@ public class EnrolController {
 
         Long cid = Long.parseLong(request.get("cid").toString());
         Long sid = Long.parseLong(request.get("sid").toString());
+        String recording = request.get("recording").toString();
 
         System.out.println("cid = " + cid);
         System.out.println("sid = " + sid);
@@ -99,7 +100,7 @@ public class EnrolController {
             (int) Math.round(emotionDto.getSad()*100),
             (int) Math.round(emotionDto.getSurprised()*100)
         );
-        return new ResponseEntity<>(enrolService.updateEmotion(cid, sid, emotion),HttpStatus.OK);
+        return new ResponseEntity<>(enrolService.updateEmotionAndRecording(cid, sid, emotion, recording),HttpStatus.OK);
     }
 
     @ApiOperation("recording에 streamid 저장")
