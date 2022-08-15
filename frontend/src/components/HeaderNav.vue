@@ -151,21 +151,22 @@
 </template>
 
 <script>
-import { onMounted, ref, getCurrentInstance, reactive } from "vue";
+import { onMounted, ref, reactive, watch } from "vue";
 import { useStore } from "vuex";
 import axios from "axios";
 import RequestPostCanvas from "@/components/class/RequestPostCanvas.vue";
 import { useRouter } from "vue-router";
+import Stomp from "webstomp-client";
+import SockJS from "sockjs-client";
 
 export default {
+  props: ["isMatchingBtnClick", "isRequestClassRegist", "rid"],
   components: {
     RequestPostCanvas,
   },
   name: "HeaderNav",
-  setup() {
+  setup(props, { emit }) {
     const router = useRouter();
-    const app = getCurrentInstance();
-    const $soketio = app.appContext.config.globalProperties.$soketio;
     const store = useStore();
     const user = ref(store.state.root.user);
     const state = reactive({
@@ -175,6 +176,9 @@ export default {
       matchingSid: null,
       children: [],
       totalNotice: 0,
+      stompClient: null,
+      socketConnected: false,
+      studentDto: null,
     });
     let isNoticeOpen = ref(false);
 
@@ -191,6 +195,97 @@ export default {
       isNoticeOpen.value = !isNoticeOpen.value;
     };
 
+    const connectSocket = async (isVolunteer) => {
+      const serverURL = "http://localhost:8081/api/ws";
+      let socket = await new SockJS(serverURL);
+      state.stompClient = Stomp.over(socket);
+      console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`);
+      await state.stompClient.connect(
+        {},
+        () => {
+          state.socketConnected = true;
+          console.log("연결됐다아~");
+          if (isVolunteer) {
+            // 봉사자일때
+            state.stompClient.subscribe("/send/talkable", (res) => {
+              state.isMatchingModal = true;
+              console.log(
+                "여기서계속.. 호출됨..",
+                JSON.parse(res.body).student,
+              );
+              // 캐릭터 컬러 넣어줌~
+              state.characterColor = JSON.parse(res.body).student.character;
+              state.matchingSid = JSON.parse(res.body).student.sid;
+              state.studentDto = JSON.parse(res.body).student;
+            });
+          } else {
+            // 학생일때
+            subscribeStudentAlarm();
+          }
+        },
+        (error) => {
+          // 소켓 연결 실패
+          console.log("소켓 연결 실패", error);
+          state.socketConnected = false;
+        },
+      );
+    };
+
+    const subscribeStudentAlarm = () => {
+      state.stompClient.subscribe(`/send/wait/${user.value.sid}`, (res) => {
+        console.log("들어오니~", JSON.parse(res.body).message);
+        if (JSON.parse(res.body).message === "success") {
+          //수업등록 알림이온거다
+          console.log("여기왔니?");
+          getClassOpenAlarm();
+        } else {
+          // 봉사자가 비밀친구 매칭을 승인한거다
+          const vid = JSON.parse(res.body).volunteer.vid;
+          router.push({
+            name: "secrettalk",
+            params: { sid: user.value.sid, vid: vid },
+          });
+        }
+      });
+    };
+
+    //학생이 버튼을 눌렀을 경우, (props로 전달받은 값이 true일 경우...?)
+    watch(
+      () => props.isMatchingBtnClick,
+      (cur) => {
+        if (cur) {
+          sendMatchingStart();
+        }
+      },
+    );
+
+    watch(
+      () => props.isRequestClassRegist,
+      (cur) => {
+        if (cur) {
+          sendResolveRequest();
+        }
+      },
+    );
+    // 봉사자가 요청받은 클래스를 등록되었을 떄,
+    const sendResolveRequest = () => {
+      state.stompClient.send("/opend", props.rid, (res) => {
+        console.log(res);
+      });
+      emit("changeRequestState");
+    };
+
+    // 학생이 매칭시작버튼을 눌렸음을 알린다.
+    const sendMatchingStart = () => {
+      const msg = {
+        student: user.value,
+      };
+      state.stompClient.send("/vreceive", JSON.stringify(msg), (res) => {
+        console.log(res);
+      });
+      emit("sendAlarm");
+    };
+
     const logout = () => {
       store.dispatch("root/inactiveKakaoToken", user.value.accessToken);
       store.commit("root/logoutUser");
@@ -202,25 +297,18 @@ export default {
         .dispatch("root/toggleTalkable", user.value.vid)
         .then(() => store.commit("root/toggleTalkable"))
         .catch((err) => console.log(err.message));
+      // db도 변경해준다.
+      changeTalkableState();
     };
 
     //클래스 오픈 알람
     const getClassOpenAlarm = async () => {
-      // await axios
-      //   .get(`${process.env.VUE_APP_API_URL}/likes/${user.value.sid}`)
-      //   .then((response) => {
-      //     // console.log("좋아요버튼", response.data.requsest);
-      //     notices.value = response.data.requsest;
-      //   });
+      await axios
+        .get(`${process.env.VUE_APP_API_URL}/likes/${user.value.sid}`)
+        .then((response) => {
+          notices.value = response.data.requsest;
+        });
     };
-    console.log(user);
-    // 학생일 경우 학생에 대한 알람 socket 알람을 받어.
-    if (user.value && user.value.userType === "student") {
-      $soketio.on("updateStudentAlarm", () => {
-        getClassOpenAlarm();
-      });
-    }
-
     onMounted(() => {
       if (user.value && user.value.userType === "student") {
         getClassOpenAlarm();
@@ -236,7 +324,6 @@ export default {
       await store.dispatch("root/getChildren", user.value.email).then((res) => {
         state.children = res.data.childs;
         console.log("내자식들이다", state.children);
-
         getChildrenDangerAlarm();
       });
     };
@@ -250,11 +337,10 @@ export default {
         })
         .then((response) => {
           console.log(response);
-          $soketio.emit("readStudentAlarm");
         });
     };
 
-    //자식들 위험단어 알림을 받는다~
+    //자식들 위험단어 알림을 받는다.
     const getChildrenDangerAlarm = async () => {
       state.children.forEach((child) => {
         console.log("내자식번호찾기", child.sid);
@@ -281,50 +367,33 @@ export default {
         .then((response) => {
           console.log(response);
           store.commit("root/setVolunteerTalkingState");
-          $soketio.emit("volunteerChangeTalkState");
           console.log(user.value.talkable);
         });
     };
 
     const rejectMatching = () => {
       state.isMatchingModal = false;
+      emit("sendAlarm");
     };
     console.log(user.value);
 
-    // 봉사자일 경우 socket 알람을 받는다.
-    if (
-      user.value &&
-      user.value.userType === "volunteer" &&
-      user.value.talkable
-    ) {
-      $soketio.on("newMessage", (data) => {
-        state.isMatchingModal = true;
-        store.dispatch("root/getStudentInfo", data).then((res) => {
-          state.characterColor = res.data.user.character;
-          state.matchingSid = res.data.user.sid;
-          state.studentName = res.data.user.nickname;
-        });
-      });
-
-      // 한명이라도 수락을 누르면 모달창이 다 닫혀야 하니깐~
-      // 동시에누를수도있나? 그건모름..
-      $soketio.on("closeModalMatching", () => {
-        state.isMatchingModal = false;
-      });
-    }
-
     const acceptMatching = () => {
-      // 한명이 수락을 하면 다른사람들의 모달을 다 지워줘야 함.
-      $soketio.emit("matchingComplete");
-
-      //봉사자가 요청을 받아들였을 때
-      // 대충 봉사자가 비밀친구 페이지로 가는 코드
+      // 학생에게 봉사자 정보 넘겨주기
+      sendAcceptMatching();
       router.push({
         name: "secrettalk",
         params: { sid: state.matchingSid, vid: user.value.vid },
       });
-      // 학생에게 봉사자가 매칭을 승인했다고 알려주기.
-      $soketio.emit("volunteerAcceptMatching", user.value.vid);
+    };
+
+    const sendAcceptMatching = () => {
+      const msg = {
+        volunteer: user.value,
+        student: state.studentDto,
+      };
+      state.stompClient.send("/sreceive", JSON.stringify(msg), (res) => {
+        console.log(res);
+      });
     };
 
     //부모님이 알람을 읽었따!
@@ -338,9 +407,25 @@ export default {
         });
     };
 
+    if (
+      user.value &&
+      user.value.userType === "volunteer" &&
+      user.value.talkable
+    ) {
+      connectSocket(true);
+    }
+
+    if (user.value && user.value.userType === "student") {
+      connectSocket(false);
+    }
+
+    if (user.value && user.value.userType === "parent") {
+      connectSocket(false);
+    }
     return {
       user,
       isNoticeOpen,
+      sendAcceptMatching,
       isProfileOpen,
       toggleProfileModal,
       getClassOpenAlarm,
@@ -353,9 +438,12 @@ export default {
       getChildrenDangerAlarm,
       checkAlarm,
       logout,
+      subscribeStudentAlarm,
       state,
       getChildren,
       toggleTalkable,
+      connectSocket,
+      sendResolveRequest,
     };
   },
 };

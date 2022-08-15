@@ -1,6 +1,10 @@
 <template>
   <div class="background">
-    <HeaderNav />
+    <HeaderNav
+      :isRequestClassRegist="state.isRequestClassRegist"
+      @changeRequestState="state.isRequestClassRegist = false"
+      :rid="rid"
+    />
     <div class="title">
       <h2>수업 등록</h2>
     </div>
@@ -103,7 +107,7 @@ import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";
 import HeaderNav from "@/components/HeaderNav.vue";
 import RectPostCard from "@/components/common/RectPostCard.vue";
-import { reactive, ref, getCurrentInstance } from "vue";
+import { reactive, ref } from "vue";
 import { useStore } from "vuex";
 
 export default {
@@ -112,8 +116,6 @@ export default {
     RectPostCard,
   },
   setup() {
-    const app = getCurrentInstance();
-    const $soketio = app.appContext.config.globalProperties.$soketio;
     const router = useRouter();
     const route = useRoute();
     const store = useStore();
@@ -133,6 +135,7 @@ export default {
       classOpen: false,
       maxcnt: 0,
       introduce: inputIntroduce,
+      isRequestClassRegist: false,
       vid: { nickname: user.nickname },
     });
     // 요청글에서 들어온 경우는 room id, 헤더에서 들어온 경우 -1임.
@@ -225,8 +228,7 @@ export default {
               console.log(response);
               router.push(`/class/requestdetail/${rid}`);
               // 요청을 해결하는 수업을 개설했을 경우, 사용자들에게 알림
-              $soketio.emit("resolveRequest");
-              // $soketio.emit("matchingStart", user.value.sid);
+              state.isRequestClassRegist = true;
             });
         }
       }

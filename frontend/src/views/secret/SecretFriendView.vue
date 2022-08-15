@@ -1,6 +1,9 @@
 <template>
   <div class="background">
-    <HeaderNav />
+    <HeaderNav
+      :isMatchingBtnClick="state.isMatchingBtnClick"
+      @sendAlarm="sendAlarm"
+    />
     <section class="main-section">
       <section classs="sub-section" v-if="!state.isMatching">
         <img src="@/assets/secret_landing.png" class="landing-img loading" />
@@ -10,48 +13,53 @@
           현재 상담 가능한 친구 수 : {{ state.volunteerCnt }} 명
         </h4>
       </section>
-      <section class="sub-section" v-else>
+      <section class="sub-section-loading" v-else>
         <!-- <img src="@/assets/secret_matching.png" /> -->
-        <img src="@/assets/loading.gif" class="loading" />
+        <img
+          v-if="!state.startMinigame"
+          src="@/assets/loading.gif"
+          class="loading-gif"
+        />
+        <button class="minigame-start" @click="startMinigame">
+          미니게임 시작
+          <img src="@/assets/guide-volunteer.png" />
+        </button>
+        <div class="minigame-area" v-if="state.startMinigame">
+          <Mini2dGame></Mini2dGame>
+        </div>
       </section>
     </section>
   </div>
 </template>
 
 <script>
-import { onMounted, reactive, ref, getCurrentInstance } from "vue";
+import { onMounted, reactive } from "vue";
 import HeaderNav from "@/components/HeaderNav.vue";
 import { useStore } from "vuex";
-import { useRouter } from "vue-router";
+// import { useRouter } from "vue-router";
+import Mini2dGame from "@/components/secret/Mini2dGame.vue";
 
 export default {
   name: "SecretFriendView",
   components: {
     HeaderNav,
+    Mini2dGame,
   },
   setup() {
-    const router = useRouter();
     const store = useStore();
-    const app = getCurrentInstance();
-    const $soketio = app.appContext.config.globalProperties.$soketio;
     const state = reactive({
       isMatching: false,
       volunteerCnt: 0,
+      isMatchingBtnClick: false,
+      startMinigame: false,
     });
-    const user = ref(store.state.root.user);
 
     const startMatch = () => {
       state.isMatching = true;
-      // 봉사자에게 알림 뿌려주기
-      $soketio.emit("matchingStart", user.value.sid);
+      state.isMatchingBtnClick = true;
     };
 
     onMounted(() => {
-      // 현재 상담가능한 봉사자 수 세기
-      getTalkableVolunteer();
-    });
-
-    $soketio.on("updateVolunteerTalkableCount", () => {
       getTalkableVolunteer();
     });
 
@@ -62,18 +70,21 @@ export default {
       });
     };
 
-    //봉사자가 학생의 매칭 요청을 승인했을때 실행되는 함수
-    $soketio.on("gotoSecretPage", (data) => {
-      // 대충 학생이 비밀페이지로 간다는 코드
-      router.push({
-        name: "secrettalk",
-        params: { sid: user.value.sid, vid: data },
-      });
-    });
+    const sendAlarm = () => {
+      console.log(state.isMatchingBtnClick);
+      state.isMatchingBtnClick = false;
+    };
+
+    //유저가 미니게임 시작을 눌렀다
+    const startMinigame = () => {
+      state.startMinigame = !state.startMinigame;
+    };
 
     return {
       state,
       startMatch,
+      sendAlarm,
+      startMinigame,
     };
   },
 };

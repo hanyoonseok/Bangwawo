@@ -634,6 +634,7 @@ export default {
       publishScreenShare,
       startRecording,
       stopRecording,
+      leaveSession,
       updateMainVideoStreamManager,
       user,
       volunteerNickname,

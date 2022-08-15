@@ -26,6 +26,7 @@
     "openvidu-browser": "^2.22.0",
     "sass-loader": "^13.0.2",
     "socket.io-client": "^4.5.1",
+    "sockjs-client": "^1.6.1",
     "swiper": "^8.3.1",
     "three": "^0.143.0",
     "v-calendar": "^3.0.0-alpha.8",
@@ -38,7 +39,8 @@
     "vue-router": "^4.0.13",
     "vue-socket.io": "^3.0.10",
     "vuex": "^4.0.2",
-    "vuex-persistedstate": "^4.1.0"
+    "vuex-persistedstate": "^4.1.0",
+    "webstomp-client": "^1.2.6"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
