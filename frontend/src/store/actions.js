@@ -191,19 +191,6 @@ export const getStudentFeedback = ({ state }, payload) => {
   return axios.get(url);
 };
 
-export const getRecordVideo = ({ state }, recordId) => {
-  console.log("getRecordVideo", state, recordId);
-  axios.defaults.baseURL = "";
-  const url = `${process.env.VUE_APP_OV_DOMAIN}/openvidu/api/recordings/${recordId}`;
-  const headers = {
-    headers: {
-      Authorization:
-        "Basic " + btoa("OPENVIDUAPP:" + process.env.VUE_APP_OV_SECRET),
-      "Content-Type": "application/json",
-    },
-  };
-  return axios.get(url, headers);
-};
 // 좋아요 추가
 export const addLikeRequest = ({ state }, payload) => {
   console.log("addLikeRequest", state, payload);
@@ -228,3 +215,16 @@ export const unzipRecords = ({ state }, payload) => {
   const url = `/session/recording/unzip/${payload.sessionId}/${payload.name}`;
   return axios.get(url);
 };
+
+// export const stopRecording = ({ state }, recordId) => {
+//   console.log("stopRecording", state, recordId);
+//   axios.defaults.baseURL = "";
+//   const url = `${process.env.VUE_APP_OV_DOMAIN}/openvidu/api/recordings/stop/${recordId}`;
+//   const headers = {
+//     headers: {
+//       Authorization:
+//         "Basic " + btoa("OPENVIDUAPP:" + process.env.VUE_APP_OV_SECRET),
+//     },
+//   };
+//   return axios.post(url, null, headers);
+// };

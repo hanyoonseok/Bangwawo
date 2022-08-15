@@ -426,6 +426,21 @@ export default {
         .catch((error) => console.error(error));
     };
 
+    const waitUntilUnzip = async () => {
+      await axios
+        .get(
+          `${process.env.VUE_APP_API_URL}/session/recording/unzip/${sessionId}/${cid}`,
+        )
+        .then(() => {
+          console.log("unzip 성공@@@@@@@@@@@@@@@@");
+          return;
+        })
+        .catch(() => {
+          console.log("아직 unzip 안됐네 다시 돌아가");
+          waitUntilUnzip();
+        });
+    };
+
     const leaveSession = () => {
       console.log("세션을 종료시키고 싶슴다");
       if (state.session == undefined) return;
@@ -446,13 +461,20 @@ export default {
 
       if (state.isHost) {
         console.log("세션을 종료할건데 난 봉사자입니당");
+
+        waitUntilUnzip();
+
         store
           .dispatch("root/endClass", { cid: cid, vid: vid })
           .then((response) => {
             console.log(response);
             window.removeEventListener("beforeunload", leaveSession);
             state.publisher = undefined;
-            router.push({ name: "feedbackSubmit", params: { cid: cid } });
+
+            router.push({
+              name: "feedbackSubmit",
+              params: { cid: cid },
+            });
           })
           .catch((error) => {
             console.log(error);
@@ -487,12 +509,17 @@ export default {
           .dispatch("root/setStreamId", {
             sid: { sid: sid },
             cid: { cid: cid },
-            recording: state.publisher.stream.streamId,
+            recording: `${sessionId}/${state.publisher.stream.streamId}`,
           })
           .then((res) => {
             console.log(res);
             state.publisher = undefined;
           });
+        // store
+        //   .dispatch("root/unzipRecords", { sessionId, name: cid })
+        //   .then((res) => {
+        //     console.log("success unzip", res);
+        //   });
 
         router.push({ name: "mypage" });
       }

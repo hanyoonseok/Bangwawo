@@ -153,6 +153,7 @@ export default {
       store.dispatch("root/getStudentFeedback", { sid, cid }).then((res) => {
         feedbackInfo.value = res.data;
         console.log(res.data);
+        videoURL.value = `${process.env.VUE_APP_OV_DOMAIN}/openvidu/recordings/${feedbackInfo.value.recording}.webm`;
       });
     };
     getStudentFeedback();
@@ -197,14 +198,6 @@ export default {
       });
     };
     getClassStudentNum();
-
-    const getRecordVideo = () => {
-      store.dispatch("root/getRecordVideo", `${55}Class${55}`).then((res) => {
-        console.log(res.data);
-        videoURL.value = res.data.url;
-      });
-    };
-    getRecordVideo();
 
     return {
       state,
