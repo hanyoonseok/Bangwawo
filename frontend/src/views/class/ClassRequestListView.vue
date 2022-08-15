@@ -25,8 +25,7 @@
       />
       <label>미해결 요청만 보기</label>
     </div>
-    <!-- 봉사자 아닐 경우에만 요청 글 작성 가능 -->
-    <div v-if="state.userType !== 'volunteer'">
+    <div v-if="state.userType === 'student'">
       <router-link :to="{ name: 'classrequestregist' }">
         <button class="request-register">작성하기</button></router-link
       >
