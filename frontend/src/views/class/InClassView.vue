@@ -366,7 +366,7 @@ export default {
 
     const recordId = ref(null);
 
-    const startRecording = () => {
+    const startRecording = async () => {
       console.log("녹화", state.streamId);
       const recordings = {
         session: state.mySessionId,
@@ -384,7 +384,7 @@ export default {
       };
       console.log(recordings);
 
-      axios
+      await axios
         .post(
           OPENVIDU_SERVER_URL + "/openvidu/api/recordings/start",
           recordings,
