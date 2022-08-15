@@ -178,31 +178,6 @@ export default {
       console.log("변경하자.", state.backgroundPubImg);
     };
 
-    //위험 단어 리스트
-    const dangerWord = [
-      "자살",
-      "타살",
-      "괴롭힘",
-      "왕따",
-      "따돌림",
-      "폭력",
-      "때림",
-      "일진",
-      "담배",
-      "술",
-      "마약",
-      "총",
-      "성폭행",
-      "성폭력",
-      "성희롱",
-      "시발",
-      "새끼",
-      "병신",
-      "지랄",
-      "좆까",
-      "꺼져",
-    ];
-
     // 사용자가 방에 참여하겠다는 버튼 누를때마다 호출
     const joinSession = () => {
       console.log("join session");
@@ -330,6 +305,21 @@ export default {
       window.removeEventListener("beforeunload", leaveSession);
       console.log("대화종료 후 위험단어 수 : ", state.danger);
 
+      if (user.value.userType === "student") {
+        if (dangerCnt[0] > 0) {
+          // 자녀의 상담중 ${word}이(가) 감지되었습니다.
+          studentDangerWord("욕설");
+        }
+        if (dangerCnt[1] > 0) {
+          studentDangerWord("학교 생활 관련 위험용어");
+        }
+        if (dangerCnt[2] > 0) {
+          studentDangerWord("부적절 용어");
+        }
+        if (dangerCnt[3] > 0) {
+          studentDangerWord("심각 상태임을 짐작할 수 있는 위험용어");
+        }
+      }
       if (user.value.userType === "student") {
         router.push({ name: "secret" });
       } else {
@@ -463,19 +453,30 @@ export default {
         state.backgroundSubImg = event.data;
     });
 
+    //위험 단어 리스트
+
+    const dangerWord = [
+      ["시발", "새끼", "병신", "지랄", "좆까", "꺼져", "닥쳐"],
+      ["괴롭힘", "왕따", "따돌림", "일진"],
+      ["담배", "술", "마약"],
+      ["자살", "폭력", "성폭행", "성폭력", "성희롱"],
+    ];
+
+    const dangerCnt = reactive([0, 0, 0, 0]);
+
     recognition.lang = "ko-KR"; // 한국어 지정
     recognition.onresult = (event) => {
       const text = event.results[0][0].transcript;
       console.log("transcript", text);
-      if (user.value.userType === "student")
-        for (const item of dangerWord) {
+      for (let i = 0; i < dangerWord.length; ++i) {
+        for (const item of dangerWord[i]) {
           if (text.indexOf(item) >= 0) {
-            state.danger++;
-            studentDangerWord(item);
+            dangerCnt[i]++;
+            console.log("i번째 위험용어 감지했다아아" + i);
           }
         }
+      }
     };
-
     const studentDangerWord = async (item) => {
       const secretChatDto = {
         sname: state.studentName,
@@ -518,9 +519,11 @@ export default {
       model,
       // applyVoiceFilter,
       leaveSession,
+      dangerWord,
       clickMute,
       activeBackgroudSelect,
       studentDangerWord,
+      dangerCnt,
       getVolunteerInfo,
       getStudentInfo,
       backgrounds,

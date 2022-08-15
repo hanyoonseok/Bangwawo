@@ -137,7 +137,6 @@ export default {
         console.log("ydist=" + ydist);
         //게임 종료
         cancelAnimationFrame(state.animation);
-        state.ctx.clearRect(0, 0, state.canvas.width, state.canvas.height);
 
         state.isGameOver = true;
       }
@@ -150,6 +149,10 @@ export default {
     });
 
     const restartGame = () => {
+      state.isGameOver = false;
+      state.ctx.clearRect(0, 0, state.canvas.width, state.canvas.height);
+      state.ctx.beginPath();
+      frame();
       // 하하 재시작을 어떻게 해줘야한담??
     };
 
