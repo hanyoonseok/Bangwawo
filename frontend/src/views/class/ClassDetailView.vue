@@ -194,9 +194,10 @@
         </div>
       </div>
       <!-- 강사 프로필 -->
-      <div class="profile">
-        <div class="profile-img">
-          <img src="@/assets/profile.png" alt="프로필이미지" />
+
+      <div class="profile" v-if="isProfileOpen">
+        <div class="profile-canvas-wrapper">
+          <ProfileCanvas :childColor="userColor" />
         </div>
         <div class="profile-info">
           <div class="info-box">
@@ -215,7 +216,7 @@
     <div class="confirm" v-if="isConfirm.status">
       <div class="container">
         <img src="@/assets/profile.png" alt="오리" />
-        <h2>정말로 삭제하시겠습니까?</h2>
+        <h4>정말로 삭제하시겠습니까?</h4>
         <div class="btn-wrapper">
           <button class="btn" @click="deleteClass">네</button>
           <button class="btn" @click="isConfirm.status = false">아니요</button>
@@ -227,6 +228,7 @@
 
 <script>
 import HeaderNav from "@/components/HeaderNav.vue";
+import ProfileCanvas from "@/components/mypage/ProfileCanvas.vue";
 import { reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -235,6 +237,7 @@ export default {
   name: "ClassDetailView",
   components: {
     HeaderNav,
+    ProfileCanvas,
   },
   setup() {
     const route = useRoute();
@@ -244,7 +247,9 @@ export default {
     console.log("userInfo", userInfo);
     const cid = route.params.cid;
 
+    let userColor = ref(null);
     const classInfo = ref(null);
+    let isProfileOpen = ref(false);
 
     // 수업 상세정보 가져오기
     const getClassDetail = () => {
@@ -252,9 +257,8 @@ export default {
         .dispatch("root/getClassDetail", cid)
         .then((response) => {
           console.log(response.data);
-          classInfo.value = response.data;
-          console.log("수업 상태", classInfo.value.state);
-          console.log(classInfo.value);
+          classInfo.value = response.data.class;
+          userColor.value = response.data.vCharacter;
         })
         .catch((error) => {
           console.log(error);
@@ -317,20 +321,12 @@ export default {
     });
 
     const showProfile = () => {
-      if (document.querySelector(".profile").style.display === "block") {
-        document.querySelector(".profile").style.display = "none";
-      } else {
-        document.querySelector(".profile").style.display = "block";
-      }
+      isProfileOpen.value = true;
     };
 
     const hideProfile = () => {
-      if (document.querySelector(".profile").style.display === "block") {
-        document.querySelector(".profile").style.display = "none";
-      }
+      isProfileOpen.value = false;
     };
-
-    // alert 창
     const isConfirm = reactive({
       status: false,
     });
@@ -375,6 +371,7 @@ export default {
             params: {
               mySessionId: sessionId,
               userType: userInfo.userType,
+              nickname: userInfo.nickname,
               cid: cid,
               vid: userInfo.vid,
               volunteerNickname: classInfo.value.vid.nickname,
@@ -414,6 +411,7 @@ export default {
       classInfo,
       user,
       userInfo,
+      userColor,
       showProfile,
       hideProfile,
       enrolClass,
@@ -422,6 +420,7 @@ export default {
       startClass,
       sessionId,
       entranceClass,
+      isProfileOpen,
     };
   },
 };

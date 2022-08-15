@@ -1,13 +1,13 @@
 <template>
-  <div id="canvas_main_div" ref="element">
+  <div id="canvas_main_div">
     <div class="bg-game"><img src="@/assets/gameBg.gif" /></div>
     <canvas id="canvas" width="300" height="700"></canvas>
     <div class="notice-wrapper" v-if="state.isGameOver">
       <div class="game-over">
-        다시 시작하시곘습니까?
-        <div>
-          <button @click="restartGame">네</button>
-          <button @click="closeMinigame">아니오</button>
+        <img src="@/assets/crying-duck.png" />
+        Game Over
+        <div class="user-btn" @click="restartGame">
+          <i class="fa-solid fa-arrows-rotate" style="font-size: 25px"></i>
         </div>
       </div>
     </div>
@@ -19,7 +19,7 @@ import { onMounted, reactive } from "vue";
 // import { useEventListener } from "@vueuse/core";
 
 export default {
-  setup({ emit }) {
+  setup() {
     const state = reactive({
       timer: 0,
       cactusarr: [],
@@ -75,7 +75,7 @@ export default {
 
       state.canvas.width = window.innerWidth - 100;
       state.canvas.height = window.innerHeight - 100;
-
+      state.isGameGoing = true;
       frame();
     };
 
@@ -95,7 +95,7 @@ export default {
         if (a.x < 60) {
           o.splice(i, 1);
         }
-        a.x -= 2;
+        a.x -= 3;
 
         //충돌 감지
         crash(ongduck, a);
@@ -148,18 +148,14 @@ export default {
         state.jump = true;
       }
     });
-    const closeMinigame = () => {
-      emit("closeMinigame");
-    };
 
     const restartGame = () => {
-      start();
+      // 하하 재시작을 어떻게 해줘야한담??
     };
 
     return {
       restartGame,
       frame,
-      closeMinigame,
       state,
       crash,
       ongduck,

@@ -23,6 +23,8 @@
         <button class="minigame-start" @click="startMinigame">
           미니게임 시작
           <img src="@/assets/guide-volunteer.png" />
+          <i class="fa-solid fa-caret-up" v-if="!state.startMinigame"></i>
+          <i class="fa-solid fa-caret-down" v-else></i>
         </button>
         <div class="minigame-area" v-if="state.startMinigame">
           <Mini2dGame @closeMinigame="closeMinigame"></Mini2dGame>
