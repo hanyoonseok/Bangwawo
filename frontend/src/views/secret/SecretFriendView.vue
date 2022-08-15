@@ -25,7 +25,7 @@
           <img src="@/assets/guide-volunteer.png" />
         </button>
         <div class="minigame-area" v-if="state.startMinigame">
-          <Mini2dGame></Mini2dGame>
+          <Mini2dGame @closeMinigame="closeMinigame"></Mini2dGame>
         </div>
       </section>
     </section>
@@ -79,10 +79,14 @@ export default {
     const startMinigame = () => {
       state.startMinigame = !state.startMinigame;
     };
+    const closeMinigame = () => {
+      state.startMinigame = false;
+    };
 
     return {
       state,
       startMatch,
+      closeMinigame,
       sendAlarm,
       startMinigame,
     };
