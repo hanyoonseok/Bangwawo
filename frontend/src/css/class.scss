@@ -501,6 +501,10 @@
   .ox-top-article {
     @include flexColumn;
 
+    > img {
+      width: 80px;
+      height: 90px;
+    }
     .o-name {
       @include flexCenter;
       padding: 4px;
@@ -620,4 +624,8 @@
   height: 100%;
   background-color: $light-grey;
   border-radius: 20px;
+}
+
+.selected-answer {
+  font-family: $SCore;
 }

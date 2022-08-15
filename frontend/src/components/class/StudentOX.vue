@@ -10,7 +10,9 @@
         <img src="@/assets/oDuck.png" @click="selectOne(true)" />
         <img src="@/assets/xDuck.png" @click="selectOne(false)" />
       </div>
-      <div>선택한 답 : {{ state.answer ? "O" : "X" }}</div>
+      <div class="selected-answer">
+        선택한 답 : {{ state.answer ? "O" : "X" }}
+      </div>
       <div class="stu-ox-resttime">
         <label>{{ timer }}</label>
       </div>

@@ -181,6 +181,18 @@ export default {
       state.oxResult = false;
     };
 
+    const openOXResult = () => {
+      console.log("결과창 열거임");
+      state.oxResult = true;
+      console.log("ox 결과창 바뀜?", state.oxResult);
+      state.oxState = false;
+      console.log("ox 시작여부 바뀜?", state.oxState);
+    };
+
+    let oxEndCount = reactive({
+      count: 0,
+    });
+
     const joinSession = () => {
       console.log("join session");
       // 초기화
@@ -284,19 +296,20 @@ export default {
         state.oxData.answer = e.data;
       });
       state.session.on("signal:ox-end", (e) => {
+        oxEndCount.count++;
         console.log("=======OX 게임 끝=========", e);
         console.log("결과??", e.data);
-        if (e.data) {
+        console.log("지금 들어온 학생 몇명임?", state.subscribers.length);
+        if (e.data === "true") {
           correctStudents.push({ sender: JSON.parse(e.from.data).clientData });
         } else {
           incorrectStudents.push({
             sender: JSON.parse(e.from.data).clientData,
           });
         }
-        state.oxResult = true;
-        console.log("ox 결과창 바뀜?", state.oxResult);
-        state.oxState = false;
-        console.log("ox 시작여부 바뀜?", state.oxState);
+        if (oxEndCount.count === state.subscribers.length) {
+          openOXResult();
+        }
       });
 
       console.log("sessionid", state.mySessionId);

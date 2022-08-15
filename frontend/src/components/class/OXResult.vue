@@ -18,7 +18,6 @@
         </div>
       </article>
     </div>
-    <label class="noanswer">무응답자 : 3</label>
   </article>
 </template>
 
