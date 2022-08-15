@@ -134,8 +134,8 @@ export default {
       streamId: null,
     });
 
-    const correctStudents = [];
-    const incorrectStudents = [];
+    const correctStudents = ref([]);
+    const incorrectStudents = ref([]);
 
     // 화면 공유 상태 변화했는지 감지
     watch(
@@ -289,6 +289,9 @@ export default {
       state.session.on("signal:start-question", (e) => {
         console.log("=======OX 게임 시작, 질문=========", e);
         state.oxData.question = e.data;
+        correctStudents.value = [];
+        incorrectStudents.value = [];
+        oxEndCount.count = 0;
       });
       state.session.on("signal:start-answer", (e) => {
         console.log("=======OX 게임 시작, 답=========", e);
@@ -300,10 +303,13 @@ export default {
         console.log("=======OX 게임 끝=========", e);
         console.log("결과??", e.data);
         console.log("지금 들어온 학생 몇명임?", state.subscribers.length);
+        console.log(oxEndCount.count, state.subscribers.length);
         if (e.data === "true") {
-          correctStudents.push({ sender: JSON.parse(e.from.data).clientData });
+          correctStudents.value.push({
+            sender: JSON.parse(e.from.data).clientData,
+          });
         } else {
-          incorrectStudents.push({
+          incorrectStudents.value.push({
             sender: JSON.parse(e.from.data).clientData,
           });
         }

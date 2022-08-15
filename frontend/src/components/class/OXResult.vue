@@ -7,7 +7,7 @@
     <div class="ox-form row">
       <article class="ox-top-article">
         <img src="@/assets/O-btn.png" />
-        <div class="o-name red" v-for="(item, i) in correctStudents" :key="i">
+        <div class="o-name blue" v-for="(item, i) in correctStudents" :key="i">
           {{ item.sender }}
         </div>
       </article>
