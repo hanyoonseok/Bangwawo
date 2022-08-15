@@ -42,7 +42,7 @@
           <div class="info-card">
             <img src="@/assets/consult-1.png" />
           </div>
-          <div class="info-desc">연애</div>
+          <div class="info-desc">학업</div>
         </div>
         <div class="info-box" data-aos="fade-up" data-aos-duration="1000">
           <div class="info-card">

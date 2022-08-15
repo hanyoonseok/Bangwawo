@@ -4,7 +4,6 @@
       v-if="user && user.userType === 'volunteer' && state.session"
       :dataLen="dataLen"
       :currentUsers="currentUsers"
-      :leaveSession="leaveSession"
       :me="state.publisher"
       :subs="state.subscribers"
       @activeVideo="activeVideo"
@@ -15,21 +14,28 @@
       :screen="state.screenShareState"
       :cid="cid"
       @updateMainVideoStreamManager="updateMainVideoStreamManager"
-      @leaveSession="leaveSession"
+      :volunteerNickname="volunteerNickname"
+      :oxResult="oxResult"
+      :correctStudents="correctStudents"
+      :incorrectStudents="incorrectStudents"
     />
     <UserView
       v-if="user && user.userType === 'student' && state.session"
       :dataLen="dataLen"
       :currentUsers="currentUsers"
-      :leaveSession="leaveSession"
       :state="state"
       :me="state.publisher"
       :subs="state.subscribers"
       :session="state.session"
       :chats="state.chats"
+      :screen="state.screenShareState"
       @activeVideo="activeVideo"
       @activeMute="activeMute"
       @updateMainVideoStreamManager="updateMainVideoStreamManager"
+      @leaveSession="leaveSession"
+      :volunteerNickname="volunteerNickname"
+      :ox="state.oxState"
+      :oxData="state.oxData"
     />
   </section>
 </template>
@@ -80,6 +86,8 @@ export default {
     console.log("nickname", nickname);
     const cid = route.params.cid;
     const vid = route.params.vid;
+    const sid = route.params.sid;
+    const volunteerNickname = route.params.volunteerNickname;
 
     const state = reactive({
       OV: OV,
@@ -115,35 +123,66 @@ export default {
         return user.value.userType === "volunteer" ? 12 : 4;
       }),
       dataIdx: 0,
-
+      oxState: false, //ox 시작 여부
+      oxData: {
+        question: null,
+        answer: null,
+      }, // ox 질문, 답 데이터
+      oxResult: false,
       screenShareState: false, //화면공유 여부
+      streamId: null,
     });
+
+    const correctStudents = [];
+    const incorrectStudents = [];
 
     // 화면 공유 상태 변화했는지 감지
     watch(
       () => state.screenShareState,
       (cur) => {
+        console.log("watch야 일을 하고 있니?????????????");
         screenShare(cur);
       },
       { deep: true },
     );
 
     const screenShare = (cur) => {
-      console.log("싱태", cur);
+      console.log("상태", cur);
+      const screenShareStart = document.getElementById("screenShareStart");
+      const volunteerVideo = document.getElementById("volunteerVideo");
+      const screenContainer = document.getElementById("container-screens");
       if (cur) {
         // true일때는 화면공유 창 보여주기
         if (state.isHost) {
-          document.getElementById("screenShareStart").style.display = "none";
+          screenShareStart.style.display = "none"; //봉사자는 화면공유 시작 버튼 안보여야 함
+        } else {
+          // 학생은 화면공유창 보여야하고 기존 봉사자 화면 안보여야함..?
+          screenContainer.style.display = "block";
+          volunteerVideo.style.display = "none";
         }
-        document.getElementById("container-screens").style.display = "block";
       } else {
         if (state.isHost) {
-          document.getElementById("screenShareStart").style.display = "block";
+          screenShareStart.style.display = "block";
+        } else {
+          screenContainer.style.display = "none";
+          volunteerVideo.style.display = "block";
         }
-
-        document.getElementById("container-screens").style.display = "hidden";
+        state.session.signal({
+          data: "0",
+          to: [],
+          type: "screen-off",
+        });
       }
     };
+
+    // ox 상태 변화했는지 감지
+    watch(
+      () => state.oxState,
+      () => {
+        console.log("ox 상태 변화했니??", state.oxState);
+      },
+      { deep: true },
+    );
 
     const joinSession = () => {
       console.log("join session");
@@ -154,9 +193,13 @@ export default {
       // 새로운 Stream을 구독하고 subscribers배열에 저장
       state.session.on("streamCreated", ({ stream }) => {
         console.log(
-          "누구인가???????????",
+          "현재 퍼블리셔가 누구인가???????????",
           state.isHost ? "봉사자다" : "학생이다",
         );
+        console.log("봉사자인지 학생인지 파악하기 위해 도움이 될까..?", stream);
+        state.streamId = stream.streamId;
+        console.log("아이디 나와라", state.streamId);
+
         // 웹 캠 사용하면서 사용자가 학생일때만 sub에 들어감
         if (stream.typeOfVideo == "CAMERA") {
           const subscriber = state.session.subscribe(stream);
@@ -195,6 +238,22 @@ export default {
         }
       });
 
+      state.session.on("signal:screen-off", () => {
+        // console.log("화면공유 끝났다고", e);
+        state.screenShareState = false;
+        const screenShare = document.getElementById("screenShareStart");
+        // console.log("화면공유버튼", screenShare);
+        if (screenShare) {
+          screenShare.style.display = "block";
+        }
+        const containerScreens = document.getElementById("container-screens");
+        // console.log("화면공유 컨테이너", containerScreens);
+        if (containerScreens) {
+          containerScreens.style.display = "none";
+        }
+        // console.log("공유상태", state.screenShareState);
+      });
+
       // 채팅
       state.session.on("signal:my-chat", (e) => {
         console.log(e.data); // Message
@@ -212,9 +271,32 @@ export default {
       });
 
       // 봉사자가 세션 종료하면 학생도 자동으로 종료시켜야 함
-      state.session.on("signal:end", (e) => {
+      state.session.on("signal:leave-session", (e) => {
         console.log("봉사자가 세션 종료???", e);
         leaveSession();
+      });
+
+      // OX 시작
+      state.session.on("signal:start-question", (e) => {
+        console.log("=======OX 게임 시작, 질문=========", e);
+        state.oxData.question = e.data;
+      });
+      state.session.on("signal:start-answer", (e) => {
+        console.log("=======OX 게임 시작, 답=========", e);
+        state.oxState = true;
+        state.oxData.answer = e.data;
+      });
+      state.session.on("signal:ox-end", (e) => {
+        console.log("=======OX 게임 끝=========", e);
+        console.log("결과??", e.data);
+        if (e.data === "o") {
+          correctStudents.push({ sender: JSON.parse(e.from.data).clientData });
+        } else {
+          incorrectStudents.push({
+            sender: JSON.parse(e.from.data).clientData,
+          });
+        }
+        state.oxResult = true;
       });
 
       console.log("sessionid", state.mySessionId);
@@ -243,7 +325,16 @@ export default {
             state.joinedPlayerNumbers++;
             state.session.publish(publisher);
             console.log("######################joinSession", state.session);
-            startRecording(); // 녹화 시작
+            console.log(state.publisher.stream);
+            console.log(
+              Object.keys(state.publisher.stream.streamManager.stream),
+            );
+            const copy = { ...state.publisher.stream };
+            console.log(copy.streamId);
+            if (!state.isHost) {
+              console.log("학생이니까 녹화를 시작하겠다ㅏㅏ");
+              startRecording(); // 녹화 시작
+            }
           })
           .catch((error) => {
             console.log(
@@ -276,6 +367,7 @@ export default {
     const recordId = ref(null);
 
     const startRecording = () => {
+      console.log("녹화", state.streamId);
       const recordings = {
         session: state.mySessionId,
         name: cid,
@@ -335,21 +427,20 @@ export default {
     };
 
     const leaveSession = () => {
+      console.log("세션을 종료시키고 싶슴다");
+      if (state.session == undefined) return;
+
+      console.log(state.publisher);
+      state.publisher.off();
+
       // --- Leave the session by calling 'disconnect' method over the Session object ---
       if (state.session) {
         state.session.disconnect();
       }
 
-      if (state.sessionScreen) {
-        state.sessionScreen.disconnect();
-      }
-
-      // 녹화 끝
-      stopRecording();
       state.session = undefined;
       state.sessionScreen = undefined;
       state.mainStreamManager = undefined;
-      state.publisher = undefined;
       state.subscribers = [];
       state.OV = undefined;
 
@@ -390,17 +481,21 @@ export default {
 
         store.dispatch("root/storeEmotion", payload);
         store.commit("root/initEmotion");
-      }
 
-      store
-        .dispatch("root/endClass", { cid: cid, vid: vid })
-        .then((response) => {
-          console.log(response);
-          router.push({ name: "feedbackSubmit", params: { cid: cid } });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        console.log(state.publisher.stream.streamId);
+        store
+          .dispatch("root/setStreamId", {
+            sid: { sid: sid },
+            cid: { cid: cid },
+            recording: state.publisher.stream.streamId,
+          })
+          .then((res) => {
+            console.log(res);
+            state.publisher = undefined;
+          });
+
+        router.push({ name: "mypage" });
+      }
     };
 
     const getToken = (mySessionId) => {
@@ -581,18 +676,13 @@ export default {
     };
 
     onMounted(() => {
-      console.log("mounted", userType);
-      if (userType) {
-        document.getElementById("screenShareStart").style.display = "block";
-        document.getElementById("container-screens").style.display = "none";
-        // const screenShare = document.getElementById("screenShareStart");
-        // if (screenShare) {
-        //   screenShare.style.display = "block";
-        // }
-        // const containerScreens = document.getElementById("container-screens");
-        // if (containerScreens) {
-        //   containerScreens.style.display = "none";
-        // }
+      const screenShare = document.getElementById("screenShareStart");
+      if (screenShare) {
+        screenShare.style.display = "block";
+      }
+      const containerScreens = document.getElementById("container-screens");
+      if (containerScreens) {
+        containerScreens.style.display = "none";
       }
     });
 
@@ -617,6 +707,10 @@ export default {
       stopRecording,
       updateMainVideoStreamManager,
       user,
+      volunteerNickname,
+      leaveSession,
+      correctStudents,
+      incorrectStudents,
     };
   },
 };

@@ -7,46 +7,15 @@
     <div class="ox-form row">
       <article class="ox-top-article">
         <img src="@/assets/O-btn.png" />
-        <div class="o-name blue">김수빈</div>
-        <div class="o-name blue">김수빈</div>
-        <div class="o-name blue">김수빈</div>
-        <div class="o-name blue">김수빈</div>
-        <div class="o-name blue">김수빈</div>
-        <div class="o-name blue">김수빈</div>
-        <div class="o-name blue">김수빈</div>
-        <div class="o-name blue">김수빈</div>
-        <div class="o-name blue">김수빈</div>
-        <div class="o-name blue">김수빈</div>
-        <div class="o-name blue">김수빈</div>
-        <div class="o-name blue">김수빈</div>
-        <div class="o-name blue">김수빈</div>
-        <div class="o-name blue">김수빈</div>
-        <div class="o-name blue">김수빈</div>
-        <div class="o-name blue">김수빈</div>
-        <div class="o-name blue">김수빈</div>
-        <div class="o-name blue">김수빈</div>
-        <div class="o-name blue">김수빈</div>
+        <div class="o-name red" v-for="(item, i) in correctStudents" :key="i">
+          {{ item.sender }}
+        </div>
       </article>
       <article class="ox-top-article">
         <img src="@/assets/X-btn.png" />
-        <div class="o-name red">김수빈</div>
-        <div class="o-name red">김수빈</div>
-        <div class="o-name red">김수빈</div>
-        <div class="o-name red">김수빈</div>
-        <div class="o-name red">김수빈</div>
-        <div class="o-name red">김수빈</div>
-        <div class="o-name red">김수빈</div>
-        <div class="o-name red">김수빈</div>
-        <div class="o-name red">김수빈</div>
-        <div class="o-name red">김수빈</div>
-        <div class="o-name red">김수빈</div>
-        <div class="o-name red">김수빈</div>
-        <div class="o-name red">김수빈</div>
-        <div class="o-name red">김수빈</div>
-        <div class="o-name red">김수빈</div>
-        <div class="o-name red">김수빈</div>
-        <div class="o-name red">김수빈</div>
-        <div class="o-name red">김수빈</div>
+        <div class="o-name red" v-for="(item, i) in incorrectStudents" :key="i">
+          {{ item.sender }}
+        </div>
       </article>
     </div>
     <label class="noanswer">무응답자 : 3</label>
@@ -56,7 +25,7 @@
 <script>
 export default {
   name: "OXResult",
-  props: ["state", "toggleOX"],
+  props: ["state", "toggleOX", "incorrectStudents", "correctStudents"],
   setup() {},
 };
 </script>

@@ -1,6 +1,7 @@
 <template>
   <div class="stu-inclass-container">
-    <user-video :stream-manager="publisher" />
+    <user-video :stream-manager="publisher" id="volunteerVideo" />
+    <div id="container-screens"></div>
   </div>
 </template>
 
@@ -8,7 +9,7 @@
 import UserVideo from "@/components/class/UserVideo.vue";
 export default {
   name: "StudentOX",
-  props: ["publisher"],
+  props: ["publisher", "screen"],
   setup() {},
   components: { UserVideo },
 };

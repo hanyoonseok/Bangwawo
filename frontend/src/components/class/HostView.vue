@@ -4,33 +4,30 @@
       <article
         :class="{
           'top-left': true,
-          'host-2orless': subs.length < 2,
-          'host-4orless': subs.length < 4 && subs.length >= 2,
-          'host-6orless': subs.length < 6 && subs.length >= 4,
-          'host-12orless': subs.length >= 6,
+          'host-12orless': true,
           expand: !state.isTopOpen && !state.isChatOpen,
         }"
       >
-        <div class="idx-btn-wrapper next" @click="nextClick">
+        <!-- <div class="idx-btn-wrapper next" @click="nextClick">
           <button class="idx-btn next"></button>
         </div>
         <div class="idx-btn-wrapper prev" @click="prevClick">
           <button class="idx-btn prev"></button>
-        </div>
-        <div id="container-screens">
-          <h4>화면 공유</h4>
-        </div>
+        </div> -->
+        <div id="container-screens"></div>
         <div class="user-card-wrapper" id="myVideo">
           <div class="hover-wrapper">나</div>
           <div class="user-card">
-            <user-video
+            <OvVideo
               :stream-manager="me"
               @click="updateMainVideoStreamManager(me)"
             />
           </div>
         </div>
-        <div class="user-card-wrapper" v-for="(user, i) in subs" :key="user.id">
-          <div class="hover-wrapper">이름{{ i }}</div>
+        <div class="user-card-wrapper" v-for="(user, i) in subs" :key="i">
+          <div class="hover-wrapper">
+            {{ getClientData(user) }}
+          </div>
           <div class="user-card">
             <user-video
               :stream-manager="user"
@@ -47,8 +44,19 @@
           :me="state.clientData"
           :subs="state.subs"
         />
-        <OXForm :state="state" :toggleOX="toggleOX" />
-        <OXResult :state="state" :toggleOX="toggleOX" />
+        <OXForm
+          :state="state"
+          :toggleOX="toggleOX"
+          :session="session"
+          @closeOX="closeOX"
+        />
+        <OXResult
+          :state="state"
+          :correctStudents="correctStudents"
+          :incorrectStudents="incorrectStudents"
+          :toggleOX="toggleOX"
+          v-if="oxResult"
+        />
         <ChatForm
           :state="state"
           :toggleChat="toggleChat"
@@ -105,12 +113,13 @@
 </template>
 
 <script>
-import { reactive, computed } from "vue";
+import { reactive, computed, onMounted } from "vue";
 import ParticipantsList from "@/components/class/ParticipantsList.vue";
 import ChatForm from "@/components/class/ChatForm.vue";
 import OXForm from "@/components/class/OXForm.vue";
 import OXResult from "@/components/class/OXResult.vue";
 import UserVideo from "@/components/class/UserVideo.vue";
+import OvVideo from "./OvVideo";
 
 export default {
   name: "HostView",
@@ -125,6 +134,9 @@ export default {
     "chats",
     "screen",
     "cid",
+    "oxResult",
+    "correctStudents",
+    "incorrectStudents",
   ],
   setup(props, { emit }) {
     console.log("@@@@@@@@@@@@me", props.me);
@@ -167,6 +179,12 @@ export default {
       console.log("arr", arr);
 
       return arr;
+    };
+
+    const getClientData = (user) => {
+      let { connection } = user.stream;
+      let { clientData } = JSON.parse(connection.data);
+      return clientData;
     };
 
     const toggleParticipants = () => {
@@ -214,26 +232,37 @@ export default {
     };
 
     // 수업 종료
-    const leaveSession = (props) => {
+    const leaveSession = () => {
       props.session
         .signal({
           data: 0,
           to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
-          type: "end", // The type of message (optional)
+          type: "leave-session", // The type of message (optional)
         })
         .then(() => {
-          console.log("end");
+          console.log("leave-session");
         })
         .catch((error) => {
           console.error(error);
         });
-
-      emit("leaveSession");
     };
 
     const updateMainVideoStreamManager = (stream) => {
       emit("updateMainVideoStreamManager", stream);
     };
+
+    const closeOX = () => {
+      state.isOXOpen = false;
+      state.isTopOpen = false;
+    };
+
+    onMounted(() => {
+      // const left = document.querySelector(".top-left");
+      // if(left.classList.contains("host-12orless")){
+      //   left
+      // }
+      // console.log("부모", left.parentNode.classList);
+    });
 
     return {
       state,
@@ -245,6 +274,8 @@ export default {
       publishScreenShare,
       leaveSession,
       updateMainVideoStreamManager,
+      getClientData,
+      closeOX,
     };
   },
   components: {
@@ -253,19 +284,9 @@ export default {
     OXForm,
     OXResult,
     UserVideo,
+    OvVideo,
   },
 };
 </script>
 
-<style scoped src="@/css/class.scss" lang="scss">
-/* .top-section ::v-deep(#container-screens video) {
-  width: 100px;
-  height: 100px;
-} */
-
-#container-screens video {
-  position: relative;
-  width: 100px;
-  height: 100px;
-}
-</style>
+<style scoped src="@/css/class.scss" lang="scss"></style>

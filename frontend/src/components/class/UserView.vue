@@ -16,35 +16,30 @@
             'right-side': !state.isTopOpen && !state.isChatOpen,
           }"
         >
-          <div class="idx-btn-wrapper next" @click="nextClick">
+          <!-- <div class="idx-btn-wrapper next" @click="nextClick">
             <button class="idx-btn next"></button>
           </div>
           <div class="idx-btn-wrapper prev" @click="prevClick">
             <button class="idx-btn prev"></button>
-          </div>
-          <div id="container-screens">
-            <h4>화면 공유</h4>
-          </div>
+          </div> -->
           <div class="user-card-wrapper" id="myVideo">
             <div class="hover-wrapper">나</div>
             <div class="user-card" @click="updateMainVideoStreamManager(me)">
               <OvVideo :stream-manager="me" :onEmotion="true" />
             </div>
           </div>
-          <div
-            class="user-card-wrapper"
-            v-for="(user, i) in subs"
-            :key="user.id"
-          >
-            <div class="hover-wrapper">이름{{ i }}</div>
+          <div class="user-card-wrapper" v-for="(user, i) in students" :key="i">
+            <div class="hover-wrapper">
+              {{ getClientData(user) }}
+            </div>
             <div class="user-card" @click="updateMainVideoStreamManager(user)">
               <OvVideo :stream-manager="user" />
             </div>
           </div>
         </article>
         <article class="top-article-left bot">
-          <StudentOX v-if="state.isOXOpen" />
-          <StudentInclass :publisher="me" v-else />
+          <StudentOX v-if="oxState || ox" :oxData="oxData" @closeOX="closeOX" />
+          <StudentInclass :publisher="volunteer" :screen="screen" v-else />
         </article>
       </article>
 
@@ -83,9 +78,9 @@
           <i class="fa-solid fa-video"></i>
           &nbsp;비디오 시작
         </button>
-        <router-link :to="{ name: 'mypage' }">
-          <i class="fa-solid fa-xmark xmark"></i
-        ></router-link>
+        <a @click="leaveSession">
+          <i class="fa-solid fa-xmark xmark"></i>
+        </a>
       </article>
 
       <article class="bot-right">
@@ -103,7 +98,7 @@
 </template>
 
 <script>
-import { reactive, computed } from "vue";
+import { reactive, computed, ref, watch } from "vue";
 import ParticipantsList from "@/components/class/ParticipantsList.vue";
 import ChatForm from "@/components/class/ChatForm.vue";
 import StudentOX from "@/components/class/StudentOX.vue";
@@ -118,15 +113,58 @@ export default {
     "currentUsers",
     "prevClick",
     "nextClick",
-    "leaveSession",
     "session",
     "chats",
+    "screen",
     "me",
     "subs",
+    "volunteerNickname",
+    "ox",
+    "oxData",
   ],
   setup(props, { emit }) {
     console.log("@@@@@@@@@@@@me", props.me);
     console.log("=============subs", props.subs);
+
+    const volunteer = ref(null);
+    const students = ref(null);
+
+    let oxState = ref(false);
+
+    watch(
+      () => props.ox,
+      () => {
+        if (props.ox) {
+          oxState = true;
+        } else {
+          oxState = false;
+        }
+      },
+      { deep: true },
+    );
+
+    watch(
+      () => props.subs,
+      () => {
+        // console.log("watch", cur);
+        const arr = [];
+        for (const item of props.subs) {
+          const { connection } = item.stream;
+          const data = JSON.parse(connection.data);
+          const { clientData } = data;
+          if (clientData === props.volunteerNickname) {
+            volunteer.value = item;
+          } else {
+            arr.push(item);
+          }
+        }
+        students.value = arr;
+        // console.log("나머지 학생들이 담기나?", students.value);
+        // console.log("봉사자가 담기나?", volunteer.value);
+      },
+      { deep: true },
+    );
+
     console.log("~~~~~~~~~~~~~~~~~~~session", props.session);
     const store = useStore();
     store.commit("root/initEmotion");
@@ -148,6 +186,12 @@ export default {
         return getConnectionSubs();
       }),
     });
+
+    const getClientData = (user) => {
+      let { connection } = user.stream;
+      let { clientData } = JSON.parse(connection.data);
+      return clientData;
+    };
 
     const getConnectionData = () => {
       console.log(props.me.stream);
@@ -212,15 +256,44 @@ export default {
       emit("updateMainVideoStreamManager", stream);
     };
 
+    // 수업 종료
+    const leaveSession = () => {
+      emit("leaveSession");
+    };
+
+    const closeOX = (answer) => {
+      console.log("학생의 답??", answer);
+      oxState.value = false;
+      //학생이 맞았는지 틀렸는지 판단해서 signal 보내야함
+      props.session
+        .signal({
+          data: answer,
+          to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
+          type: "ox-end", // The type of message (optional)
+        })
+        .then(() => {
+          console.log("ox-end");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+
     //props.initCurrentStudents();
     return {
       state,
+      volunteer,
+      students,
       toggleParticipants,
       toggleChat,
       activeVideo,
       activeMute,
       getConnectionSubs,
       updateMainVideoStreamManager,
+      leaveSession,
+      getClientData,
+      closeOX,
+      oxState,
     };
   },
 
