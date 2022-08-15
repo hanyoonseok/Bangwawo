@@ -15,9 +15,10 @@
       :cid="cid"
       @updateMainVideoStreamManager="updateMainVideoStreamManager"
       :volunteerNickname="volunteerNickname"
-      :oxResult="oxResult"
+      :oxResult="state.oxResult"
       :correctStudents="correctStudents"
       :incorrectStudents="incorrectStudents"
+      @closeOXResult="closeOXResult"
     />
     <UserView
       v-if="user && user.userType === 'student' && state.session"
@@ -175,14 +176,10 @@ export default {
       }
     };
 
-    // ox 상태 변화했는지 감지
-    watch(
-      () => state.oxState,
-      () => {
-        console.log("ox 상태 변화했니??", state.oxState);
-      },
-      { deep: true },
-    );
+    const closeOXResult = () => {
+      console.log("ox 창 닫을거임");
+      state.oxResult = false;
+    };
 
     const joinSession = () => {
       console.log("join session");
@@ -289,7 +286,7 @@ export default {
       state.session.on("signal:ox-end", (e) => {
         console.log("=======OX 게임 끝=========", e);
         console.log("결과??", e.data);
-        if (e.data === "o") {
+        if (e.data) {
           correctStudents.push({ sender: JSON.parse(e.from.data).clientData });
         } else {
           incorrectStudents.push({
@@ -297,6 +294,9 @@ export default {
           });
         }
         state.oxResult = true;
+        console.log("ox 결과창 바뀜?", state.oxResult);
+        state.oxState = false;
+        console.log("ox 시작여부 바뀜?", state.oxState);
       });
 
       console.log("sessionid", state.mySessionId);
@@ -692,12 +692,6 @@ export default {
     return {
       state,
       cid,
-      // dataLen,
-      // currentUsers,
-      // initCurrentUsers,
-      // prevClick,
-      // nextClick,
-      // changeDataLen,
       activeVideo,
       activeMute,
       publishScreenShare,
@@ -709,6 +703,7 @@ export default {
       leaveSession,
       correctStudents,
       incorrectStudents,
+      closeOXResult,
     };
   },
 };
