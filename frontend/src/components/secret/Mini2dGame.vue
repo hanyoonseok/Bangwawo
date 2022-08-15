@@ -83,8 +83,7 @@ export default {
       state.animation = requestAnimationFrame(frame);
       state.timer++;
       state.ctx.clearRect(0, 0, state.canvas.width, state.canvas.height);
-
-      if (state.timer % 200 === 0) {
+      if (state.timer % 110 === 0) {
         var cactus = new Cactus();
         state.cactusarr.push(cactus);
       }
@@ -152,8 +151,10 @@ export default {
       state.isGameOver = false;
       state.ctx.clearRect(0, 0, state.canvas.width, state.canvas.height);
       state.ctx.beginPath();
+      state.cactusarr = [];
       frame();
       // 하하 재시작을 어떻게 해줘야한담??
+      // 데이터를 초기화해주자.
     };
 
     return {
