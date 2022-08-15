@@ -91,9 +91,14 @@ public class EnrolService {
     }
 
     @Transactional
-    public EnrolDto updateEmotion(Long cid, Long sid, Emotion emotion) throws Exception{
+    public EnrolDto updateEmotionAndRecording(Long cid, Long sid, Emotion emotion, String recording) throws Exception{
         Enrol enrol = enrolRepository.findEnrolByClasses_cIdAndStudent_sId(cid, sid);
-        enrol.setEmotion(emotion);
+        if(enrol!=null){
+            enrol.setEmotion(emotion);
+            enrol.setRecording(recording);
+        }else{
+            System.out.println("존재하지 않는 신청정보");
+        }
         return trans(enrolRepository.save(enrol));
     }
 
