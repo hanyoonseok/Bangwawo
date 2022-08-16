@@ -47,8 +47,25 @@
           :me="state.clientData"
           :subs="state.subs"
         />
+<<<<<<< Updated upstream
         <OXForm :state="state" :toggleOX="toggleOX" />
         <OXResult :state="state" :toggleOX="toggleOX" />
+=======
+        <OXForm
+          :state="state"
+          :toggleOX="toggleOX"
+          :session="session"
+          @closeOX="closeOX"
+        />
+        <OXResult
+          :state="state"
+          :correctStudents="correctStudents"
+          :incorrectStudents="incorrectStudents"
+          :noneStudents="noneStudents"
+          :toggleOX="toggleOX"
+          v-if="oxResult || oxState"
+        />
+>>>>>>> Stashed changes
         <ChatForm
           :state="state"
           :toggleChat="toggleChat"
@@ -125,6 +142,13 @@ export default {
     "chats",
     "screen",
     "cid",
+<<<<<<< Updated upstream
+=======
+    "oxResult",
+    "correctStudents",
+    "incorrectStudents",
+    "noneStudents",
+>>>>>>> Stashed changes
   ],
   setup(props, { emit }) {
     console.log("@@@@@@@@@@@@me", props.me);
