@@ -216,3 +216,9 @@ export const storeEmotion = ({ state }, payload) => {
   const url = `/enrol/emotion`;
   return axios.put(url, payload);
 };
+
+export const setStreamId = ({ state }, payload) => {
+  console.log("setStreamId", state, payload);
+  const url = `/enrol/`;
+  return axios.put(url, payload);
+};

@@ -80,12 +80,8 @@ export default {
       console.log(textareaValue);
       e.stopPropagation();
       const payload = {
-        cid: {
-          cid: CID.value,
-        },
-        sid: {
-          sid: selected.value.sid,
-        },
+        cid: CID.value,
+        sid: selected.value.sid,
         feedback: textareaValue,
       };
       if (textareaValue) {

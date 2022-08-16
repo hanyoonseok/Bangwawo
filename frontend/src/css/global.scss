@@ -314,3 +314,20 @@ h4 {
   font-weight: normal;
   font-style: normal;
 }
+
+#container-screens,
+#volunteerVideo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#volunteerVideo {
+  height: 100%;
+}
+#container-screens video,
+#volunteerVideo video {
+  width: 100% !important;
+}
+.stu-inclass-container {
+  @include flexCenter;
+}

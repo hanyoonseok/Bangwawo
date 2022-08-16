@@ -79,7 +79,10 @@ export default {
           const makedArray = [];
           for (const item of allClasses) {
             if (item.opened) {
-              openArray.push(item);
+              if (item.state !== 2) {
+                // 오픈방은 현재 종료된 수업이 아니어야함
+                openArray.push(item);
+              }
             } else {
               makedArray.push(item);
             }
