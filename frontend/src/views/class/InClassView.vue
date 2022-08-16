@@ -746,7 +746,6 @@ export default {
       updateMainVideoStreamManager,
       user,
       volunteerNickname,
-      leaveSession,
       correctStudents,
       incorrectStudents,
       closeOXResult,
