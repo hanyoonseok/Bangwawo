@@ -83,7 +83,7 @@ export default {
       state.animation = requestAnimationFrame(frame);
       state.timer++;
       state.ctx.clearRect(0, 0, state.canvas.width, state.canvas.height);
-      if (state.timer % 110 === 0) {
+      if (state.timer % (80 * (Math.floor(Math.random() * 4) + 1)) === 0) {
         var cactus = new Cactus();
         state.cactusarr.push(cactus);
       }
