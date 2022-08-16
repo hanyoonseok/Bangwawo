@@ -1,1 +1,1 @@
-![image](/uploads/b878e001db4709a0fc4115bc4fcdfcfb/image.png)
+![image](/uploads/80f4f4cfd713a5aee5b0ecd1768ea21c/image.png)
