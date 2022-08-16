@@ -41,6 +41,7 @@
               <span></span>
               <button
                 class="end-btn"
+                v-if="userInfo.sid !== state.postSid"
                 @mouseover="state.isVisibleNoticeImg = true"
                 @mouseleave="state.isVisibleNoticeImg = false"
                 @click="addLikeRequest"
@@ -114,7 +115,7 @@
             </router-link>
           </div>
           <div class="status-wrapper">
-            <label>{{ requestInfo.count }}</label>
+            <label>조회수 &nbsp;{{ requestInfo.count }}</label>
           </div>
         </div>
       </article>
@@ -155,7 +156,6 @@ export default {
       status: false,
     });
 
-    const user = ref(store.state.root.user);
     const userInfo = reactive(store.state.root.user);
 
     let state = reactive({
@@ -213,7 +213,7 @@ export default {
       store
         .dispatch("root/addLikeRequest", {
           rid: rid,
-          sid: user.value.sid,
+          sid: userInfo.sid,
         })
         .then((response) => {
           console.log(response);

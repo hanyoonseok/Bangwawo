@@ -8,10 +8,6 @@
       <section classs="sub-section" v-if="!state.isMatching">
         <img src="@/assets/secret_landing.png" class="landing-img loading" />
         <button class="start-btn" @click="startMatch">비밀친구 대화하기</button>
-
-        <h4 style="padding-top: 80px">
-          현재 상담 가능한 친구 수 : {{ state.volunteerCnt }} 명
-        </h4>
       </section>
       <section class="sub-section-loading" v-else>
         <!-- <img src="@/assets/secret_matching.png" /> -->
@@ -79,6 +75,7 @@ export default {
 
     //유저가 미니게임 시작을 눌렀다
     const startMinigame = () => {
+      document.activeElement.blur();
       state.startMinigame = !state.startMinigame;
     };
     const closeMinigame = () => {

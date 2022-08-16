@@ -158,6 +158,10 @@ export default {
       // console.log(filteredMakedClass.value);
     };
 
+    window.onbeforeunload = () => {
+      window.scrollTo(0, 0);
+    };
+
     return {
       top,
       getClassList,
