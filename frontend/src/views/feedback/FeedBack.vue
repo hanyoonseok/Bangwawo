@@ -135,7 +135,7 @@ export default {
   setup() {
     let slider;
     let menuBtn;
-    let slideOpen;
+    let slide;
     const route = useRoute();
     const store = useStore();
     const cid = route.params.cid;
@@ -161,7 +161,7 @@ export default {
     onMounted(() => {
       slider = document.querySelector(".slider");
       menuBtn = document.querySelectorAll(".menu-btn");
-      slideOpen = document.querySelector("video");
+      slide = document.querySelector("video");
     });
 
     const doSlide = (e) => {
@@ -169,14 +169,18 @@ export default {
       slider = document.querySelector(".slider");
       if (slider.classList.contains("closed")) {
         slider.classList.remove("closed");
-        console.log(slideOpen);
-        slideOpen.classList.add("slide-open");
+        document.querySelector(".feedback-container .right").style.display =
+          "block";
+        slide.classList.add("slide-open");
         e.target.classList.add("fa-arrow-right-from-line");
         e.target.classList.remove("fa-arrow-left-to-line");
         e.target.classList.add("open");
       } else {
-        slideOpen.classList.remove("slide-open");
+        // slide.classList.remove("slide-open");
+        // slide.classList.add("slide-closed");
         slider.classList.add("closed");
+        document.querySelector(".feedback-container .right").style.display =
+          "none";
         e.target.classList.remove("fa-arrow-right-from-line");
         e.target.classList.add("fa-arrow-left-to-line");
         e.target.classList.remove("open");
@@ -204,7 +208,7 @@ export default {
       doSlide,
       slider,
       menuBtn,
-      slideOpen,
+      slide,
       toggleFeedback,
       feedbackInfo,
       toTimeStr,
