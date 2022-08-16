@@ -32,7 +32,7 @@ ul {
 button {
   cursor: pointer;
   border: none;
-  font-size: 12px;
+  font-size: 13px;
 }
 a {
   cursor: pointer;
@@ -313,4 +313,21 @@ h4 {
     format("woff");
   font-weight: normal;
   font-style: normal;
+}
+
+#container-screens,
+#volunteerVideo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#volunteerVideo {
+  height: 100%;
+}
+#container-screens video,
+#volunteerVideo video {
+  width: 100% !important;
+}
+.stu-inclass-container {
+  @include flexCenter;
 }

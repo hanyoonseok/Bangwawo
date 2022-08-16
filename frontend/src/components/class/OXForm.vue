@@ -9,22 +9,72 @@
         <h4>
           질문을 적고 O/X 정답을 고르면 학생들이 OX퀴즈를 시작하게 됩니다.
         </h4>
-        <input type="text" class="ox-input" placeholder="질문을 등록하세요" />
+        <input
+          type="text"
+          class="ox-input"
+          placeholder="질문을 등록하세요"
+          v-model="ox.question"
+        />
         <div class="ox-btn-wrapper">
-          <img src="@/assets/O-btn.png" />
-          <img src="@/assets/X-btn.png" />
+          <div>
+            <input type="radio" id="answer" value="o" v-model="ox.selected" />
+            <img src="@/assets/O-btn.png" />
+          </div>
+          <div>
+            <input type="radio" id="answer" value="x" v-model="ox.selected" />
+            <img src="@/assets/X-btn.png" />
+          </div>
         </div>
       </article>
-      <button class="submit-btn">등록하기</button>
+      <button class="submit-btn" @click="enrolOX">등록하기</button>
     </div>
   </article>
 </template>
 
 <script>
+import { reactive } from "@vue/reactivity";
 export default {
   name: "OXForm",
-  props: ["state", "toggleOX"],
-  setup() {},
+  props: ["session", "state", "toggleOX"],
+  setup(props, { emit }) {
+    const ox = reactive({
+      question: "",
+      selected: "",
+    });
+    const enrolOX = () => {
+      console.log("ox", ox);
+      props.session
+        .signal({
+          data: ox.question,
+          to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
+          type: "start-question", // The type of message (optional)
+        })
+        .then(() => {
+          console.log("start-question");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      props.session
+        .signal({
+          data: ox.selected === "o" ? true : false,
+          to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
+          type: "start-answer", // The type of message (optional)
+        })
+        .then(() => {
+          console.log("start-answer");
+          emit("closeOX");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+
+    return {
+      ox,
+      enrolOX,
+    };
+  },
 };
 </script>
 

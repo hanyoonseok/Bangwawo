@@ -55,12 +55,6 @@ export const getComingClasses = ({ state }, vid) => {
   return axios.get(url);
 };
 
-export const setCharacterInfo = ({ state }, modifyInfo) => {
-  console.log("setCharacterInfo", state, modifyInfo);
-  const url = `/${modifyInfo.userType}/character`;
-  return axios.put(url, modifyInfo);
-};
-
 export const deleteUser = ({ state }, payload) => {
   console.log("deleteUser", state, payload);
   const url = `/${payload.userType}/${payload.vid || payload.sid}`;
@@ -80,7 +74,6 @@ export const inactiveKakaoToken = ({ state }, accessToken) => {
 };
 
 // 수업
-
 export const getClassList = ({ state }) => {
   console.log("getClassList", state);
   const url = `/class`;
@@ -146,6 +139,57 @@ export const startClass = ({ state }, payload) => {
   const url = `/class`;
   return axios.put(url, payload);
 };
+export const setCharacterInfo = ({ state }, modifyInfo) => {
+  console.log("setCharacterInfo", state, modifyInfo);
+  const url = `/${modifyInfo.userType}/character`;
+  return axios.put(url, modifyInfo);
+};
+
+export const getStudentInfo = ({ state }, id) => {
+  console.log("getStudentInfo", state, id);
+  const url = `/student/${id}`;
+  return axios.get(url);
+};
+
+export const getVolunteerInfo = ({ state }, id) => {
+  console.log("getVolunteerInfo", state, id);
+  const url = `/volunteer/${id}`;
+  return axios.get(url);
+};
+
+// 상담가능한 봉사자들 얻어오기
+export const getTalkableVolunteer = ({ state }) => {
+  console.log("getTalkableVolunteer", state);
+  const url = `/volunteer/talkable`;
+  return axios.get(url);
+};
+
+// 요청글 검색
+
+export const getSearchByTtileRequest = ({ state }, topic) => {
+  console.log("getSearchByTtileRequest", state);
+  const url = `/request/topic/${topic}`;
+  return axios.get(url);
+};
+
+// 학생의 위험발언 저장
+export const studentDangerWord = ({ state }, payload) => {
+  console.log("studentDangerWord", state);
+  const url = `/chat`;
+  return axios.post(url, payload);
+};
+
+export const getChildrenDangerAlarm = ({ state }, sid) => {
+  console.log("getChildrenDangerAlarm", state);
+  const url = `/chat/${sid}`;
+  return axios.get(url);
+};
+
+export const readAlaramParent = ({ state }, payload) => {
+  console.log("readAlaramParent", state);
+  const url = `/chat/read`;
+  return axios.post(url, payload);
+};
 
 // 봉사자가 세션 만들기
 export const startVolunteerClass = ({ state }, payload) => {
@@ -191,19 +235,6 @@ export const getStudentFeedback = ({ state }, payload) => {
   return axios.get(url);
 };
 
-export const getRecordVideo = ({ state }, recordId) => {
-  console.log("getRecordVideo", state, recordId);
-  axios.defaults.baseURL = "";
-  const url = `${process.env.VUE_APP_OV_DOMAIN}/openvidu/api/recordings/${recordId}`;
-  const headers = {
-    headers: {
-      Authorization:
-        "Basic " + btoa("OPENVIDUAPP:" + process.env.VUE_APP_OV_SECRET),
-      "Content-Type": "application/json",
-    },
-  };
-  return axios.get(url, headers);
-};
 // 좋아요 추가
 export const addLikeRequest = ({ state }, payload) => {
   console.log("addLikeRequest", state, payload);
@@ -211,8 +242,33 @@ export const addLikeRequest = ({ state }, payload) => {
   return axios.post(url, payload);
 };
 
-export const storeEmotion = ({ state }, payload) => {
-  console.log("storeEmotion", state, payload);
+export const setStudentFeedbackInfo = ({ state }, payload) => {
+  console.log("setStudentFeedbackInfo", state, payload);
   const url = `/enrol/emotion`;
   return axios.put(url, payload);
 };
+
+export const setStreamId = ({ state }, payload) => {
+  console.log("setStreamId", state, payload);
+  const url = `/enrol/recording`;
+  return axios.put(url, payload);
+};
+
+export const unzipRecords = ({ state }, payload) => {
+  console.log("unzipRecords", state, payload);
+  const url = `/session/recording/unzip/${payload.sessionId}/${payload.name}`;
+  return axios.get(url);
+};
+
+// export const stopRecording = ({ state }, recordId) => {
+//   console.log("stopRecording", state, recordId);
+//   axios.defaults.baseURL = "";
+//   const url = `${process.env.VUE_APP_OV_DOMAIN}/openvidu/api/recordings/stop/${recordId}`;
+//   const headers = {
+//     headers: {
+//       Authorization:
+//         "Basic " + btoa("OPENVIDUAPP:" + process.env.VUE_APP_OV_SECRET),
+//     },
+//   };
+//   return axios.post(url, null, headers);
+// };

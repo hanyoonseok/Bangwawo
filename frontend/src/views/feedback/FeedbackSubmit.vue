@@ -59,12 +59,12 @@ export default {
   setup() {
     const route = useRoute();
     const store = useStore();
-    const CID = ref(route.params.cid);
+    const CID = route.params.cid;
     const students = ref([]);
     let selected = ref(null);
 
     const getClassStudents = () => {
-      store.dispatch("root/getClassStudents", CID.value).then((res) => {
+      store.dispatch("root/getClassStudents", CID).then((res) => {
         const { data } = res;
         for (let i = 0; i < data.length; i++) data[i].idx = i;
 
@@ -80,12 +80,8 @@ export default {
       console.log(textareaValue);
       e.stopPropagation();
       const payload = {
-        cid: {
-          cid: CID.value,
-        },
-        sid: {
-          sid: selected.value.sid,
-        },
+        cid: CID,
+        sid: selected.value.sid,
         feedback: textareaValue,
       };
       if (textareaValue) {
