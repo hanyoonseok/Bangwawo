@@ -7,12 +7,18 @@
       </div>
 
       <div class="stu-ox-imgcontainer">
-        <img src="@/assets/oDuck.png" @click="selectOne(true)" />
-        <img src="@/assets/xDuck.png" @click="selectOne(false)" />
+        <img
+          src="@/assets/oDuck.png"
+          @click="selectOne(true)"
+          :class="{ select: answer }"
+        />
+        <img
+          src="@/assets/xDuck.png"
+          @click="selectOne(false)"
+          :class="{ select: !answer }"
+        />
       </div>
-      <div class="selected-answer">
-        선택한 답 : {{ state.answer ? "O" : "X" }}
-      </div>
+      <div class="selected-answer">선택한 답 : {{ answer ? "O" : "X" }}</div>
       <div class="stu-ox-resttime">
         <label>{{ timer }}</label>
       </div>
@@ -25,18 +31,19 @@
 </template>
 
 <script>
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, ref } from "vue";
 export default {
   props: ["oxData"],
   name: "StudentOX",
   setup(props, { emit }) {
     console.log("학생이 보는 ox", props.oxData);
-    const state = reactive({ answer: false });
+    let answer = ref(null);
 
-    const timer = ref(5);
+    const timer = ref(10);
 
     const selectOne = (option) => {
-      state.answer = option;
+      answer.value = option;
+      console.log("선택 바꿈 @@@@", answer.value);
     };
     onMounted(() => {
       // 30초 지나고 ox 종료시키기
@@ -44,16 +51,16 @@ export default {
         timer.value--;
         if (timer.value == 0) {
           console.log("30초 지났음 ox 사라져");
-          console.log("학생이 선택한 답", state.answer);
-          emit("closeOX", state.answer);
+          console.log("학생이 선택한 답", answer.value);
+          emit("closeOX", answer.value);
         }
       }, 1000);
     });
 
     return {
-      state,
       timer,
       selectOne,
+      answer,
     };
   },
   components: {},

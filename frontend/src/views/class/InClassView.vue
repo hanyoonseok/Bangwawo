@@ -14,10 +14,12 @@
       :screen="state.screenShareState"
       :cid="cid"
       @updateMainVideoStreamManager="updateMainVideoStreamManager"
+      @leaveSession="leaveSession"
       :volunteerNickname="volunteerNickname"
       :oxResult="state.oxResult"
-      :correctStudents="correctStudents"
-      :incorrectStudents="incorrectStudents"
+      :correctStudents="state.oxData.correctStudents"
+      :incorrectStudents="state.oxData.incorrectStudents"
+      :noneStudents="state.oxData.noneStudents"
       @closeOXResult="closeOXResult"
     />
     <UserView
@@ -128,6 +130,9 @@ export default {
       oxData: {
         question: null,
         answer: null,
+        correctStudents: [],
+        incorrectStudents: [],
+        noneStudents: [],
       }, // ox 질문, 답 데이터
       oxResult: false,
       screenShareState: false, //화면공유 여부
@@ -289,9 +294,9 @@ export default {
       state.session.on("signal:start-question", (e) => {
         console.log("=======OX 게임 시작, 질문=========", e);
         state.oxData.question = e.data;
-        correctStudents.value = [];
-        incorrectStudents.value = [];
-        oxEndCount.count = 0;
+        state.oxData.correctStudents = [];
+        state.oxData.incorrectStudents = [];
+        state.oxData.noneStudents = [];
       });
       state.session.on("signal:start-answer", (e) => {
         console.log("=======OX 게임 시작, 답=========", e);
@@ -302,14 +307,17 @@ export default {
         oxEndCount.count++;
         console.log("=======OX 게임 끝=========", e);
         console.log("결과??", e.data);
-        console.log("지금 들어온 학생 몇명임?", state.subscribers.length);
-        console.log(oxEndCount.count, state.subscribers.length);
-        if (e.data === "true") {
-          correctStudents.value.push({
+        console.log(state.oxData.correctStudents);
+        if (e.data === true || e.data === "true") {
+          state.oxData.correctStudents.push({
+            sender: JSON.parse(e.from.data).clientData,
+          });
+        } else if (e.data === false || e.data === "false") {
+          state.oxData.incorrectStudents.push({
             sender: JSON.parse(e.from.data).clientData,
           });
         } else {
-          incorrectStudents.value.push({
+          state.oxData.noneStudents.push({
             sender: JSON.parse(e.from.data).clientData,
           });
         }
