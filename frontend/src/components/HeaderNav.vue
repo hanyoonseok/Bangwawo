@@ -196,7 +196,7 @@ export default {
     };
 
     const connectSocket = async (isVolunteer) => {
-      const serverURL = "http://localhost:8081/api/ws";
+      const serverURL = `${process.env.VUE_APP_API_URL}/ws`;
       let socket = await new SockJS(serverURL);
       state.stompClient = Stomp.over(socket);
       console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`);

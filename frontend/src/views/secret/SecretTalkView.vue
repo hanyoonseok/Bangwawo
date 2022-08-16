@@ -226,6 +226,7 @@ export default {
           console.log("이건내목소리다.");
         } else {
           console.log("내목소리아니얌!!");
+          state.isSubscribeTalking = true;
         }
       });
       // publisher.on("publisherStartSpeaking", (event) => {
