@@ -251,9 +251,18 @@ apt-get install nginx
 
 ---
 🧨 이미 실행 중일때 update가 필요하다면
-1. `docker stop backendt` (컨테이너 정지)
-2. `docker rm backendt` (켄테이너 삭제)
-3. `docker image rm backendt` (이미지 삭제)
+1. 컨테이너 정지
+    ```
+    docker stop backendt
+    ````
+2. 켄테이너 삭제
+    ```
+    docker rm backendt
+    ```
+3. 이미지 삭제
+    ```
+    docker image rm backendt
+    ```
 4. 위 내용 작성 후 build부터 재실행
 
 
