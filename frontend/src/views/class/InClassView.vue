@@ -15,7 +15,16 @@
       :screen="state.screenShareState"
       :cid="cid"
       @updateMainVideoStreamManager="updateMainVideoStreamManager"
+<<<<<<< Updated upstream
       @leaveSession="leaveSession"
+=======
+      :volunteerNickname="volunteerNickname"
+      :oxResult="state.oxResult"
+      :correctStudents="state.oxData.correctStudents"
+      :incorrectStudents="state.oxData.incorrectStudents"
+      :noneStudents="state.oxData.noneStudents"
+      @closeOXResult="closeOXResult"
+>>>>>>> Stashed changes
     />
     <UserView
       v-if="user && user.userType === 'student' && state.session"
@@ -115,7 +124,19 @@ export default {
         return user.value.userType === "volunteer" ? 12 : 4;
       }),
       dataIdx: 0,
+<<<<<<< Updated upstream
 
+=======
+      oxState: false, //ox 시작 여부
+      oxData: {
+        question: null,
+        answer: null,
+        correctStudents: [],
+        incorrectStudents: [],
+        noneStudents: [],
+      }, // ox 질문, 답 데이터
+      oxResult: false,
+>>>>>>> Stashed changes
       screenShareState: false, //화면공유 여부
     });
 
@@ -217,6 +238,45 @@ export default {
         leaveSession();
       });
 
+<<<<<<< Updated upstream
+=======
+      // OX 시작
+      state.session.on("signal:start-question", (e) => {
+        console.log("=======OX 게임 시작, 질문=========", e);
+        state.oxData.question = e.data;
+        state.oxData.correctStudents = [];
+        state.oxData.incorrectStudents = [];
+        state.oxData.noneStudents = [];
+      });
+      state.session.on("signal:start-answer", (e) => {
+        console.log("=======OX 게임 시작, 답=========", e);
+        state.oxState = true;
+        state.oxData.answer = e.data;
+      });
+      state.session.on("signal:ox-end", (e) => {
+        console.log("=======OX 게임 끝=========", e);
+        console.log("결과??", e.data);
+        console.log(state.oxData.correctStudents);
+        if (e.data === true || e.data === "true") {
+          state.oxData.correctStudents.push({
+            sender: JSON.parse(e.from.data).clientData,
+          });
+        } else if (e.data === false || e.data === "false") {
+          state.oxData.incorrectStudents.push({
+            sender: JSON.parse(e.from.data).clientData,
+          });
+        } else {
+          state.oxData.noneStudents.push({
+            sender: JSON.parse(e.from.data).clientData,
+          });
+        }
+        state.oxResult = true;
+        console.log("ox 결과창 바뀜?", state.oxResult);
+        state.oxState = false;
+        console.log("ox 시작여부 바뀜?", state.oxState);
+      });
+
+>>>>>>> Stashed changes
       console.log("sessionid", state.mySessionId);
       console.log("user name", state.myUserName);
       // 'getToken' method is simulating what your server-side should do.

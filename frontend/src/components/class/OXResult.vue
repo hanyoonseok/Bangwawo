@@ -49,14 +49,24 @@
         <div class="o-name red">김수빈</div>
       </article>
     </div>
-    <label class="noanswer">무응답자 : 3</label>
+    <label class="noanswer">무응답자 : {{ noneStudents.length }}</label>
   </article>
 </template>
 
 <script>
 export default {
   name: "OXResult",
+<<<<<<< Updated upstream
   props: ["state", "toggleOX"],
+=======
+  props: [
+    "state",
+    "toggleOX",
+    "incorrectStudents",
+    "correctStudents",
+    "noneStudents",
+  ],
+>>>>>>> Stashed changes
   setup() {},
 };
 </script>
