@@ -188,6 +188,7 @@ export default {
       // 새로운 Stream을 구독하고 subscribers배열에 저장
       state.session.on("streamCreated", ({ stream }) => {
         const subscriber = state.session.subscribe(stream);
+        state.subscriber = subscriber;
         console.log("subscriber", subscriber);
         // subscriber.subscribeToVideo(false); // true to enable the video, false to disable it
         state.subscribers.push(subscriber);
@@ -208,38 +209,65 @@ export default {
         console.warn(exception);
       });
 
-      //음성 감지
-      state.session.on("publisherStartSpeaking", (event) => {
+      // //음성 감지
+      // state.session.on("publisherStartSpeaking", (event) => {
+      //   console.log(
+      //     "User " + event.connection.connectionId + " start speaking",
+      //   );
+      //   console.log(state.publisher.stream.connection.connectionId);
+      //   voiceDetection();
+      //   if (
+      //     state.publisher.stream.connection.connectionId ===
+      //     event.connection.connectionId
+      //   ) {
+      //     state.isPublisherTalking = true;
+      //     console.log("이건내목소리다.");
+      //   } else {
+      //     console.log("내목소리아니얌!!");
+      //   }
+      // });
+      state.subscriber.on("publisherStartSpeaking", (event) => {
         console.log(
           "User " + event.connection.connectionId + " start speaking",
         );
-        console.log(state.publisher.stream.connection.connectionId);
+        state.isSubscribeTalking = true;
+        console.log("상대목소리다!.");
+      });
+
+      state.subscriber.on("publisherStopSpeaking", (event) => {
+        console.log(
+          "User " + event.connection.connectionId + " start speaking",
+        );
+        state.isSubscribeTalking = false;
+      });
+      state.publisher.on("publisherStartSpeaking", (event) => {
+        console.log(
+          "User " + event.connection.connectionId + " start speaking",
+        );
+        state.isPublisherTalking = true;
+        console.log("이건내목소리다.");
         voiceDetection();
-        if (
-          state.publisher.stream.connection.connectionId ===
-          event.connection.connectionId
-        ) {
-          state.isPublisherTalking = true;
-          console.log("이건내목소리다.", state.isPublisherTalking);
-        } else {
-          state.isSubscribeTalking = true;
-          console.log("내목소리아니얌!!", state.isPublisherTalking);
-        }
+      });
+      state.publisher.on("publisherStopSpeaking", (event) => {
+        console.log(
+          "User " + event.connection.connectionId + " start speaking",
+        );
+        state.isPublisherTalking = false;
       });
 
       //음성 감지 종료
-      state.session.on("publisherStopSpeaking", (event) => {
-        console.log("User " + event.connection.connectionId + " stop speaking");
-        if (
-          state.publisher.stream.connection.connectionId ===
-          event.connection.connectionId
-        ) {
-          state.isPublisherTalking = false;
-        } else {
-          state.isSubscribeTalking = false;
-        }
-        recognition.stop();
-      });
+      // state.session.on("publisherStopSpeaking", (event) => {
+      //   console.log("User " + event.connection.connectionId + " stop speaking");
+      //   if (
+      //     state.publisher.stream.connection.connectionId ===
+      //     event.connection.connectionId
+      //   ) {
+      //     state.isPublisherTalking = false;
+      //   } else {
+      //     state.isSubscribeTalking = false;
+      //   }
+      //   recognition.stop();
+      // });
 
       console.log("sessionid", state.mySessionId);
       console.log("user name", state.myUserName);

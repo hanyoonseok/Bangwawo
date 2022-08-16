@@ -297,11 +297,6 @@ export default {
     };
 
     const toggleTalkable = () => {
-      store
-        .dispatch("root/toggleTalkable", user.value.vid)
-        .then(() => store.commit("root/toggleTalkable"))
-        .catch((err) => console.log(err.message));
-      // db도 변경해준다.
       changeTalkableState();
     };
 
@@ -370,7 +365,7 @@ export default {
         )
         .then((response) => {
           console.log(response);
-          store.commit("root/setVolunteerTalkingState");
+          store.commit("root/toggleTalkable");
           console.log(user.value.talkable);
         });
     };
