@@ -14,10 +14,12 @@
       :screen="state.screenShareState"
       :cid="cid"
       @updateMainVideoStreamManager="updateMainVideoStreamManager"
+      @leaveSession="leaveSession"
       :volunteerNickname="volunteerNickname"
-      :oxResult="oxResult"
-      :correctStudents="correctStudents"
-      :incorrectStudents="incorrectStudents"
+      :oxResult="state.oxResult"
+      :correctStudents="state.oxData.correctStudents"
+      :incorrectStudents="state.oxData.incorrectStudents"
+      @closeOXResult="closeOXResult"
     />
     <UserView
       v-if="user && user.userType === 'student' && state.session"
@@ -127,14 +129,16 @@ export default {
       oxData: {
         question: null,
         answer: null,
+        correctStudents: [],
+        incorrectStudents: [],
       }, // ox 질문, 답 데이터
       oxResult: false,
       screenShareState: false, //화면공유 여부
       streamId: null,
     });
 
-    const correctStudents = [];
-    const incorrectStudents = [];
+    const correctStudents = ref([]);
+    const incorrectStudents = ref([]);
 
     // 화면 공유 상태 변화했는지 감지
     watch(
@@ -175,14 +179,22 @@ export default {
       }
     };
 
-    // ox 상태 변화했는지 감지
-    watch(
-      () => state.oxState,
-      () => {
-        console.log("ox 상태 변화했니??", state.oxState);
-      },
-      { deep: true },
-    );
+    const closeOXResult = () => {
+      console.log("ox 창 닫을거임");
+      state.oxResult = false;
+    };
+
+    const openOXResult = () => {
+      console.log("결과창 열거임");
+      state.oxResult = true;
+      console.log("ox 결과창 바뀜?", state.oxResult);
+      state.oxState = false;
+      console.log("ox 시작여부 바뀜?", state.oxState);
+    };
+
+    let oxEndCount = reactive({
+      count: 0,
+    });
 
     const joinSession = () => {
       console.log("join session");
@@ -280,6 +292,9 @@ export default {
       state.session.on("signal:start-question", (e) => {
         console.log("=======OX 게임 시작, 질문=========", e);
         state.oxData.question = e.data;
+        state.oxData.correctStudents = [];
+        state.oxData.incorrectStudents = [];
+        state.oxData.noneStudents = [];
       });
       state.session.on("signal:start-answer", (e) => {
         console.log("=======OX 게임 시작, 답=========", e);
@@ -287,16 +302,22 @@ export default {
         state.oxData.answer = e.data;
       });
       state.session.on("signal:ox-end", (e) => {
+        oxEndCount.count++;
         console.log("=======OX 게임 끝=========", e);
         console.log("결과??", e.data);
-        if (e.data === "o") {
-          correctStudents.push({ sender: JSON.parse(e.from.data).clientData });
+        console.log(state.oxData.correctStudents);
+        if (e.data === "true") {
+          state.oxData.correctStudents.push({
+            sender: JSON.parse(e.from.data).clientData,
+          });
         } else {
-          incorrectStudents.push({
+          state.oxData.incorrectStudents.push({
             sender: JSON.parse(e.from.data).clientData,
           });
         }
-        state.oxResult = true;
+        if (oxEndCount.count === state.subscribers.length) {
+          openOXResult();
+        }
       });
 
       console.log("sessionid", state.mySessionId);
@@ -715,12 +736,6 @@ export default {
     return {
       state,
       cid,
-      // dataLen,
-      // currentUsers,
-      // initCurrentUsers,
-      // prevClick,
-      // nextClick,
-      // changeDataLen,
       activeVideo,
       activeMute,
       publishScreenShare,
@@ -732,6 +747,7 @@ export default {
       leaveSession,
       correctStudents,
       incorrectStudents,
+      closeOXResult,
     };
   },
 };

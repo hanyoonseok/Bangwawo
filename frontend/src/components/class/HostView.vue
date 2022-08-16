@@ -55,7 +55,7 @@
           :correctStudents="correctStudents"
           :incorrectStudents="incorrectStudents"
           :toggleOX="toggleOX"
-          v-if="oxResult"
+          v-if="oxResult || oxState"
         />
         <ChatForm
           :state="state"
@@ -113,7 +113,7 @@
 </template>
 
 <script>
-import { reactive, computed, onMounted } from "vue";
+import { reactive, computed, onMounted, ref, watch } from "vue";
 import ParticipantsList from "@/components/class/ParticipantsList.vue";
 import ChatForm from "@/components/class/ChatForm.vue";
 import OXForm from "@/components/class/OXForm.vue";
@@ -161,6 +161,28 @@ export default {
       }),
     });
 
+    let oxState = ref(false);
+
+    watch(
+      () => props.oxResult,
+      () => {
+        console.log("ox 끝났는지ㅣㅣㅣ");
+        if (props.oxResult) {
+          console.log("ㅇㅇ");
+          oxState.value = true;
+          state.isOXOpen = false;
+          state.isOXResult = true;
+          state.isTopOpen = true;
+        } else {
+          console.log("ㄴㄴ");
+          oxState.value = false;
+          state.isOXOpen = true;
+          state.isOXResult = false;
+        }
+      },
+      { deep: true },
+    );
+
     const getConnectionData = () => {
       console.log(props.me.stream);
       const { connection } = props.me.stream;
@@ -201,6 +223,7 @@ export default {
       if (state.isParticipantsOpen || state.isOXOpen) state.isTopOpen = true;
       else state.isTopOpen = false;
       console.log(state);
+      emit("closeOXResult");
     };
 
     const toggleChat = () => {

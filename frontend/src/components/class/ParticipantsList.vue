@@ -27,10 +27,7 @@
 export default {
   name: "ParticipantsList",
   props: ["state", "toggleParticipants", "me", "subs"],
-  setup(props) {
-    console.log("me", props.me);
-    console.log("subs", props.subs);
-  },
+  setup() {},
 };
 </script>
 

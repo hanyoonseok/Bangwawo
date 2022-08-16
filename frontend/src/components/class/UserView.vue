@@ -134,9 +134,9 @@ export default {
       () => props.ox,
       () => {
         if (props.ox) {
-          oxState = true;
+          oxState.value = true;
         } else {
-          oxState = false;
+          oxState.value = false;
         }
       },
       { deep: true },
@@ -261,11 +261,10 @@ export default {
 
     const closeOX = (answer) => {
       console.log("학생의 답??", answer);
-      oxState.value = false;
       //학생이 맞았는지 틀렸는지 판단해서 signal 보내야함
       props.session
         .signal({
-          data: answer,
+          data: answer ? "true" : "false",
           to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
           type: "ox-end", // The type of message (optional)
         })
