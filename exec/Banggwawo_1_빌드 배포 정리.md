@@ -46,7 +46,7 @@
 
 
 ## 빌드 및 배포
-### 1. OPENVIDU 설치
+### 1. Openvidu 설치
 📜 [공식 사이트](https://docs.openvidu.io/en/stable/deployment/ce/on-premises/#2-lets-encrypt-certificatep)
 1) ROOT권한으로 설치 진행
     ```
@@ -90,7 +90,7 @@
 
 
 
-### 2. nginx 설치
+### 2. Nginx 설치
 ```
 apt-get update
 apt-get install nginx
@@ -99,8 +99,8 @@ apt-get install nginx
 
 
 
-### 3. certbot 설치
-1. 공통 certbot 설치
+### 3. Certbot 설치
+1. 공통 Certbot 설치
     ```
     apt-get update
     apt-get install software-propeties-common
@@ -109,7 +109,7 @@ apt-get install nginx
     apt-get install certbot python3-certbot-nginx
     ```
 
-2. nginx 세팅                         
+2. Nginx 세팅                         
     `conf` 파일이 있는지 확인하고, conf파일이 있는 경우 `your server block`에 파일 이름을 넣고 없는 경우 원하는 이름으로 생성한다.
     ```A
     vim /etc/nginx/sites-available/[your server block]
@@ -129,7 +129,7 @@ apt-get install nginx
     ```
 
 
-3. ssl인증획득하기
+3. SSL 인증 획득하기
     example.com을 자신의 도메인을 넣어준다.
 
     ```
@@ -144,7 +144,7 @@ apt-get install nginx
 
 
 
-### 2. mysql 설치
+### 2. MySQL 설치
 1. mysql 설치하기
     ```
     apt-get install mysql-server
@@ -187,7 +187,7 @@ apt-get install nginx
     ```
 
 
-### 3. backend 배포
+### 3. Backend 배포
 
 1. backend jar 파일 만들기
 
@@ -250,7 +250,7 @@ apt-get install nginx
     ```
 
 ---
-🧨 이미 실행 중일때 update가 필요하다면
+🧨 **이미 실행 중일때 update가 필요하다면**
 1. 컨테이너 정지
     ```
     docker stop backendt
@@ -267,6 +267,20 @@ apt-get install nginx
 
 
 
-
-
 ### 4. Frontend 배포
+
+1. VSCode 터미널에서 빌드 파일 생성
+    ```
+    npm run build
+    ```
+2. dist 폴더를 /home/ubuntu로 이동 (filezila 사용)
+
+    ![image](/uploads/ee4304be5431c7c87b8a6a41235f5474/image.png)
+3. dist 폴더를 /var/www로 이동
+    ```
+    mv dist /var/www/html
+    ```
+4. nginx 재가동
+    ```
+    sudo service nginx restart
+    ```
