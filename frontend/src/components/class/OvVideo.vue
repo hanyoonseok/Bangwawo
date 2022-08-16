@@ -30,10 +30,10 @@ export default {
     const video = document.getElementById("video");
 
     Promise.all([
-      faceapi.nets.tinyFaceDetector.loadFromUri("./models"),
-      faceapi.nets.faceLandmark68Net.loadFromUri("./models"),
-      faceapi.nets.faceRecognitionNet.loadFromUri("./models"),
-      faceapi.nets.faceExpressionNet.loadFromUri("./models"),
+      faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
+      faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
+      faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
+      faceapi.nets.faceExpressionNet.loadFromUri("/models"),
     ]).then(startVideo);
 
     function startVideo() {
@@ -62,6 +62,7 @@ export default {
           displaySize,
         );
         if (resizedDetections.length > 0) {
+          // console.log(resizedDetections[0].expressions);
           console.log(resizedDetections[0].expressions);
           this.store.commit(
             "root/addEmotion",
