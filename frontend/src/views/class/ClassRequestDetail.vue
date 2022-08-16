@@ -155,6 +155,7 @@ export default {
       status: false,
     });
 
+    const user = ref(store.state.root.user);
     const userInfo = reactive(store.state.root.user);
 
     let state = reactive({
@@ -212,7 +213,7 @@ export default {
       store
         .dispatch("root/addLikeRequest", {
           rid: rid,
-          sid: state.postSid,
+          sid: user.value.sid,
         })
         .then((response) => {
           console.log(response);

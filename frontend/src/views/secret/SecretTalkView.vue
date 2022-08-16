@@ -229,34 +229,6 @@ export default {
           state.isSubscribeTalking = true;
         }
       });
-      // publisher.on("publisherStartSpeaking", (event) => {
-      //   console.log(
-      //     "User " + event.connection.connectionId + " start speaking",
-      //   );
-      //   state.isPublisherTalking = true;
-      //   console.log("이건내목소리다.");
-      //   voiceDetection();
-      // });
-      // publisher.on("publisherStopSpeaking", (event) => {
-      //   console.log(
-      //     "User " + event.connection.connectionId + " start speaking",
-      //   );
-      //   state.isPublisherTalking = false;
-      // });
-      // state.subscriber.on("publisherStartSpeaking", (event) => {
-      //   console.log(
-      //     "User " + event.connection.connectionId + " start speaking",
-      //   );
-      //   state.isSubscribeTalking = true;
-      //   console.log("상대목소리다!.");
-      // });
-
-      // state.subscriber.on("publisherStopSpeaking", (event) => {
-      //   console.log(
-      //     "User " + event.connection.connectionId + " start speaking",
-      //   );
-      //   state.isSubscribeTalking = false;
-      // });
 
       // 음성 감지 종료
       state.session.on("publisherStopSpeaking", (event) => {
@@ -323,6 +295,7 @@ export default {
       state.showBackgroundSelection = !state.showBackgroundSelection;
     };
     const leaveSession = () => {
+      console.log("하하");
       // --- Leave the session by calling 'disconnect' method over the Session object ---
       if (state.session) {
         state.session.disconnect();
@@ -447,7 +420,6 @@ export default {
     joinSession();
     onBeforeUnmount(() => {
       state.joinedPlayerNumbers = 0;
-      leaveSession();
     });
 
     if (!Recognition) {

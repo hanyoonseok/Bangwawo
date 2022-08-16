@@ -125,13 +125,13 @@ $drop-shadow: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.1));
 }
 
 @mixin SubmitBtn() {
-  height: 30px;
+  height: 35px;
   @include flexCenter();
-  font-size: 12px;
-  font-family: $appleB;
+  font-size: 14px;
+  font-family: $SCore;
   background-color: $soft-yellow;
   border-radius: 20px;
-  padding: 0 20px;
+  padding: 10px 27px;
   transition: 0.3s ease;
   &:hover {
     background-color: darken($soft-yellow, 5%);
