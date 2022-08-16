@@ -252,6 +252,10 @@
             border-radius: 20px 20px 0 0;
             box-shadow: $light-shadow;
             position: relative;
+            .lecture-timg {
+              width: 100%;
+              height: 100%;
+            }
             .state-btn {
               position: absolute;
               top: 10px;

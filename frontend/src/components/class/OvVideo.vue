@@ -47,6 +47,7 @@ export default {
     video.addEventListener("play", () => {
       if (!this.onEmotion) return;
       const canvas = faceapi.createCanvasFromMedia(video);
+      this.store.commit("root/initEmotion");
 
       //document.body.append(canvas);
       // const displaySize = { width: video.width, height: video.height };
