@@ -138,7 +138,7 @@ export default {
       store
         .dispatch("root/getClassDetail", cid)
         .then((response) => {
-          const data = response.data;
+          const data = response.data.class;
           console.log(data);
           classInfo.title = data.title;
           classInfo.dateStr = data.dateStr;

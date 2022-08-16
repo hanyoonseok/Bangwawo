@@ -107,7 +107,6 @@ export default {
         ongduck.y -= 3;
         state.jumptimer++;
       }
-      console.log(state.jumptimer);
 
       if (state.jumptimer > 35) {
         state.jump = false;
