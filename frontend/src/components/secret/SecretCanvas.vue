@@ -13,6 +13,8 @@ export default {
   name: "SecretCanvas",
   props: [
     "parts",
+    "backgroundSubImg",
+    "backgroundPubImg",
     "user",
     "isSubscribeTalking",
     "isPublisherTalking",
@@ -20,15 +22,12 @@ export default {
   ],
   setup(props) {
     // Initial material
-    // const store = useStore();
+    let parts = [];
+    parts = props.parts;
     const INITIAL_MTL = new THREE.MeshPhongMaterial({
       color: 0xffcb57,
       shininess: 10,
     });
-    const state = reactive({
-      actionStanding: undefined,
-    });
-
     const INITIAL_MAP = [
       { childID: "body", mtl: INITIAL_MTL },
       { childID: "foot", mtl: INITIAL_MTL },
@@ -37,6 +36,9 @@ export default {
       { childID: "glasses", mtl: INITIAL_MTL },
       { childID: "clothes", mtl: INITIAL_MTL },
     ];
+    const state = reactive({
+      actionStanding: undefined,
+    });
 
     // 1. 장면 설정
     const scene = new THREE.Scene();
@@ -53,9 +55,34 @@ export default {
     );
 
     //배경
+    let bgTexture;
     const bg = new THREE.TextureLoader();
-    const bgTexture = bg.load("./secretBg.png");
-    scene.background = bgTexture;
+    if (props.user === "publisher") {
+      watch(
+        () => props.backgroundPubImg,
+        () => {
+          bgTexture = bg.load(props.backgroundPubImg);
+          console.log("왔는데?" + props.backgroundPubImg);
+          scene.background = bgTexture;
+        },
+      );
+      bgTexture = bg.load(props.backgroundPubImg);
+      console.log("배경임", props.backgroundSubImg);
+      scene.background = bgTexture;
+    }
+    if (props.user === "subscriber") {
+      watch(
+        () => props.backgroundSubImg,
+        () => {
+          bgTexture = bg.load(props.backgroundSubImg);
+          console.log("왔는데?" + props.backgroundSubImg);
+          scene.background = bgTexture;
+        },
+      );
+      bgTexture = bg.load(props.backgroundSubImg);
+      console.log("배경임", props.backgroundSubImg);
+      scene.background = bgTexture;
+    }
 
     renderer.shadowMap.enabled = false; // 그림자
     renderer.setPixelRatio(window.devicePixelRatio); // 픽셀 비율
@@ -99,7 +126,7 @@ export default {
     controls.autoRotate = false; // Toggle this if you'd like the chair to automatically rotate
     controls.autoRotateSpeed = 0.2; // 30
 
-    const MODEL_PATH = "./duckduck3.glb";
+    const MODEL_PATH = `${window.location.protocol}//${window.location.host}/duckduck3.glb`;
 
     let mixer = null;
     let clips = null;
@@ -128,8 +155,8 @@ export default {
         // Set initial textures
         for (let object of INITIAL_MAP) {
           let init_mtl = null;
-          props.parts.forEach((item) => {
-            if (item.id === object.childID) {
+          parts.forEach((item) => {
+            if (item.part === object.childID) {
               init_mtl = new THREE.MeshPhongMaterial({
                 color: parseInt("0x" + item.color),
                 shininess: 10,
@@ -221,7 +248,6 @@ export default {
     );
 
     const playTalkingAnimation = (talkingUser, isTalking) => {
-      console.log("안올거냐 ㅠㅠㅠㅠ 너무하다", talkingUser);
       let clip = THREE.AnimationClip.findByName(clips, "talking");
       let actionTalking = mixer.clipAction(clip);
       if (props.user === talkingUser && isTalking) {
@@ -254,7 +280,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 canvas {
-  width: 460px;
-  height: 520px;
+  height: 100%;
 }
 </style>

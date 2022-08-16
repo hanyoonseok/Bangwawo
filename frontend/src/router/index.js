@@ -28,7 +28,7 @@ const routes = [
     beforeEnter: onlyAuthUser,
   },
   {
-    path: "/secrettalk",
+    path: "/secrettalk/:sid/:vid",
     name: "secrettalk",
     component: () => import("@/views/secret/SecretTalkView"),
     beforeEnter: onlyAuthUser,

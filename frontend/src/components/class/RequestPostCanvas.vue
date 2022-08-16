@@ -10,19 +10,22 @@ import { onMounted } from "vue";
 
 export default {
   name: "RequestPostCanvas",
-  props: ["characterColor"],
+  props: ["characterColor", "isMatchingProfile"],
   setup(props) {
     // Initial material
-    let colorObj = props.characterColor;
-    console.log("character임1", colorObj);
-
-    let keys = Object.keys(colorObj);
-    let values = Object.values(colorObj);
     let parts = [];
-    for (let i = 0; i < keys.length; ++i) {
-      parts.push({ part: keys[i], color: values[i] });
+    if (props.isMatchingProfile) {
+      parts = props.characterColor;
+    } else {
+      let colorObj = props.characterColor;
+
+      let keys = Object.keys(colorObj);
+      let values = Object.values(colorObj);
+      parts = [];
+      for (let i = 0; i < keys.length; ++i) {
+        parts.push({ part: keys[i], color: values[i] });
+      }
     }
-    console.log("character임2", parts.value);
     const INITIAL_MTL = new THREE.MeshPhongMaterial({
       color: 0xffcb57,
       shininess: 10,
@@ -62,7 +65,7 @@ export default {
     camera.position.x = 14; // 화면에 보여지는 위치인것같음
     camera.position.y = -3;
 
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.75);
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.6);
     hemiLight.position.set(1, -2, 1);
     scene.add(hemiLight);
     // 특정 방향으로 빛 방출

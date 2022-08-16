@@ -1,6 +1,10 @@
 <template>
   <div class="background">
-    <HeaderNav />
+    <HeaderNav
+      :isRequestClassRegist="state.isRequestClassRegist"
+      @changeRequestState="state.isRequestClassRegist = false"
+      :rid="rid"
+    />
     <div class="title">
       <h2>수업 등록</h2>
     </div>
@@ -131,6 +135,7 @@ export default {
       classOpen: false,
       maxcnt: 0,
       introduce: inputIntroduce,
+      isRequestClassRegist: false,
       vid: { nickname: user.nickname },
     });
     // 요청글에서 들어온 경우는 room id, 헤더에서 들어온 경우 -1임.
@@ -222,6 +227,8 @@ export default {
             .then((response) => {
               console.log(response);
               router.push(`/class/requestdetail/${rid}`);
+              // 요청을 해결하는 수업을 개설했을 경우, 사용자들에게 알림
+              state.isRequestClassRegist = true;
             });
         }
       }
