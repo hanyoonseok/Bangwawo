@@ -238,6 +238,10 @@ export default {
           //수업등록 알림이온거다
           console.log("여기왔니?");
           getClassOpenAlarm();
+        } else if (
+          JSON.parse(res.body).message === "이미 매칭이 완료되었습니다!"
+        ) {
+          state.isMatchingModal = false;
         } else {
           // 봉사자가 비밀친구 매칭을 승인한거다
           const vid = JSON.parse(res.body).volunteer.vid;
@@ -380,9 +384,21 @@ export default {
     const acceptMatching = () => {
       // 학생에게 봉사자 정보 넘겨주기
       sendAcceptMatching();
+      sendCompleteMatching();
       router.push({
         name: "secrettalk",
         params: { sid: state.matchingSid, vid: user.value.vid },
+      });
+    };
+
+    const sendCompleteMatching = () => {
+      const msg = {
+        volunteer: null,
+        student: null,
+        message: "이미 매칭이 완료되었습니다!",
+      };
+      state.stompClient.send("/vreceive", JSON.stringify(msg), (res) => {
+        console.log(res);
       });
     };
 
