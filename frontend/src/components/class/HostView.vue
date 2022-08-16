@@ -56,7 +56,6 @@
           :incorrectStudents="incorrectStudents"
           :toggleOX="toggleOX"
           v-if="oxResult || oxState"
-          :noneStudents="noneStudents"
         />
         <ChatForm
           :state="state"
@@ -138,7 +137,6 @@ export default {
     "oxResult",
     "correctStudents",
     "incorrectStudents",
-    "noneStudents",
   ],
   setup(props, { emit }) {
     console.log("@@@@@@@@@@@@me", props.me);

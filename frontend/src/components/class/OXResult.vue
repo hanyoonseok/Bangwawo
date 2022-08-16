@@ -18,20 +18,13 @@
         </div>
       </article>
     </div>
-    <label class="noanswer">무응답자 : {{ noneStudents.length }}</label>
   </article>
 </template>
 
 <script>
 export default {
   name: "OXResult",
-  props: [
-    "state",
-    "toggleOX",
-    "incorrectStudents",
-    "correctStudents",
-    "noneStudents",
-  ],
+  props: ["state", "toggleOX", "incorrectStudents", "correctStudents"],
   setup() {},
 };
 </script>

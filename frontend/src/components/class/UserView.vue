@@ -266,7 +266,7 @@ export default {
       //학생이 맞았는지 틀렸는지 판단해서 signal 보내야함
       props.session
         .signal({
-          data: answer ? "true" : "false",
+          data: answer ? true : false,
           to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
           type: "ox-end", // The type of message (optional)
         })

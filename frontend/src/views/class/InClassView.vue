@@ -19,7 +19,6 @@
       :oxResult="state.oxResult"
       :correctStudents="state.oxData.correctStudents"
       :incorrectStudents="state.oxData.incorrectStudents"
-      :noneStudents="state.oxData.noneStudents"
       @closeOXResult="closeOXResult"
     />
     <UserView
@@ -132,7 +131,6 @@ export default {
         answer: null,
         correctStudents: [],
         incorrectStudents: [],
-        noneStudents: [],
       }, // ox 질문, 답 데이터
       oxResult: false,
       screenShareState: false, //화면공유 여부
@@ -314,10 +312,6 @@ export default {
           });
         } else if (e.data === false || e.data === "false") {
           state.oxData.incorrectStudents.push({
-            sender: JSON.parse(e.from.data).clientData,
-          });
-        } else {
-          state.oxData.noneStudents.push({
             sender: JSON.parse(e.from.data).clientData,
           });
         }

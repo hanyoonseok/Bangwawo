@@ -37,7 +37,7 @@ export default {
   name: "StudentOX",
   setup(props, { emit }) {
     console.log("학생이 보는 ox", props.oxData);
-    let answer = ref(null);
+    let answer = ref(false);
 
     const timer = ref(10);
 
