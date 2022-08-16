@@ -448,6 +448,7 @@ export default {
     };
 
     const waitUntilUnzip = async () => {
+      console.log("waituntilunzip 들어옴");
       await axios
         .get(
           `${process.env.VUE_APP_API_URL}/session/recording/unzip/${sessionId}/${cid}`,
@@ -458,7 +459,7 @@ export default {
         })
         .catch(() => {
           console.log("아직 unzip 안됐네 다시 돌아가!!!");
-          setInterval(() => {
+          setTimeout(() => {
             waitUntilUnzip();
           }, 1000);
         });
