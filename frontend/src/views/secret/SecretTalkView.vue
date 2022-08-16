@@ -209,37 +209,39 @@ export default {
         console.warn(exception);
       });
 
-      // //음성 감지
-      // state.session.on("publisherStartSpeaking", (event) => {
+      //음성 감지
+      state.session.on("publisherStartSpeaking", (event) => {
+        console.log(
+          "User " + event.connection.connectionId + " start speaking",
+        );
+        console.log(state.publisher.stream.connection.connectionId);
+        voiceDetection();
+        console.log(state.session);
+        console.log("event찍어본다", event);
+        if (
+          state.publisher.stream.connection.connectionId ===
+          event.connection.connectionId
+        ) {
+          state.isPublisherTalking = true;
+          console.log("이건내목소리다.");
+        } else {
+          console.log("내목소리아니얌!!");
+        }
+      });
+      // publisher.on("publisherStartSpeaking", (event) => {
       //   console.log(
       //     "User " + event.connection.connectionId + " start speaking",
       //   );
-      //   console.log(state.publisher.stream.connection.connectionId);
+      //   state.isPublisherTalking = true;
+      //   console.log("이건내목소리다.");
       //   voiceDetection();
-      //   if (
-      //     state.publisher.stream.connection.connectionId ===
-      //     event.connection.connectionId
-      //   ) {
-      //     state.isPublisherTalking = true;
-      //     console.log("이건내목소리다.");
-      //   } else {
-      //     console.log("내목소리아니얌!!");
-      //   }
       // });
-      publisher.on("publisherStartSpeaking", (event) => {
-        console.log(
-          "User " + event.connection.connectionId + " start speaking",
-        );
-        state.isPublisherTalking = true;
-        console.log("이건내목소리다.");
-        voiceDetection();
-      });
-      publisher.on("publisherStopSpeaking", (event) => {
-        console.log(
-          "User " + event.connection.connectionId + " start speaking",
-        );
-        state.isPublisherTalking = false;
-      });
+      // publisher.on("publisherStopSpeaking", (event) => {
+      //   console.log(
+      //     "User " + event.connection.connectionId + " start speaking",
+      //   );
+      //   state.isPublisherTalking = false;
+      // });
       // state.subscriber.on("publisherStartSpeaking", (event) => {
       //   console.log(
       //     "User " + event.connection.connectionId + " start speaking",
@@ -255,19 +257,19 @@ export default {
       //   state.isSubscribeTalking = false;
       // });
 
-      //음성 감지 종료
-      // state.session.on("publisherStopSpeaking", (event) => {
-      //   console.log("User " + event.connection.connectionId + " stop speaking");
-      //   if (
-      //     state.publisher.stream.connection.connectionId ===
-      //     event.connection.connectionId
-      //   ) {
-      //     state.isPublisherTalking = false;
-      //   } else {
-      //     state.isSubscribeTalking = false;
-      //   }
-      //   recognition.stop();
-      // });
+      // 음성 감지 종료
+      state.session.on("publisherStopSpeaking", (event) => {
+        console.log("User " + event.connection.connectionId + " stop speaking");
+        if (
+          state.publisher.stream.connection.connectionId ===
+          event.connection.connectionId
+        ) {
+          state.isPublisherTalking = false;
+        } else {
+          state.isSubscribeTalking = false;
+        }
+        recognition.stop();
+      });
 
       console.log("sessionid", state.mySessionId);
       console.log("user name", state.myUserName);

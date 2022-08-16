@@ -208,15 +208,22 @@ export default {
           if (isVolunteer) {
             // 봉사자일때
             state.stompClient.subscribe("/send/talkable", (res) => {
-              state.isMatchingModal = true;
-              console.log(
-                "여기서계속.. 호출됨..",
-                JSON.parse(res.body).student,
-              );
-              // 캐릭터 컬러 넣어줌~
-              state.characterColor = JSON.parse(res.body).student.character;
-              state.matchingSid = JSON.parse(res.body).student.sid;
-              state.studentDto = JSON.parse(res.body).student;
+              if (
+                JSON.parse(res.body).message === "이미 매칭이 완료되었습니다!"
+              ) {
+                console.log("이미매칭완료됐대!");
+                state.isMatchingModal = false;
+              } else {
+                state.isMatchingModal = true;
+                console.log(
+                  "여기서계속.. 호출됨..",
+                  JSON.parse(res.body).student,
+                );
+                // 캐릭터 컬러 넣어줌~
+                state.characterColor = JSON.parse(res.body).student.character;
+                state.matchingSid = JSON.parse(res.body).student.sid;
+                state.studentDto = JSON.parse(res.body).student;
+              }
             });
           } else {
             // 학생일때
@@ -238,10 +245,6 @@ export default {
           //수업등록 알림이온거다
           console.log("여기왔니?");
           getClassOpenAlarm();
-        } else if (
-          JSON.parse(res.body).message === "이미 매칭이 완료되었습니다!"
-        ) {
-          state.isMatchingModal = false;
         } else {
           // 봉사자가 비밀친구 매칭을 승인한거다
           const vid = JSON.parse(res.body).volunteer.vid;
@@ -389,7 +392,7 @@ export default {
     const sendCompleteMatching = () => {
       const msg = {
         volunteer: null,
-        student: null,
+        student: state.studentDto,
         message: "이미 매칭이 완료되었습니다!",
       };
       state.stompClient.send("/vreceive", JSON.stringify(msg), (res) => {
