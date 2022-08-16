@@ -89,7 +89,7 @@ public class FileUtil {
 
     public static boolean isExist(String sourceStr, String fileName, String ext) throws Exception{
         File file = new File(sourceStr+"/"+fileName+"."+ext);
-        if(file.exists()){
+        if(file.exists() && !file.isDirectory() && file.isFile()){
             return true;
         }
         return false;
