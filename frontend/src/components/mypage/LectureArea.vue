@@ -10,6 +10,12 @@
           :to="{ name: 'classdetail', params: { cid: lecture.cid } }"
         >
           <div class="lecture-thumb">
+            <img
+              :src="lecture.thumbnail"
+              v-if="lecture.thumbnail"
+              class="lecture-timg"
+            />
+            <img src="@/assets/thumbnail.png" v-else class="lecture-timg" />
             <div class="state-btn">
               <i class="fa-solid fa-circle"></i> &nbsp;
               {{ statusText(lecture.state) }}
@@ -50,6 +56,12 @@
           }"
         >
           <div class="lecture-thumb">
+            <img
+              :src="lecture.thumbnail"
+              v-if="lecture.thumbnail"
+              class="lecture-timg"
+            />
+            <img src="@/assets/thumbnail.png" v-else class="lecture-timg" />
             <div class="end-btn">
               <i class="fa-solid fa-circle"></i> &nbsp;
               {{ statusText(lecture.state) }}

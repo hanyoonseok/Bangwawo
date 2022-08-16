@@ -387,14 +387,14 @@ export default {
 
     const recordId = ref(null);
 
-    const startRecording = () => {
+    const startRecording = async () => {
       console.log("녹화", state.streamId);
       const recordings = {
-        session: state.streamId,
+        session: state.mySessionId,
         name: cid,
         hasAudio: true,
         hasVideo: true,
-        outputMode: "COMPOSED", //개별녹화?
+        outputMode: "INDIVIDUAL", //개별녹화?
         resolution: "1280x720",
         frameRate: 25,
         shmSize: 536870912,
@@ -405,7 +405,7 @@ export default {
       };
       console.log(recordings);
 
-      axios
+      await axios
         .post(
           OPENVIDU_SERVER_URL + "/openvidu/api/recordings/start",
           recordings,
@@ -420,14 +420,15 @@ export default {
         .then((response) => {
           console.log("===== 녹화 시작 =====", response.data);
           recordId.value = response.data.id;
+          console.log("@@@@@ start record Id : ", recordId.value);
         })
         .catch((error) => console.error(error));
     };
 
-    const stopRecording = () => {
+    const stopRecording = async () => {
       console.log("stop");
       console.log(recordId.value);
-      axios
+      await axios
         .post(
           OPENVIDU_SERVER_URL +
             "/openvidu/api/recordings/stop/" +
@@ -444,6 +445,24 @@ export default {
           console.log("===== 녹화 끝 =====", response);
         })
         .catch((error) => console.error(error));
+    };
+
+    const waitUntilUnzip = async () => {
+      console.log("waituntilunzip 들어옴");
+      await axios
+        .get(
+          `${process.env.VUE_APP_API_URL}/session/recording/unzip/${sessionId}/${cid}`,
+        )
+        .then(() => {
+          console.log("unzip 성공@@@@@@@@@@@@@@@@");
+          return;
+        })
+        .catch(() => {
+          console.log("아직 unzip 안됐네 다시 돌아가!!!");
+          setTimeout(() => {
+            waitUntilUnzip();
+          }, 1000);
+        });
     };
 
     const leaveSession = () => {
@@ -466,13 +485,20 @@ export default {
 
       if (state.isHost) {
         console.log("세션을 종료할건데 난 봉사자입니당");
+
+        waitUntilUnzip();
+
         store
           .dispatch("root/endClass", { cid: cid, vid: vid })
           .then((response) => {
             console.log(response);
             window.removeEventListener("beforeunload", leaveSession);
             state.publisher = undefined;
-            router.push({ name: "feedbackSubmit", params: { cid: cid } });
+
+            router.push({
+              name: "feedbackSubmit",
+              params: { cid: cid },
+            });
           })
           .catch((error) => {
             console.log(error);
@@ -485,33 +511,31 @@ export default {
         const emotionInfo = { ...store.state.root.emotions };
         const emotionCnt = store.state.root.emotionCnt;
         const keySet = Object.keys(emotionInfo);
-        for (let i = 0; i < keySet.length; i++) {
-          emotionInfo[keySet[i]] /= emotionCnt;
+        if (emotionCnt > 0) {
+          for (let i = 0; i < keySet.length; i++) {
+            emotionInfo[keySet[i]] /= emotionCnt;
+          }
         }
         console.log(emotionInfo);
         console.log(cid);
         console.log(user.value.sid);
         const payload = {
           cid,
-          sid: user.value.sid,
+          sid,
           emotion: emotionInfo,
+          recording: `${sessionId}/${state.publisher.stream.streamId}`,
         };
 
-        store.dispatch("root/storeEmotion", payload).then(() => {
-          store.commit("root/initEmotion");
-        });
+        store.dispatch("root/setStudentFeedbackInfo", payload);
+        store.commit("root/initEmotion");
 
         console.log(state.publisher.stream.streamId);
-        store
-          .dispatch("root/setStreamId", {
-            sid: { sid: sid },
-            cid: { cid: cid },
-            recording: state.publisher.stream.streamId,
-          })
-          .then((res) => {
-            console.log(res);
-            state.publisher = undefined;
-          });
+        state.publisher = undefined;
+        // store
+        //   .dispatch("root/unzipRecords", { sessionId, name: cid })
+        //   .then((res) => {
+        //     console.log("success unzip", res);
+        //   });
 
         router.push({ name: "mypage" });
       }
