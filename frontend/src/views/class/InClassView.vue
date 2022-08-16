@@ -306,11 +306,11 @@ export default {
         console.log("=======OX 게임 끝=========", e);
         console.log("결과??", e.data);
         console.log(state.oxData.correctStudents);
-        if (e.data === true || e.data === "true") {
+        if (e.data === "true") {
           state.oxData.correctStudents.push({
             sender: JSON.parse(e.from.data).clientData,
           });
-        } else if (e.data === false || e.data === "false") {
+        } else {
           state.oxData.incorrectStudents.push({
             sender: JSON.parse(e.from.data).clientData,
           });
