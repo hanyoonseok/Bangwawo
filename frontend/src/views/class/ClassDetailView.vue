@@ -11,7 +11,7 @@
           <img src="@/assets/backhead.png" alt="오리 뒷모습" />
         </div>
         <div class="title">
-          <h3>{{ classInfo.title }}</h3>
+          <h2>{{ classInfo.title }}</h2>
         </div>
         <div class="content">
           <article>
@@ -205,8 +205,8 @@
             <p class="info-content">{{ classInfo.vid.nickname }}</p>
           </div>
           <div class="info-box">
-            <p class="info-title post-card">자기소개</p>
-            <p class="info-content bg">
+            <p class="info-title post-card alignnone">자기소개</p>
+            <p class="info-content bg" style="align-items: initial">
               {{ classInfo.vid.introduce }}
             </p>
           </div>

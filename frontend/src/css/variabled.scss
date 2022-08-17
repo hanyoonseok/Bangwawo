@@ -102,10 +102,10 @@ $drop-shadow: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.1));
 }
 
 @mixin StatusBtn($status) {
-  padding: 8px;
+  padding: 12px;
   height: 30px;
   border-radius: 7px;
-  font-size: 12px;
+  font-size: 14px;
   font-family: $SCore;
   display: flex;
   align-items: center;
