@@ -177,7 +177,7 @@ export default {
       children: [],
       totalNotice: 0,
       stompClient: store.state.root.stompClient,
-      socketConnected: false,
+      socket: null,
       studentDto: null,
     });
     let isNoticeOpen = ref(false);
@@ -204,14 +204,13 @@ export default {
         return;
 
       const serverURL = `${process.env.VUE_APP_API_URL}/ws`;
-      let socket = await new SockJS(serverURL);
-      store.commit("root/connectSocket", Stomp.over(socket));
+      state.socket = await new SockJS(serverURL);
+      store.commit("root/connectSocket", Stomp.over(state.socket));
       console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`);
       state.stompClient = store.state.root.stompClient;
       await state.stompClient.connect(
         {},
         () => {
-          state.socketConnected = true;
           console.log("연결됐다아~");
           if (isVolunteer) {
             // 봉사자일때
@@ -241,7 +240,6 @@ export default {
         (error) => {
           // 소켓 연결 실패
           console.log("소켓 연결 실패", error);
-          state.socketConnected = false;
         },
       );
     };
@@ -304,11 +302,9 @@ export default {
     const logout = () => {
       store.dispatch("root/inactiveKakaoToken", user.value.accessToken);
       store.commit("root/logoutUser");
-      store.state.root.stompClient.disconnect(() => {
-        console.log("stomp 정상 종료");
-        store.commit("root/disconnectSocket");
-        location.href = "/";
-      });
+      if (user.value.userType === "volunteer" && user.value.talkable)
+        disconnectSocket();
+      location.href = "/";
     };
 
     const toggleTalkable = () => {
@@ -380,6 +376,12 @@ export default {
           console.log(response);
           store.commit("root/toggleTalkable");
           console.log(user.value.talkable);
+          if (user.value.talkable) {
+            connectSocket(true);
+          } else {
+            console.log("소켓 끌게요");
+            disconnectSocket();
+          }
         });
     };
 
@@ -431,8 +433,20 @@ export default {
         });
     };
 
+    const disconnectSocket = () => {
+      if (state.socket) {
+        state.socket.close();
+        state.socket = null;
+      }
+
+      console.log("소켓 정상 종료");
+      state.stompClient = null;
+      store.commit("root/disconnectSocket");
+    };
+
     if (user.value && user.value.userType === "volunteer") {
-      connectSocket(true);
+      if (user.value.talkable) connectSocket(true);
+      else disconnectSocket();
     }
 
     if (user.value && user.value.userType === "student") {
