@@ -121,6 +121,7 @@ export default {
         .get(`${process.env.VUE_APP_API_URL}/request?scrollcnt=${page}`)
         .then((response) => {
           const data = response.data.requestsList;
+          console.log(data);
           state.requestList = data.content;
           pages.total = data.totalElements;
           pages.listData = state.requestList;
@@ -213,6 +214,7 @@ export default {
             console.log("검색결과", data.requestsList);
             state.requestList = data.requestsList;
             pages.total = state.requestList.length;
+            pagingMethod(1);
           });
       }
     };

@@ -40,7 +40,10 @@
               <img src="@/assets/notice-text.png" class="notice-img" />
               <span></span>
               <button
-                class="end-btn"
+                :class="{
+                  'end-btn': true,
+                  isLike: state.isLike === 1 ? true : false,
+                }"
                 v-if="userInfo.sid !== state.postSid"
                 @mouseover="state.isVisibleNoticeImg = true"
                 @mouseleave="state.isVisibleNoticeImg = false"
@@ -103,7 +106,8 @@
               v-else
             >
               <div class="yes">
-                <img :src="classInfo.thumbnail" />
+                <img :src="classInfo.thumbnail" v-if="classInfo.thumbnail" />
+                <img src="@/assets/consult-main.png" v-else />
 
                 <div class="column">
                   <label class="link-title">{{ classInfo.title }}</label>
@@ -164,6 +168,7 @@ export default {
       nickname: "",
       createDate: ["", "", ""],
       isVisibleNoticeImg: false,
+      isLike: 0,
     });
     const requestInfo = ref("");
     const classInfo = ref("");
@@ -171,11 +176,12 @@ export default {
     const rid = route.params.rid;
     const getRequest = async () => {
       await axios
-        .get(`${process.env.VUE_APP_API_URL}/request/${rid}`)
+        .get(`${process.env.VUE_APP_API_URL}/request/${rid}/${userInfo.sid}`)
         .then((response) => {
           console.log(response.data);
           requestInfo.value = response.data.requsest;
           classInfo.value = response.data.classinfo;
+          state.isLike = response.data.LikeorNot;
           state.createDate = requestInfo.value.createDate;
           state.nickname = requestInfo.value.student.nickname;
           state.postSid = requestInfo.value.student.sid;
