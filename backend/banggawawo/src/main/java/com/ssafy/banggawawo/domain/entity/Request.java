@@ -30,7 +30,8 @@ public class Request {
     @CreatedDate
     private LocalDate createDate;  // 글작성일
     private int count;        // 조회수
-    private int likes;
+    private int likes;        // 좋아요 갯수
+
 
     @Builder
     public Request(Student student, String title, String content, Boolean solved, int count,int likes,LocalDate createDate) {

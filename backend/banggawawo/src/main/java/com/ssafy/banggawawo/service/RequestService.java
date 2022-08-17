@@ -5,12 +5,9 @@ import com.ssafy.banggawawo.domain.entity.ClassRoom;
 import com.ssafy.banggawawo.domain.entity.Likes;
 import com.ssafy.banggawawo.domain.entity.Request;
 import com.ssafy.banggawawo.repository.ClassRepository;
-import com.ssafy.banggawawo.repository.LikesRepository;
 import com.ssafy.banggawawo.repository.RequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -24,6 +21,8 @@ public class RequestService {
     @Autowired
     private RequestRepository requestRepository;
 
+    @Autowired
+    private LikesService likesService;
     @Autowired
     private ClassRepository classRepository;
 
@@ -61,6 +60,10 @@ public class RequestService {
     @Transactional(readOnly = true)
     public Map<String, Object> searchlist(String topic) throws Exception {
         List<Request> requestsList = requestRepository.findByContentContaining(topic);
+        List<Request> tlist = requestRepository.findByTitleContaining(topic);
+        for (int i = 0 ; i < tlist.size(); i++){
+            requestsList.add(tlist.get(i));
+        }
         HashMap<String, Object> result = new HashMap<String, Object>();
         result.put("requestsList", requestsList);
         return result;
@@ -68,7 +71,7 @@ public class RequestService {
 
     //요청글 상세보기
     @Transactional // 조회
-    public Map<String, Object> read(Long rid) throws Exception {
+    public Map<String, Object> read(Long rid,Long sid) throws Exception {
         HashMap<String, Object> hashmap = new HashMap<String, Object>();
 
         Optional<Request> request = requestRepository.findById(rid);
@@ -80,8 +83,13 @@ public class RequestService {
                 Optional<ClassRoom> classinfo = classRepository.findByRId(rid);
                 hashmap.put("classinfo", classinfo.get());
             }
-
             requestRepository.save(request.get());
+
+            List<Likes> orequest=likesService.readonly(rid,sid);
+            if(orequest.size() != 0)
+                hashmap.put("LikeorNot", 1);
+            else
+                hashmap.put("LikeorNot", 0);
         }
         hashmap.put("requsest", request.get()); // 현재 읽는 게시글 내용
         return hashmap;
