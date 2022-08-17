@@ -431,11 +431,7 @@ export default {
         });
     };
 
-    if (
-      user.value &&
-      user.value.userType === "volunteer" &&
-      user.value.talkable
-    ) {
+    if (user.value && user.value.userType === "volunteer") {
       connectSocket(true);
     }
 
