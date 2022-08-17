@@ -160,7 +160,7 @@ import Stomp from "webstomp-client";
 import SockJS from "sockjs-client";
 
 export default {
-  props: ["isMatchingBtnClick", "isRequestClassRegist", "rid"],
+  props: ["isMatchingBtnClick", "rid"],
   components: {
     RequestPostCanvas,
   },
@@ -176,8 +176,8 @@ export default {
       matchingSid: null,
       children: [],
       totalNotice: 0,
-      stompClient: null,
-      socketConnected: false,
+      stompClient: store.state.root.stompClient,
+      socket: null,
       studentDto: null,
     });
     let isNoticeOpen = ref(false);
@@ -196,14 +196,21 @@ export default {
     };
 
     const connectSocket = async (isVolunteer) => {
+      console.log(store.state.root.stompClient);
+      if (
+        store.state.root.stompClient &&
+        store.state.root.stompClient.connected
+      )
+        return;
+
       const serverURL = `${process.env.VUE_APP_API_URL}/ws`;
-      let socket = await new SockJS(serverURL);
-      state.stompClient = Stomp.over(socket);
+      state.socket = await new SockJS(serverURL);
+      store.commit("root/connectSocket", Stomp.over(state.socket));
       console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`);
+      state.stompClient = store.state.root.stompClient;
       await state.stompClient.connect(
         {},
         () => {
-          state.socketConnected = true;
           console.log("연결됐다아~");
           if (isVolunteer) {
             // 봉사자일때
@@ -233,7 +240,6 @@ export default {
         (error) => {
           // 소켓 연결 실패
           console.log("소켓 연결 실패", error);
-          state.socketConnected = false;
         },
       );
     };
@@ -266,22 +272,6 @@ export default {
       },
     );
 
-    watch(
-      () => props.isRequestClassRegist,
-      (cur) => {
-        if (cur) {
-          sendResolveRequest();
-        }
-      },
-    );
-    // 봉사자가 요청받은 클래스를 등록되었을 떄,
-    const sendResolveRequest = () => {
-      state.stompClient.send("/opend", props.rid, (res) => {
-        console.log(res);
-      });
-      emit("changeRequestState");
-    };
-
     // 학생이 매칭시작버튼을 눌렸음을 알린다.
     const sendMatchingStart = () => {
       const msg = {
@@ -296,6 +286,8 @@ export default {
     const logout = () => {
       store.dispatch("root/inactiveKakaoToken", user.value.accessToken);
       store.commit("root/logoutUser");
+      if (user.value.userType === "volunteer" && user.value.talkable)
+        disconnectSocket();
       location.href = "/";
     };
 
@@ -325,7 +317,6 @@ export default {
     const getChildren = async () => {
       await store.dispatch("root/getChildren", user.value.email).then((res) => {
         state.children = res.data.childs;
-        console.log("내자식들이다", state.children);
         getChildrenDangerAlarm();
       });
     };
@@ -345,7 +336,6 @@ export default {
     //자식들 위험단어 알림을 받는다.
     const getChildrenDangerAlarm = async () => {
       state.children.forEach((child) => {
-        console.log("내자식번호찾기", child.sid);
         store
           .dispatch("root/getChildrenDangerAlarm", child.sid)
           .then((response) => {
@@ -370,6 +360,12 @@ export default {
           console.log(response);
           store.commit("root/toggleTalkable");
           console.log(user.value.talkable);
+          if (user.value.talkable) {
+            connectSocket(true);
+          } else {
+            console.log("소켓 끌게요");
+            disconnectSocket();
+          }
         });
     };
 
@@ -421,12 +417,20 @@ export default {
         });
     };
 
-    if (
-      user.value &&
-      user.value.userType === "volunteer" &&
-      user.value.talkable
-    ) {
-      connectSocket(true);
+    const disconnectSocket = () => {
+      if (state.socket) {
+        state.socket.close();
+        state.socket = null;
+      }
+
+      console.log("소켓 정상 종료");
+      state.stompClient = null;
+      store.commit("root/disconnectSocket");
+    };
+
+    if (user.value && user.value.userType === "volunteer") {
+      if (user.value.talkable) connectSocket(true);
+      else disconnectSocket();
     }
 
     if (user.value && user.value.userType === "student") {
@@ -457,7 +461,6 @@ export default {
       getChildren,
       toggleTalkable,
       connectSocket,
-      sendResolveRequest,
     };
   },
 };

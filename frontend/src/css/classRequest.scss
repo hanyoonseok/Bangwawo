@@ -228,6 +228,13 @@
         &:hover {
           background-color: darken(#f1f1f1, 10%);
         }
+        &.isLike {
+          background-color: $yellow;
+          color: $white;
+          &:hover {
+            background-color: darken($yellow, 10%);
+          }
+        }
       }
       .end-btn + a {
         margin-left: 20px;

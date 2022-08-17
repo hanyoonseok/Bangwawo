@@ -107,7 +107,7 @@ export default {
     const searchClass = async () => {
       console.log(keyword.value);
       if (keyword.value !== "") {
-        axios
+        await axios
           .get(`${process.env.VUE_APP_API_URL}/class`, {
             params: { title: keyword.value },
           })

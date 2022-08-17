@@ -1,10 +1,6 @@
 <template>
   <div class="background">
-    <HeaderNav
-      :isRequestClassRegist="state.isRequestClassRegist"
-      @changeRequestState="state.isRequestClassRegist = false"
-      :rid="rid"
-    />
+    <HeaderNav :rid="rid" />
     <div class="title">
       <h2>수업 등록</h2>
     </div>
@@ -229,6 +225,10 @@ export default {
               router.push(`/class/requestdetail/${rid}`);
               // 요청을 해결하는 수업을 개설했을 경우, 사용자들에게 알림
               state.isRequestClassRegist = true;
+              const stompClient = store.state.root.stompClient;
+              stompClient.send("/opend", rid, (res) => {
+                console.log(res);
+              });
             });
         }
       }
