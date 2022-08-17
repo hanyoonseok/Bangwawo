@@ -52,13 +52,13 @@ export default defineComponent({
       datasets: [
         {
           backgroundColor: [
-            "#41B883",
-            "#456b51",
-            "#00D8FF",
-            "#DD1B16",
-            "#a90bd5",
-            "#8sd183",
-            "#E408x1",
+            "red",
+            "orange",
+            "green",
+            "navy",
+            "purple",
+            "blue",
+            "yellow",
           ],
           data: [
             props.emotion.angry,
