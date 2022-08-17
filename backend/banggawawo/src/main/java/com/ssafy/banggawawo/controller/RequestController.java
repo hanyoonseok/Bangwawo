@@ -84,11 +84,11 @@ public class RequestController {
     }
 
     //요청글 상세보기 (rid와 userid 입력받는다)
-    @GetMapping("/{rid}")
+    @GetMapping("/{rid}/{sid}")
     @ApiOperation(value = "요청글 상세보기")
-    public ResponseEntity<?> read(@PathVariable("rid") Long rid) throws Exception {
+    public ResponseEntity<?> read(@PathVariable("rid") Long rid,@PathVariable("sid") Long sid) throws Exception {
         try {
-            return new ResponseEntity<Map<String, Object>>(requestservice.read(rid), HttpStatus.ACCEPTED);
+            return new ResponseEntity<Map<String, Object>>(requestservice.read(rid,sid), HttpStatus.ACCEPTED);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
