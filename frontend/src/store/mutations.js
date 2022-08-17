@@ -50,3 +50,11 @@ export const addEmotion = (state, payload) => {
   }
   state.emotionCnt++;
 };
+
+export const connectSocket = (state, payload) => {
+  state.stompClient = payload;
+};
+
+export const disconnectSocket = (state) => {
+  state.stompClient = null;
+};

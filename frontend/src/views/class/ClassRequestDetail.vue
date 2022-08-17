@@ -40,7 +40,7 @@
               <img src="@/assets/notice-text.png" class="notice-img" />
               <span></span>
               <button
-                class="end-btn"
+                :class="{ 'end-btn': true }"
                 v-if="userInfo.sid !== state.postSid"
                 @mouseover="state.isVisibleNoticeImg = true"
                 @mouseleave="state.isVisibleNoticeImg = false"
@@ -103,7 +103,8 @@
               v-else
             >
               <div class="yes">
-                <img :src="classInfo.thumbnail" />
+                <img :src="classInfo.thumbnail" v-if="classInfo.thumbnail" />
+                <img src="@/assets/consult-main.png" v-else />
 
                 <div class="column">
                   <label class="link-title">{{ classInfo.title }}</label>

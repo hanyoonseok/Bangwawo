@@ -196,6 +196,8 @@ export default {
     };
 
     const connectSocket = async (isVolunteer) => {
+      if (store.state.root.stompClient) return;
+
       const serverURL = `${process.env.VUE_APP_API_URL}/ws`;
       let socket = await new SockJS(serverURL);
       state.stompClient = Stomp.over(socket);
@@ -296,7 +298,10 @@ export default {
     const logout = () => {
       store.dispatch("root/inactiveKakaoToken", user.value.accessToken);
       store.commit("root/logoutUser");
-      location.href = "/";
+      state.stompClient.disconnect(() => {
+        console.log("stomp 정상 종료");
+        location.href = "/";
+      });
     };
 
     const toggleTalkable = () => {
@@ -325,7 +330,6 @@ export default {
     const getChildren = async () => {
       await store.dispatch("root/getChildren", user.value.email).then((res) => {
         state.children = res.data.childs;
-        console.log("내자식들이다", state.children);
         getChildrenDangerAlarm();
       });
     };
@@ -345,7 +349,6 @@ export default {
     //자식들 위험단어 알림을 받는다.
     const getChildrenDangerAlarm = async () => {
       state.children.forEach((child) => {
-        console.log("내자식번호찾기", child.sid);
         store
           .dispatch("root/getChildrenDangerAlarm", child.sid)
           .then((response) => {
