@@ -160,7 +160,7 @@ import Stomp from "webstomp-client";
 import SockJS from "sockjs-client";
 
 export default {
-  props: ["isMatchingBtnClick", "isRequestClassRegist", "rid"],
+  props: ["isMatchingBtnClick", "rid"],
   components: {
     RequestPostCanvas,
   },
@@ -271,22 +271,6 @@ export default {
         }
       },
     );
-
-    watch(
-      () => props.isRequestClassRegist,
-      (cur) => {
-        if (cur) {
-          sendResolveRequest();
-        }
-      },
-    );
-    // 봉사자가 요청받은 클래스를 등록되었을 떄,
-    const sendResolveRequest = () => {
-      state.stompClient.send("/opend", props.rid, (res) => {
-        console.log(res);
-      });
-      emit("changeRequestState");
-    };
 
     // 학생이 매칭시작버튼을 눌렸음을 알린다.
     const sendMatchingStart = () => {
@@ -477,7 +461,6 @@ export default {
       getChildren,
       toggleTalkable,
       connectSocket,
-      sendResolveRequest,
     };
   },
 };
