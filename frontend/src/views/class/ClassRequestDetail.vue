@@ -175,8 +175,9 @@ export default {
 
     const rid = route.params.rid;
     const getRequest = async () => {
+      const id = userInfo.userType === "student" ? userInfo.sid : userInfo.vid;
       await axios
-        .get(`${process.env.VUE_APP_API_URL}/request/${rid}/${userInfo.sid}`)
+        .get(`${process.env.VUE_APP_API_URL}/request/${rid}/${id}`)
         .then((response) => {
           console.log(response.data);
           requestInfo.value = response.data.requsest;
