@@ -17,6 +17,7 @@ public interface RequestRepository extends JpaRepository<Request,Long> {
     @Query("SELECT r FROM Request r where r.solved =false order by r.rId")
     List<Request> unfindlist();
 
-    List<Request> findByContentContaining(String topic);
 
+    List<Request> findByContentContaining(String topic);
+    List<Request> findByTitleContaining(String topic);
 }
