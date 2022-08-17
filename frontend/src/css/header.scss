@@ -205,14 +205,13 @@
             background-color: #fff4e2;
           }
           p {
+            font-size: 14px;
             color: $dark-grey;
           }
-
           .notice-title {
             font-weight: bolder;
             color: $dark-grey;
           }
-
           img {
             width: 35px;
             height: 35px;
@@ -222,9 +221,6 @@
           label {
             width: 100%;
             margin: 0 10px;
-          }
-          p {
-            font-size: 12px;
           }
           .date {
             font-size: 8px;
