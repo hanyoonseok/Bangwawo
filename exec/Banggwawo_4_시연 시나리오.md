@@ -73,6 +73,7 @@
 
 
 ## 4. 수업 요청
+![ezgif.com-gif-maker__2_](/uploads/8a3624b374513deb72a48ce60642b588/ezgif.com-gif-maker__2_.gif)
 
 ![4.1_수업_요청글_작성](/uploads/cf93209f0502cec1aa865ce624a186ae/4.1_수업_요청글_작성.gif)
 
