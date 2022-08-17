@@ -8,10 +8,8 @@
 }
 section {
   position: relative;
+  padding: 40px 70px 80px 70px;
   .back-btn-wrapper {
-    position: absolute;
-    left: 100px;
-    top: 15px;
     .back-btn {
       width: 20px;
       height: 20px;
@@ -28,7 +26,7 @@ section {
   .detail {
     width: 1200px;
     height: 575px;
-    margin: auto;
+    margin: 15px 50px 15px 100px;
     background-color: lighten($color: $light-yellow, $amount: 8);
     box-shadow: $shadow;
     border-radius: 20px;
