@@ -96,7 +96,7 @@
                 style="left: 0"
                 v-if="state.step === 2"
               >
-                원
+                도넛
               </button>
               <button
                 @click="state.chartNum = 1"
@@ -104,7 +104,7 @@
                 style="left: 90px"
                 v-if="state.step === 2"
               >
-                도넛
+                바
               </button>
               <button
                 @click="state.chartNum = 2"
