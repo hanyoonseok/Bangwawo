@@ -176,7 +176,7 @@ export default {
       matchingSid: null,
       children: [],
       totalNotice: 0,
-      stompClient: null,
+      stompClient: store.state.root.stompClient,
       socketConnected: false,
       studentDto: null,
     });
@@ -196,12 +196,18 @@ export default {
     };
 
     const connectSocket = async (isVolunteer) => {
-      if (store.state.root.stompClient) return;
+      console.log(store.state.root.stompClient);
+      if (
+        store.state.root.stompClient &&
+        store.state.root.stompClient.connected
+      )
+        return;
 
       const serverURL = `${process.env.VUE_APP_API_URL}/ws`;
       let socket = await new SockJS(serverURL);
-      state.stompClient = Stomp.over(socket);
+      store.commit("root/connectSocket", Stomp.over(socket));
       console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`);
+      state.stompClient = store.state.root.stompClient;
       await state.stompClient.connect(
         {},
         () => {
@@ -298,8 +304,9 @@ export default {
     const logout = () => {
       store.dispatch("root/inactiveKakaoToken", user.value.accessToken);
       store.commit("root/logoutUser");
-      state.stompClient.disconnect(() => {
+      store.state.root.stompClient.disconnect(() => {
         console.log("stomp 정상 종료");
+        store.commit("root/disconnectSocket");
         location.href = "/";
       });
     };
