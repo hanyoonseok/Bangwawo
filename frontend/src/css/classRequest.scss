@@ -145,7 +145,7 @@
       justify-content: flex-end;
       margin-top: 14px;
       .status-btn {
-        width: 74px;
+        width: 84px;
         &.no {
           @include StatusBtn(false);
         }
