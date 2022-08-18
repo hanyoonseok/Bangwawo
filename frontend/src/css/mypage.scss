@@ -1,0 +1,451 @@
+.mypage-background {
+  background: url("@/assets/mainBg.png");
+  height: 100vh;
+  .mypage-container {
+    padding: 80px 80px 50px 80px;
+    @include flexCenter;
+    overflow-y: scroll;
+    height: 100%;
+  }
+  .profile-info {
+    width: 300px;
+    height: 100%;
+    margin-right: 80px;
+    position: relative;
+    @include flexColumn;
+    .left-box {
+      width: 100%;
+      height: 50%;
+      border-radius: 40px;
+      box-shadow: $light-shadow;
+      position: relative;
+    }
+    .parent-profile {
+      @include flexCenter;
+      align-items: flex-start;
+      height: 50%;
+      .left-box {
+        height: 100%;
+      }
+    }
+    .bookmark-area {
+      padding: 10px 0;
+      position: absolute;
+      right: -13px;
+      top: 0;
+
+      .children-bookmark {
+        cursor: pointer;
+        @include flexCenter;
+        flex-wrap: wrap;
+        position: relative;
+        margin-top: 20px;
+        transition: all 200ms ease;
+        &:hover {
+          transform: translateX(40px);
+        }
+        &:hover > .children-name {
+          background-color: $light-yellow;
+          font-size: 14px;
+        }
+        img {
+          width: 35px;
+          height: 35px;
+          position: absolute;
+          right: -28px;
+        }
+        .children-name {
+          background-color: #ebebeb;
+          padding: 5px 13px;
+          font-size: 11px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          font-family: $appleB;
+        }
+      }
+      .children-bookmark.active {
+        transform: translateX(40px);
+        .children-name {
+          background-color: $light-yellow;
+        }
+      }
+    }
+    .profile {
+      position: relative;
+      background-color: white;
+      padding: 30px 0;
+      z-index: 1;
+      @include flexCenter;
+      flex-direction: column;
+
+      .profile-ellipse {
+        position: absolute;
+        right: 25px;
+        top: 25px;
+        color: $grey;
+      }
+      ul {
+        position: absolute;
+        width: 120px;
+        border-radius: 12px;
+        padding: 8px 10px;
+        background-color: $white;
+        @include flexColumn;
+        box-shadow: $light-shadow;
+        li {
+          padding: 6px 0;
+          font-family: $appleM;
+          font-size: 13px;
+          @include flexCenter;
+          &:first-child {
+            border-bottom: 1px solid $light-grey;
+          }
+          &:last-child {
+            color: $pink;
+          }
+        }
+        &:target {
+          display: block;
+        }
+      }
+      img {
+        width: 100px;
+        height: 100px;
+        filter: $drop-shadow;
+      }
+      .img-box {
+        position: relative;
+        cursor: pointer;
+        transition: 0.3s ease;
+        .img-hover-box {
+          width: 100px;
+          height: 100px;
+          background-color: rgba(69, 69, 69, 0.558);
+          border-radius: 50%;
+          color: $white;
+          @include flexCenter;
+          position: absolute;
+          left: 0;
+          top: 0;
+          opacity: 0;
+        }
+
+        &:hover {
+          .img-hover-box {
+            opacity: 1;
+          }
+        }
+      }
+      .person-info {
+        display: flex;
+        align-items: flex-start;
+        margin-top: 20px;
+        label {
+          @include inputTitleLabel;
+          width: 60px;
+        }
+        .label-value {
+          margin-left: 25px;
+          width: 130px;
+          align-items: center;
+          display: flex;
+          height: 100%;
+        }
+        .modify-input {
+          width: 130px;
+          margin-left: 25px;
+        }
+        .children-name {
+          display: block;
+          background-color: transparent;
+          font-family: $appleM;
+          font-size: 16px;
+          line-height: 30px;
+          height: 30px;
+          &::after {
+            content: "";
+            border-bottom: 3px solid $grey;
+            width: 100%;
+            display: none;
+          }
+          &:hover {
+            border-bottom: 2px solid $grey;
+          }
+        }
+        .volunteer-value {
+          width: 170px;
+        }
+        .introduce {
+          padding: 10px;
+          width: 170px;
+          border-radius: 20px;
+          background-color: $lightx2-yellow;
+          height: 80px;
+          overflow: auto;
+          align-items: initial;
+        }
+        .modify-textarea {
+          padding: 10px;
+          width: 170px;
+          border-radius: 20px;
+          background-color: $lightx2-yellow;
+          height: 80px;
+          margin-left: 25px;
+          position: relative;
+        }
+      }
+    }
+    .calendar {
+      background-color: #fff5e5;
+      padding: 30px 20px;
+      margin-top: 35px;
+      @include flexColumn;
+      text-align: center;
+    }
+  }
+  .lecture-container {
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    box-shadow: $light-shadow;
+    border-radius: 40px;
+    padding: 30px;
+    .lecture-nav {
+      width: 100%;
+      height: 35px;
+      font-size: 16px;
+      border-bottom: 1px solid $light-grey;
+      display: flex;
+      flex-direction: row;
+      .nav-item {
+        margin-left: 10px;
+      }
+      .active {
+        font-weight: bold;
+        border-bottom: 1.5px solid $grey;
+      }
+    }
+    .right-box {
+      height: 100%;
+      padding-bottom: 40px;
+      .lecture-area {
+        overflow-y: scroll;
+        width: 100%;
+        padding: 10px 2vw;
+        height: 100%;
+        @include flexCenter;
+        flex-wrap: wrap;
+
+        .lecture-box {
+          width: 100%;
+          max-width: 250px;
+          min-width: 100px;
+          margin: 10px 15px;
+          transition: all 200ms ease;
+          &:hover {
+            transform: scale(1.04);
+          }
+          .lecture-thumb {
+            width: 100%;
+            height: 130px;
+            background-color: $light-grey;
+            border-radius: 20px 20px 0 0;
+            box-shadow: $light-shadow;
+            position: relative;
+            .lecture-timg {
+              width: 100%;
+              height: 100%;
+            }
+            .state-btn {
+              position: absolute;
+              top: 10px;
+              right: 13px;
+              color: $dark-grey;
+              @include StatusBtn(true);
+              width: 72px;
+              font-size: 12px;
+              height: 25px;
+              font-family: $appleB;
+              i {
+                font-size: 6px;
+              }
+            }
+            .end-btn {
+              @include StatusBtn(false);
+              position: absolute;
+              top: 10px;
+              right: 13px;
+              width: 64px;
+              font-size: 12px;
+              height: 25px;
+              font-family: $appleB;
+              color: $white;
+              background-color: $grey;
+              i {
+                color: $white;
+                font-size: 6px;
+              }
+            }
+          }
+
+          .lecture-info {
+            background-color: #fefefe;
+            width: 100%;
+            box-shadow: $light-shadow;
+            height: 80px;
+            border-radius: 0 0 20px 20px;
+            padding: 10px 15px;
+            position: relative;
+            .teacher-photo {
+              img {
+                width: 42px;
+                height: 42px;
+              }
+              position: absolute;
+              top: -20px;
+              right: 15px;
+            }
+            .lecture-teacher {
+              font-size: 16px;
+              color: $dark-grey;
+            }
+            .lecture-date {
+              position: absolute;
+              bottom: 7px;
+              font-size: 12px;
+              font-weight: bold;
+              color: #a6a6a6;
+              left: 15px;
+            }
+            .lecture-cancel {
+              position: absolute;
+              right: 15px;
+              bottom: 7px;
+              font-family: $appleM;
+              background-color: #ffc4c4;
+              width: 32px;
+              height: 17px;
+              font-size: 12px;
+              border-radius: 5px;
+            }
+          }
+          .lecture-title {
+            white-space: nowrap;
+            overflow: hidden;
+            color: $dark-grey;
+            text-overflow: ellipsis;
+            font-size: 18px;
+          }
+        }
+      }
+      .pagination-wrapper {
+        @include flexCenter;
+        i {
+          font-size: 5px;
+          margin: 0 6px;
+        }
+        .page {
+          margin: 0 6px;
+          background-color: $soft-yellow;
+          width: 10px;
+          height: 10px;
+          border-radius: 10px;
+          cursor: pointer;
+          transition: all 200ms ease;
+          &:hover {
+            transform: scale(1.1);
+          }
+        }
+      }
+    }
+  }
+}
+
+.modify-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #3333335d;
+  z-index: 10;
+  @include flexCenter;
+
+  .modal-wrapper {
+    background-color: #fff9ef;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    width: 300px;
+    border-radius: 40px;
+    padding: 20px 20px;
+    @include flexColumn;
+    align-items: center;
+    label {
+      height: 40px;
+      font-family: "S-CoreDream-5Medium";
+      font-weight: bold;
+      font-size: 14px;
+      background-color: #ffd89b;
+      color: #3e3e3e;
+      border-bottom-left-radius: 30px;
+      border-bottom-right-radius: 30px;
+      border-top-right-radius: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 60px;
+    }
+    .contents {
+      width: 100%;
+      margin-top: 20px;
+      @include flexColumn;
+      span {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+      }
+      input {
+        @include Input;
+        height: 40px;
+        margin-left: 10px;
+      }
+      textarea {
+        @include TextArea;
+        margin-top: 20px;
+        height: 100px;
+      }
+    }
+    .width100 {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+      button {
+        @include SubmitBtn;
+        width: fit-content;
+      }
+    }
+  }
+}
+.confirm {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  @include flexCenter;
+
+  .container {
+    margin-top: 50px;
+    background-color: $white;
+    padding: 20px;
+    border-radius: 20px;
+    @include flexCenter;
+    flex-direction: column;
+    button {
+      @include SubmitBtn;
+      margin-top: 10px;
+    }
+  }
+}
