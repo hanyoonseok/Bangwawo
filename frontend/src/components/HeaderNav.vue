@@ -196,7 +196,7 @@ export default {
     };
 
     const connectSocket = async (isVolunteer) => {
-      console.log(store.state.root.stompClient);
+      console.log("connect socket", store.state.root.stompClient);
       if (
         store.state.root.stompClient &&
         store.state.root.stompClient.connected
@@ -277,6 +277,7 @@ export default {
       const msg = {
         student: user.value,
       };
+      console.log(state.stompClient);
       state.stompClient.send("/vreceive", JSON.stringify(msg), (res) => {
         console.log(res);
       });
@@ -428,18 +429,22 @@ export default {
       store.commit("root/disconnectSocket");
     };
 
-    if (user.value && user.value.userType === "volunteer") {
-      if (user.value.talkable) connectSocket(true);
-      else disconnectSocket();
-    }
+    const initSocket = () => {
+      if (user.value && user.value.userType === "volunteer") {
+        if (user.value.talkable) connectSocket(true);
+        else disconnectSocket();
+      }
 
-    if (user.value && user.value.userType === "student") {
-      connectSocket(false);
-    }
+      if (user.value && user.value.userType === "student") {
+        connectSocket(false);
+      }
 
-    if (user.value && user.value.userType === "parent") {
-      connectSocket(false);
-    }
+      if (user.value && user.value.userType === "parent") {
+        connectSocket(false);
+      }
+    };
+    initSocket();
+
     return {
       user,
       isNoticeOpen,
