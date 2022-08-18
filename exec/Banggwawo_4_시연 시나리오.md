@@ -150,6 +150,7 @@
 
 개별로 작성된 피드백은 학부모의 마이페이지에서 열람할 수 있습니다.
 
+![ezgif.com-gif-maker__8_](/uploads/4d42ef2281ea642e13fa67f40ad0bb76/ezgif.com-gif-maker__8_.gif)
 
 
 
@@ -161,13 +162,13 @@
 학생은 마이페이지에서 신청한 수업을 [대기수업]/[종료수업]으로 볼 수 있습니다. 캘린더를 통해 수업 스케줄을 확인할 수 있습니다.
 
 더보기를 통해 별명을 수정할 수 있고, 프로필 이미지를 눌러 본인의 3D캐릭터를 원하는대로 커스텀 할 수 있습니다.
-
+![ezgif.com-gif-maker__10_](/uploads/41d0f91bc97a50a2f6f4fe90e5bca164/ezgif.com-gif-maker__10_.gif)
 
 
 // 봉사자 마이페이지
 
 봉사자는 개설한 수업을 [대기수업]/[종료수업]으로 볼 수 있습니다. 캘린더를 통해 수업 스케줄을 확인할 수 있고, 자기소개와 캐릭터를 수정할 수 있습니다.
-
+![ezgif.com-gif-maker__11_](/uploads/e1a772e97f54c07e6c88d379138b4213/ezgif.com-gif-maker__11_.gif)
 
 
 // 학부모 마이페이지
@@ -178,7 +179,7 @@
 
 봉사자가 학생에 대해 작성한 [봉사자 피드백]과, 수업 진행 중 실시간으로 수집된 감정상태를 보여주는 [감정 피드백], 수업 중 학생의 화면을 녹화한 [녹화 영상]을 확인할 수 있습니다.
 
-
+![ezgif.com-gif-maker__9_](/uploads/035940d8dafa5f09284126d99be860d5/ezgif.com-gif-maker__9_.gif)
 
 
 
@@ -193,7 +194,9 @@
 학생이 비밀친구 요청을 하면, 현재 상담 가능한 봉사자들에게 요청 알림이 전송됩니다. 봉사자는 상담가능 여부를 자유롭게 변경할 수 있습니다.
 
 요청을 수락할 봉사자를 기다리는 동안 학생은 간단한 게임을 하며 대기하게 됩니다.
-
+![ezgif.com-gif-maker__12_](/uploads/5a2c202995b653286450e0cceb77e4b6/ezgif.com-gif-maker__12_.gif)
+![ezgif.com-gif-maker__14_](/uploads/bd0ca3f1462726290bf1b1a5d1150be7/ezgif.com-gif-maker__14_.gif)
+![ezgif.com-gif-maker__15_](/uploads/9eaeb27d79e09321f29eafc16f55b6a7/ezgif.com-gif-maker__15_.gif)
 
 
 // 대화 시작 ~ 종료 후 학부모에게 위험단어 알림 전송
@@ -205,3 +208,7 @@
 학생의 대화 내용은 실시간으로 STT를 통해 텍스트로 감지하여 위험 단어를 인지하고, 대화가 끝난 이후 학부모에게 알림을 통해 안내합니다.
 
 + 학부모 입장에서 알림 받은거 확인하는 모습
+
+![ezgif.com-gif-maker__13_](/uploads/418b39a03018ca3004d8a7827cd456bf/ezgif.com-gif-maker__13_.gif)
+
+
