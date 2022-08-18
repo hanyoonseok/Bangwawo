@@ -277,7 +277,6 @@ export default {
       const msg = {
         student: user.value,
       };
-      console.log(state.stompClient);
       state.stompClient.send("/vreceive", JSON.stringify(msg), (res) => {
         console.log(res);
       });
@@ -311,7 +310,6 @@ export default {
       if (user.value && user.value.userType === "parent") {
         getChildren();
       }
-      console.log(user.value);
     });
 
     // 자식정보 불러오기
@@ -340,7 +338,6 @@ export default {
         store
           .dispatch("root/getChildrenDangerAlarm", child.sid)
           .then((response) => {
-            console.log(response.data.requsest);
             notices.value = [];
             // 자녀당 배열이 들어있음
             notices.value.push(response.data.requsest);
@@ -351,7 +348,6 @@ export default {
 
     // 상담 on/off 상태 변경
     const changeTalkableState = async () => {
-      console.log("시작한다아아");
       await axios
         .put(
           `${process.env.VUE_APP_API_URL}/volunteer/talkable/${user.value.vid}`,
@@ -374,7 +370,6 @@ export default {
       state.isMatchingModal = false;
       emit("sendAlarm");
     };
-    console.log(user.value);
 
     const acceptMatching = () => {
       // 학생에게 봉사자 정보 넘겨주기
