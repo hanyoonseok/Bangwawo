@@ -1,19 +1,23 @@
 <template>
-  <div>
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HeaderNav />
+  <div class="layout">
+    <transition name="slide-fade" mode="out-in">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
 <script>
-import HeaderNav from "./components/HeaderNav.vue";
-
+import AOS from "aos";
+import "aos/dist/aos.css";
 export default {
   name: "App",
-  components: {
-    HeaderNav,
+  setup() {
+    AOS.init();
+    return {};
   },
 };
 </script>
 
-<style></style>
+<style lang="scss">
+@import "@/css/global.scss";
+</style>

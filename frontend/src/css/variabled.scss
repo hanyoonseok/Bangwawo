@@ -1,0 +1,139 @@
+//color
+$yellow: #ffcb57;
+$dark-grey: #3e3e3e;
+$grey: #a9a9a9;
+$light-grey: #f1f1f1;
+$white: #fbfbfb;
+$yellow: #ffcb57;
+$soft-yellow: #ffd89b;
+$light-yellow: #ffe8b5;
+$lightx2-yellow: #fff9ef;
+$pink: #ff9696;
+$soft-pink: #ffaeae;
+$light-pink: #fff1f1;
+
+$breakpoint-mobile: 335px;
+$breakpoint-tablet: 758px;
+$breakpoint-desktop: 1024px;
+
+//fonts
+$hyemin: "IM_Hyemin-Regular";
+$appleM: "AppleSDGothicNeoM";
+$SCore: "S-CoreDream-5Medium";
+$SCoreL: "S-CoreDream-1Thin";
+$appleB: "AppleSDGothicNeoB";
+$Gmarket: "GmarketSansMedium";
+
+//backgroundTemplate
+$userBg: url("@/assets/userBg.png");
+$mainBg: url("@/assets/mainBg.png");
+$shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+$light-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+$drop-shadow: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.1));
+
+//mixin
+@mixin flexCenter() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flexBetween() {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@mixin flexColumn() {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin flexAround() {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+@mixin inputTitleLabel() {
+  width: 76px;
+  height: 30px;
+  font-family: $SCore;
+  font-weight: bold;
+  font-size: 12px;
+  background-color: $soft-yellow;
+  color: $dark-grey;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  border-top-right-radius: 30px;
+  @include flexCenter();
+}
+
+@mixin Input() {
+  height: 45px;
+  padding: 12px 20px;
+  background-color: $light-grey;
+  border-radius: 40px;
+  font-size: 12px;
+  border: none;
+  &::placeholder {
+    color: $grey;
+    font-size: 12px;
+    font-family: $appleM;
+  }
+}
+
+@mixin TextArea() {
+  padding: 12px 20px;
+  border-radius: 25px;
+  background-color: $light-grey;
+  border: none;
+  resize: none;
+  font-family: inherit;
+
+  &::placeholder {
+    color: $grey;
+    font-size: 12px;
+  }
+  &:focus {
+    outline: none;
+  }
+  //   나중에 스크롤바 스타일 추가하자
+}
+
+@mixin StatusBtn($status) {
+  padding: 12px;
+  height: 30px;
+  border-radius: 7px;
+  font-size: 14px;
+  font-family: $SCore;
+  display: flex;
+  align-items: center;
+  //@include flexCenter();
+  @if $status {
+    background-color: #d4ffc5;
+  } @else {
+    background-color: #ffaeae;
+  }
+  i {
+    @if $status {
+      color: #59f58a;
+    } @else {
+      color: #ff8888;
+    }
+  }
+}
+
+@mixin SubmitBtn() {
+  height: 35px;
+  @include flexCenter();
+  font-size: 16px;
+  font-family: $SCore;
+  background-color: $soft-yellow;
+  border-radius: 20px;
+  padding: 10px 27px;
+  transition: 0.3s ease;
+  &:hover {
+    background-color: darken($soft-yellow, 5%);
+  }
+}
