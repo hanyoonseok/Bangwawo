@@ -48,17 +48,18 @@
 
 .contents {
   width: 990px;
-  height: 520px;
+  height: 72vh;
   background-color: #fff;
   border-radius: 44px;
   box-shadow: $shadow;
   margin: auto;
-  padding: 50px 40px;
+  padding: 7vh 40px;
   column-gap: 20px;
   position: relative;
 
   article {
     @include flexBetween;
+    height: 100%;
     .left-box {
       width: 50%;
       .info-box {
@@ -215,7 +216,6 @@
   .register-btn,
   .modify-btn {
     width: 170px;
-    margin-top: 20px;
     @include SubmitBtn;
     float: right;
   }
@@ -280,7 +280,6 @@ input[type="number"]::-webkit-inner-spin-button {
   .btn-wrapper {
     @include flexCenter;
     width: 100%;
-    margin-top: 20px;
     .btn {
       width: 80px;
       height: 30px;
