@@ -160,7 +160,7 @@
 
 ## 8. 피드백 작성
 
-![ezgif.com-gif-maker__8_](/uploads/4d42ef2281ea642e13fa67f40ad0bb76/ezgif.com-gif-maker__8_.gif)
+![ezgif.com-gif-maker__21_](/uploads/cbe85e576fd6b0416f343581562bedfc/ezgif.com-gif-maker__21_.gif)
 
 [8. 봉사자의 피드백 작성]
 
@@ -174,7 +174,8 @@
 
 ## 9. 마이 페이지
 
-![ezgif.com-gif-maker__10_](/uploads/41d0f91bc97a50a2f6f4fe90e5bca164/ezgif.com-gif-maker__10_.gif)
+
+![ezgif.com-gif-maker__18_](/uploads/6f8455504119709e14f2cfee7d06f3c6/ezgif.com-gif-maker__18_.gif)
 
 [9.1 학생 마이페이지]
 
@@ -193,7 +194,7 @@
 캘린더를 통해 수업 스케줄을 확인할 수 있고, 자기소개와 캐릭터를 수정할 수 있습니다.
 
 
-![ezgif.com-gif-maker__9_](/uploads/035940d8dafa5f09284126d99be860d5/ezgif.com-gif-maker__9_.gif)
+![ezgif.com-gif-maker__19_](/uploads/c8c6e1783648d567beaa5025b90f8016/ezgif.com-gif-maker__19_.gif)
 
 [9.3 학부모 마이페이지]
 
@@ -225,7 +226,7 @@
 요청을 수락할 봉사자를 기다리는 동안 학생은 간단한 미니 게임을 하며 대기할 수 있습니다.
 
 
-![10_비밀친구_봉사자](/uploads/a9ca8a615142776c6173437ba3578b38/10_비밀친구_봉사자.gif)
+![ezgif.com-gif-maker__20_](/uploads/5a2c716391490c16fa1ec8fb2a65434f/ezgif.com-gif-maker__20_.gif)
 
 [10.2 봉사자의 대화 요청 수락]
 
@@ -234,7 +235,7 @@
 학생이 대화를 요청하는 순간, 상담 가능한 봉사자들에게 알림이 뜨며 [수락/거절] 여부를 선택할 수 있습니다.
 
 
-![대화 진행](/uploads/bd0ca3f1462726290bf1b1a5d1150be7/ezgif.com-gif-maker__14_.gif)
+![ezgif.com-gif-maker__17_](/uploads/dc2cb2569c21e2d3d13483484a806042/ezgif.com-gif-maker__17_.gif)
 
 [10.3 대화 진행]
 
@@ -248,7 +249,7 @@
 
 
 
-![ezgif.com-gif-maker__13_](/uploads/418b39a03018ca3004d8a7827cd456bf/ezgif.com-gif-maker__13_.gif)
+![ezgif.com-gif-maker__16_](/uploads/8fe146234b0b0cc812d70357b49c2013/ezgif.com-gif-maker__16_.gif)
 
 [10. 4 학부모의 위험단어 감지 시 알림]
 
