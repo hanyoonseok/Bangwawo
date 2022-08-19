@@ -224,6 +224,7 @@ https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene
 <img src="https://user-images.githubusercontent.com/33210124/185528432-8df67eef-ffac-41b6-b641-7be4e2c18190.png" width="50%">
 
 - 6주차
+<img src="https://cdn.discordapp.com/attachments/996205976493502554/1010014243141193778/unknown.png" width="50%">
 
 
 ### Notion
