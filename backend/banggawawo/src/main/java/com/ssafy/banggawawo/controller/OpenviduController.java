@@ -151,6 +151,9 @@ public class OpenviduController {
         if(!fileUtil.unzipFile("/opt/openvidu/recordings/"+sessionid, name, "zip", "/opt/openvidu/recordings/"+sessionid)){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        if(!fileUtil.isExist("/opt/openvidu/recordings"+sessionid, name, "json")){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
