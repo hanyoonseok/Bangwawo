@@ -1,0 +1,68 @@
+.calendar-area {
+  height: 150px;
+
+  .vc-is-expanded {
+    min-height: 150px;
+  }
+  .vc-container {
+    font-family: $Gmarket;
+    --font-medium: 600;
+    --text-xs: 10px;
+    --text-sm: 11px;
+    --text-base: 12px;
+    --text-lg: 14px;
+    --text-lg: 14px;
+    --pink-600: #ff9696;
+    --yellow-200: #ffe8b5;
+    --yellow-600: #ffd89b;
+    color: #3e3e3e;
+    background-color: #fff5e5;
+    border: none;
+    height: 150px;
+
+    .vc-day {
+      height: 20px;
+    }
+    .vc-header {
+      font-size: 16px;
+    }
+    .vc-weeks {
+      padding: 3px;
+    }
+  }
+}
+
+.calendar-area ::v-deep(.custom-calendar.vc-container) {
+  --day-border: 1px solid #ffd89b;
+  --day-border-highlight: 1px solid #ffd89b;
+  --day-width: 5%;
+  --day-height: 1vh;
+  --weekday-bg: #ffd89b;
+  --weekday-border: 1px solid #ffd89b;
+  border-radius: 0;
+  width: 100%;
+  & .vc-weeks {
+    padding: 0;
+  }
+  & .vc-weekday {
+    color: #3e3e3e;
+    &:first-child {
+      color: #ff9696;
+    }
+    &:last-child {
+      color: #8591ff;
+    }
+  }
+  & .vc-day {
+    text-align: left;
+    min-height: 25px;
+    height: var(--day-height);
+    min-width: var(--day-width);
+    &.weekday-1 {
+      color: #ff9696;
+    }
+  }
+  & .vc-day-dots {
+    margin-bottom: 5px;
+  }
+}

@@ -1,0 +1,287 @@
+.background {
+  background-image: $mainBg;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  padding-top: 80px;
+}
+section {
+  position: relative;
+  padding: 40px 70px 80px 70px;
+  .back-btn-wrapper {
+    .back-btn {
+      width: 20px;
+      height: 20px;
+      border-top: 4px solid #000;
+      border-left: 4px solid #000;
+      transform: rotate(-45deg);
+      content: "";
+      background-color: transparent;
+      border-color: $yellow;
+      border-radius: 2px;
+    }
+  }
+
+  .detail {
+    width: 1200px;
+    height: 575px;
+    margin: 15px 50px 15px 100px;
+    background-color: lighten($color: $light-yellow, $amount: 8);
+    box-shadow: $shadow;
+    border-radius: 20px;
+    position: relative;
+
+    .empty {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      background-color: #000;
+      opacity: 0;
+      top: 0;
+      left: 0;
+      z-index: 20;
+    }
+
+    .img-box {
+      width: 146px;
+      height: 74px;
+      position: absolute;
+      bottom: 12px;
+      left: 52px;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .title {
+      padding: 68px 86px 46px;
+    }
+
+    .content {
+      article {
+        margin: 0 76px;
+        @include flexBetween;
+
+        .left-box {
+          width: 506px;
+          height: 316px;
+          margin-right: 80px;
+          background-color: $white;
+          border-radius: 0 75px 75px 75px;
+
+          .left-box-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 0 75px 75px 75px;
+          }
+        }
+
+        .right-box {
+          .info-box {
+            width: 450px;
+
+            &:first-child .info-content {
+              z-index: 20;
+            }
+
+            .info-content button {
+              margin-left: 11px;
+              background-color: transparent;
+              color: darken($color: $grey, $amount: 5);
+              z-index: 20;
+              cursor: pointer;
+              i {
+                font-size: 15px;
+                transition: all 200ms ease;
+                &:hover {
+                  color: $dark-grey;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .button-box {
+        z-index: 100;
+        > div {
+          margin-top: 40px;
+          display: flex;
+          justify-content: flex-end;
+
+          button,
+          a {
+            margin-left: 22px;
+            line-height: 30px;
+            cursor: pointer;
+            z-index: 30;
+          }
+
+          .class-status-btn,
+          .class-entrance-btn,
+          .class-subscribe-btn {
+            @include SubmitBtn;
+            background-color: #e2e2e2;
+          }
+          .class-status-btn {
+            background-color: $soft-yellow;
+          }
+          .class-modify-btn,
+          .class-delete-btn {
+            background-color: transparent;
+            color: $grey;
+            font-size: 20px;
+            &:hover {
+              color: $yellow;
+            }
+          }
+          .class-delete-btn,
+          .class-entrance-btn,
+          .class-subscribe-btn {
+            margin-right: 45px;
+          }
+        }
+      }
+    }
+  }
+
+  .profile {
+    width: 363px;
+    height: 424px;
+    background-color: #fff;
+    box-shadow: $shadow;
+    padding: 30px 58px;
+    border-radius: 44px;
+    position: absolute;
+    right: 70px;
+    top: 30px;
+    z-index: 30;
+
+    .profile-canvas-wrapper {
+      width: 157px;
+      height: 157px;
+      margin: 0 auto 30px;
+      @include flexCenter;
+    }
+
+    .profile-info .info-box {
+      font-size: 12px;
+      column-gap: 17px;
+
+      .info-title {
+        width: 72px;
+        height: 32px;
+      }
+
+      .bg {
+        width: 190px;
+        height: 120px;
+        background-color: $light-yellow;
+        border-radius: 13px;
+        padding: 13px;
+        overflow-y: auto;
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+        &::-webkit-scrollbar {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+// info-box 공통 부분
+.info-box {
+  margin-bottom: 30px;
+  display: grid;
+  line-height: 30px;
+  grid-template-columns: 74px 2fr;
+  column-gap: 35px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .info-title {
+    width: 80px;
+    height: 36px;
+    text-align: center;
+    background-color: #ffd793;
+    font-size: 16px;
+    font-family: $SCore;
+    font-weight: 500;
+    margin-right: 37px;
+    @include flexCenter;
+  }
+  .info-content {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .info-content button {
+    margin-left: 11px;
+    background-color: transparent;
+  }
+}
+
+.confirm {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  @include flexCenter;
+
+  .container {
+    width: 300px;
+    height: 200px;
+    border-radius: 20px;
+    background-color: $light-grey;
+    padding: 12px;
+    box-shadow: $shadow;
+    @include flexColumn;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      display: block;
+      width: 50px;
+      height: 50px;
+      margin-bottom: 20px;
+    }
+  }
+  h2 {
+    font-size: 20px;
+  }
+
+  .btn-wrapper {
+    @include flexCenter;
+    width: 100%;
+    margin-top: 20px;
+    .btn {
+      width: 80px;
+      height: 30px;
+      padding: 8px;
+      @include SubmitBtn;
+    }
+    .btn + .btn {
+      margin-left: 20px;
+    }
+  }
+}
+
+#end {
+  background-color: $soft-pink;
+}
+
+#ing {
+  background-color: #d4ffc5;
+}
