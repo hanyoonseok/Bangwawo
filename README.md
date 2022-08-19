@@ -1,6 +1,6 @@
 # Ⅰ. 서비스 소개
 
-<img src="https://user-images.githubusercontent.com/33210124/185524915-f7fd4890-ee7b-4624-aa0a-43f949a21224.png" width="40%">
+![image](/uploads/8cd73df23cd3641e54af3bedf9b0e110/image.png)
 
 ## 💡 개요
 
@@ -181,21 +181,26 @@ https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene
 
 # III. 주요 서비스 화면
 
+##### 자세한 기능은 [시연 시나리오](https://lab.ssafy.com/s07-webmobile1-sub2/S07P12B201/-/blob/master/exec/Banggwawo_4_%EC%8B%9C%EC%97%B0%20%EC%8B%9C%EB%82%98%EB%A6%AC%EC%98%A4.md)를 참고해주세요 🥰
+
+
+
 - 온보딩 페이지
+
   ![온보딩](https://user-images.githubusercontent.com/33210124/185527172-2aad77d5-bb5a-4e9e-b26b-a61719f9332f.png)
 
 - 수업
 
-![Untitled](https://user-images.githubusercontent.com/33210124/185527177-8999d47b-3d3b-4033-a7d4-117fd4fd7082.png)
+  ![Untitled](https://user-images.githubusercontent.com/33210124/185527177-8999d47b-3d3b-4033-a7d4-117fd4fd7082.png)
 
 - 비밀친구 (상담)
 
-![Untitled](https://user-images.githubusercontent.com/33210124/185527430-07894f36-65f8-4d37-956a-80e031e1d6b5.png)
+  ![Untitled](https://user-images.githubusercontent.com/33210124/185527430-07894f36-65f8-4d37-956a-80e031e1d6b5.png)
 
 - 마이페이지
 
-![마이페이지캡](https://user-images.githubusercontent.com/33210124/185527439-9689d2f3-94a0-4831-a591-c1e390e35180.png)
-![마이페이지캡쳐](https://user-images.githubusercontent.com/33210124/185527441-6e8c0a6e-b2f8-4976-81e8-fc86a7c0f859.png)
+  ![마이페이지캡](https://user-images.githubusercontent.com/33210124/185527439-9689d2f3-94a0-4831-a591-c1e390e35180.png)
+  ![마이페이지캡쳐](https://user-images.githubusercontent.com/33210124/185527441-6e8c0a6e-b2f8-4976-81e8-fc86a7c0f859.png)
 
 # IV. 프로젝트 진행
 
@@ -206,25 +211,31 @@ https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene
 ![Untitled 3](https://user-images.githubusercontent.com/33210124/185528436-132b97d1-1c38-4625-8f17-e9364d294b99.png)
 
 
-## Gira
+## Jira
 
 - 1주차
-<img src="https://user-images.githubusercontent.com/33210124/185528195-e4d3e6b1-d963-4fcb-89c2-3af8e294bb02.png" width="50%">
+
+  <img src="https://user-images.githubusercontent.com/33210124/185528195-e4d3e6b1-d963-4fcb-89c2-3af8e294bb02.png" width="50%">
 
 - 2주차
-<img src="https://user-images.githubusercontent.com/33210124/185528197-a35566d3-e7d0-49ca-b404-7b03d29a565c.png" width="50%">
+
+  <img src="https://user-images.githubusercontent.com/33210124/185528197-a35566d3-e7d0-49ca-b404-7b03d29a565c.png" width="50%">
 
 - 3주차
-<img src="https://user-images.githubusercontent.com/33210124/185528200-7783bcff-bade-49f5-b3ee-f12c2a02e3c5.png" width="50%">
+
+  <img src="https://user-images.githubusercontent.com/33210124/185528200-7783bcff-bade-49f5-b3ee-f12c2a02e3c5.png" width="50%">
 
 - 4주차
-<img src="https://user-images.githubusercontent.com/33210124/185528202-082bcdae-3a3e-4b6c-ac93-e41e377ea4e0.png" width="50%">
+
+  <img src="https://user-images.githubusercontent.com/33210124/185528202-082bcdae-3a3e-4b6c-ac93-e41e377ea4e0.png" width="50%">
 
 - 5주차
-<img src="https://user-images.githubusercontent.com/33210124/185528432-8df67eef-ffac-41b6-b641-7be4e2c18190.png" width="50%">
+
+  <img src="https://user-images.githubusercontent.com/33210124/185528432-8df67eef-ffac-41b6-b641-7be4e2c18190.png" width="50%">
 
 - 6주차
-<img src="https://cdn.discordapp.com/attachments/996205976493502554/1010014243141193778/unknown.png" width="50%">
+
+  <img src="https://cdn.discordapp.com/attachments/996205976493502554/1010014243141193778/unknown.png" width="50%">
 
 
 ### Notion
@@ -268,29 +279,29 @@ figma를 사용해 홈페이지의 초안을 작성합니다. 관련 레퍼런�
 
 # VII. 소감 및 배운점
 - 팀 소개
-![팀소개](https://user-images.githubusercontent.com/33210124/185528250-4866c872-d5aa-495b-8f42-fce73ca8572c.png)
+  ![팀소개](https://user-images.githubusercontent.com/33210124/185528250-4866c872-d5aa-495b-8f42-fce73ca8572c.png)
 
 - 김수빈
 
-막연하게 생각했던 것들이 실제로 구현되는 것을 보니 어떤 주제를 해도 잘했을것같다는 생각이 듭니다. 부족한 저를 이끌어주는 팀원들이 있어서 해낼 수 있었던 것같습니다. 부족한점이 많았는데 팀원들한테 정말 많이 배운 것 같습니다. 특화때도 잘해봅시당~
+  막연하게 생각했던 것들이 실제로 구현되는 것을 보니 어떤 주제를 해도 잘했을것같다는 생각이 듭니다. 부족한 저를 이끌어주는 팀원들이 있어서 해낼 수 있었던 것같습니다. 부족한점이 많았는데 팀원들한테 정말 많이 배운 것 같습니다. 특화때도 잘해봅시당~
 
 - 김진호
 
-처음으로 많은 친구들과 프로젝트를 진행하면서 우리만의 생각으로 서비스를 만든다는게 너무 재미있었습니다. 하지만 7주라는 시간이 너무나 짧아 저스스로가 아직까지 배울점이 너무 많다는점을 느겼고 나중에 기회가 된다면 지금 팀원들가 다시한번 프로젝트를 하고 싶습니다.
+  처음으로 많은 친구들과 프로젝트를 진행하면서 우리만의 생각으로 서비스를 만든다는게 너무 재미있었습니다. 하지만 7주라는 시간이 너무나 짧아 저스스로가 아직까지 배울점이 너무 많다는점을 느겼고 나중에 기회가 된다면 지금 팀원들가 다시한번 프로젝트를 하고 싶습니다.
 
 - 육다빈
 
-많은 사람들과 역할을 나눠 제대로 해본 첫 프로젝트라 새롭게 알게 된 게 많았고 재밌었습니다. 유저 관련 로직을 맡았는데 security 관련해서 더 꼼꼼하게 공부해서 다음프로젝트 보완해보고 싶습니다. 7주 사이에 얻어간 것이 많아 좋았고 다들 고생 많으셨습니다 특화때도 화이팅 !
+  많은 사람들과 역할을 나눠 제대로 해본 첫 프로젝트라 새롭게 알게 된 게 많았고 재밌었습니다. 유저 관련 로직을 맡았는데 security 관련해서 더 꼼꼼하게 공부해서 다음프로젝트 보완해보고 싶습니다. 7주 사이에 얻어간 것이 많아 좋았고 다들 고생 많으셨습니다 특화때도 화이팅 !
 
 - 이화연
 
-처음 시작할때는 7주안에 과연 다 완성할 수 있을까 싶었는데 팀원들과 같이 도와가며 개발해서 잘 마무리할 수 있었던 것 같습니다. 깃 플로우, 지라 등 협업툴 사용에 익숙해질 수 있었고 팀원들에게 많이 배웠습니다! 특화때도 열심히 하자 💪
+  처음 시작할때는 7주안에 과연 다 완성할 수 있을까 싶었는데 팀원들과 같이 도와가며 개발해서 잘 마무리할 수 있었던 것 같습니다. 깃 플로우, 지라 등 협업툴 사용에 익숙해질 수 있었고 팀원들에게 많이 배웠습니다! 특화때도 열심히 하자 💪
 
 - 정수빈
 
-많은 것을 배우고 느꼈던 프로젝트였습니다. 처음 해보는 것이 많아서 어려웠지만 재미있었습니다. 모두와 함께 협업해서 즐거웠습니다. 더 배울 수 있어서 좋았습니다. 다들 화이팅!
+  많은 것을 배우고 느꼈던 프로젝트였습니다. 처음 해보는 것이 많아서 어려웠지만 재미있었습니다. 모두와 함께 협업해서 즐거웠습니다. 더 배울 수 있어서 좋았습니다. 다들 화이팅!
 
 - 한윤석
 
-좋은 팀원들과 좋은 서비스를 만들 수 있어서 뜻 깊은 7주였습니다. 팀장으로써 부족한 점이 많았지만 잘 따라와줘서 프로젝트를 잘 마무리할 수 있던 것 같습니다. 이 느낌 그대로 특화 프로젝트때도 같이 힘내보자
+  좋은 팀원들과 좋은 서비스를 만들 수 있어서 뜻 깊은 7주였습니다. 팀장으로써 부족한 점이 많았지만 잘 따라와줘서 프로젝트를 잘 마무리할 수 있던 것 같습니다. 이 느낌 그대로 특화 프로젝트때도 같이 힘내보자
 
