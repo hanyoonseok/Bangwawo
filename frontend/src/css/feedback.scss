@@ -1,0 +1,475 @@
+.feedback-background {
+  background: url("@/assets/feedbackBg.png");
+  height: 100vh;
+  height: 1440px;
+  padding: 30px 70px;
+  .feedback-area {
+    z-index: 10;
+    background-color: $lightx2-yellow;
+    box-shadow: $shadow;
+    height: 1230px;
+    border-radius: 40px;
+    padding: 60px 90px;
+    position: relative;
+    .deco-img {
+      position: absolute;
+      right: 100px;
+      top: 100px;
+      height: 80px;
+      width: 220px;
+    }
+    section {
+      padding-bottom: 20px;
+    }
+    .title {
+      display: inline-block;
+      line-height: 65px;
+      border-bottom: 5px solid $yellow;
+    }
+
+    .feedback-desc {
+      background-color: #fff0d3;
+      height: 215px;
+      border-radius: 20px;
+      margin: 30px 0;
+      padding: 40px;
+      font-size: 20px;
+    }
+
+    .lecture-video-area {
+      text-align: center;
+      @include flexCenter;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      .lecture-video {
+        width: 360px;
+        height: 230px;
+        border-radius: 20px;
+        background-color: $light-grey;
+        margin: 30px 20px;
+      }
+    }
+  }
+}
+.lecture-desc {
+  @include flexColumn;
+  flex-wrap: wrap;
+  .lecture-value {
+    margin: 5px;
+    label {
+      @include inputTitleLabel;
+    }
+    .label-value {
+      margin-left: 15px;
+      width: 60%;
+    }
+    @include flexCenter;
+    justify-content: flex-start;
+  }
+}
+.background {
+  background-image: $mainBg;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  padding-top: 80px;
+}
+
+.main-section {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  @include flexColumn;
+  align-items: center;
+  padding: 0 60px 30px 60px;
+}
+
+.title-wrapper {
+  position: relative;
+  padding: 10px 0;
+  flex-shrink: 0;
+  &:after {
+    position: absolute;
+    content: "";
+    bottom: 0;
+    left: 50%;
+    width: 100%;
+    height: 5px;
+    background-color: $yellow;
+    transform: translate(-50%, 0);
+  }
+}
+
+.list-wrapper {
+  width: 80%;
+  height: 100%;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 0;
+  row-gap: 50px;
+  margin: 40px 0;
+  place-items: center;
+  padding: 10px 0;
+}
+
+.btn-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  .submit-btn {
+    @include SubmitBtn;
+    flex-shrink: 0;
+  }
+}
+
+.profile {
+  width: 250px;
+  height: 215px;
+  border-radius: 40px;
+  box-shadow: $light-shadow;
+  background-color: white;
+  @include flexAround;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  cursor: pointer;
+  transition: all 200ms ease;
+  &:hover {
+    transform: scale(1.04);
+  }
+  img {
+    width: 100px;
+    height: 100px;
+    filter: $drop-shadow;
+  }
+  .person-info {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    color: #7b7777;
+    label {
+      @include inputTitleLabel;
+      width: 55px;
+      margin: 0 15px;
+    }
+  }
+}
+
+@keyframes show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(53, 53, 53, 0.25);
+  opacity: 0;
+  @include flexCenter;
+  animation: show 0.3s forwards;
+  .empty {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    opacity: 0;
+  }
+
+  .container {
+    width: 80%;
+    height: 70%;
+    z-index: 20;
+    background-color: $lightx2-yellow;
+    border-radius: 20px;
+    padding: 28px 36px 36px 80px;
+
+    .stretch {
+      width: 100%;
+      height: 100%;
+      @include flexColumn;
+    }
+    .close {
+      float: right;
+      width: fit-content;
+      font-size: 38px;
+      color: #cecece;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .title-wrapper {
+      width: fit-content;
+    }
+
+    .center-wrapper {
+      margin-top: 60px;
+      @include flexBetween;
+      width: 100%;
+
+      textarea {
+        width: 70%;
+        height: 100%;
+        border-radius: 22px;
+        box-shadow: $light-shadow;
+        padding: 15px;
+      }
+
+      .modal-profile {
+        @include flexColumn;
+        align-items: center;
+        img {
+          width: 170px;
+          height: 170px;
+          filter: $drop-shadow;
+        }
+        .person-info {
+          width: 100%;
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          color: #7b7777;
+          margin-top: 26px;
+          label {
+            @include inputTitleLabel;
+            margin: 0 15px;
+          }
+        }
+      }
+    }
+
+    .btn-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+
+      .submit-btn {
+        @include SubmitBtn;
+        width: fit-content;
+        margin-top: 50px;
+      }
+    }
+  }
+}
+
+.confirm {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  @include flexCenter;
+
+  .container {
+    width: 300px;
+    height: 200px;
+    border-radius: 20px;
+    background-color: $white;
+    padding: 12px;
+    box-shadow: $shadow;
+    @include flexColumn;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      display: block;
+      width: 50px;
+      height: 50px;
+      margin-bottom: 20px;
+    }
+  }
+  h2 {
+    font-size: 20px;
+  }
+
+  .btn-wrapper {
+    @include flexCenter;
+    width: 100%;
+    margin-top: 20px;
+    .btn {
+      width: 80px;
+      height: 30px;
+      @include SubmitBtn;
+      padding: 8px;
+      margin-left: 20px;
+    }
+    a + .btn {
+      margin-left: 20px;
+    }
+  }
+}
+
+// 여기서부터는 수정된 피드백 뷰
+
+.background-view {
+  transition: all 300ms ease;
+  background-image: $mainBg;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  padding: 0 130px;
+  @include flexCenter;
+  flex-direction: column;
+  .feedback-title {
+    line-height: 60px;
+    border-bottom: 7px solid $soft-yellow;
+  }
+  .feedback-container {
+    margin-top: 30px;
+    height: 600px;
+    width: 100%;
+    background-color: white;
+    border-radius: 40px;
+    box-shadow: $light-shadow;
+    @include flexCenter;
+    position: relative;
+    .duck-img {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 210px;
+      height: 80px;
+    }
+    .left {
+      flex: 6.5;
+      .lecture-area {
+        position: relative;
+        video {
+          height: 477px;
+          width: 900px;
+          transition: all 300ms ease;
+        }
+        .slide-open {
+          // width: 700px;
+          width: 100%;
+        }
+        i {
+          position: absolute;
+          right: 17px;
+          top: 17px;
+          font-size: 20px;
+          transition: all 200ms ease;
+          &:hover {
+            font-size: 22px;
+          }
+        }
+        .open {
+          right: -30px;
+          color: $dark-grey;
+        }
+      }
+    }
+    .slider.closed {
+      max-width: 0;
+      transition: all 200ms ease;
+    }
+    .right {
+      flex: 3.5;
+      margin-left: 50px;
+      width: 400px;
+      transition: all 300ms ease;
+      padding-right: 20px;
+      .slider {
+        overflow-x: hidden;
+        width: 100%;
+        .feedback-area {
+          @include flexColumn;
+          box-shadow: none;
+          .feedback-menu {
+            display: flex;
+            flex-direction: row;
+            .menu-btn {
+              padding: 5px 15px;
+            }
+            .active {
+              border-bottom: 3px solid $dark-grey;
+              color: $dark-grey;
+            }
+          }
+          .feedback-info {
+            // max-width: 400px;
+            width: 100%; //400px;
+            margin-top: 25px;
+            height: 400px;
+            background-color: #fbfbfb;
+            border-radius: 20px;
+            position: relative;
+            canvas {
+              width: 100%;
+              height: 100%;
+            }
+            .chart-btn {
+              position: absolute;
+              top: 0;
+              width: 70px;
+              height: 30px;
+              border-radius: 10px;
+              color: $white;
+              font-family: $appleM;
+              font-weight: bold;
+              &.blue {
+                background-color: skyblue;
+              }
+              &.red {
+                background-color: lightcoral;
+              }
+              &.green {
+                background-color: green;
+              }
+            }
+            .feedback-box {
+              padding: 20px 35px 0 35px;
+            }
+            .emotion-feedback-box {
+              height: 100%;
+              width: 100%;
+              border-radius: 20px;
+              padding: 35px 35px 0 35px;
+              overflow: hidden;
+              display: flex;
+              flex-wrap: nowrap;
+              div {
+                width: 100%;
+              }
+              .emotion-box {
+                @include flexAround;
+                flex-wrap: wrap;
+                width: 100%;
+                transition: 0.3s ease;
+                span {
+                  @include flexColumn;
+                  align-items: center;
+                  color: $grey;
+                  font-size: 12px;
+                }
+                img {
+                  width: 80px;
+                  height: 80px;
+                  margin: 15px 0;
+                }
+                img + img {
+                  margin-left: 10px;
+                }
+              }
+            }
+            .detail-box {
+              padding: 35px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
