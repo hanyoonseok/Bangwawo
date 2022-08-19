@@ -19,7 +19,9 @@
 
 - 기사 링크
   ["초등생 3분의 1 방과후 방치 '나홀로 아동'"(종합) | 연합뉴스](https://www.yna.co.kr/view/AKR20160204109551005)
+
   [방과후학교 코로나에 2년째 스톱...강사도, 학생도 '낙동강 오리알'](https://www.newspim.com/news/view/20210825000945)
+
   [출근길 인터뷰] 코로나 시대, 자원봉사 활동 변화...비대면·온라인 강화](https://www.yonhapnewstv.co.kr/news/MYH20211228005000038?did=1825m)
 
 ## 🎯 Target
@@ -135,6 +137,48 @@
 - MySQL Workbench `8.0.29`
 - VSCode `1.69.2`
 
+## 기술 소개
+### 1. WebRTC
+
+![image](/uploads/44f0d65568601a7a5684c0b3444355d1/image.png)
+
+#### WebRTC 
+WebRTC(Web Real-Time Communication)는 웹 브라우저 간에 플러그인의 도움 없이 서로 통신할 수 있도록 설계된 API이다. <br>
+W3C에서 제시된 초안이며, 음성 통화, 영상 통화, P2P 파일 공유 등으로 활용될 수 있다.
+
+![image](/uploads/578aea9254e8f29cbccb649ff6277bc4/image.png)
+
+#### Openvidu
+  OpenVidu is a platform to facilitate the addition of video calls in your web or mobile application. It provides a complete stack of     technologies very easy to integrate in your application. Our main goal is to allow developers to add real-time communications to their apps very fast and with low impact in their code.
+
+WebRTC를 보다 간단하게 적용할 수 있고, 다양한 프레임워크와 호환성이 높은 openvidu를 사용하여 프로젝트를 진행했습니다.
+
+### 2.Web Socket
+
+![image](/uploads/9efa44ec12633c1b63b8c68b73f12ca2/image.png)
+
+#### 웹소켓(WebSocket)
+웹소켓은 하나의 TCP 접속에 전이중 통신 채널을 제공하는 컴퓨터 통신 프로토콜이다. 웹소켓 프로토콜은 2011년 IETF에 의해 RFC 6455로 표준화되었으며 웹 IDL의 웹소켓 API는 W3C에 의해 표준화되고 있다. (이미지 출처 : http://www.secmem.org/blog/2019/08/17/websocket-socketio/)
+
+일반적인 Ajax 통신과 다르게, 특정 end point를 구독하면 종단지점과 연결된 모든 통신을 수신할 수 있으며, 실시간 소통이 가능합니다. 그래서 실시간 채팅등에 많이 활용되고 있습니다.
+
+#### Stomp.js 
+이 라이브러리를 사용하면 WebSocket을 통해 STOMP 브로커에 연결할 수 있습니다. 이 라이브러리는 모든 현재 프로토콜 변형을 포함하여 완전한 STOMP 사양을 지원합니다. 가장 인기 있는 메시징 브로커는 기본적으로 또는 플러그인을 사용하여 WebSocket을 통해 STOMP 및 STOMP를 지원합니다.
+
+### 3. face API
+JavaScript face recognition API for the browser and nodejs implemented on top of tensorflow.js core
+
+![image](/uploads/6bd8ef4ecf38da4acbcaf98b709297c2/image.png)
+
+
+### 4. Web Speech API
+웹 음성 API는 사용자가 웹 애플리케이션에 음성 데이터를 통합 할 수 있습니다. Web Speech API는 SpeechSynthesis(텍스트 음성 변환) 및 SpeechRecognition(비동기 음성 인식 )의 두 부분으로 구성 됩니다.
+
+### 5. three.js
+3차원 그래픽 및 애니메이션을 올리기 위한 js library입니다. 
+https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene
+
+
 # III. 주요 서비스 화면
 
 - 온보딩 페이지
@@ -227,13 +271,25 @@ figma를 사용해 홈페이지의 초안을 작성합니다. 관련 레퍼런�
 
 - 김수빈
 
+막연하게 생각했던 것들이 실제로 구현되는 것을 보니 어떤 주제를 해도 잘했을것같다는 생각이 듭니다. 부족한 저를 이끌어주는 팀원들이 있어서 해낼 수 있었던 것같습니다. 부족한점이 많았는데 팀원들한테 정말 많이 배운 것 같습니다. 특화때도 잘해봅시당~
+
 - 김진호
+
+처음으로 많은 친구들과 프로젝트를 진행하면서 우리만의 생각으로 서비스를 만든다는게 너무 재미있었습니다. 하지만 7주라는 시간이 너무나 짧아 저스스로가 아직까지 배울점이 너무 많다는점을 느겼고 나중에 기회가 된다면 지금 팀원들가 다시한번 프로젝트를 하고 싶습니다.
 
 - 육다빈
 
+많은 사람들과 역할을 나눠 제대로 해본 첫 프로젝트라 새롭게 알게 된 게 많았고 재밌었습니다. 유저 관련 로직을 맡았는데 security 관련해서 더 꼼꼼하게 공부해서 다음프로젝트 보완해보고 싶습니다. 7주 사이에 얻어간 것이 많아 좋았고 다들 고생 많으셨습니다 특화때도 화이팅 !
+
 - 이화연
+
+처음 시작할때는 7주안에 과연 다 완성할 수 있을까 싶었는데 팀원들과 같이 도와가며 개발해서 잘 마무리할 수 있었던 것 같습니다. 깃 플로우, 지라 등 협업툴 사용에 익숙해질 수 있었고 팀원들에게 많이 배웠습니다! 특화때도 열심히 하자 💪
 
 - 정수빈
 
+많은 것을 배우고 느꼈던 프로젝트였습니다. 처음 해보는 것이 많아서 어려웠지만 재미있었습니다. 모두와 함께 협업해서 즐거웠습니다. 더 배울 수 있어서 좋았습니다. 다들 화이팅!
+
 - 한윤석
+
+좋은 팀원들과 좋은 서비스를 만들 수 있어서 뜻 깊은 7주였습니다. 팀장으로써 부족한 점이 많았지만 잘 따라와줘서 프로젝트를 잘 마무리할 수 있던 것 같습니다. 이 느낌 그대로 특화 프로젝트때도 같이 힘내보자
 
