@@ -169,27 +169,25 @@
 ## Gira
 
 - 1주차
-<img src="https://user-images.githubusercontent.com/33210124/185528195-e4d3e6b1-d963-4fcb-89c2-3af8e294bb02.png" width="40%">
+<img src="https://user-images.githubusercontent.com/33210124/185528195-e4d3e6b1-d963-4fcb-89c2-3af8e294bb02.png" width="50%">
 
 - 2주차
-
-![Untitled 5](https://user-images.githubusercontent.com/33210124/185528197-a35566d3-e7d0-49ca-b404-7b03d29a565c.png)
+<img src="https://user-images.githubusercontent.com/33210124/185528197-a35566d3-e7d0-49ca-b404-7b03d29a565c.png" width="50%">
 
 - 3주차
-
-![Untitled 6](https://user-images.githubusercontent.com/33210124/185528200-7783bcff-bade-49f5-b3ee-f12c2a02e3c5.png)
+<img src="https://user-images.githubusercontent.com/33210124/185528200-7783bcff-bade-49f5-b3ee-f12c2a02e3c5.png" width="50%">
 
 - 4주차
-
-![Untitled 7](https://user-images.githubusercontent.com/33210124/185528202-082bcdae-3a3e-4b6c-ac93-e41e377ea4e0.png)
+<img src="https://user-images.githubusercontent.com/33210124/185528202-082bcdae-3a3e-4b6c-ac93-e41e377ea4e0.png" width="50%">
 
 - 5주차
+<img src="https://user-images.githubusercontent.com/33210124/185528432-8df67eef-ffac-41b6-b641-7be4e2c18190.png" width="50%">
 
-![Untitled 8](https://user-images.githubusercontent.com/33210124/185528432-8df67eef-ffac-41b6-b641-7be4e2c18190.png)
 
 ### Notion
 
 ![Untitled 9](https://user-images.githubusercontent.com/33210124/185528605-bb4f094b-c54e-4e6d-b9fb-fbb742e139ce.png)
+
 # V. 배포
 
 서버는 AWS EC2 ubuntu를 사용하였습니다.
