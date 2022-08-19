@@ -18,11 +18,12 @@
 따라서 저희는 학생, 학부모, 봉사자를 연결해줄 비대면 방과후 플랫폼 방과워를 제작하게 됐습니다.
 
 - 기사 링크
+
   ["초등생 3분의 1 방과후 방치 '나홀로 아동'"(종합) | 연합뉴스](https://www.yna.co.kr/view/AKR20160204109551005)
 
   [방과후학교 코로나에 2년째 스톱...강사도, 학생도 '낙동강 오리알'](https://www.newspim.com/news/view/20210825000945)
 
-  [출근길 인터뷰] 코로나 시대, 자원봉사 활동 변화...비대면·온라인 강화](https://www.yonhapnewstv.co.kr/news/MYH20211228005000038?did=1825m)
+  [[출근길 인터뷰] 코로나 시대, 자원봉사 활동 변화...비대면·온라인 강화](https://www.yonhapnewstv.co.kr/news/MYH20211228005000038?did=1825m)
 
 ## 🎯 Target
 
@@ -115,7 +116,7 @@
 - SpringBoot
 - Gradle `7.5`
 - Lombok `1.18.24`
-- ~~JPA `1.0`~~
+- JPA `1.0`
 - Hibernate (ORM프레임워크)
 - Swagger
 
@@ -149,7 +150,6 @@ W3C에서 제시된 초안이며, 음성 통화, 영상 통화, P2P 파일 공�
 ![image](/uploads/578aea9254e8f29cbccb649ff6277bc4/image.png)
 
 #### Openvidu
-  OpenVidu is a platform to facilitate the addition of video calls in your web or mobile application. It provides a complete stack of     technologies very easy to integrate in your application. Our main goal is to allow developers to add real-time communications to their apps very fast and with low impact in their code.
 
 WebRTC를 보다 간단하게 적용할 수 있고, 다양한 프레임워크와 호환성이 높은 openvidu를 사용하여 프로젝트를 진행했습니다.
 
@@ -162,20 +162,20 @@ WebRTC를 보다 간단하게 적용할 수 있고, 다양한 프레임워크와
 
 일반적인 Ajax 통신과 다르게, 특정 end point를 구독하면 종단지점과 연결된 모든 통신을 수신할 수 있으며, 실시간 소통이 가능합니다. 그래서 실시간 채팅등에 많이 활용되고 있습니다.
 
-#### Stomp.js 
+#### stomp.js 
 이 라이브러리를 사용하면 WebSocket을 통해 STOMP 브로커에 연결할 수 있습니다. 이 라이브러리는 모든 현재 프로토콜 변형을 포함하여 완전한 STOMP 사양을 지원합니다. 가장 인기 있는 메시징 브로커는 기본적으로 또는 플러그인을 사용하여 WebSocket을 통해 STOMP 및 STOMP를 지원합니다.
 
 ### 3. face API
-JavaScript face recognition API for the browser and nodejs implemented on top of tensorflow.js core
+Face API는 감정 감지를 수행하여 인간 코더의 인식된 주석에 따라 얼굴 표정에서 분노, 경멸, 혐오, 두려움, 행복, 중립, 슬픔 및 놀라움을 감지할 수 있습니다.
 
-![image](/uploads/6bd8ef4ecf38da4acbcaf98b709297c2/image.png)
+![image](/uploads/cb16c8a4139d2ef001fe2af9f6bfdd30/image.png)
 
 
 ### 4. Web Speech API
 웹 음성 API는 사용자가 웹 애플리케이션에 음성 데이터를 통합 할 수 있습니다. Web Speech API는 SpeechSynthesis(텍스트 음성 변환) 및 SpeechRecognition(비동기 음성 인식 )의 두 부분으로 구성 됩니다.
 
 ### 5. three.js
-3차원 그래픽 및 애니메이션을 올리기 위한 js library입니다. 
+3차원 그래픽 및 애니메이션을 올리기 위한 js library입니다. <br>
 https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene
 
 
