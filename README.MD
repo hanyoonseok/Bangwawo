@@ -24,7 +24,7 @@
 - 기사 링크
   ["초등생 3분의 1 방과후 방치 '나홀로 아동'"(종합) | 연합뉴스](https://www.yna.co.kr/view/AKR20160204109551005)
   [방과후학교 코로나에 2년째 스톱...강사도, 학생도 '낙동강 오리알'](https://www.newspim.com/news/view/20210825000945)
-  [[출근길 인터뷰] 코로나 시대, 자원봉사 활동 변화...비대면·온라인 강화](https://www.yonhapnewstv.co.kr/news/MYH20211228005000038?did=1825m)
+  [출근길 인터뷰] 코로나 시대, 자원봉사 활동 변화...비대면·온라인 강화](https://www.yonhapnewstv.co.kr/news/MYH20211228005000038?did=1825m)
 
 ## 🎯 Target
 
@@ -109,6 +109,7 @@
   - Web Speech API(STT)
     [GitHub - fresh-web/web-speech: Web Speech API Example](https://github.com/fresh-web/web-speech)
     [Web Speech API - Web APIs | MDN](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API)
+  - [three.js](https://threejs.org/)
 
 ## 🐳 Back End
 
@@ -168,8 +169,8 @@
 ## Gira
 
 - 1주차
+<img src="https://user-images.githubusercontent.com/33210124/185528195-e4d3e6b1-d963-4fcb-89c2-3af8e294bb02.png" width="40%">
 
-![Untitled 4](https://user-images.githubusercontent.com/33210124/185528195-e4d3e6b1-d963-4fcb-89c2-3af8e294bb02.png)
 - 2주차
 
 ![Untitled 5](https://user-images.githubusercontent.com/33210124/185528197-a35566d3-e7d0-49ca-b404-7b03d29a565c.png)
