@@ -2,7 +2,9 @@
 
 .user-background {
   background: url("@/assets/userBg.png");
-  height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
   @include flexCenter;
   .three-duck {
     img {

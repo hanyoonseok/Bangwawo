@@ -9,7 +9,7 @@
 section {
   position: relative;
   height: 100%;
-  padding: 40px 70px 80px 70px;
+  padding: 20px 70px 80px 70px;
   .back-btn-wrapper {
     .back-btn {
       width: 20px;
@@ -26,8 +26,8 @@ section {
 
   .detail {
     width: 1200px;
-    height: 575px;
-    margin: 15px 50px 15px 100px;
+    height: 75vh;
+    margin: 0 50px 15px 100px;
     background-color: lighten($color: $light-yellow, $amount: 8);
     box-shadow: $shadow;
     border-radius: 20px;
@@ -268,10 +268,11 @@ section {
     width: 100%;
     margin-top: 20px;
     .btn {
-      width: 80px;
+      width: 95px;
       height: 30px;
-      padding: 8px;
+      padding: 4px;
       @include SubmitBtn;
+      font-size: 14px;
     }
     .btn + .btn {
       margin-left: 20px;

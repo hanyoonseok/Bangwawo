@@ -1,6 +1,4 @@
 .calendar-area {
-  height: 150px;
-
   .vc-is-expanded {
     min-height: 150px;
   }
@@ -8,8 +6,8 @@
     font-family: $Gmarket;
     --font-medium: 600;
     --text-xs: 10px;
-    --text-sm: 11px;
-    --text-base: 12px;
+    --text-sm: 12px;
+    --text-base: 13px;
     --text-lg: 14px;
     --text-lg: 14px;
     --pink-600: #ff9696;
@@ -18,10 +16,10 @@
     color: #3e3e3e;
     background-color: #fff5e5;
     border: none;
-    height: 150px;
+    height: 100%;
 
     .vc-day {
-      height: 20px;
+      height: 14%;
     }
     .vc-header {
       font-size: 16px;
@@ -32,11 +30,11 @@
   }
 }
 
-.calendar-area ::v-deep(.custom-calendar.vc-container) {
+.calendar-area::v-deep(.custom-calendar.vc-container) {
   --day-border: 1px solid #ffd89b;
   --day-border-highlight: 1px solid #ffd89b;
   --day-width: 5%;
-  --day-height: 1vh;
+  --day-height: 4.2vh;
   --weekday-bg: #ffd89b;
   --weekday-border: 1px solid #ffd89b;
   border-radius: 0;
@@ -55,7 +53,7 @@
   }
   & .vc-day {
     text-align: left;
-    min-height: 25px;
+    min-height: 30px;
     height: var(--day-height);
     min-width: var(--day-width);
     &.weekday-1 {

@@ -16,7 +16,6 @@ export default {
 
     const getLoginInfo = async () => {
       const { data } = await store.dispatch("root/getUserInfo", code);
-      console.log(data);
       if (data.isUser) {
         store.commit("root/setUserInfo", data);
         router.push("/class/list");

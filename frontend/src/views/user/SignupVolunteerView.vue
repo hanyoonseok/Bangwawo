@@ -29,7 +29,6 @@ export default {
     const registObj = ref({ ...props });
     const router = useRouter();
     const store = useStore();
-    console.log(props);
     registObj.value.character = [
       { part: "body", color: "fffffb" },
       { part: "foot", color: "ff9696" },

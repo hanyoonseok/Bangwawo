@@ -49,7 +49,7 @@ export default {
       isMatching: false,
       volunteerCnt: 0,
       isMatchingBtnClick: false,
-      startMinigame: false,
+      startMinigame: true,
     });
 
     const startMatch = () => {
