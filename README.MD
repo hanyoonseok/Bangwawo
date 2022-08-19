@@ -1,7 +1,3 @@
-# gitlab Readme 작성
-
-- 목차
-
 # Ⅰ. 서비스 소개
 
 <img src="https://user-images.githubusercontent.com/33210124/185524915-f7fd4890-ee7b-4624-aa0a-43f949a21224.png" width="40%">
@@ -182,6 +178,8 @@
 
 - 5주차
 <img src="https://user-images.githubusercontent.com/33210124/185528432-8df67eef-ffac-41b6-b641-7be4e2c18190.png" width="50%">
+
+- 6주차
 
 
 ### Notion
