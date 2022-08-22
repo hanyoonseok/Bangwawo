@@ -33,6 +33,11 @@ export default {
 
     console.log(props);
 
+    if (!props.nickname || !props.kakaoId) {
+      alert("원활한 서비스 이용을 위해 정보 수집을 모두 동의해주세요...!");
+      location.href = "/user/login";
+    }
+
     registObj.value.character = [
       { part: "body", color: "fffffb" },
       { part: "foot", color: "ff9696" },
