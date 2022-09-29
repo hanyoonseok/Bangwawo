@@ -142,14 +142,14 @@
 
 ## 기술 소개
 ### 1. WebRTC
+![image](https://user-images.githubusercontent.com/28249948/192952997-748edc80-4c34-479b-8fc2-dcd06bf97fe8.png)
 
-![image](/uploads/44f0d65568601a7a5684c0b3444355d1/image.png)
 
 #### WebRTC 
 WebRTC(Web Real-Time Communication)는 웹 브라우저 간에 플러그인의 도움 없이 서로 통신할 수 있도록 설계된 API이다. <br>
 W3C에서 제시된 초안이며, 음성 통화, 영상 통화, P2P 파일 공유 등으로 활용될 수 있다.
 
-![image](/uploads/578aea9254e8f29cbccb649ff6277bc4/image.png)
+![image](https://user-images.githubusercontent.com/28249948/192953032-f24aec56-fda1-439a-97da-85c9695c42fc.png)
 
 #### Openvidu
 
@@ -157,7 +157,7 @@ WebRTC를 보다 간단하게 적용할 수 있고, 다양한 프레임워크와
 
 ### 2.Web Socket
 
-![image](/uploads/9efa44ec12633c1b63b8c68b73f12ca2/image.png)
+![image](https://user-images.githubusercontent.com/28249948/192953061-eea55042-7956-4d17-8b57-c64e7d78fa84.png)
 
 #### 웹소켓(WebSocket)
 웹소켓은 하나의 TCP 접속에 전이중 통신 채널을 제공하는 컴퓨터 통신 프로토콜이다. 웹소켓 프로토콜은 2011년 IETF에 의해 RFC 6455로 표준화되었으며 웹 IDL의 웹소켓 API는 W3C에 의해 표준화되고 있다. (이미지 출처 : http://www.secmem.org/blog/2019/08/17/websocket-socketio/)
@@ -170,7 +170,7 @@ WebRTC를 보다 간단하게 적용할 수 있고, 다양한 프레임워크와
 ### 3. face API
 Face API는 감정 감지를 수행하여 인간 코더의 인식된 주석에 따라 얼굴 표정에서 분노, 경멸, 혐오, 두려움, 행복, 중립, 슬픔 및 놀라움을 감지할 수 있습니다.
 
-![image](/uploads/cb16c8a4139d2ef001fe2af9f6bfdd30/image.png)
+![image](https://user-images.githubusercontent.com/28249948/192953098-64023d3e-b32e-4df8-a5b2-d633698afc27.png)
 
 
 ### 4. Web Speech API
@@ -201,7 +201,7 @@ https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene
 
 # IV. 프로젝트 진행
 
-프로젝트는 온+오프라인 병행되었습니다. 프로젝트 진행 방식은 `agail` 이고 jira를 이용하여 스프린트 관리, Notion을 이용하여 자료 공유 및 아카이브를 하였습니다.
+프로젝트는 온+오프라인 병행되었습니다. 프로젝트 진행 방식은 `agile` 이고 jira를 이용하여 스프린트 관리, Notion을 이용하여 자료 공유 및 아카이브를 하였습니다.
 
 ## Git Flow
 
