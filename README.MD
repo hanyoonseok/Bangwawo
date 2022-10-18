@@ -6,7 +6,7 @@
 
 - 방과후에 혼자 있는 학생들의 곁을 지켜줄 비대면 방과후 활동 서비스<br>
 - 서비스 명 : 방과워
-- 삼성 청년 SW 아카데미 2학기 특화 프로젝트 대전 2반 `우수상`
+- 삼성 청년 SW 아카데미 2학기 공통 프로젝트 대전 2반 `우수상`
 - [발표영상 Youtube](https://www.youtube.com/watch?v=kAQn2lvFOSk&ab_channel=yoonseokhan)
 
 ## 💭 Background
